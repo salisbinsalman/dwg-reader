@@ -1,0 +1,440 @@
+#!/usr/bin/env python3
+"""
+Orchestrate hierarchy building over inventory FUNCTIONs, one by one.
+
+Flow:
+  1. Load tags from pid_inventory.json ``functions`` (all kinds by default)
+  2. Take the first ``--limit`` tags (default 10; 0 = all)
+  3. For each tag: run viewer+Bedrock hierarchy, then compare to GT
+     - EQUIPMENT: hits / misses (in GT, not in ours) / extras
+     - SUB-EQUIPMENT: same
+  4. Write combined hierarchy CSV + per-function score report
+"""
+
+from __future__ import annotations
+
+import argparse
+import csv
+import json
+import os
+import subprocess
+import sys
+from pathlib import Path
+from typing import Any, Dict, List, Optional
+
+from dwg_pure_dump import find_json, json_path, logs_dir, safe_name, write_json
+from eval_hierarchy_gt import (
+    GT_COLUMNS,
+    format_function_report,
+    load_gt_rows,
+    macro_hit_accuracy,
+    score_function,
+)
+
+# Hierarchy deliverable may include DESCRIPTION for FLOC PLTXT.
+HIERARCHY_COLUMNS = list(GT_COLUMNS)
+if "DESCRIPTION" not in HIERARCHY_COLUMNS:
+    HIERARCHY_COLUMNS = HIERARCHY_COLUMNS + ["DESCRIPTION"]
+if "MASK" not in HIERARCHY_COLUMNS:
+    HIERARCHY_COLUMNS = HIERARCHY_COLUMNS + ["MASK"]
+
+
+def load_inventory_functions(path: Path, kinds: Optional[List[str]] = None) -> List[Dict[str, Any]]:
+    data = json.loads(path.read_text(encoding="utf-8"))
+    rows = data.get("functions") or []
+    if kinds:
+        want = {k.lower() for k in kinds}
+        rows = [r for r in rows if str(r.get("kind") or "").lower() in want]
+    # Keep inventory order; drop duplicate tags (first kind wins).
+    out: List[Dict[str, Any]] = []
+    seen = set()
+    for r in rows:
+        tag = str(r.get("function") or "").strip().upper().replace(" ", "")
+        if not tag or tag in seen:
+            continue
+        seen.add(tag)
+        row = dict(r)
+        row["function"] = tag
+        out.append(row)
+    return out
+
+
+def csv_function_headers(rows: List[Dict[str, str]]) -> List[str]:
+    out: List[str] = []
+    seen = set()
+    for row in rows:
+        fn = str(row.get("FUNCTION") or "").strip().upper().replace(" ", "")
+        eq = str(row.get("EQUIPMENT") or "").strip()
+        sub = str(row.get("SUB-EQUIPMENT") or "").strip()
+        if fn and not eq and not sub and fn not in seen:
+            seen.add(fn)
+            out.append(fn)
+    return out
+
+
+def rows_for_function(rows: List[Dict[str, str]], tag: str) -> List[Dict[str, str]]:
+    """Keep only the requested FUNCTION header + its inherited children."""
+    want = str(tag or "").strip().upper().replace(" ", "")
+    out: List[Dict[str, str]] = []
+    current = False
+    for row in rows:
+        fn = str(row.get("FUNCTION") or "").strip().upper().replace(" ", "")
+        eq = str(row.get("EQUIPMENT") or "").strip()
+        sub = str(row.get("SUB-EQUIPMENT") or "").strip()
+        if fn and not eq and not sub:
+            current = fn == want
+        if current:
+            out.append(row)
+    return out
+
+
+def write_hierarchy_csv(path: Path, rows: List[Dict[str, str]]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    cols = HIERARCHY_COLUMNS
+    with path.open("w", encoding="utf-8", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=cols, extrasaction="ignore")
+        writer.writeheader()
+        for row in rows:
+            writer.writerow({c: row.get(c, "") for c in cols})
+
+
+def read_hierarchy_csv(path: Path) -> List[Dict[str, str]]:
+    if not path.exists():
+        return []
+    with path.open(encoding="utf-8", newline="") as f:
+        return [{c: str(raw.get(c) or "").strip() for c in raw.keys()} for raw in csv.DictReader(f)]
+
+
+def run_hierarchy_for_tag(
+    *,
+    tag: str,
+    input_path: Path,
+    out_dir: Path,
+    model_id: str,
+    region: str,
+    prompt_file: str,
+    inventory_json: Path,
+    reuse_shots: bool,
+    no_clean_prev: bool,
+    aws_profile: str,
+) -> int:
+    cmd = [
+        sys.executable,
+        str(Path(__file__).resolve().parent / "dwg_pid_hierarchy_ai.py"),
+        "--input",
+        str(input_path),
+        "--output-dir",
+        str(out_dir),
+        "--tags",
+        tag,
+        "--model-id",
+        model_id,
+        "--region",
+        region,
+        "--prompt-file",
+        prompt_file,
+        "--inventory-json",
+        str(inventory_json),
+    ]
+    if reuse_shots:
+        cmd.append("--reuse-shots")
+    if no_clean_prev:
+        cmd.append("--no-clean-prev")
+
+    env = os.environ.copy()
+    if aws_profile:
+        env["AWS_PROFILE"] = aws_profile
+    print(f"\n---------- hierarchy: {tag} ----------")
+    print(" ".join(cmd))
+    proc = subprocess.run(cmd, env=env)
+    return int(proc.returncode)
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(
+        description="Run hierarchy one-by-one over inventory equipment and score vs GT"
+    )
+    parser.add_argument("--input", default="inputs/Broke System.dwg")
+    parser.add_argument("--output-dir", default="outputs")
+    parser.add_argument(
+        "--inventory-json",
+        default="",
+        help="pid_inventory.json (default: outputs/jsons/<stem>.pid_inventory.json)",
+    )
+    parser.add_argument(
+        "--gt",
+        default="inputs/gt_hierarchy_broke_system.xlsx",
+        help="GT hierarchy workbook/CSV for hit-miss scoring",
+    )
+    parser.add_argument(
+        "--limit",
+        type=int,
+        default=10,
+        help="Max number of inventory FUNCTIONs to process (default: 10; 0 = all)",
+    )
+    parser.add_argument(
+        "--kinds",
+        default="",
+        help="Comma-separated function kinds (equipment,instrument,line). Empty = all inventory FUNCTIONs",
+    )
+    parser.add_argument(
+        "--tags",
+        default="",
+        help="Optional explicit comma-separated tags (overrides inventory selection)",
+    )
+    parser.add_argument("--model-id", default="eu.anthropic.claude-sonnet-4-6")
+    parser.add_argument("--region", default="eu-west-2")
+    parser.add_argument("--prompt-file", default="pid_hierarchy_gt_v7_floc.md")
+    parser.add_argument("--aws-profile", default=os.environ.get("AWS_PROFILE", "foundrydev"))
+    parser.add_argument(
+        "--reuse-shots",
+        action="store_true",
+        help="Reuse existing viewer PNGs when present",
+    )
+    parser.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="Only list selected equipment + GT child counts; do not call Bedrock",
+    )
+    parser.add_argument(
+        "--skip-existing",
+        action="store_true",
+        help="Skip FUNCTIONs already present as headers in hierarchy_orchestrator.csv",
+    )
+    parser.add_argument(
+        "--score-only",
+        action="store_true",
+        help="Skip Bedrock; score existing hierarchy_orchestrator.csv for the selected tags",
+    )
+    parser.add_argument(
+        "--no-export-floc",
+        action="store_true",
+        help="Skip SAP Functional Location workbook export at the end",
+    )
+    parser.add_argument(
+        "--no-export-equipment",
+        action="store_true",
+        help="Skip SAP Equipment workbook export at the end",
+    )
+    args = parser.parse_args()
+
+    input_path = Path(args.input).expanduser().resolve()
+    out_dir = Path(args.output_dir).expanduser().resolve()
+    out_dir.mkdir(parents=True, exist_ok=True)
+    log_dir = logs_dir(out_dir)
+    base = safe_name(input_path)
+
+    inv_path = (
+        Path(args.inventory_json).expanduser().resolve()
+        if args.inventory_json
+        else find_json(out_dir, f"{base}.pid_inventory.json")
+    )
+    if not inv_path.exists():
+        print(f"[error] Missing inventory JSON: {inv_path}. Run `make inventory` first.", file=sys.stderr)
+        return 2
+
+    gt_path = Path(args.gt).expanduser().resolve()
+    if not gt_path.exists():
+        print(f"[error] Missing GT file: {gt_path}", file=sys.stderr)
+        return 2
+    gt_rows = load_gt_rows(gt_path)
+
+    if args.tags.strip():
+        tags = [t.strip().upper() for t in args.tags.split(",") if t.strip()]
+        selected = [{"function": t, "kind": "explicit"} for t in tags]
+    else:
+        kinds = [k.strip() for k in args.kinds.split(",") if k.strip() and k.strip().lower() != "all"]
+        selected = load_inventory_functions(inv_path, kinds=kinds or None)
+        if args.limit > 0:
+            selected = selected[: args.limit]
+        tags = [str(r.get("function") or "").upper() for r in selected if r.get("function")]
+
+    if not tags:
+        print("[error] No inventory FUNCTIONs selected.", file=sys.stderr)
+        return 2
+
+    all_tags = list(tags)
+
+    combined_csv = out_dir / f"{base}.hierarchy_orchestrator.csv"
+    report_json = json_path(out_dir, f"{base}.hierarchy_orchestrator_report.json")
+    log_path = log_dir / "hierarchy-orchestrator.log"
+    per_tag_csv = out_dir / f"{base}.hierarchy.csv"
+
+    combined_rows: List[Dict[str, str]] = []
+    per_function_scores: List[Dict[str, Any]] = []
+
+    if args.skip_existing and combined_csv.exists() and not args.score_only:
+        existing_headers = set(csv_function_headers(read_hierarchy_csv(combined_csv)))
+        before = len(tags)
+        tags = [t for t in tags if t not in existing_headers]
+        print(f"[skip-existing] {before - len(tags)} already in {combined_csv.name}; {len(tags)} remaining")
+        combined_rows = read_hierarchy_csv(combined_csv)
+
+    print(f"Selected {len(all_tags)} FUNCTION(s) from {inv_path.name} ({len(tags)} to run)")
+    for i, t in enumerate(tags, 1):
+        print(f"  {i:2d}. {t}")
+
+    if args.dry_run:
+        print("\n[dry-run] GT child counts:")
+        for tag in all_tags:
+            score = score_function(tag, [], gt_rows)
+            eq = score["equipment"]
+            sub = score["subequipment"]
+            print(
+                f"  {tag}: in_gt={score['in_gt']}  "
+                f"EQUIPMENT gt={eq['gt_count']}  SUB-EQUIPMENT gt={sub['gt_count']}"
+            )
+        return 0
+
+    if args.score_only:
+        existing = read_hierarchy_csv(combined_csv)
+        if not existing:
+            print(f"[error] --score-only but missing {combined_csv}", file=sys.stderr)
+            return 2
+        combined_rows = existing
+        print(f"[score-only] scoring {combined_csv}", flush=True)
+    else:
+        for idx, tag in enumerate(tags):
+            rc = run_hierarchy_for_tag(
+                tag=tag,
+                input_path=input_path,
+                out_dir=out_dir,
+                model_id=args.model_id,
+                region=args.region,
+                prompt_file=args.prompt_file,
+                inventory_json=inv_path,
+                reuse_shots=args.reuse_shots,
+                no_clean_prev=(idx > 0) or args.reuse_shots or bool(combined_rows),
+                aws_profile=args.aws_profile,
+            )
+            tag_rows = rows_for_function(read_hierarchy_csv(per_tag_csv), tag)
+            if not tag_rows:
+                print(f"[warn] no rows for {tag} (exit={rc}); not appending stale CSV")
+                per_function_scores.append(
+                    {
+                        "function": tag,
+                        "error": f"no_rows_exit_{rc}",
+                        "in_gt": False,
+                        "equipment": {},
+                        "subequipment": {},
+                    }
+                )
+                continue
+
+            combined_rows.extend(tag_rows)
+            write_hierarchy_csv(combined_csv, combined_rows)
+            score = score_function(tag, tag_rows, gt_rows)
+            per_function_scores.append(score)
+            print(format_function_report(score))
+
+    # Final scores always cover the full selected set from the combined CSV.
+    combined_rows = read_hierarchy_csv(combined_csv) if combined_csv.exists() else combined_rows
+    per_function_scores = [score_function(tag, combined_rows, gt_rows) for tag in all_tags]
+    for score in per_function_scores:
+        print(format_function_report(score))
+
+    # Aggregate over selected functions only.
+    # Accuracy = hit/gt per FUNCTION, then mean (extras ignored).
+    eq_hit = eq_miss = eq_extra = eq_gt = 0
+    sub_hit = sub_miss = sub_extra = sub_gt = 0
+    for s in per_function_scores:
+        if "error" in s:
+            continue
+        eq = s["equipment"]
+        sub = s["subequipment"]
+        eq_hit += eq["hit_count"]
+        eq_miss += eq["miss_count"]
+        eq_extra += eq["extra_count"]
+        eq_gt += eq["gt_count"]
+        sub_hit += sub["hit_count"]
+        sub_miss += sub["miss_count"]
+        sub_extra += sub["extra_count"]
+        sub_gt += sub["gt_count"]
+
+    eq_acc = macro_hit_accuracy(per_function_scores, "equipment")
+    sub_acc = macro_hit_accuracy(per_function_scores, "subequipment")
+
+    summary = {
+        "tags": all_tags,
+        "limit": args.limit,
+        "model_id": args.model_id,
+        "prompt_file": args.prompt_file,
+        "gt": str(gt_path),
+        "inventory": str(inv_path),
+        "pred_csv": str(combined_csv),
+        "accuracy_definition": "per_function hit/gt, then mean (extras ignored)",
+        "equipment": {
+            "gt_count": eq_gt,
+            "hit": eq_hit,
+            "miss": eq_miss,
+            "extra": eq_extra,
+            "accuracy": eq_acc,
+        },
+        "subequipment": {
+            "gt_count": sub_gt,
+            "hit": sub_hit,
+            "miss": sub_miss,
+            "extra": sub_extra,
+            "accuracy": sub_acc,
+        },
+        "per_function": per_function_scores,
+    }
+    write_json(report_json, summary)
+
+    print("\n========== ORCHESTRATOR SUMMARY ==========")
+    print(f"functions scored: {len(all_tags)}")
+    print(
+        f"EQUIPMENT:     hit={eq_hit}/{eq_gt}  miss={eq_miss}  extra={eq_extra}  "
+        f"acc={eq_acc*100:.1f}% (mean of per-function hit/gt)"
+    )
+    print(
+        f"SUB-EQUIPMENT: hit={sub_hit}/{sub_gt}  miss={sub_miss}  extra={sub_extra}  "
+        f"acc={sub_acc*100:.1f}% (mean of per-function hit/gt)"
+    )
+    print(f"report: {report_json}")
+    print(f"combined CSV: {combined_csv}")
+    log_path.write_text(json.dumps(summary, indent=2), encoding="utf-8")
+
+    if combined_csv.exists() and combined_csv.stat().st_size > 0:
+        limit_s = str(args.limit if args.limit > 0 else 0)
+        if not args.no_export_floc:
+            floc_cmd = [
+                sys.executable,
+                str(Path(__file__).resolve().parent / "export_sap_floc.py"),
+                "--input",
+                str(input_path),
+                "--output-dir",
+                str(out_dir),
+                "--hierarchy-csv",
+                str(combined_csv),
+                "--gt",
+                str(gt_path),
+                "--limit",
+                limit_s,
+            ]
+            print("\n---------- export SAP FLOC ----------")
+            print(" ".join(floc_cmd))
+            subprocess.run(floc_cmd, check=False)
+
+        if not args.no_export_equipment:
+            eq_cmd = [
+                sys.executable,
+                str(Path(__file__).resolve().parent / "export_sap_equipment.py"),
+                "--input",
+                str(input_path),
+                "--output-dir",
+                str(out_dir),
+                "--hierarchy-csv",
+                str(combined_csv),
+                "--limit",
+                limit_s,
+            ]
+            print("\n---------- export SAP Equipment ----------")
+            print(" ".join(eq_cmd))
+            subprocess.run(eq_cmd, check=False)
+
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

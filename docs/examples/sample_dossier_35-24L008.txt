@@ -1,0 +1,77 @@
+Parent tag: 35-24L008
+Parent category/block: process_equipment / PPI_1302A-25_0
+Parent XY: (660.0, 297.5)
+Nearby descriptions: WINDER PULPER; HP-33G2; 800 BDTPD
+
+Same-tag CAD family:
+- process_equipment @ (660.0,297.5) block=PPI_1302A-25_0 nearby=35-24L008; 35-24P509
+- motors @ (680.0,232.5) block=PPI_1504A-25_0 nearby=35-24L008; 35-24P509
+- valves @ (672.5,242.5) block=PPI_0900A nearby=35-24L008; 35-24P509
+- valves @ (691.25,312.5) block=PPI_0900A nearby=35-24L008
+- valves @ (661.75,310.0) block=PPI_0900A nearby=35-24L008
+- valves @ (691.25,332.5) block=PPI_0900A nearby=35-24L008; 35-24
+- valves @ (651.25,260.0) block=PPI_0900A nearby=35-24L008; 35-24P509
+- instruments @ (707.8420054295607,267.5) block=PPI_0100X nearby=35-24L008
+
+Nearby line numbers (short ids preferred in output):
+- 35-24-015  full=35-24-015-WAF-125-E10H2A  d=147  layer=P-LINEPOS
+- 35-24-016  full=35-24-016-WAF-250-E10H2A  d=197  layer=P-LINEPOS
+- 35-24-011  full=35-24-011-PP-250-E10H2A  d=107  layer=P-LINEPOS
+- 35-24-007  full=35-24-007-PP-200-E10H2A  d=80  layer=P-LINEPOS
+- 35-24-002  full=35-24-002-PP-500-E10H2A  d=181  layer=P-LINEPOS
+- 35-24-013  full=35-24-013-PP-600-E10H2A  d=120  layer=P-LINEPOS
+- 35-24-009  full=35-24-009-PP-600-E10H2A  d=46  layer=P-LINEPOS
+
+Nearby devices (valves/instruments/pumps/…):
+- line_markers: PPI_1100A  d=48  block=PPI_1100A
+- valves: PPI_0900A  d=113  block=PPI_0900A
+- control_valves: PPI_1000A  d=195  block=PPI_1000A
+- instruments: PPI_1205A  d=164  block=PPI_1205A
+- pumps: P7A0200  d=56  block=P7A0200
+- motors: PPI_1504A-25_0  d=68  block=PPI_1504A-25_0
+- fittings: P7A1214  d=168  block=P7A1214
+
+Nearby peer primary equipment (do NOT nest under parent):
+- 35-24P509 (pumps, d=56)
+
+Nearby drawing text tokens:
+- A1  d=62  layer=P-TEXT
+- A2  d=55  layer=P-TEXT
+- 2 bar  d=120  layer=P-TEXT
+- 1 bar  d=64  layer=P-TEXT
+- S2  d=107  layer=P-TEXT
+- S6  d=70  layer=P-TEXT
+- S1  d=129  layer=P-TEXT
+- S5  d=72  layer=P-TEXT
+- S3  d=33  layer=P-TEXT
+- GEARBOX 1  d=196  layer=P-OTHER
+- 800 BDTPD  d=24  layer=P-TEXT
+- 35-24  d=187  layer=P-INSTRPOS_TEXTS
+- SHOWER S3  d=194  layer=P-TEXT
+- 35-24L008  d=7  layer=P-EQUIPMENT_POS
+- HP-33G2  d=16  layer=P-EQUIPMENT_POS
+- 516  d=200  layer=P-INSTRPOS_TEXTS
+- 504  d=185  layer=P-INSTRPOS_TEXTS
+- 511  d=110  layer=P-INSTRPOS_TEXTS
+- 510  d=125  layer=P-INSTRPOS_TEXTS
+- 509  d=160  layer=P-INSTRPOS_TEXTS
+- 508  d=140  layer=P-INSTRPOS_TEXTS
+- WINDER PULPER ROTOR 1  d=153  layer=P-TEXT
+- 513  d=112  layer=P-INSTRPOS_TEXTS
+- 665  d=182  layer=P-INSTRPOS_TEXTS
+- 691  d=155  layer=P-INSTRPOS_TEXTS
+- 501  d=185  layer=P-INSTRPOS_TEXTS
+- 35-24P509  d=87  layer=P-PUMP_POS
+- 300  d=92  layer=P-PUMP_POS
+- 28  d=85  layer=P-PUMP_POS
+- 110  d=96  layer=P-PUMP_POS
+- 1000  d=90  layer=P-PUMP_POS
+- 35-24-008.4  d=179  layer=P-MOTOR_POS
+- 1,5  d=182  layer=P-MOTOR_POS
+- 1500  d=177  layer=P-MOTOR_POS
+- 35-24-008.3  d=166  layer=P-MOTOR_POS
+- 35-24-008.1  d=88  layer=P-MOTOR_POS
+- 200  d=93  layer=P-MOTOR_POS
+- 35-24-008.2  d=73  layer=P-MOTOR_POS
+- 35-24-187  d=159  layer=P-VALVEPOS
+- 003-50  d=160  layer=P-VALVEPOS

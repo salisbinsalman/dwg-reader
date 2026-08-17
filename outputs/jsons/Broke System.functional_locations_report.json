@@ -1,0 +1,69 @@
+{
+  "hierarchy_csv": "/Users/code-huddle-ensemble/Desktop/dwg-reader/outputs/Broke System.hierarchy_orchestrator.csv",
+  "output": "/Users/code-huddle-ensemble/Desktop/dwg-reader/outputs/Broke System.functional_locations.xlsx",
+  "function_count": 5,
+  "floc_row_count": 9,
+  "functions": [
+    "35-24L001",
+    "35-24L002",
+    "35-24L003",
+    "35-24L004",
+    "35-24L005"
+  ],
+  "gt_eval": {
+    "functions_compared": 5,
+    "mask_hit": 5,
+    "mask_miss": 0,
+    "mask_accuracy": 1.0,
+    "description_exact": 5,
+    "description_total": 5,
+    "description_accuracy": 1.0,
+    "details": [
+      {
+        "function": "35-24L005",
+        "tplnr_pred": "5001-PM03-BR-BR1-35-24L005",
+        "tplnr_gt": "5001-PM03-BR-BR1-35-24L005",
+        "mask_match": true,
+        "pltxt_pred": "35-24L005 REEL PLPR",
+        "pltxt_gt": "35-24L005 REEL PLPR",
+        "pltxt_exact": true
+      },
+      {
+        "function": "35-24L004",
+        "tplnr_pred": "5001-PM03-BR-BR1-35-24L004",
+        "tplnr_gt": "5001-PM03-BR-BR1-35-24L004",
+        "mask_match": true,
+        "pltxt_pred": "35-24L004 BROKE CVYR 2",
+        "pltxt_gt": "35-24L004 BROKE CVYR 2",
+        "pltxt_exact": true
+      },
+      {
+        "function": "35-24L003",
+        "tplnr_pred": "5001-PM03-BR-BR1-35-24L003",
+        "tplnr_gt": "5001-PM03-BR-BR1-35-24L003",
+        "mask_match": true,
+        "pltxt_pred": "35-24L003 SIZE PRESS PLPR",
+        "pltxt_gt": "35-24L003 SIZE PRESS PLPR",
+        "pltxt_exact": true
+      },
+      {
+        "function": "35-24L001",
+        "tplnr_pred": "5001-PM03-BR-BR1-35-24L001",
+        "tplnr_gt": "5001-PM03-BR-BR1-35-24L001",
+        "mask_match": true,
+        "pltxt_pred": "35-24L001 PRESS PLPR",
+        "pltxt_gt": "35-24L001 PRESS PLPR",
+        "pltxt_exact": true
+      },
+      {
+        "function": "35-24L002",
+        "tplnr_pred": "5001-PM03-BR-BR1-35-24L002",
+        "tplnr_gt": "5001-PM03-BR-BR1-35-24L002",
+        "mask_match": true,
+        "pltxt_pred": "35-24L002 BROKE THICKENER",
+        "pltxt_gt": "35-24L002 BROKE THICKENER",
+        "pltxt_exact": true
+      }
+    ]
+  }
+}

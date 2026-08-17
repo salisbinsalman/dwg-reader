@@ -1,0 +1,537 @@
+{
+  "input": "/Users/code-huddle-ensemble/Desktop/dwg-reader/inputs/Broke System.dwg",
+  "mode": "viewer_shot_ai_gt",
+  "evidence_dir": "/Users/code-huddle-ensemble/Desktop/dwg-reader/outputs/evidence",
+  "site": "Shotton Paper Mill, United Kingdom",
+  "line": "Shotton PM3",
+  "process": "Broke System",
+  "sub_process": "BR1",
+  "model_id": "eu.anthropic.claude-opus-4-5-20251101-v1:0",
+  "region": "eu-west-2",
+  "prompt_file": "pid_hierarchy_gt_v1.md",
+  "results": [
+    {
+      "tag": "35-24L009",
+      "shot": "/Users/code-huddle-ensemble/Desktop/dwg-reader/outputs/evidence/Broke System.viewer_35-24L009.png",
+      "parent": {
+        "category": "process_equipment",
+        "block_name": "PPI_1320A-25_0",
+        "handle": "7753E",
+        "layer": "P-EQUIPMENT_POS",
+        "x": 200.0,
+        "y": 317.5,
+        "resolved_tag": "35-24L009",
+        "nearby_tags": "35-24L009",
+        "nearby_descriptions": "BROKE ROLL PULPER; 141 BDTPD; STOP",
+        "confidence": "high"
+      },
+      "candidates": [
+        "35-25P502",
+        "35-25P504",
+        "35-25P513",
+        "35-25T602",
+        "55-32T601",
+        "35-24L009",
+        "35-24-220",
+        "001-100",
+        "35-24-196",
+        "35-24-187",
+        "35-24-187-WAF-100-E10H2A",
+        "355-250",
+        "35-24-188",
+        "35-24-188-WAF-80-E10H2A",
+        "35-24-189",
+        "35-24-189-PP-300-E10H2A",
+        "35-24P519",
+        "35-24-191",
+        "35-24-191-PP-250-E10H2A",
+        "35-24-221",
+        "35-24-199",
+        "003-50",
+        "35-24-186",
+        "35-24-186-WAF-100-E10H2A",
+        "003-15",
+        "35-24-193",
+        "35-24-193-PP-100-E10H2A",
+        "35-24-009.1",
+        "35-24-197",
+        "35-24-194",
+        "001-80",
+        "350-200",
+        "35-24-190",
+        "35-24-190-PP-200-E10H2A",
+        "35-24",
+        "35-24LV2-674",
+        "35-24-198",
+        "35-24-192",
+        "35-24-192-PP-200-E10H2A",
+        "35-24LV1-674",
+        "35-24NV-675",
+        "35-24HV-676",
+        "35-24-001",
+        "35-24-001-WAB-20-E10H2A",
+        "35-24KV-677",
+        "35-24-204",
+        "35-24-204-PP-100-E10H2A",
+        "35-24XV-681",
+        "003-20",
+        "35-24XV-665",
+        "35-24-222",
+        "35-24-223"
+      ],
+      "ai": {
+        "raw_text": "```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24L009\",\n  \"rows\": [\n    {\"equipment\": \"35-24L009\", \"subequipment\": \"\", \"mask\": \"\"},\n    {\"equipment\": \"35-24XS-692\", \"subequipment\": \"\", \"mask\": \"\"},\n    {\"equipment\": \"35-24ES-683\", \"subequipment\": \"\", \"mask\": \"\"},\n    {\"equipment\": \"35-24KJ-684\", \"subequipment\": \"\", \"mask\": \"\"},\n    {\"equipment\": \"35-24KJ-685\", \"subequipment\": \"\", \"mask\": \"\"},\n    {\"equipment\": \"35-24HS-682\", \"subequipment\": \"\", \"mask\": \"\"},\n    {\"equipment\": \"35-24HI-676\", \"subequipment\": \"\", \"mask\": \"\"},\n    {\"equipment\": \"35-24LC-674\", \"subequipment\": \"\", \"mask\": \"\"},\n    {\"equipment\": \"35-24LV1-674\", \"subequipment\": \"\", \"mask\": \"\"},\n    {\"equipment\": \"35-24LV2-674\", \"subequipment\": \"\", \"mask\": \"\"},\n    {\"equipment\": \"35-24XV-681\", \"subequipment\": \"\", \"mask\": \"\"},\n    {\"equipment\": \"35-24-220\", \"subequipment\": \"\", \"mask\": \"001-100\"},\n    {\"equipment\": \"35-24-193\", \"subequipment\": \"\", \"mask\": \"003-15\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-193-PP-100-E10H2A\", \"mask\": \"\"},\n    {\"equipment\": \"35-24-198\", \"subequipment\": \"\", \"mask\": \"003-50\"},\n    {\"equipment\": \"35-24-221\", \"subequipment\": \"\", \"mask\": \"003-50\"},\n    {\"equipment\": \"35-24-196\", \"subequipment\": \"\", \"mask\": \"355-250\"},\n    {\"equipment\": \"35-24-191\", \"subequipment\": \"\", \"mask\": \"\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-191-PP-250-E10H2A\", \"mask\": \"\"}\n  ],\n  \"peers\": [\n    {\"tag\": \"35-24P519\", \"evidence\": \"Separate pump equipment with own datablock (65/32/30/1500)\"},\n    {\"tag\": \"35-24-009.1\", \"evidence\": \"Separate equipment with own datablock (160/1500)\"},\n    {\"tag\": \"35-24-197\", \"evidence\": \"Separate line with own datablock (001-80)\"},\n    {\"tag\": \"35-24-194\", \"evidence\": \"Separate line with own datablock (350-200)\"},\n    {\"tag\": \"35-24NV-675\", \"evidence\": \"Valve on separate discharge system\"},\n    {\"tag\": \"35-24HV-676\", \"evidence\": \"Valve on separate discharge system\"},\n    {\"tag\": \"35-24KV-677\", \"evidence\": \"Valve on separate discharge system\"},\n    {\"tag\": \"35-24-186\", \"evidence\": \"Shower water line to Broke Roll Cutter area\"},\n    {\"tag\": \"35-24-187\", \"evidence\": \"Shower water line to pulper area\"},\n    {\"tag\": \"35-24-188\", \"evidence\": \"Shower water line\"},\n    {\"tag\": \"35-24-189\", \"evidence\": \"Process line with spec\"},\n    {\"tag\": \"35-24-190\", \"evidence\": \"Process line with spec\"},\n    {\"tag\": \"35-24-192\", \"evidence\": \"Process line feeding from upstream\"}\n  ],\n  \"notes\": [\n    \"PARENT 35-24L009 label clearly identifies the Broke Roll Pulper (141 BDTPD)\",\n    \"Local panel instruments (XS-692, ES-683, KJ-684, KJ-685, HS-682) are dedicated to pulper control\",\n    \"LC-674 and associated LV1/LV2-674 are level control for the pulper\"\n  ],\n  \"confidence\": \"high\"\n}\n```",
+        "parsed": {
+          "sub_process": "BR1",
+          "function": "35-24L009",
+          "rows": [
+            {
+              "equipment": "35-24L009",
+              "subequipment": "",
+              "mask": ""
+            },
+            {
+              "equipment": "35-24XS-692",
+              "subequipment": "",
+              "mask": ""
+            },
+            {
+              "equipment": "35-24ES-683",
+              "subequipment": "",
+              "mask": ""
+            },
+            {
+              "equipment": "35-24KJ-684",
+              "subequipment": "",
+              "mask": ""
+            },
+            {
+              "equipment": "35-24KJ-685",
+              "subequipment": "",
+              "mask": ""
+            },
+            {
+              "equipment": "35-24HS-682",
+              "subequipment": "",
+              "mask": ""
+            },
+            {
+              "equipment": "35-24HI-676",
+              "subequipment": "",
+              "mask": ""
+            },
+            {
+              "equipment": "35-24LC-674",
+              "subequipment": "",
+              "mask": ""
+            },
+            {
+              "equipment": "35-24LV1-674",
+              "subequipment": "",
+              "mask": ""
+            },
+            {
+              "equipment": "35-24LV2-674",
+              "subequipment": "",
+              "mask": ""
+            },
+            {
+              "equipment": "35-24XV-681",
+              "subequipment": "",
+              "mask": ""
+            },
+            {
+              "equipment": "35-24-220",
+              "subequipment": "",
+              "mask": "001-100"
+            },
+            {
+              "equipment": "35-24-193",
+              "subequipment": "",
+              "mask": "003-15"
+            },
+            {
+              "equipment": "",
+              "subequipment": "35-24-193-PP-100-E10H2A",
+              "mask": ""
+            },
+            {
+              "equipment": "35-24-198",
+              "subequipment": "",
+              "mask": "003-50"
+            },
+            {
+              "equipment": "35-24-221",
+              "subequipment": "",
+              "mask": "003-50"
+            },
+            {
+              "equipment": "35-24-196",
+              "subequipment": "",
+              "mask": "355-250"
+            },
+            {
+              "equipment": "35-24-191",
+              "subequipment": "",
+              "mask": ""
+            },
+            {
+              "equipment": "",
+              "subequipment": "35-24-191-PP-250-E10H2A",
+              "mask": ""
+            }
+          ],
+          "peers": [
+            {
+              "tag": "35-24P519",
+              "evidence": "Separate pump equipment with own datablock (65/32/30/1500)"
+            },
+            {
+              "tag": "35-24-009.1",
+              "evidence": "Separate equipment with own datablock (160/1500)"
+            },
+            {
+              "tag": "35-24-197",
+              "evidence": "Separate line with own datablock (001-80)"
+            },
+            {
+              "tag": "35-24-194",
+              "evidence": "Separate line with own datablock (350-200)"
+            },
+            {
+              "tag": "35-24NV-675",
+              "evidence": "Valve on separate discharge system"
+            },
+            {
+              "tag": "35-24HV-676",
+              "evidence": "Valve on separate discharge system"
+            },
+            {
+              "tag": "35-24KV-677",
+              "evidence": "Valve on separate discharge system"
+            },
+            {
+              "tag": "35-24-186",
+              "evidence": "Shower water line to Broke Roll Cutter area"
+            },
+            {
+              "tag": "35-24-187",
+              "evidence": "Shower water line to pulper area"
+            },
+            {
+              "tag": "35-24-188",
+              "evidence": "Shower water line"
+            },
+            {
+              "tag": "35-24-189",
+              "evidence": "Process line with spec"
+            },
+            {
+              "tag": "35-24-190",
+              "evidence": "Process line with spec"
+            },
+            {
+              "tag": "35-24-192",
+              "evidence": "Process line feeding from upstream"
+            }
+          ],
+          "notes": [
+            "PARENT 35-24L009 label clearly identifies the Broke Roll Pulper (141 BDTPD)",
+            "Local panel instruments (XS-692, ES-683, KJ-684, KJ-685, HS-682) are dedicated to pulper control",
+            "LC-674 and associated LV1/LV2-674 are level control for the pulper"
+          ],
+          "confidence": "high"
+        },
+        "model_id": "eu.anthropic.claude-opus-4-5-20251101-v1:0",
+        "region": "eu-west-2",
+        "prompt_file": "pid_hierarchy_gt_v1.md",
+        "candidates": [
+          "35-25P502",
+          "35-25P504",
+          "35-25P513",
+          "35-25T602",
+          "55-32T601",
+          "35-24L009",
+          "35-24-220",
+          "001-100",
+          "35-24-196",
+          "35-24-187",
+          "35-24-187-WAF-100-E10H2A",
+          "355-250",
+          "35-24-188",
+          "35-24-188-WAF-80-E10H2A",
+          "35-24-189",
+          "35-24-189-PP-300-E10H2A",
+          "35-24P519",
+          "35-24-191",
+          "35-24-191-PP-250-E10H2A",
+          "35-24-221",
+          "35-24-199",
+          "003-50",
+          "35-24-186",
+          "35-24-186-WAF-100-E10H2A",
+          "003-15",
+          "35-24-193",
+          "35-24-193-PP-100-E10H2A",
+          "35-24-009.1",
+          "35-24-197",
+          "35-24-194",
+          "001-80",
+          "350-200",
+          "35-24-190",
+          "35-24-190-PP-200-E10H2A",
+          "35-24",
+          "35-24LV2-674",
+          "35-24-198",
+          "35-24-192",
+          "35-24-192-PP-200-E10H2A",
+          "35-24LV1-674",
+          "35-24NV-675",
+          "35-24HV-676",
+          "35-24-001",
+          "35-24-001-WAB-20-E10H2A",
+          "35-24KV-677",
+          "35-24-204",
+          "35-24-204-PP-100-E10H2A",
+          "35-24XV-681",
+          "003-20",
+          "35-24XV-665",
+          "35-24-222",
+          "35-24-223"
+        ]
+      }
+    },
+    {
+      "tag": "35-24P519",
+      "shot": "/Users/code-huddle-ensemble/Desktop/dwg-reader/outputs/evidence/Broke System.viewer_35-24P519.png",
+      "parent": {
+        "category": "pumps",
+        "block_name": "PPI_0521A-25_0",
+        "handle": "77547",
+        "layer": "P-PUMP_POS",
+        "x": 152.5,
+        "y": 227.5,
+        "resolved_tag": "35-24P519",
+        "nearby_tags": "35-24P519; 35-24",
+        "nearby_descriptions": "141 BDTPD; BROKE ROLL PULPER",
+        "confidence": "high"
+      },
+      "candidates": [
+        "35-25P502",
+        "35-25P504",
+        "35-25P513",
+        "35-25T602",
+        "55-32T601",
+        "35-24P519",
+        "35-24",
+        "003-15",
+        "35-24L009",
+        "35-24-199",
+        "35-24-221",
+        "003-50",
+        "35-24-197",
+        "35-24-191",
+        "35-24-191-PP-250-E10H2A",
+        "001-80",
+        "35-24LV2-674",
+        "35-24-198",
+        "35-24-193",
+        "35-24-193-PP-100-E10H2A",
+        "355-250",
+        "35-24-196",
+        "35-24-009.1",
+        "001-100",
+        "35-24LV1-674",
+        "35-24-220",
+        "35-24-190",
+        "35-24-190-PP-200-E10H2A",
+        "35-24-194",
+        "350-200",
+        "35-24-192",
+        "35-24-192-PP-200-E10H2A",
+        "35-24-189",
+        "35-24-189-PP-300-E10H2A",
+        "35-24-188",
+        "35-24-188-WAF-80-E10H2A",
+        "35-24XV-681",
+        "003-20",
+        "35-24-223",
+        "35-24-222",
+        "35-24-195",
+        "35-24-187",
+        "35-24-187-WAF-100-E10H2A",
+        "35-24NV-675",
+        "35-24-214",
+        "35-24-214-PP-100-E10H2A",
+        "35-24-213",
+        "35-24-213-WAF-20-E10H2A",
+        "35-24-194-WFL-15-E10H2A",
+        "35-24-218",
+        "35-24HV-676",
+        "35-24-195-WFL-15-E10H2A",
+        "35-24-186",
+        "35-24-186-WAF-100-E10H2A",
+        "35-24-215",
+        "35-24-215-WFC--E10H2A",
+        "35-24KV-677",
+        "35-24-216",
+        "35-24-216-WFC--E10H2A"
+      ],
+      "ai": {
+        "raw_text": "```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24P519\",\n  \"rows\": [\n    {\"equipment\": \"35-24P519\", \"subequipment\": \"\", \"mask\": \"\"},\n    {\"equipment\": \"35-24-193-PP-100-E10H2A\", \"subequipment\": \"\", \"mask\": \"\"},\n    {\"equipment\": \"35-24LV1-674\", \"subequipment\": \"\", \"mask\": \"\"},\n    {\"equipment\": \"35-24LV2-674\", \"subequipment\": \"\", \"mask\": \"\"},\n    {\"equipment\": \"35-24LC-674\", \"subequipment\": \"\", \"mask\": \"\"},\n    {\"equipment\": \"35-24-198\", \"subequipment\": \"\", \"mask\": \"003-50\"},\n    {\"equipment\": \"35-24-199\", \"subequipment\": \"\", \"mask\": \"003-15\"},\n    {\"equipment\": \"35-24-197\", \"subequipment\": \"\", \"mask\": \"001-80\"},\n    {\"equipment\": \"35-24-221\", \"subequipment\": \"\", \"mask\": \"003-50\"},\n    {\"equipment\": \"35-24-191-PP-250-E10H2A\", \"subequipment\": \"\", \"mask\": \"\"}\n  ],\n  \"peers\": [\n    {\"tag\": \"35-24L009\", \"evidence\": \"Level indicator shown separately above pulper, not within pump boundary\"},\n    {\"tag\": \"35-24XV-681\", \"evidence\": \"Valve shown outside pump boundary on left side\"},\n    {\"tag\": \"35-24-192-PP-200-E10H2A\", \"evidence\": \"Separate pipe line shown outside pump boundary\"},\n    {\"tag\": \"35-24-220\", \"evidence\": \"Line shown at pulper discharge, separate from pump\"},\n    {\"tag\": \"35-24-196\", \"evidence\": \"Line shown downstream outside pump boundary\"},\n    {\"tag\": \"35-24-009.1\", \"evidence\": \"Separate equipment tag shown to right of pump\"}\n  ],\n  \"notes\": [\n    \"Pump 35-24P519 shown with data block 65/32/30/1500\",\n    \"LC 674 is level controller for pump suction control valves LV1-674 and LV2-674\",\n    \"Pink boundary indicates PARENT 35-24P519 equipment scope\"\n  ],\n  \"confidence\": \"high\"\n}\n```",
+        "parsed": {
+          "sub_process": "BR1",
+          "function": "35-24P519",
+          "rows": [
+            {
+              "equipment": "35-24P519",
+              "subequipment": "",
+              "mask": ""
+            },
+            {
+              "equipment": "35-24-193-PP-100-E10H2A",
+              "subequipment": "",
+              "mask": ""
+            },
+            {
+              "equipment": "35-24LV1-674",
+              "subequipment": "",
+              "mask": ""
+            },
+            {
+              "equipment": "35-24LV2-674",
+              "subequipment": "",
+              "mask": ""
+            },
+            {
+              "equipment": "35-24LC-674",
+              "subequipment": "",
+              "mask": ""
+            },
+            {
+              "equipment": "35-24-198",
+              "subequipment": "",
+              "mask": "003-50"
+            },
+            {
+              "equipment": "35-24-199",
+              "subequipment": "",
+              "mask": "003-15"
+            },
+            {
+              "equipment": "35-24-197",
+              "subequipment": "",
+              "mask": "001-80"
+            },
+            {
+              "equipment": "35-24-221",
+              "subequipment": "",
+              "mask": "003-50"
+            },
+            {
+              "equipment": "35-24-191-PP-250-E10H2A",
+              "subequipment": "",
+              "mask": ""
+            }
+          ],
+          "peers": [
+            {
+              "tag": "35-24L009",
+              "evidence": "Level indicator shown separately above pulper, not within pump boundary"
+            },
+            {
+              "tag": "35-24XV-681",
+              "evidence": "Valve shown outside pump boundary on left side"
+            },
+            {
+              "tag": "35-24-192-PP-200-E10H2A",
+              "evidence": "Separate pipe line shown outside pump boundary"
+            },
+            {
+              "tag": "35-24-220",
+              "evidence": "Line shown at pulper discharge, separate from pump"
+            },
+            {
+              "tag": "35-24-196",
+              "evidence": "Line shown downstream outside pump boundary"
+            },
+            {
+              "tag": "35-24-009.1",
+              "evidence": "Separate equipment tag shown to right of pump"
+            }
+          ],
+          "notes": [
+            "Pump 35-24P519 shown with data block 65/32/30/1500",
+            "LC 674 is level controller for pump suction control valves LV1-674 and LV2-674",
+            "Pink boundary indicates PARENT 35-24P519 equipment scope"
+          ],
+          "confidence": "high"
+        },
+        "model_id": "eu.anthropic.claude-opus-4-5-20251101-v1:0",
+        "region": "eu-west-2",
+        "prompt_file": "pid_hierarchy_gt_v1.md",
+        "candidates": [
+          "35-25P502",
+          "35-25P504",
+          "35-25P513",
+          "35-25T602",
+          "55-32T601",
+          "35-24P519",
+          "35-24",
+          "003-15",
+          "35-24L009",
+          "35-24-199",
+          "35-24-221",
+          "003-50",
+          "35-24-197",
+          "35-24-191",
+          "35-24-191-PP-250-E10H2A",
+          "001-80",
+          "35-24LV2-674",
+          "35-24-198",
+          "35-24-193",
+          "35-24-193-PP-100-E10H2A",
+          "355-250",
+          "35-24-196",
+          "35-24-009.1",
+          "001-100",
+          "35-24LV1-674",
+          "35-24-220",
+          "35-24-190",
+          "35-24-190-PP-200-E10H2A",
+          "35-24-194",
+          "350-200",
+          "35-24-192",
+          "35-24-192-PP-200-E10H2A",
+          "35-24-189",
+          "35-24-189-PP-300-E10H2A",
+          "35-24-188",
+          "35-24-188-WAF-80-E10H2A",
+          "35-24XV-681",
+          "003-20",
+          "35-24-223",
+          "35-24-222",
+          "35-24-195",
+          "35-24-187",
+          "35-24-187-WAF-100-E10H2A",
+          "35-24NV-675",
+          "35-24-214",
+          "35-24-214-PP-100-E10H2A",
+          "35-24-213",
+          "35-24-213-WAF-20-E10H2A",
+          "35-24-194-WFL-15-E10H2A",
+          "35-24-218",
+          "35-24HV-676",
+          "35-24-195-WFL-15-E10H2A",
+          "35-24-186",
+          "35-24-186-WAF-100-E10H2A",
+          "35-24-215",
+          "35-24-215-WFC--E10H2A",
+          "35-24KV-677",
+          "35-24-216",
+          "35-24-216-WFC--E10H2A"
+        ]
+      }
+    }
+  ]
+}

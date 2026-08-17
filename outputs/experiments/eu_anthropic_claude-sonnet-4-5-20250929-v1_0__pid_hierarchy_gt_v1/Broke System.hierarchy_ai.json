@@ -1,0 +1,492 @@
+{
+  "input": "/Users/code-huddle-ensemble/Desktop/dwg-reader/inputs/Broke System.dwg",
+  "mode": "viewer_shot_ai_gt",
+  "evidence_dir": "/Users/code-huddle-ensemble/Desktop/dwg-reader/outputs/evidence",
+  "site": "Shotton Paper Mill, United Kingdom",
+  "line": "Shotton PM3",
+  "process": "Broke System",
+  "sub_process": "BR1",
+  "model_id": "eu.anthropic.claude-sonnet-4-5-20250929-v1:0",
+  "region": "eu-west-2",
+  "prompt_file": "pid_hierarchy_gt_v1.md",
+  "results": [
+    {
+      "tag": "35-24L009",
+      "shot": "/Users/code-huddle-ensemble/Desktop/dwg-reader/outputs/evidence/Broke System.viewer_35-24L009.png",
+      "parent": {
+        "category": "process_equipment",
+        "block_name": "PPI_1320A-25_0",
+        "handle": "7753E",
+        "layer": "P-EQUIPMENT_POS",
+        "x": 200.0,
+        "y": 317.5,
+        "resolved_tag": "35-24L009",
+        "nearby_tags": "35-24L009",
+        "nearby_descriptions": "BROKE ROLL PULPER; 141 BDTPD; STOP",
+        "confidence": "high"
+      },
+      "candidates": [
+        "35-25P502",
+        "35-25P504",
+        "35-25P513",
+        "35-25T602",
+        "55-32T601",
+        "35-24L009",
+        "35-24-220",
+        "001-100",
+        "35-24-196",
+        "35-24-187",
+        "35-24-187-WAF-100-E10H2A",
+        "355-250",
+        "35-24-188",
+        "35-24-188-WAF-80-E10H2A",
+        "35-24-189",
+        "35-24-189-PP-300-E10H2A",
+        "35-24P519",
+        "35-24-191",
+        "35-24-191-PP-250-E10H2A",
+        "35-24-221",
+        "35-24-199",
+        "003-50",
+        "35-24-186",
+        "35-24-186-WAF-100-E10H2A",
+        "003-15",
+        "35-24-193",
+        "35-24-193-PP-100-E10H2A",
+        "35-24-009.1",
+        "35-24-197",
+        "35-24-194",
+        "001-80",
+        "350-200",
+        "35-24-190",
+        "35-24-190-PP-200-E10H2A",
+        "35-24",
+        "35-24LV2-674",
+        "35-24-198",
+        "35-24-192",
+        "35-24-192-PP-200-E10H2A",
+        "35-24LV1-674",
+        "35-24NV-675",
+        "35-24HV-676",
+        "35-24-001",
+        "35-24-001-WAB-20-E10H2A",
+        "35-24KV-677",
+        "35-24-204",
+        "35-24-204-PP-100-E10H2A",
+        "35-24XV-681",
+        "003-20",
+        "35-24XV-665",
+        "35-24-222",
+        "35-24-223"
+      ],
+      "ai": {
+        "raw_text": "```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24L009\",\n  \"rows\": [\n    {\"equipment\": \"35-24L009\", \"subequipment\": \"\", \"mask\": \"\"},\n    {\"equipment\": \"35-24-220\", \"subequipment\": \"\", \"mask\": \"001-100\"},\n    {\"equipment\": \"35-24-009.1\", \"subequipment\": \"\", \"mask\": \"\"},\n    {\"equipment\": \"35-24-197\", \"subequipment\": \"\", \"mask\": \"001-80\"},\n    {\"equipment\": \"35-24-221\", \"subequipment\": \"\", \"mask\": \"003-50\"},\n    {\"equipment\": \"35-24-222\", \"subequipment\": \"\", \"mask\": \"\"},\n    {\"equipment\": \"35-24-186\", \"subequipment\": \"\", \"mask\": \"\"},\n    {\"equipment\": \"35-24-193\", \"subequipment\": \"\", \"mask\": \"\"},\n    {\"equipment\": \"35-24LV2-674\", \"subequipment\": \"\", \"mask\": \"\"},\n    {\"equipment\": \"35-24LV1-674\", \"subequipment\": \"\", \"mask\": \"\"},\n    {\"equipment\": \"35-24-188\", \"subequipment\": \"\", \"mask\": \"\"},\n    {\"equipment\": \"35-24-189\", \"subequipment\": \"\", \"mask\": \"\"},\n    {\"equipment\": \"35-24-190\", \"subequipment\": \"\", \"mask\": \"\"},\n    {\"equipment\": \"35-24-191\", \"subequipment\": \"\", \"mask\": \"\"},\n    {\"equipment\": \"35-24NV-675\", \"subequipment\": \"\", \"mask\": \"\"},\n    {\"equipment\": \"35-24HV-676\", \"subequipment\": \"\", \"mask\": \"\"},\n    {\"equipment\": \"35-24-187\", \"subequipment\": \"\", \"mask\": \"\"}\n  ],\n  \"peers\": [\n    {\"tag\": \"35-24P519\", \"evidence\": \"Separate pump equipment with own tag block, not mounted on or owned by pulper 35-24L009\"},\n    {\"tag\": \"35-24HS682\", \"evidence\": \"Local panel hand switch for pulper start/stop control\"},\n    {\"tag\": \"35-24HI676\", \"evidence\": \"Local panel indicator for pulper shower\"},\n    {\"tag\": \"35-24HS\", \"evidence\": \"Local panel hand switch\"},\n    {\"tag\": \"35-24LC674\", \"evidence\": \"Level controller in separate control loop\"},\n    {\"tag\": \"35-24XS681\", \"evidence\": \"Position switch on separate valve upstream\"}\n  ],\n  \"notes\": [\n    \"Parent equipment 35-24L009 is the Broke Roll Pulper (141 BDTPD capacity)\",\n    \"Multiple process piping connections visible with line numbers (WAF, PP series)\",\n    \"Local control panel shown with HS682 start/stop and HI676 shower indicator\",\n    \"Level control loop 35-24LV1-674 and 35-24LV2-674 associated with pulper operation\",\n    \"Pump 35-24P519 is adjacent equipment but separate function, listed as peer\"\n  ],\n  \"confidence\": \"high\"\n}\n```",
+        "parsed": {
+          "sub_process": "BR1",
+          "function": "35-24L009",
+          "rows": [
+            {
+              "equipment": "35-24L009",
+              "subequipment": "",
+              "mask": ""
+            },
+            {
+              "equipment": "35-24-220",
+              "subequipment": "",
+              "mask": "001-100"
+            },
+            {
+              "equipment": "35-24-009.1",
+              "subequipment": "",
+              "mask": ""
+            },
+            {
+              "equipment": "35-24-197",
+              "subequipment": "",
+              "mask": "001-80"
+            },
+            {
+              "equipment": "35-24-221",
+              "subequipment": "",
+              "mask": "003-50"
+            },
+            {
+              "equipment": "35-24-222",
+              "subequipment": "",
+              "mask": ""
+            },
+            {
+              "equipment": "35-24-186",
+              "subequipment": "",
+              "mask": ""
+            },
+            {
+              "equipment": "35-24-193",
+              "subequipment": "",
+              "mask": ""
+            },
+            {
+              "equipment": "35-24LV2-674",
+              "subequipment": "",
+              "mask": ""
+            },
+            {
+              "equipment": "35-24LV1-674",
+              "subequipment": "",
+              "mask": ""
+            },
+            {
+              "equipment": "35-24-188",
+              "subequipment": "",
+              "mask": ""
+            },
+            {
+              "equipment": "35-24-189",
+              "subequipment": "",
+              "mask": ""
+            },
+            {
+              "equipment": "35-24-190",
+              "subequipment": "",
+              "mask": ""
+            },
+            {
+              "equipment": "35-24-191",
+              "subequipment": "",
+              "mask": ""
+            },
+            {
+              "equipment": "35-24NV-675",
+              "subequipment": "",
+              "mask": ""
+            },
+            {
+              "equipment": "35-24HV-676",
+              "subequipment": "",
+              "mask": ""
+            },
+            {
+              "equipment": "35-24-187",
+              "subequipment": "",
+              "mask": ""
+            }
+          ],
+          "peers": [
+            {
+              "tag": "35-24P519",
+              "evidence": "Separate pump equipment with own tag block, not mounted on or owned by pulper 35-24L009"
+            },
+            {
+              "tag": "35-24HS682",
+              "evidence": "Local panel hand switch for pulper start/stop control"
+            },
+            {
+              "tag": "35-24HI676",
+              "evidence": "Local panel indicator for pulper shower"
+            },
+            {
+              "tag": "35-24HS",
+              "evidence": "Local panel hand switch"
+            },
+            {
+              "tag": "35-24LC674",
+              "evidence": "Level controller in separate control loop"
+            },
+            {
+              "tag": "35-24XS681",
+              "evidence": "Position switch on separate valve upstream"
+            }
+          ],
+          "notes": [
+            "Parent equipment 35-24L009 is the Broke Roll Pulper (141 BDTPD capacity)",
+            "Multiple process piping connections visible with line numbers (WAF, PP series)",
+            "Local control panel shown with HS682 start/stop and HI676 shower indicator",
+            "Level control loop 35-24LV1-674 and 35-24LV2-674 associated with pulper operation",
+            "Pump 35-24P519 is adjacent equipment but separate function, listed as peer"
+          ],
+          "confidence": "high"
+        },
+        "model_id": "eu.anthropic.claude-sonnet-4-5-20250929-v1:0",
+        "region": "eu-west-2",
+        "prompt_file": "pid_hierarchy_gt_v1.md",
+        "candidates": [
+          "35-25P502",
+          "35-25P504",
+          "35-25P513",
+          "35-25T602",
+          "55-32T601",
+          "35-24L009",
+          "35-24-220",
+          "001-100",
+          "35-24-196",
+          "35-24-187",
+          "35-24-187-WAF-100-E10H2A",
+          "355-250",
+          "35-24-188",
+          "35-24-188-WAF-80-E10H2A",
+          "35-24-189",
+          "35-24-189-PP-300-E10H2A",
+          "35-24P519",
+          "35-24-191",
+          "35-24-191-PP-250-E10H2A",
+          "35-24-221",
+          "35-24-199",
+          "003-50",
+          "35-24-186",
+          "35-24-186-WAF-100-E10H2A",
+          "003-15",
+          "35-24-193",
+          "35-24-193-PP-100-E10H2A",
+          "35-24-009.1",
+          "35-24-197",
+          "35-24-194",
+          "001-80",
+          "350-200",
+          "35-24-190",
+          "35-24-190-PP-200-E10H2A",
+          "35-24",
+          "35-24LV2-674",
+          "35-24-198",
+          "35-24-192",
+          "35-24-192-PP-200-E10H2A",
+          "35-24LV1-674",
+          "35-24NV-675",
+          "35-24HV-676",
+          "35-24-001",
+          "35-24-001-WAB-20-E10H2A",
+          "35-24KV-677",
+          "35-24-204",
+          "35-24-204-PP-100-E10H2A",
+          "35-24XV-681",
+          "003-20",
+          "35-24XV-665",
+          "35-24-222",
+          "35-24-223"
+        ]
+      }
+    },
+    {
+      "tag": "35-24P519",
+      "shot": "/Users/code-huddle-ensemble/Desktop/dwg-reader/outputs/evidence/Broke System.viewer_35-24P519.png",
+      "parent": {
+        "category": "pumps",
+        "block_name": "PPI_0521A-25_0",
+        "handle": "77547",
+        "layer": "P-PUMP_POS",
+        "x": 152.5,
+        "y": 227.5,
+        "resolved_tag": "35-24P519",
+        "nearby_tags": "35-24P519; 35-24",
+        "nearby_descriptions": "141 BDTPD; BROKE ROLL PULPER",
+        "confidence": "high"
+      },
+      "candidates": [
+        "35-25P502",
+        "35-25P504",
+        "35-25P513",
+        "35-25T602",
+        "55-32T601",
+        "35-24P519",
+        "35-24",
+        "003-15",
+        "35-24L009",
+        "35-24-199",
+        "35-24-221",
+        "003-50",
+        "35-24-197",
+        "35-24-191",
+        "35-24-191-PP-250-E10H2A",
+        "001-80",
+        "35-24LV2-674",
+        "35-24-198",
+        "35-24-193",
+        "35-24-193-PP-100-E10H2A",
+        "355-250",
+        "35-24-196",
+        "35-24-009.1",
+        "001-100",
+        "35-24LV1-674",
+        "35-24-220",
+        "35-24-190",
+        "35-24-190-PP-200-E10H2A",
+        "35-24-194",
+        "350-200",
+        "35-24-192",
+        "35-24-192-PP-200-E10H2A",
+        "35-24-189",
+        "35-24-189-PP-300-E10H2A",
+        "35-24-188",
+        "35-24-188-WAF-80-E10H2A",
+        "35-24XV-681",
+        "003-20",
+        "35-24-223",
+        "35-24-222",
+        "35-24-195",
+        "35-24-187",
+        "35-24-187-WAF-100-E10H2A",
+        "35-24NV-675",
+        "35-24-214",
+        "35-24-214-PP-100-E10H2A",
+        "35-24-213",
+        "35-24-213-WAF-20-E10H2A",
+        "35-24-194-WFL-15-E10H2A",
+        "35-24-218",
+        "35-24HV-676",
+        "35-24-195-WFL-15-E10H2A",
+        "35-24-186",
+        "35-24-186-WAF-100-E10H2A",
+        "35-24-215",
+        "35-24-215-WFC--E10H2A",
+        "35-24KV-677",
+        "35-24-216",
+        "35-24-216-WFC--E10H2A"
+      ],
+      "ai": {
+        "raw_text": "```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24P519\",\n  \"rows\": [\n    {\"equipment\": \"35-24P519\", \"subequipment\": \"\", \"mask\": \"\"},\n    {\"equipment\": \"35-24LV1-674\", \"subequipment\": \"\", \"mask\": \"150\"},\n    {\"equipment\": \"35-24LV2-674\", \"subequipment\": \"\", \"mask\": \"80\"},\n    {\"equipment\": \"35-24-198\", \"subequipment\": \"\", \"mask\": \"\"},\n    {\"equipment\": \"35-24-199\", \"subequipment\": \"\", \"mask\": \"003-15\"},\n    {\"equipment\": \"35-24-221\", \"subequipment\": \"\", \"mask\": \"003-50\"},\n    {\"equipment\": \"35-24-191-PP-250-E10H2A\", \"subequipment\": \"\", \"mask\": \"\"},\n    {\"equipment\": \"35-24-196\", \"subequipment\": \"\", \"mask\": \"355-250\"},\n    {\"equipment\": \"35-24-197\", \"subequipment\": \"\", \"mask\": \"001-80\"},\n    {\"equipment\": \"35-24-193-PP-100-E10H2A\", \"subequipment\": \"\", \"mask\": \"\"},\n    {\"equipment\": \"35-24-192-PP-200-E10H2A\", \"subequipment\": \"\", \"mask\": \"\"}\n  ],\n  \"peers\": [\n    {\"tag\": \"35-24L009\", \"evidence\": \"Level instrument for Broke Roll Pulper, separate equipment above pump\"},\n    {\"tag\": \"35-24-220\", \"evidence\": \"Line tag 001-100 associated with Broke Roll Pulper discharge, not pump nozzle\"}\n  ],\n  \"notes\": [\n    \"Parent pump 35-24P519 shown with red boundary box\",\n    \"Multiple control valves (LV1-674, LV2-674) on suction side\",\n    \"Piping connections include lines 35-24-192, 35-24-193, 35-24-191 on discharge\",\n    \"Line 35-24-198 (003-50) on suction manifold\",\n    \"Pump dataplate visible showing 65/32/30/1500 specifications\"\n  ],\n  \"confidence\": \"high\"\n}\n```",
+        "parsed": {
+          "sub_process": "BR1",
+          "function": "35-24P519",
+          "rows": [
+            {
+              "equipment": "35-24P519",
+              "subequipment": "",
+              "mask": ""
+            },
+            {
+              "equipment": "35-24LV1-674",
+              "subequipment": "",
+              "mask": "150"
+            },
+            {
+              "equipment": "35-24LV2-674",
+              "subequipment": "",
+              "mask": "80"
+            },
+            {
+              "equipment": "35-24-198",
+              "subequipment": "",
+              "mask": ""
+            },
+            {
+              "equipment": "35-24-199",
+              "subequipment": "",
+              "mask": "003-15"
+            },
+            {
+              "equipment": "35-24-221",
+              "subequipment": "",
+              "mask": "003-50"
+            },
+            {
+              "equipment": "35-24-191-PP-250-E10H2A",
+              "subequipment": "",
+              "mask": ""
+            },
+            {
+              "equipment": "35-24-196",
+              "subequipment": "",
+              "mask": "355-250"
+            },
+            {
+              "equipment": "35-24-197",
+              "subequipment": "",
+              "mask": "001-80"
+            },
+            {
+              "equipment": "35-24-193-PP-100-E10H2A",
+              "subequipment": "",
+              "mask": ""
+            },
+            {
+              "equipment": "35-24-192-PP-200-E10H2A",
+              "subequipment": "",
+              "mask": ""
+            }
+          ],
+          "peers": [
+            {
+              "tag": "35-24L009",
+              "evidence": "Level instrument for Broke Roll Pulper, separate equipment above pump"
+            },
+            {
+              "tag": "35-24-220",
+              "evidence": "Line tag 001-100 associated with Broke Roll Pulper discharge, not pump nozzle"
+            }
+          ],
+          "notes": [
+            "Parent pump 35-24P519 shown with red boundary box",
+            "Multiple control valves (LV1-674, LV2-674) on suction side",
+            "Piping connections include lines 35-24-192, 35-24-193, 35-24-191 on discharge",
+            "Line 35-24-198 (003-50) on suction manifold",
+            "Pump dataplate visible showing 65/32/30/1500 specifications"
+          ],
+          "confidence": "high"
+        },
+        "model_id": "eu.anthropic.claude-sonnet-4-5-20250929-v1:0",
+        "region": "eu-west-2",
+        "prompt_file": "pid_hierarchy_gt_v1.md",
+        "candidates": [
+          "35-25P502",
+          "35-25P504",
+          "35-25P513",
+          "35-25T602",
+          "55-32T601",
+          "35-24P519",
+          "35-24",
+          "003-15",
+          "35-24L009",
+          "35-24-199",
+          "35-24-221",
+          "003-50",
+          "35-24-197",
+          "35-24-191",
+          "35-24-191-PP-250-E10H2A",
+          "001-80",
+          "35-24LV2-674",
+          "35-24-198",
+          "35-24-193",
+          "35-24-193-PP-100-E10H2A",
+          "355-250",
+          "35-24-196",
+          "35-24-009.1",
+          "001-100",
+          "35-24LV1-674",
+          "35-24-220",
+          "35-24-190",
+          "35-24-190-PP-200-E10H2A",
+          "35-24-194",
+          "350-200",
+          "35-24-192",
+          "35-24-192-PP-200-E10H2A",
+          "35-24-189",
+          "35-24-189-PP-300-E10H2A",
+          "35-24-188",
+          "35-24-188-WAF-80-E10H2A",
+          "35-24XV-681",
+          "003-20",
+          "35-24-223",
+          "35-24-222",
+          "35-24-195",
+          "35-24-187",
+          "35-24-187-WAF-100-E10H2A",
+          "35-24NV-675",
+          "35-24-214",
+          "35-24-214-PP-100-E10H2A",
+          "35-24-213",
+          "35-24-213-WAF-20-E10H2A",
+          "35-24-194-WFL-15-E10H2A",
+          "35-24-218",
+          "35-24HV-676",
+          "35-24-195-WFL-15-E10H2A",
+          "35-24-186",
+          "35-24-186-WAF-100-E10H2A",
+          "35-24-215",
+          "35-24-215-WFC--E10H2A",
+          "35-24KV-677",
+          "35-24-216",
+          "35-24-216-WFC--E10H2A"
+        ]
+      }
+    }
+  ]
+}

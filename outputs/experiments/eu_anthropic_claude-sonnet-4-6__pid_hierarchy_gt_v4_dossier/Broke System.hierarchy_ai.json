@@ -1,0 +1,626 @@
+{
+  "input": "/Users/code-huddle-ensemble/Desktop/dwg-reader/inputs/Broke System.dwg",
+  "mode": "viewer_shot_ai_gt",
+  "evidence_dir": "/Users/code-huddle-ensemble/Desktop/dwg-reader/outputs/evidence",
+  "site": "Shotton Paper Mill, United Kingdom",
+  "line": "Shotton PM3",
+  "process": "Broke System",
+  "sub_process": "BR1",
+  "model_id": "eu.anthropic.claude-sonnet-4-6",
+  "region": "eu-west-2",
+  "prompt_file": "pid_hierarchy_gt_v4_dossier.md",
+  "results": [
+    {
+      "tag": "35-24L009",
+      "shot": "/Users/code-huddle-ensemble/Desktop/dwg-reader/outputs/evidence/Broke System.viewer_35-24L009.png",
+      "parent": {
+        "category": "process_equipment",
+        "block_name": "PPI_1320A-25_0",
+        "handle": "7753E",
+        "layer": "P-EQUIPMENT_POS",
+        "x": 200.0,
+        "y": 317.5,
+        "resolved_tag": "35-24L009",
+        "nearby_tags": "35-24L009",
+        "nearby_descriptions": "BROKE ROLL PULPER; 141 BDTPD; STOP",
+        "confidence": "high"
+      },
+      "candidates": [
+        "35-24L009",
+        "35-24-220",
+        "35-24-196",
+        "35-24-187",
+        "35-24-188",
+        "35-24-189",
+        "35-24P519",
+        "35-24-191",
+        "35-24-221",
+        "35-24-199",
+        "35-24-186",
+        "35-24-193",
+        "35-24-009.1",
+        "35-24-197",
+        "35-24-194",
+        "35-24-190",
+        "35-24",
+        "35-24LV2-674",
+        "35-24-198",
+        "35-24-192",
+        "35-24LV1-674",
+        "35-24NV-675",
+        "35-24HV-676",
+        "35-24-001",
+        "35-24KV-677",
+        "35-24-204",
+        "35-24XV-681",
+        "35-24XV-665",
+        "35-24-222",
+        "35-24-223"
+      ],
+      "dossier": "Parent tag: 35-24L009\nParent category/block: process_equipment / PPI_1320A-25_0\nParent XY: (200.0, 317.5)\nNearby descriptions: BROKE ROLL PULPER; 141 BDTPD; STOP\n\nSame-tag CAD family:\n- process_equipment @ (287.5,332.5) block=P7A0903 nearby=35-24L009\n- process_equipment @ (200.0,317.5) block=PPI_1320A-25_0 nearby=35-24L009\n- valves @ (222.5,260.0) block=PPI_0900A nearby=35-24L009; 35-24P519\n- valves @ (228.75,292.5) block=PPI_0900A nearby=35-24L009\n- instruments @ (237.5,270.0) block=PPI_0102B nearby=35-24L009\n- fittings @ (235.0,242.5) block=P7A1271 nearby=35-24L009; 35-24P519; 35-24\n\nNearby line numbers (short ids preferred in output):\n- 35-24-186  full=35-24-186-WAF-100-E10H2A  d=93  layer=P-LINEPOS\n- 35-24-187  full=35-24-187-WAF-100-E10H2A  d=66  layer=P-LINEPOS\n- 35-24-188  full=35-24-188-WAF-80-E10H2A  d=74  layer=P-LINEPOS\n- 35-24-204  full=35-24-204-PP-100-E10H2A  d=198  layer=P-LINEPOS\n- 35-24-193  full=35-24-193-PP-100-E10H2A  d=96  layer=P-LINEPOS\n- 35-24-192  full=35-24-192-PP-200-E10H2A  d=152  layer=P-LINEPOS\n- 35-24-191  full=35-24-191-PP-250-E10H2A  d=84  layer=P-LINEPOS\n- 35-24-190  full=35-24-190-PP-200-E10H2A  d=111  layer=P-LINEPOS\n- 35-24-189  full=35-24-189-PP-300-E10H2A  d=78  layer=P-LINEPOS\n- 35-24-001  full=35-24-001-WAB-20-E10H2A  d=195  layer=P-LINEPOS\n\nNearby devices (valves/instruments/pumps/\u2026):\n- line_markers: PPI_1100A  d=196  block=PPI_1100A\n- valves: PPI_0900A  d=107  block=PPI_0900A\n- control_valves: PPI_1000A  d=115  block=PPI_1000A\n- instruments: PPI_0102B  d=111  block=PPI_0102B\n- pumps: P7A0200  d=89  block=P7A0200\n- motors: PPI_1504A-25_0  d=96  block=PPI_1504A-25_0\n- fittings: P7A1271  d=96  block=P7A1271\n\nNearby peer primary equipment (do NOT nest under parent):\n- 35-24P519 (pumps, d=89)\n\nNearby drawing text tokens:\n- 141 BDTPD  d=41  layer=P-TEXT\n- 674  d=138  layer=P-INSTRPOS_TEXTS\n- 35-24  d=145  layer=P-INSTRPOS_TEXTS\n- 675  d=162  layer=P-INSTRPOS_TEXTS\n- 677  d=191  layer=P-INSTRPOS_TEXTS\n- 35-24L009  d=25  layer=P-EQUIPMENT_POS\n- 681  d=172  layer=P-INSTRPOS_TEXTS\n- SHOWER S1  d=122  layer=P-TEXT\n- 676  d=173  layer=P-INSTRPOS_TEXTS\n- 682  d=114  layer=P-INSTRPOS_TEXTS\n- 683  d=149  layer=P-INSTRPOS_TEXTS\n- 684  d=137  layer=P-INSTRPOS_TEXTS\n- 685  d=126  layer=P-INSTRPOS_TEXTS\n- 692  d=160  layer=P-INSTRPOS_TEXTS\n- 35-24P519  d=122  layer=P-PUMP_POS\n- 65  d=126  layer=P-PUMP_POS\n- 32  d=120  layer=P-PUMP_POS\n- 30  d=130  layer=P-PUMP_POS\n- 1500  d=125  layer=P-PUMP_POS\n- 35-24-009.1  d=99  layer=P-MOTOR_POS\n- 160  d=104  layer=P-MOTOR_POS\n- 35-24-198  d=136  layer=P-VALVEPOS\n- 003-50  d=138  layer=P-VALVEPOS\n- 35-24-199  d=92  layer=P-VALVEPOS\n- 003-15  d=94  layer=P-VALVEPOS\n- 35-24-221  d=90  layer=P-VALVEPOS\n- 35-24-197  d=102  layer=P-VALVEPOS\n- 001-80  d=106  layer=P-VALVEPOS\n- 35-24-196  d=63  layer=P-VALVEPOS\n- 355-250  d=67  layer=P-VALVEPOS\n- 35-24-220  d=30  layer=P-VALVEPOS\n- 001-100  d=34  layer=P-VALVEPOS\n- 35-24-194  d=103  layer=P-VALVEPOS\n- 350-200  d=108  layer=P-VALVEPOS\n- 35-24-186  d=93  layer=P-LINEPOS\n- 35-24-187  d=66  layer=P-LINEPOS\n- 35-24-188  d=74  layer=P-LINEPOS\n- 35-24-204  d=198  layer=P-LINEPOS\n- 35-24-193  d=96  layer=P-LINEPOS\n- 35-24-192  d=152  layer=P-LINEPOS",
+      "ai": {
+        "raw_text": "I'll systematically analyze the P&ID image and dossier to build the hierarchy for FUNCTION=35-24L009 (Broke Roll Pulper).\n\n**Evidence gathering:**\n\n1. **Parent vessel**: 35-24L009 (Broke Roll Pulper, 141 BDTPD)\n2. **Motor/local point**: 35-24-009.1 (motor tag visible, 160/1500)\n3. **Connected lines** (directly attached to vessel):\n   - 35-24-186 (WAF-100, wire/broke feed in from top)\n   - 35-24-187 (WAF-100, wire feed)\n   - 35-24-188 (WAF-80, shower line)\n   - 35-24-189 (PP-300, discharge/bottom)\n   - 35-24-190 (PP-200, discharge)\n   - 35-24-191 (PP-250, connected)\n   - 35-24-192 (PP-200, inlet magenta line)\n   - 35-24-193 (PP-100, inlet)\n   - 35-24-220 (valve on vessel, 001-100, visible directly on pulper body)\n\n4. **Valves on lines**:\n   - 35-24-220 (001-100) \u2014 on vessel/line 35-24-189 area, very close (d=30)\n   - 35-24-196 (355-250) \u2014 on line 35-24-191\n   - 35-24-199 (003-15) \u2014 on line 35-24-193\n   - 35-24-198 (003-50) \u2014 on line 35-24-192\n   - 35-24-221 (003-50) \u2014 on line 35-24-191\n   - 35-24-197 (001-80) \u2014 on line 35-24-190\n   - 35-24-194 (350-200) \u2014 on line 35-24-190/189\n\n5. **Instruments on vessel**:\n   - 35-24LC-674 (level controller, visible on vessel)\n   - 35-24LV1-674 (level valve, 150)\n   - 35-24LV2-674 (level valve, 80)\n   - 35-24XS-681 (interlock/switch)\n\n6. **Control instruments** (panel tags associated):\n   - 35-24HS-682, 35-24HS-683 (HS instruments for start/stop/emergency)\n   - 35-24KJ-684, 35-24KJ-685 (start/stop)\n   - 35-24XS-692 (MCS signal)\n   - 35-24HI-676 (shower S1 indicator)\n   - 35-24NV-675, 35-24HV-676, 35-24KV-677\n\n7. **Peer**: 35-24P519 (pump, separate primary equipment)\n\n**Nesting logic:**\n- Valves nest under their line\n- LC/LV instruments nest under vessel directly\n- Motor 35-24-009.1 is a direct child of vessel\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24L009\",\n  \"rows\": [\n    {\"equipment\": \"35-24-009.1\", \"subequipment\": \"\", \"mask\": \"motor / local drive point\"},\n    {\"equipment\": \"35-24LC-674\", \"subequipment\": \"\", \"mask\": \"level controller on pulper\"},\n    {\"equipment\": \"35-24LV1-674\", \"subequipment\": \"\", \"mask\": \"level control valve 1 (150)\"},\n    {\"equipment\": \"35-24LV2-674\", \"subequipment\": \"\", \"mask\": \"level control valve 2 (80)\"},\n    {\"equipment\": \"35-24XS-681\", \"subequipment\": \"\", \"mask\": \"interlock switch MCS signal\"},\n    {\"equipment\": \"35-24-186\", \"subequipment\": \"\", \"mask\": \"WAF-100 wire/broke feed line\"},\n    {\"equipment\": \"35-24-187\", \"subequipment\": \"\", \"mask\": \"WAF-100 wire feed line\"},\n    {\"equipment\": \"35-24-188\", \"subequipment\": \"\", \"mask\": \"WAF-80 shower line\"},\n    {\"equipment\": \"35-24-189\", \"subequipment\": \"\", \"mask\": \"PP-300 discharge line\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-220\", \"mask\": \"gate valve 001-100 on PP-300 discharge\"},\n    {\"equipment\": \"35-24-190\", \"subequipment\": \"\", \"mask\": \"PP-200 discharge line\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-197\", \"mask\": \"valve 001-80 on PP-200 line\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-194\", \"mask\": \"valve 350-200 on PP-200 line\"},\n    {\"equipment\": \"35-24-191\", \"subequipment\": \"\", \"mask\": \"PP-250 line\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-196\", \"mask\": \"valve 355-250 on PP-250 line\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-221\", \"mask\": \"valve 003-50 on PP-250 line\"},\n    {\"equipment\": \"35-24-192\", \"subequipment\": \"\", \"mask\": \"PP-200 inlet line (magenta)\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-198\", \"mask\": \"valve 003-50 on PP-200 inlet\"},\n    {\"equipment\": \"35-24-193\", \"subequipment\": \"\", \"mask\": \"PP-100 inlet line\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-199\", \"mask\": \"valve 003-15 on PP-100 inlet\"}\n  ],\n  \"peers\": [\n    {\"tag\": \"35-24P519\", \"evidence\": \"independent pump block (P7A0903) with own tag label at d=89; listed as nearby peer primary equipment; has own motor/speed data (65/32/30/1500) \u2014 not a child of the pulper vessel\"}\n  ],\n  \"notes\": [\n    \"35-24-009.1 is the pulper motor/drive local tag (layer P-MOTOR_POS, d=99)\",\n    \"35-24LC-674 level controller bubble visible on vessel body; LV1-674 and LV2-674 are its associated control valves (150mm and 80mm)\",\n    \"35-24-220 (001-100) is the closest valve to the vessel (d=30) and sits on the PP-300 discharge spool 35-24-189\",\n    \"Lines 35-24-186/187/188 are WAF (wire/broke) feeds entering from top of pulper\",\n    \"35-24NV-675, 35-24HV-676, 35-24KV-677 are visible at bottom-right but at greater distance and associated with shower/dilution circuit \u2014 omitted pending clearer attachment evidence\",\n    \"35-24HS-682/683, 35-24KJ-684/685, 35-24XS-692 are panel/MCS instruments shown in legend block; omitted from hierarchy as they are panel items not directly piped to vessel\",\n    \"35-24-001 (d=195) excluded \u2014 too distant to defend attachment\"\n  ],\n  \"confidence\": \"high\"\n}\n```",
+        "parsed": {
+          "sub_process": "BR1",
+          "function": "35-24L009",
+          "rows": [
+            {
+              "equipment": "35-24-009.1",
+              "subequipment": "",
+              "mask": "motor / local drive point"
+            },
+            {
+              "equipment": "35-24LC-674",
+              "subequipment": "",
+              "mask": "level controller on pulper"
+            },
+            {
+              "equipment": "35-24LV1-674",
+              "subequipment": "",
+              "mask": "level control valve 1 (150)"
+            },
+            {
+              "equipment": "35-24LV2-674",
+              "subequipment": "",
+              "mask": "level control valve 2 (80)"
+            },
+            {
+              "equipment": "35-24XS-681",
+              "subequipment": "",
+              "mask": "interlock switch MCS signal"
+            },
+            {
+              "equipment": "35-24-186",
+              "subequipment": "",
+              "mask": "WAF-100 wire/broke feed line"
+            },
+            {
+              "equipment": "35-24-187",
+              "subequipment": "",
+              "mask": "WAF-100 wire feed line"
+            },
+            {
+              "equipment": "35-24-188",
+              "subequipment": "",
+              "mask": "WAF-80 shower line"
+            },
+            {
+              "equipment": "35-24-189",
+              "subequipment": "",
+              "mask": "PP-300 discharge line"
+            },
+            {
+              "equipment": "",
+              "subequipment": "35-24-220",
+              "mask": "gate valve 001-100 on PP-300 discharge"
+            },
+            {
+              "equipment": "35-24-190",
+              "subequipment": "",
+              "mask": "PP-200 discharge line"
+            },
+            {
+              "equipment": "",
+              "subequipment": "35-24-197",
+              "mask": "valve 001-80 on PP-200 line"
+            },
+            {
+              "equipment": "",
+              "subequipment": "35-24-194",
+              "mask": "valve 350-200 on PP-200 line"
+            },
+            {
+              "equipment": "35-24-191",
+              "subequipment": "",
+              "mask": "PP-250 line"
+            },
+            {
+              "equipment": "",
+              "subequipment": "35-24-196",
+              "mask": "valve 355-250 on PP-250 line"
+            },
+            {
+              "equipment": "",
+              "subequipment": "35-24-221",
+              "mask": "valve 003-50 on PP-250 line"
+            },
+            {
+              "equipment": "35-24-192",
+              "subequipment": "",
+              "mask": "PP-200 inlet line (magenta)"
+            },
+            {
+              "equipment": "",
+              "subequipment": "35-24-198",
+              "mask": "valve 003-50 on PP-200 inlet"
+            },
+            {
+              "equipment": "35-24-193",
+              "subequipment": "",
+              "mask": "PP-100 inlet line"
+            },
+            {
+              "equipment": "",
+              "subequipment": "35-24-199",
+              "mask": "valve 003-15 on PP-100 inlet"
+            }
+          ],
+          "peers": [
+            {
+              "tag": "35-24P519",
+              "evidence": "independent pump block (P7A0903) with own tag label at d=89; listed as nearby peer primary equipment; has own motor/speed data (65/32/30/1500) \u2014 not a child of the pulper vessel"
+            }
+          ],
+          "notes": [
+            "35-24-009.1 is the pulper motor/drive local tag (layer P-MOTOR_POS, d=99)",
+            "35-24LC-674 level controller bubble visible on vessel body; LV1-674 and LV2-674 are its associated control valves (150mm and 80mm)",
+            "35-24-220 (001-100) is the closest valve to the vessel (d=30) and sits on the PP-300 discharge spool 35-24-189",
+            "Lines 35-24-186/187/188 are WAF (wire/broke) feeds entering from top of pulper",
+            "35-24NV-675, 35-24HV-676, 35-24KV-677 are visible at bottom-right but at greater distance and associated with shower/dilution circuit \u2014 omitted pending clearer attachment evidence",
+            "35-24HS-682/683, 35-24KJ-684/685, 35-24XS-692 are panel/MCS instruments shown in legend block; omitted from hierarchy as they are panel items not directly piped to vessel",
+            "35-24-001 (d=195) excluded \u2014 too distant to defend attachment"
+          ],
+          "confidence": "high"
+        },
+        "model_id": "eu.anthropic.claude-sonnet-4-6",
+        "region": "eu-west-2",
+        "prompt_file": "pid_hierarchy_gt_v4_dossier.md",
+        "candidates": [
+          "35-24L009",
+          "35-24-220",
+          "35-24-196",
+          "35-24-187",
+          "35-24-188",
+          "35-24-189",
+          "35-24P519",
+          "35-24-191",
+          "35-24-221",
+          "35-24-199",
+          "35-24-186",
+          "35-24-193",
+          "35-24-009.1",
+          "35-24-197",
+          "35-24-194",
+          "35-24-190",
+          "35-24",
+          "35-24LV2-674",
+          "35-24-198",
+          "35-24-192",
+          "35-24LV1-674",
+          "35-24NV-675",
+          "35-24HV-676",
+          "35-24-001",
+          "35-24KV-677",
+          "35-24-204",
+          "35-24XV-681",
+          "35-24XV-665",
+          "35-24-222",
+          "35-24-223"
+        ],
+        "prompt_chars": 5988
+      },
+      "refined_rows": [
+        {
+          "equipment": "35-24-009.1",
+          "subequipment": "",
+          "mask": "motor / local drive point"
+        },
+        {
+          "equipment": "35-24LC-674",
+          "subequipment": "",
+          "mask": "level controller on pulper"
+        },
+        {
+          "equipment": "35-24LV1-674",
+          "subequipment": "",
+          "mask": "level control valve 1 (150)"
+        },
+        {
+          "equipment": "35-24LV2-674",
+          "subequipment": "",
+          "mask": "level control valve 2 (80)"
+        },
+        {
+          "equipment": "35-24XS-681",
+          "subequipment": "",
+          "mask": "interlock switch MCS signal"
+        },
+        {
+          "equipment": "35-24-186",
+          "subequipment": "",
+          "mask": "WAF-100 wire/broke feed line"
+        },
+        {
+          "equipment": "35-24-187",
+          "subequipment": "",
+          "mask": "WAF-100 wire feed line"
+        },
+        {
+          "equipment": "35-24-188",
+          "subequipment": "",
+          "mask": "WAF-80 shower line"
+        },
+        {
+          "equipment": "35-24-189",
+          "subequipment": "",
+          "mask": "PP-300 discharge line"
+        },
+        {
+          "equipment": "",
+          "subequipment": "35-24-220",
+          "mask": "gate valve 001-100 on PP-300 d"
+        },
+        {
+          "equipment": "35-24-190",
+          "subequipment": "",
+          "mask": "PP-200 discharge line"
+        },
+        {
+          "equipment": "",
+          "subequipment": "35-24-197",
+          "mask": "valve 001-80 on PP-200 line"
+        },
+        {
+          "equipment": "",
+          "subequipment": "35-24-194",
+          "mask": "valve 350-200 on PP-200 line"
+        },
+        {
+          "equipment": "35-24-191",
+          "subequipment": "",
+          "mask": "PP-250 line"
+        },
+        {
+          "equipment": "",
+          "subequipment": "35-24-196",
+          "mask": "valve 355-250 on PP-250 line"
+        },
+        {
+          "equipment": "",
+          "subequipment": "35-24-221",
+          "mask": "valve 003-50 on PP-250 line"
+        },
+        {
+          "equipment": "35-24-192",
+          "subequipment": "",
+          "mask": "PP-200 inlet line (magenta)"
+        },
+        {
+          "equipment": "",
+          "subequipment": "35-24-198",
+          "mask": "valve 003-50 on PP-200 inlet"
+        },
+        {
+          "equipment": "35-24-193",
+          "subequipment": "",
+          "mask": "PP-100 inlet line"
+        },
+        {
+          "equipment": "",
+          "subequipment": "35-24-199",
+          "mask": "valve 003-15 on PP-100 inlet"
+        },
+        {
+          "equipment": "35-24L009.1",
+          "subequipment": "",
+          "mask": ""
+        },
+        {
+          "equipment": "35-24L009.2",
+          "subequipment": "",
+          "mask": ""
+        },
+        {
+          "equipment": "35-24-009.2",
+          "subequipment": "",
+          "mask": ""
+        }
+      ]
+    },
+    {
+      "tag": "35-24P519",
+      "shot": "/Users/code-huddle-ensemble/Desktop/dwg-reader/outputs/evidence/Broke System.viewer_35-24P519.png",
+      "parent": {
+        "category": "pumps",
+        "block_name": "PPI_0521A-25_0",
+        "handle": "77547",
+        "layer": "P-PUMP_POS",
+        "x": 152.5,
+        "y": 227.5,
+        "resolved_tag": "35-24P519",
+        "nearby_tags": "35-24P519; 35-24",
+        "nearby_descriptions": "141 BDTPD; BROKE ROLL PULPER",
+        "confidence": "high"
+      },
+      "candidates": [
+        "35-24P519",
+        "35-24",
+        "35-24L009",
+        "35-24-199",
+        "35-24-221",
+        "35-24-197",
+        "35-24-191",
+        "35-24LV2-674",
+        "35-24-198",
+        "35-24-193",
+        "35-24-196",
+        "35-24-009.1",
+        "35-24LV1-674",
+        "35-24-220",
+        "35-24-190",
+        "35-24-194",
+        "35-24-192",
+        "35-24-189",
+        "35-24-188",
+        "35-24XV-681",
+        "35-24-223",
+        "35-24-222",
+        "35-24-195",
+        "35-24-187",
+        "35-24NV-675",
+        "35-24-214",
+        "35-24-213",
+        "35-24-218",
+        "35-24HV-676",
+        "35-24-186",
+        "35-24-215",
+        "35-24KV-677",
+        "35-24-216"
+      ],
+      "dossier": "Parent tag: 35-24P519\nParent category/block: pumps / PPI_0521A-25_0\nParent XY: (152.5, 227.5)\nNearby descriptions: 141 BDTPD; BROKE ROLL PULPER\n\nSame-tag CAD family:\n- pumps @ (177.5,250.0) block=P7A0200 nearby=35-24P519; 35-24L009; 35-24\n- pumps @ (152.5,227.5) block=PPI_0521A-25_0 nearby=35-24P519; 35-24\n- motors @ (217.5,227.5) block=PPI_1504A-25_0 nearby=35-24P519; 35-24L009\n- valves @ (195.0,227.5) block=PPI_0900A nearby=35-24P519; 35-24L009\n- valves @ (122.5,245.0) block=PPI_0900A nearby=35-24P519; 35-24; 35-24\n- valves @ (167.5,260.0) block=PPI_0900A nearby=35-24P519; 35-24L009; 35-24\n- valves @ (192.5,242.5) block=PPI_0900A nearby=35-24P519; 35-24L009\n- control_valves @ (133.75,257.5) block=PPI_1000A nearby=35-24P519; 35-24; 35-24\n- control_valves @ (88.75,257.5) block=PPI_1000A nearby=35-24; 35-24; 35-24P519\n- instruments @ (147.5,247.5) block=PPI_0102B nearby=35-24P519; 35-24; 35-24L009\n- instruments @ (105.0,270.0) block=PPI_1204A nearby=35-24; 35-24; 35-24P519\n\nNearby line numbers (short ids preferred in output):\n- 35-24-214  full=35-24-214-PP-100-E10H2A  d=169  layer=P-LINEPOS\n- 35-24-213  full=35-24-213-WAF-20-E10H2A  d=170  layer=P-LINEPOS\n- 35-24-187  full=35-24-187-WAF-100-E10H2A  d=159  layer=P-LINEPOS\n- 35-24-188  full=35-24-188-WAF-80-E10H2A  d=140  layer=P-LINEPOS\n- 35-24-194  full=35-24-194-WFL-15-E10H2A  d=172  layer=P-LINEPOS\n- 35-24-195  full=35-24-195-WFL-15-E10H2A  d=189  layer=P-LINEPOS\n- 35-24-193  full=35-24-193-PP-100-E10H2A  d=55  layer=P-LINEPOS\n- 35-24-192  full=35-24-192-PP-200-E10H2A  d=115  layer=P-LINEPOS\n- 35-24-191  full=35-24-191-PP-250-E10H2A  d=29  layer=P-LINEPOS\n- 35-24-190  full=35-24-190-PP-200-E10H2A  d=101  layer=P-LINEPOS\n- 35-24-189  full=35-24-189-PP-300-E10H2A  d=138  layer=P-LINEPOS\n\nNearby devices (valves/instruments/pumps/\u2026):\n- line_markers: PPI_1100A  d=138  block=PPI_1100A\n- valves: PPI_0900A  d=118  block=PPI_0900A\n- control_valves: PPI_1000A  d=35  block=PPI_1000A\n- instruments: PPI_0102B  d=18  block=PPI_0102B\n- pumps: P7A0200  d=22  block=P7A0200\n- motors: PPI_1504A-25_0  d=57  block=PPI_1504A-25_0\n- fittings: P7A1271  d=122  block=P7A1271\n\nNearby peer primary equipment (do NOT nest under parent):\n- 35-24L009 (process_equipment, d=160)\n\nNearby drawing text tokens:\n- 141 BDTPD  d=71  layer=P-TEXT\n- 674  d=66  layer=P-INSTRPOS_TEXTS\n- 35-24  d=78  layer=P-INSTRPOS_TEXTS\n- 675  d=164  layer=P-INSTRPOS_TEXTS\n- 678  d=151  layer=P-INSTRPOS_TEXTS\n- 679  d=174  layer=P-INSTRPOS_TEXTS\n- 9334  d=148  layer=P-INSTRPOS_TEXTS\n- 9336  d=160  layer=P-INSTRPOS_TEXTS\n- 35-24L009  d=91  layer=P-EQUIPMENT_POS\n- 681  d=101  layer=P-INSTRPOS_TEXTS\n- 9335  d=148  layer=P-INSTRPOS_TEXTS\n- 9337  d=164  layer=P-INSTRPOS_TEXTS\n- 676  d=191  layer=P-INSTRPOS_TEXTS\n- 684  d=191  layer=P-INSTRPOS_TEXTS\n- 685  d=176  layer=P-INSTRPOS_TEXTS\n- 35-24P519  d=12  layer=P-PUMP_POS\n- 65  d=17  layer=P-PUMP_POS\n- 32  d=18  layer=P-PUMP_POS\n- 30  d=22  layer=P-PUMP_POS\n- 1500  d=22  layer=P-PUMP_POS\n- 35-24-009.1  d=62  layer=P-MOTOR_POS\n- 160  d=64  layer=P-MOTOR_POS\n- 35-24-222  d=150  layer=P-VALVEPOS\n- 003-20  d=147  layer=P-VALVEPOS\n- 35-24-223  d=148  layer=P-VALVEPOS\n- 35-24-198  d=46  layer=P-VALVEPOS\n- 003-50  d=43  layer=P-VALVEPOS\n- 35-24-199  d=26  layer=P-VALVEPOS\n- 003-15  d=21  layer=P-VALVEPOS\n- 35-24-221  d=27  layer=P-VALVEPOS\n- 35-24-195  d=158  layer=P-VALVEPOS\n- 35-24-197  d=28  layer=P-VALVEPOS\n- 001-80  d=32  layer=P-VALVEPOS\n- 35-24-196  d=61  layer=P-VALVEPOS\n- 355-250  d=60  layer=P-VALVEPOS\n- 35-24-220  d=85  layer=P-VALVEPOS\n- 001-100  d=83  layer=P-VALVEPOS\n- 35-24-218  d=179  layer=P-VALVEPOS\n- 35-24-194  d=112  layer=P-VALVEPOS\n- 350-200  d=113  layer=P-VALVEPOS",
+      "ai": {
+        "raw_text": "```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24P519\",\n  \"rows\": [\n    {\"equipment\": \"35-24P519\", \"subequipment\": \"\", \"mask\": \"pump self-row; nameplate visible on P&ID with 65/32/30/1500 data block\"},\n    {\"equipment\": \"35-24-009.1\", \"subequipment\": \"\", \"mask\": \"motor tag visible on P&ID at (217.5,227.5); 160/1500 data block; PPI_1504A-25_0 block\"},\n    {\"equipment\": \"35-24-191\", \"subequipment\": \"\", \"mask\": \"suction/discharge line 35-24-191-PP-250-E10H2A visible on P&ID; closest line d=29; directly connected to pump\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-196\", \"mask\": \"valve 355-250 on line 35-24-191; visible on P&ID discharge side\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-197\", \"mask\": \"valve 001-80 on line 35-24-191; visible on P&ID\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-221\", \"mask\": \"valve 003-50 on line 35-24-191; visible on P&ID\"},\n    {\"equipment\": \"35-24-193\", \"subequipment\": \"\", \"mask\": \"line 35-24-193-PP-100-E10H2A visible on P&ID; d=55; pump discharge header\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-199\", \"mask\": \"valve 003-15 on line 35-24-193; visible on P&ID\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-220\", \"mask\": \"valve 001-100 on line 35-24-193; visible on P&ID near 35-24L009 connection\"},\n    {\"equipment\": \"35-24-192\", \"subequipment\": \"\", \"mask\": \"line 35-24-192-PP-200-E10H2A visible top of P&ID crop; d=115; suction feed line\"},\n    {\"equipment\": \"35-24-198\", \"subequipment\": \"\", \"mask\": \"valve 003-50 visible on P&ID; P-VALVEPOS d=46; on suction side of pump\"},\n    {\"equipment\": \"35-24LV1-674\", \"subequipment\": \"\", \"mask\": \"control valve 35-24LV1-674 / 150 visible on P&ID; PPI_1000A block; level control valve on suction\"},\n    {\"equipment\": \"35-24LV2-674\", \"subequipment\": \"\", \"mask\": \"control valve 35-24LV2-674 / 80 visible on P&ID; PPI_1000A block; level control valve on suction\"},\n    {\"equipment\": \"35-24LC-674\", \"subequipment\": \"\", \"mask\": \"LC 674 instrument bubble visible on P&ID at (147.5,247.5); PPI_0102B block; level controller associated with LV1/LV2-674\"}\n  ],\n  \"peers\": [\n    {\n      \"tag\": \"35-24L009\",\n      \"evidence\": \"process_equipment BROKE ROLL PULPER; d=160; separate primary equipment block on P&ID; explicitly listed as nearby peer primary equipment \u2014 must not be nested under 35-24P519\"\n    }\n  ],\n  \"notes\": [\n    \"35-24XV-681 (XS-681) appears at left edge of crop on a separate branch line; association to this pump function is uncertain \u2014 excluded pending wider P&ID context\",\n    \"Lines 35-24-194/195 (WFL-15) and 35-24-187/188 (WAF) are dilution/white-water lines at greater distance; not directly attached to pump symbol \u2014 excluded\",\n    \"Valve tags 35-24-222/223 are at d=148-150 and appear associated with 35-24L009 pulper rather than pump \u2014 excluded\",\n    \"Motor tag 35-24-009.1 confirmed by P-MOTOR_POS layer text and PPI_1504A-25_0 CAD block at (217.5,227.5)\"\n  ],\n  \"confidence\": \"high\"\n}\n```",
+        "parsed": {
+          "sub_process": "BR1",
+          "function": "35-24P519",
+          "rows": [
+            {
+              "equipment": "35-24P519",
+              "subequipment": "",
+              "mask": "pump self-row; nameplate visible on P&ID with 65/32/30/1500 data block"
+            },
+            {
+              "equipment": "35-24-009.1",
+              "subequipment": "",
+              "mask": "motor tag visible on P&ID at (217.5,227.5); 160/1500 data block; PPI_1504A-25_0 block"
+            },
+            {
+              "equipment": "35-24-191",
+              "subequipment": "",
+              "mask": "suction/discharge line 35-24-191-PP-250-E10H2A visible on P&ID; closest line d=29; directly connected to pump"
+            },
+            {
+              "equipment": "",
+              "subequipment": "35-24-196",
+              "mask": "valve 355-250 on line 35-24-191; visible on P&ID discharge side"
+            },
+            {
+              "equipment": "",
+              "subequipment": "35-24-197",
+              "mask": "valve 001-80 on line 35-24-191; visible on P&ID"
+            },
+            {
+              "equipment": "",
+              "subequipment": "35-24-221",
+              "mask": "valve 003-50 on line 35-24-191; visible on P&ID"
+            },
+            {
+              "equipment": "35-24-193",
+              "subequipment": "",
+              "mask": "line 35-24-193-PP-100-E10H2A visible on P&ID; d=55; pump discharge header"
+            },
+            {
+              "equipment": "",
+              "subequipment": "35-24-199",
+              "mask": "valve 003-15 on line 35-24-193; visible on P&ID"
+            },
+            {
+              "equipment": "",
+              "subequipment": "35-24-220",
+              "mask": "valve 001-100 on line 35-24-193; visible on P&ID near 35-24L009 connection"
+            },
+            {
+              "equipment": "35-24-192",
+              "subequipment": "",
+              "mask": "line 35-24-192-PP-200-E10H2A visible top of P&ID crop; d=115; suction feed line"
+            },
+            {
+              "equipment": "35-24-198",
+              "subequipment": "",
+              "mask": "valve 003-50 visible on P&ID; P-VALVEPOS d=46; on suction side of pump"
+            },
+            {
+              "equipment": "35-24LV1-674",
+              "subequipment": "",
+              "mask": "control valve 35-24LV1-674 / 150 visible on P&ID; PPI_1000A block; level control valve on suction"
+            },
+            {
+              "equipment": "35-24LV2-674",
+              "subequipment": "",
+              "mask": "control valve 35-24LV2-674 / 80 visible on P&ID; PPI_1000A block; level control valve on suction"
+            },
+            {
+              "equipment": "35-24LC-674",
+              "subequipment": "",
+              "mask": "LC 674 instrument bubble visible on P&ID at (147.5,247.5); PPI_0102B block; level controller associated with LV1/LV2-674"
+            }
+          ],
+          "peers": [
+            {
+              "tag": "35-24L009",
+              "evidence": "process_equipment BROKE ROLL PULPER; d=160; separate primary equipment block on P&ID; explicitly listed as nearby peer primary equipment \u2014 must not be nested under 35-24P519"
+            }
+          ],
+          "notes": [
+            "35-24XV-681 (XS-681) appears at left edge of crop on a separate branch line; association to this pump function is uncertain \u2014 excluded pending wider P&ID context",
+            "Lines 35-24-194/195 (WFL-15) and 35-24-187/188 (WAF) are dilution/white-water lines at greater distance; not directly attached to pump symbol \u2014 excluded",
+            "Valve tags 35-24-222/223 are at d=148-150 and appear associated with 35-24L009 pulper rather than pump \u2014 excluded",
+            "Motor tag 35-24-009.1 confirmed by P-MOTOR_POS layer text and PPI_1504A-25_0 CAD block at (217.5,227.5)"
+          ],
+          "confidence": "high"
+        },
+        "model_id": "eu.anthropic.claude-sonnet-4-6",
+        "region": "eu-west-2",
+        "prompt_file": "pid_hierarchy_gt_v4_dossier.md",
+        "candidates": [
+          "35-24P519",
+          "35-24",
+          "35-24L009",
+          "35-24-199",
+          "35-24-221",
+          "35-24-197",
+          "35-24-191",
+          "35-24LV2-674",
+          "35-24-198",
+          "35-24-193",
+          "35-24-196",
+          "35-24-009.1",
+          "35-24LV1-674",
+          "35-24-220",
+          "35-24-190",
+          "35-24-194",
+          "35-24-192",
+          "35-24-189",
+          "35-24-188",
+          "35-24XV-681",
+          "35-24-223",
+          "35-24-222",
+          "35-24-195",
+          "35-24-187",
+          "35-24NV-675",
+          "35-24-214",
+          "35-24-213",
+          "35-24-218",
+          "35-24HV-676",
+          "35-24-186",
+          "35-24-215",
+          "35-24KV-677",
+          "35-24-216"
+        ],
+        "prompt_chars": 6498
+      },
+      "refined_rows": [
+        {
+          "equipment": "35-24P519",
+          "subequipment": "",
+          "mask": "pump self-row; nameplate visib"
+        },
+        {
+          "equipment": "35-24-009.1",
+          "subequipment": "",
+          "mask": "motor tag visible on P&ID at ("
+        },
+        {
+          "equipment": "35-24-191",
+          "subequipment": "",
+          "mask": "suction/discharge line 35-24-1"
+        },
+        {
+          "equipment": "",
+          "subequipment": "35-24-196",
+          "mask": "valve 355-250 on line 35-24-19"
+        },
+        {
+          "equipment": "",
+          "subequipment": "35-24-197",
+          "mask": "valve 001-80 on line 35-24-191"
+        },
+        {
+          "equipment": "",
+          "subequipment": "35-24-221",
+          "mask": "valve 003-50 on line 35-24-191"
+        },
+        {
+          "equipment": "35-24-193",
+          "subequipment": "",
+          "mask": "line 35-24-193-PP-100-E10H2A v"
+        },
+        {
+          "equipment": "",
+          "subequipment": "35-24-199",
+          "mask": "valve 003-15 on line 35-24-193"
+        },
+        {
+          "equipment": "",
+          "subequipment": "35-24-220",
+          "mask": "valve 001-100 on line 35-24-19"
+        },
+        {
+          "equipment": "35-24-192",
+          "subequipment": "",
+          "mask": "line 35-24-192-PP-200-E10H2A v"
+        },
+        {
+          "equipment": "35-24-198",
+          "subequipment": "",
+          "mask": "valve 003-50 visible on P&ID; "
+        },
+        {
+          "equipment": "35-24LV1-674",
+          "subequipment": "",
+          "mask": "control valve 35-24LV1-674 / 1"
+        },
+        {
+          "equipment": "35-24LV2-674",
+          "subequipment": "",
+          "mask": "control valve 35-24LV2-674 / 8"
+        },
+        {
+          "equipment": "35-24LC-674",
+          "subequipment": "",
+          "mask": "LC 674 instrument bubble visib"
+        },
+        {
+          "equipment": "35-24P519.1",
+          "subequipment": "",
+          "mask": ""
+        },
+        {
+          "equipment": "35-24-519.1",
+          "subequipment": "",
+          "mask": ""
+        },
+        {
+          "equipment": "35-24P519.2",
+          "subequipment": "",
+          "mask": ""
+        },
+        {
+          "equipment": "35-24-519.2",
+          "subequipment": "",
+          "mask": ""
+        },
+        {
+          "equipment": "35-24-190",
+          "subequipment": "",
+          "mask": ""
+        },
+        {
+          "equipment": "35-24-194",
+          "subequipment": "",
+          "mask": ""
+        }
+      ]
+    }
+  ]
+}

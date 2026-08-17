@@ -1,0 +1,42 @@
+0:01 Hi Sales Armu. Just want to take you through the notes from the call with Rob on Shotton Mill on Friday.
+0:08 First thing I just want to call out is if you view a PDF in Acrobat Reader, you can search it.
+0:16 Which is super useful, right? So I can search for 137, for example, and it will find it in the diagram.
+0:23 So if I'm zoomed right out, I could search for you know 137, whatever, and it will find it. So that's really cool.
+0:32 So you Using Aquapat Reader, it can find the text in the PDFs. Okay, so let me just cancel this one.
+0:40 Okay, going back to, so there's several things that Rob found out. Some of them are simple, some of them are going to be quite hard to solve, but no.
+0:48 Nevertheless, let's dive in. So the first one was abbreviations. So I'm on the broke system functional locations. And he just noticed that some of these functional location descriptions are not fully abbreviated.
+1:05 So, for example, the word conveyor should be abbreviated to C V Y R. So, I think we need to look in the In the standards in here, you'll find an abbreviation for conveyor.
+1:27 Okay, so that's the first thing. But crucially, what we need to do is for every word, use regex, I guess, for every word in this.
+1:37 Description: If there is a abbreviation, then use it. Okay, so there's other words in here that could be abbreviated as well.
+1:48 Okay, next one. So, that's all about abbreviations. This. Next one is the work center column is empty. So, again, in the functional locations, all the way over here, right at the end is work center.
+2:03 This should be populated, and it's a very similar, well, it's basically the identical. Field to um to work centre in here, wherever it is.
+2:14 Blah, blah, blah, blah, blah. Sorry, uh work centre where is it? Sorry, it's really late here, I should go to bed.
+2:29 Here we go, Work Centre. So this is in the equipment file. You see you've populated Work Centre here. Work Centre in the functional locations also needs to be populated.
+2:42 Okay, next one, subordinate equipment. So now in the equipment spreadsheet. So in the equipment spreadsheet. What he quickly saw, hold on, this is my working one, original.
+3:03 What he picked up on is that whenever you had a, if you imagine subordinate equipment is another level of hierarchy, imagine it another layer.
+3:13 So, when you jump into subordinate equipment, you need to reset the position. So, this is correct as position six, if you like, but this should become position one because it's the first row on the subordinate equipment.
+3:25 So, this number should be zero. And then this next one, you now pop back up a level. So this should be 70 because it goes 60, 70.
+3:38 And then these three are all subordinate equipment. This should be 10, 20, 30. And then this one follows on from this one.
+3:49 So this was 60, 70, so this one should be 80. I've made this much clearer by giving you the actual worked example in the document.
+4:00 Okay, next one. Line identifiers. So looking at cell F12, you see that this is a line, it's got the word line in it, but all lines should be prefixed with LN and the word line.
+4:17 Line should be removed. Okay, so this should actually be ln space thirty-five and then the word line should be removed instead.
+4:26 Okay, so that's a fairly simple one. Here's another one here. This should be prefixed with ln and the word line should be removed.
+4:34 There's two examples here. The next one is valve identifiers. Right, this starts to get a bit gnarly now. So, all valves should be prefixed with HV for hand valve.
+4:48 All valves. Should be prefixed with HV. So in cell 95, down here, so cell 95, you see this one's got 35 to
+0:01 Okay, let's just talk about hand valves. So, all hand valves need to be prefixed with HV. So, if you go to cell F95 in the equipment, you'll see we've got it as 3524 HV548.
+0:15 All hand valves need to be prefixed. Prefixed with HV, so this should actually be HV3524548. But it doesn't stop there.
+0:25 If we go to the diagram, so I've searched for 548 in the PDF, we can see this is the 3424 HV548.
+0:32 Now, this isn't a hand valve, this is an automatic valve. If I go to the key, which I've actually pulled through into the diagram here, then you can see that this, like a hand valve, is up here, that's a hand valve, but a valve with a surface On top is actually an automatic valve.
+0:52 So we need to change our description from 3524 HV548 hand valve to HV because it's a hand valve prefixed with HV.
+1:05 And then it's actually a hand valve for the pulpa. Okay, so if we go back to the diagram, we can see it's actually a hand valve for the pulpa, right, because it's on that line, thirty four um two four.
+1:21 And because of the icon, we know it's an automatic valve. So, we're going to have to do some very funky computer vision to realize that this valve is actually an automatic valve, and then give it.
+1:36 The correct value. I've explained this in a bit more detail here. Yeah, so the 3524L005 is actually the real pulper.
+1:49 If we go to the functional location spreadsheet, And we can see that 3524L005 is the real pulpa. So rather than putting in the word real pulpa.
+2:09 We put in 3524L005. Okay, hopefully, once you've studied that for a bit, you'll know what I'm talking about. Okay, and then another example is this one: cell F103.
+2:25 Go into the equipment, original one, F one zero three. F one hundred three is this one. So you can see we've got this one named a little bit incorrectly actually.
+2:41 3524137. If we go to the diagram, search for 137. Okay, we can see that this is actually, and again, if we look at the key for this black, this black valve here.
+2:55 Oops, sorry. If we look at the key, wherever the key is, we can see that this is a a drainage valve.
+3:07 And we can see that it's normally closed. Okay, because if it was because it's black black, So, black-black means normally closed.
+3:19 So, again, going to the picture, we can see it's a drainage valve and it's black-black, so it's normally closed. So, actually, rather than being 3524137 pp.
+3:29 P250 conveyor spool. It should be HV because it's a valve. 3524137. And then again, here's the pulper code, and it's a drainage valve for the pulper.
+3:45 It's normally closed. Okay, I'll leave you with that for a bit because there's an awful lot of information there. Yeah, I just close it.

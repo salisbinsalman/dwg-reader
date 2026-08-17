@@ -1,0 +1,14 @@
+{
+  "hierarchy_csv": "/Users/code-huddle-ensemble/Desktop/dwg-reader/outputs/Broke System.hierarchy_orchestrator.csv",
+  "output": "/Users/code-huddle-ensemble/Desktop/dwg-reader/outputs/Broke System.equipment.xlsx",
+  "equipment_row_count": 94,
+  "tplnr_count": 5,
+  "tplnrs": [
+    "5001-PM03-BR-BR1-35-24L001",
+    "5001-PM03-BR-BR1-35-24L002",
+    "5001-PM03-BR-BR1-35-24L003",
+    "5001-PM03-BR-BR1-35-24L004",
+    "5001-PM03-BR-BR1-35-24L005"
+  ],
+  "with_hequi": 18
+}

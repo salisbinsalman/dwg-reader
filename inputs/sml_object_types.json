@@ -1,0 +1,1007 @@
+{
+  "object_types": {
+    "100": {
+      "name": "ROLLS",
+      "work_centre": "MECH"
+    },
+    "101": {
+      "name": "ROLL SUCTION",
+      "work_centre": "MECH"
+    },
+    "102": {
+      "name": "ROLL SPREADER",
+      "work_centre": "MECH"
+    },
+    "103": {
+      "name": "ROLL FELT",
+      "work_centre": "MECH"
+    },
+    "104": {
+      "name": "ROLL WIRE",
+      "work_centre": "MECH"
+    },
+    "105": {
+      "name": "ROLL NIP",
+      "work_centre": "MECH"
+    },
+    "106": {
+      "name": "ROLL DC",
+      "work_centre": "MECH"
+    },
+    "107": {
+      "name": "CYLINDER DRYER",
+      "work_centre": "MECH"
+    },
+    "108": {
+      "name": "CYLINDER VAC",
+      "work_centre": "MECH"
+    },
+    "109": {
+      "name": "ROLL SIZER",
+      "work_centre": "MECH"
+    },
+    "110": {
+      "name": "ROLL PART- BOX",
+      "work_centre": "MECH"
+    },
+    "111": {
+      "name": "ROLL PART- HEAD",
+      "work_centre": "MECH"
+    },
+    "112": {
+      "name": "ROLL PART- SHELL",
+      "work_centre": "MECH"
+    },
+    "200": {
+      "name": "VALVES",
+      "work_centre": "MECH"
+    },
+    "201": {
+      "name": "VALVE  HAND",
+      "work_centre": "MECH"
+    },
+    "202": {
+      "name": "VALVE  AUTO",
+      "work_centre": "MECH"
+    },
+    "203": {
+      "name": "VALVE RELIEF",
+      "work_centre": "MECH"
+    },
+    "204": {
+      "name": "VALVE PRESSURE CTRL",
+      "work_centre": "MECH"
+    },
+    "205": {
+      "name": "VALVE NON RETURN",
+      "work_centre": "MECH"
+    },
+    "300": {
+      "name": "CONVEYORS",
+      "work_centre": "MECH"
+    },
+    "301": {
+      "name": "CONVEYOR CHAIN",
+      "work_centre": "MECH"
+    },
+    "302": {
+      "name": "CONVEYOR BELT",
+      "work_centre": "MECH"
+    },
+    "303": {
+      "name": "CONVEYOR SCREW",
+      "work_centre": "MECH"
+    },
+    "400": {
+      "name": "ELEVATORS",
+      "work_centre": "MECH"
+    },
+    "500": {
+      "name": "CRANES & LIFTING",
+      "work_centre": "MECH"
+    },
+    "501": {
+      "name": "CRANE OVERHEAD",
+      "work_centre": "MECH"
+    },
+    "502": {
+      "name": "LIFTING BEAM",
+      "work_centre": "MECH"
+    },
+    "600": {
+      "name": "TANKS AND VESSLES",
+      "work_centre": "MECH"
+    },
+    "601": {
+      "name": "TANK",
+      "work_centre": "MECH"
+    },
+    "602": {
+      "name": "SILO",
+      "work_centre": "MECH"
+    },
+    "603": {
+      "name": "PIT",
+      "work_centre": "MECH"
+    },
+    "604": {
+      "name": "PRESSURE VESSELS",
+      "work_centre": "MECH"
+    },
+    "605": {
+      "name": "BIO DIGESTER",
+      "work_centre": "MECH"
+    },
+    "606": {
+      "name": "CONDENSER",
+      "work_centre": "MECH"
+    },
+    "607": {
+      "name": "OTHER VESSELS",
+      "work_centre": "MECH"
+    },
+    "700": {
+      "name": "PUMPS",
+      "work_centre": "MECH"
+    },
+    "701": {
+      "name": "PUMP CENTRIFUGAL",
+      "work_centre": "MECH"
+    },
+    "702": {
+      "name": "PUMP POSITIVE DISP",
+      "work_centre": "MECH"
+    },
+    "703": {
+      "name": "PUMP SUBMERSIBLE",
+      "work_centre": "MECH"
+    },
+    "704": {
+      "name": "PUMP VACUUM",
+      "work_centre": "MECH"
+    },
+    "800": {
+      "name": "FANS & BLOWERS",
+      "work_centre": "MECH"
+    },
+    "801": {
+      "name": "FAN",
+      "work_centre": "MECH"
+    },
+    "802": {
+      "name": "BLOWER",
+      "work_centre": "MECH"
+    },
+    "803": {
+      "name": "BLOWER VACUUM",
+      "work_centre": "MECH"
+    },
+    "900": {
+      "name": "GEARBOXES",
+      "work_centre": "MECH"
+    },
+    "901": {
+      "name": "GEARBOX",
+      "work_centre": "MECH"
+    },
+    "1000": {
+      "name": "POWER TRANSMISSION",
+      "work_centre": "MECH"
+    },
+    "1100": {
+      "name": "ELECTRICAL EQUIP",
+      "work_centre": "ELEC"
+    },
+    "1101": {
+      "name": "MOTOR ELECTRICAL",
+      "work_centre": "ELEC"
+    },
+    "1102": {
+      "name": "GENERATOR",
+      "work_centre": "ELEC"
+    },
+    "1103": {
+      "name": "TRANSFORMER",
+      "work_centre": "ELEC"
+    },
+    "1104": {
+      "name": "ELECTRIC DRIVE",
+      "work_centre": "ELEC"
+    },
+    "1105": {
+      "name": "ELECTRIC DIST CENTRE",
+      "work_centre": "ELEC"
+    },
+    "1106": {
+      "name": "STARTER",
+      "work_centre": "ELEC"
+    },
+    "1107": {
+      "name": "ELECTRICAL POSITION",
+      "work_centre": "ELEC"
+    },
+    "1108": {
+      "name": "SWITCH",
+      "work_centre": "ELEC"
+    },
+    "1109": {
+      "name": "CONTROL BOARD",
+      "work_centre": "ELEC"
+    },
+    "1110": {
+      "name": "DISCONNECTOR",
+      "work_centre": "ELEC"
+    },
+    "1111": {
+      "name": "RELAY",
+      "work_centre": "ELEC"
+    },
+    "1112": {
+      "name": "E-METER",
+      "work_centre": "ELEC"
+    },
+    "1113": {
+      "name": "SURGE PROTECTION",
+      "work_centre": "ELEC"
+    },
+    "1114": {
+      "name": "VOLTAGE TRANSFORMER",
+      "work_centre": "ELEC"
+    },
+    "1115": {
+      "name": "PROTECTION RELAY",
+      "work_centre": "ELEC"
+    },
+    "1116": {
+      "name": "CIRCUIT BREAKER",
+      "work_centre": "ELEC"
+    },
+    "1117": {
+      "name": "CURRENT TRANSFORMER",
+      "work_centre": "ELEC"
+    },
+    "1118": {
+      "name": "POWER QUALITY METER",
+      "work_centre": "ELEC"
+    },
+    "1119": {
+      "name": "COIL",
+      "work_centre": "ELEC"
+    },
+    "1120": {
+      "name": "ELECTRICAL CUBICLE",
+      "work_centre": "ELEC"
+    },
+    "1121": {
+      "name": "SWITCH BOARD",
+      "work_centre": "ELEC"
+    },
+    "1122": {
+      "name": "EARTH SWITCH",
+      "work_centre": "ELEC"
+    },
+    "1123": {
+      "name": "GROUND RESISTOR",
+      "work_centre": "ELEC"
+    },
+    "1124": {
+      "name": "EARTHING TRANSFORMER",
+      "work_centre": "ELEC"
+    },
+    "1125": {
+      "name": "CABLE",
+      "work_centre": "ELEC"
+    },
+    "1126": {
+      "name": "CABLE SEALING END",
+      "work_centre": "ELEC"
+    },
+    "1127": {
+      "name": "LIGHTING BOARD",
+      "work_centre": "ELEC"
+    },
+    "1128": {
+      "name": "CONTACTOR",
+      "work_centre": "ELEC"
+    },
+    "1200": {
+      "name": "INSTRUMENTS",
+      "work_centre": ""
+    },
+    "1201": {
+      "name": "INSTRUMENT PRESSURE",
+      "work_centre": ""
+    },
+    "1202": {
+      "name": "INSTRUMENT TEMP",
+      "work_centre": ""
+    },
+    "1203": {
+      "name": "INSTRUMENT FLOW",
+      "work_centre": ""
+    },
+    "1204": {
+      "name": "INSTRUMENT LEVEL",
+      "work_centre": ""
+    },
+    "1205": {
+      "name": "INSTRUMENT SPEED",
+      "work_centre": ""
+    },
+    "1206": {
+      "name": "INSTRUMENT MOTION",
+      "work_centre": ""
+    },
+    "1207": {
+      "name": "INSTRUMENT RADIATION",
+      "work_centre": ""
+    },
+    "1208": {
+      "name": "INSTRUMENT QI/PH",
+      "work_centre": ""
+    },
+    "1209": {
+      "name": "INSTRUMENT POSITION",
+      "work_centre": ""
+    },
+    "1210": {
+      "name": "INSTRUMENT OTHER",
+      "work_centre": ""
+    },
+    "1300": {
+      "name": "LUBRICATION",
+      "work_centre": "LUBE"
+    },
+    "1301": {
+      "name": "LUBE UNIT",
+      "work_centre": "LUBE"
+    },
+    "1302": {
+      "name": "LUBE TANK",
+      "work_centre": "LUBE"
+    },
+    "1400": {
+      "name": "HYDRAULIC EQUIP",
+      "work_centre": "MECH"
+    },
+    "1401": {
+      "name": "HYD MOTOR",
+      "work_centre": "MECH"
+    },
+    "1402": {
+      "name": "HYD CYLINDER",
+      "work_centre": "MECH"
+    },
+    "1403": {
+      "name": "HYD PUMP",
+      "work_centre": "MECH"
+    },
+    "1404": {
+      "name": "HYD VALVE",
+      "work_centre": "MECH"
+    },
+    "1405": {
+      "name": "HYD POWER PACK",
+      "work_centre": "MECH"
+    },
+    "1406": {
+      "name": "HYD ACCUMULATOR",
+      "work_centre": "MECH"
+    },
+    "1500": {
+      "name": "PNEUMATIC EQUIPMENT",
+      "work_centre": "MECH"
+    },
+    "1501": {
+      "name": "PNEUMATIC CYLINDER",
+      "work_centre": "MECH"
+    },
+    "1502": {
+      "name": "PNEUMATIC MOTOR",
+      "work_centre": "MECH"
+    },
+    "1503": {
+      "name": "PNEUMATIC VALVE",
+      "work_centre": "MECH"
+    },
+    "1600": {
+      "name": "COMPRESSORS",
+      "work_centre": "MECH"
+    },
+    "1601": {
+      "name": "COMP OIL FILLED AIR",
+      "work_centre": "MECH"
+    },
+    "1602": {
+      "name": "COMP OIL FREE AIR",
+      "work_centre": "MECH"
+    },
+    "1603": {
+      "name": "COMP PORTABLE AIR",
+      "work_centre": "MECH"
+    },
+    "1700": {
+      "name": "FILTERS",
+      "work_centre": "MECH"
+    },
+    "1701": {
+      "name": "FILTER AIR",
+      "work_centre": "MECH"
+    },
+    "1702": {
+      "name": "FILTER HYDRAULIC",
+      "work_centre": "MECH"
+    },
+    "1703": {
+      "name": "FILTER WATER",
+      "work_centre": "MECH"
+    },
+    "1704": {
+      "name": "FILTER BAG",
+      "work_centre": "MECH"
+    },
+    "1800": {
+      "name": "VEHICLES",
+      "work_centre": ""
+    },
+    "1801": {
+      "name": "LIFT-TRUCK",
+      "work_centre": ""
+    },
+    "1802": {
+      "name": "SCISSOR LIFT",
+      "work_centre": ""
+    },
+    "1803": {
+      "name": "CHERRY PICKER",
+      "work_centre": ""
+    },
+    "1804": {
+      "name": "VEHICLE OTHER",
+      "work_centre": ""
+    },
+    "1900": {
+      "name": "TOOLS",
+      "work_centre": ""
+    },
+    "1901": {
+      "name": "SPECIALIST EQUIP",
+      "work_centre": ""
+    },
+    "1902": {
+      "name": "POWER/HAND TOOLS",
+      "work_centre": ""
+    },
+    "1903": {
+      "name": "WELD/BURNING EQUIP",
+      "work_centre": ""
+    },
+    "1904": {
+      "name": "MACHINE TOOLS",
+      "work_centre": ""
+    },
+    "1905": {
+      "name": "STORAGE RACK",
+      "work_centre": ""
+    },
+    "1906": {
+      "name": "BUILDING CTRL SYSTEM",
+      "work_centre": ""
+    },
+    "1907": {
+      "name": "HYDRAULIC PRESS",
+      "work_centre": ""
+    },
+    "1908": {
+      "name": "LAB EQUIP",
+      "work_centre": ""
+    },
+    "1909": {
+      "name": "CLEANING EQUIP",
+      "work_centre": ""
+    },
+    "2000": {
+      "name": "PROCESS MACHINES",
+      "work_centre": "MECH"
+    },
+    "2001": {
+      "name": "MIXER/AGITATOR",
+      "work_centre": "MECH"
+    },
+    "2002": {
+      "name": "REFINER",
+      "work_centre": "MECH"
+    },
+    "2003": {
+      "name": "DEWIRING",
+      "work_centre": "MECH"
+    },
+    "2004": {
+      "name": "REJECT HANDLING",
+      "work_centre": "MECH"
+    },
+    "2005": {
+      "name": "PULPER",
+      "work_centre": "MECH"
+    },
+    "2006": {
+      "name": "CLEANER",
+      "work_centre": "MECH"
+    },
+    "2007": {
+      "name": "FLOATATION EQUIPMENT",
+      "work_centre": "MECH"
+    },
+    "2008": {
+      "name": "DISC FILTER",
+      "work_centre": "MECH"
+    },
+    "2009": {
+      "name": "THICKENER",
+      "work_centre": "MECH"
+    },
+    "2010": {
+      "name": "DOCTOR",
+      "work_centre": "MECH"
+    },
+    "2011": {
+      "name": "OPTI-DRYER",
+      "work_centre": "MECH"
+    },
+    "2012": {
+      "name": "SCANNER",
+      "work_centre": "MECH"
+    },
+    "2013": {
+      "name": "BREAK DETECTION",
+      "work_centre": "MECH"
+    },
+    "2014": {
+      "name": "BROKE BELT",
+      "work_centre": "MECH"
+    },
+    "2015": {
+      "name": "SIZER",
+      "work_centre": "MECH"
+    },
+    "2016": {
+      "name": "SIZER TURN FLOAT",
+      "work_centre": "MECH"
+    },
+    "2017": {
+      "name": "CROSS CUTTER",
+      "work_centre": "MECH"
+    },
+    "2018": {
+      "name": "FELT CLEANER",
+      "work_centre": "MECH"
+    },
+    "2019": {
+      "name": "EDGE TRIM",
+      "work_centre": "MECH"
+    },
+    "2020": {
+      "name": "SHOWERS",
+      "work_centre": "MECH"
+    },
+    "2021": {
+      "name": "CORE HANDLING",
+      "work_centre": "MECH"
+    },
+    "2022": {
+      "name": "REEL TRANSFER",
+      "work_centre": "MECH"
+    },
+    "2023": {
+      "name": "WINDER",
+      "work_centre": "MECH"
+    },
+    "2024": {
+      "name": "SPLITTER",
+      "work_centre": "MECH"
+    },
+    "2025": {
+      "name": "SHREDDING MACHINES",
+      "work_centre": "MECH"
+    },
+    "2026": {
+      "name": "CLARIFIER",
+      "work_centre": "MECH"
+    },
+    "2027": {
+      "name": "BOILER",
+      "work_centre": "MECH"
+    },
+    "2028": {
+      "name": "ROTARY FEEDER",
+      "work_centre": "MECH"
+    },
+    "2029": {
+      "name": "DIFFUSER",
+      "work_centre": "MECH"
+    },
+    "2030": {
+      "name": "HEAT EXCHANGER",
+      "work_centre": "MECH"
+    },
+    "2031": {
+      "name": "SCREEN",
+      "work_centre": "MECH"
+    },
+    "2032": {
+      "name": "SORTER",
+      "work_centre": "MECH"
+    },
+    "2033": {
+      "name": "PRECIPITANT",
+      "work_centre": "MECH"
+    },
+    "2034": {
+      "name": "SPRAY BAR",
+      "work_centre": "MECH"
+    },
+    "2035": {
+      "name": "CENTRIFUGE",
+      "work_centre": "MECH"
+    },
+    "2036": {
+      "name": "TURBINE",
+      "work_centre": "MECH"
+    },
+    "2037": {
+      "name": "WASHER SCRUBBER",
+      "work_centre": "MECH"
+    },
+    "2038": {
+      "name": "LIME DOSING",
+      "work_centre": "MECH"
+    },
+    "2039": {
+      "name": "WASTE WTR TREATMENT",
+      "work_centre": "MECH"
+    },
+    "2040": {
+      "name": "FEED WTR TREATMENT",
+      "work_centre": "MECH"
+    },
+    "2041": {
+      "name": "FLARE",
+      "work_centre": "MECH"
+    },
+    "2042": {
+      "name": "COOLING UNIT",
+      "work_centre": "MECH"
+    },
+    "2043": {
+      "name": "SILENCER",
+      "work_centre": "MECH"
+    },
+    "2044": {
+      "name": "STRETCH MECHANISM",
+      "work_centre": "MECH"
+    },
+    "2045": {
+      "name": "GUIDE MECHANISM",
+      "work_centre": "MECH"
+    },
+    "2046": {
+      "name": "HEADBOX",
+      "work_centre": "MECH"
+    },
+    "2047": {
+      "name": "HEATER",
+      "work_centre": "MECH"
+    },
+    "2048": {
+      "name": "CUTTING MACHINES",
+      "work_centre": "MECH"
+    },
+    "2049": {
+      "name": "SCREW PRESS",
+      "work_centre": "MECH"
+    },
+    "2050": {
+      "name": "DISPERGER",
+      "work_centre": "MECH"
+    },
+    "2051": {
+      "name": "ECONOMIZER",
+      "work_centre": "MECH"
+    },
+    "2052": {
+      "name": "STEAM TRAP",
+      "work_centre": "MECH"
+    },
+    "2100": {
+      "name": "PIPE LINES",
+      "work_centre": "MECH"
+    },
+    "2200": {
+      "name": "IT EQUIPMENT",
+      "work_centre": "IT"
+    },
+    "2300": {
+      "name": "SAFETY EQUIPMENT",
+      "work_centre": "MECH"
+    },
+    "2301": {
+      "name": "SAFETY SHOWER",
+      "work_centre": "MECH"
+    },
+    "9999": {
+      "name": "NOT CATEGORIZED",
+      "work_centre": ""
+    }
+  },
+  "tag_prefix_rules": {
+    "LC": "1204",
+    "LT": "1204",
+    "NC": "1204",
+    "FC": "1203",
+    "FT": "1203",
+    "FI": "1203",
+    "PC": "1201",
+    "PT": "1201",
+    "PI": "1201",
+    "TC": "1202",
+    "TT": "1202",
+    "TI": "1202",
+    "TV": "202",
+    "AC": "1210",
+    "AT": "1210",
+    "AI": "1210",
+    "QI": "1208",
+    "QC": "1208",
+    "RC": "1210",
+    "XS": "1108",
+    "SH": "1205",
+    "SL": "1205",
+    "ST": "1205",
+    "SI": "1205",
+    "ZS": "1209",
+    "ZT": "1209",
+    "LV": "202",
+    "FV": "202",
+    "HV": "201",
+    "XV": "202",
+    "PV": "202",
+    "BV": "202",
+    "P": "701",
+    "M": "1101",
+    "ES": "1108"
+  },
+  "description_keyword_rules": [
+    {
+      "match": [
+        "MTR"
+      ],
+      "code": "1101"
+    },
+    {
+      "match": [
+        "MOTOR"
+      ],
+      "code": "1101"
+    },
+    {
+      "match": [
+        "CTRL VLV"
+      ],
+      "code": "202"
+    },
+    {
+      "match": [
+        "CTRL",
+        "VLV"
+      ],
+      "code": "202"
+    },
+    {
+      "match": [
+        "VLV"
+      ],
+      "code": "201"
+    },
+    {
+      "match": [
+        "PLPR",
+        "OUTLET"
+      ],
+      "code": "2100"
+    },
+    {
+      "match": [
+        "PLPR",
+        "INLET"
+      ],
+      "code": "2100"
+    },
+    {
+      "match": [
+        "PLPR",
+        "SUCT"
+      ],
+      "code": "2100"
+    },
+    {
+      "match": [
+        "PLPR",
+        "DIS"
+      ],
+      "code": "2100"
+    },
+    {
+      "match": [
+        "PLPR",
+        "CIRC"
+      ],
+      "code": "2100"
+    },
+    {
+      "match": [
+        "PLPR",
+        "OVFL"
+      ],
+      "code": "2100"
+    },
+    {
+      "match": [
+        "PLPR",
+        "DRN"
+      ],
+      "code": "2100"
+    },
+    {
+      "match": [
+        "PLPR",
+        "LINE"
+      ],
+      "code": "2100"
+    },
+    {
+      "match": [
+        "PLPR",
+        "SHW"
+      ],
+      "code": "2020"
+    },
+    {
+      "match": [
+        "PLPR"
+      ],
+      "code": "2005"
+    },
+    {
+      "match": [
+        "PULPER"
+      ],
+      "code": "2005"
+    },
+    {
+      "match": [
+        "THICKENER"
+      ],
+      "code": "2009"
+    },
+    {
+      "match": [
+        "SCRN"
+      ],
+      "code": "2031"
+    },
+    {
+      "match": [
+        "SCREEN"
+      ],
+      "code": "2031"
+    },
+    {
+      "match": [
+        "SHW"
+      ],
+      "code": "2020"
+    },
+    {
+      "match": [
+        "AGI"
+      ],
+      "code": "2001"
+    },
+    {
+      "match": [
+        "AGITATOR"
+      ],
+      "code": "2001"
+    },
+    {
+      "match": [
+        "CVYR"
+      ],
+      "code": "300"
+    },
+    {
+      "match": [
+        "CONVEYOR"
+      ],
+      "code": "300"
+    },
+    {
+      "match": [
+        "PMP"
+      ],
+      "code": "701"
+    },
+    {
+      "match": [
+        "PUMP"
+      ],
+      "code": "701"
+    },
+    {
+      "match": [
+        "FAN"
+      ],
+      "code": "801"
+    },
+    {
+      "match": [
+        "BLOWER"
+      ],
+      "code": "802"
+    },
+    {
+      "match": [
+        "TWR"
+      ],
+      "code": "601"
+    },
+    {
+      "match": [
+        "TNK"
+      ],
+      "code": "601"
+    },
+    {
+      "match": [
+        "TANK"
+      ],
+      "code": "601"
+    },
+    {
+      "match": [
+        "LINE"
+      ],
+      "code": "2100"
+    },
+    {
+      "match": [
+        "REFINER"
+      ],
+      "code": "2002"
+    },
+    {
+      "match": [
+        "CLEANER"
+      ],
+      "code": "2006"
+    },
+    {
+      "match": [
+        "SORTER"
+      ],
+      "code": "2032"
+    },
+    {
+      "match": [
+        "DOCTOR"
+      ],
+      "code": "2010"
+    },
+    {
+      "match": [
+        "GEARBOX"
+      ],
+      "code": "901"
+    }
+  ]
+}

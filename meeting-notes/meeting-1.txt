@@ -1,0 +1,258 @@
+0:00 Functional Location, Structure List, and this is what we're aiming to have, so CHP-1 is our boilerplant, and that was done manually, and this is what we're aiming to, to do, is, is to put the assets into order of system.
+0:17 So, as we go in, uhm, these are in operational order, and this has all been put together through the drawings, uhm, so, this is the makeup water system, and as you're drawing through it, you down through this tree structure, you get to that pump, then, from the functional locations you have equipment
+0:39 as well, erm, and then, drill down into there and we have components, we're not going to component level. In this scope, it's only functional location and, er, equipment.
+0:53 Equipment, yeah. So the equipment is the leaf of the tree, if you like. Yes! And the functional location is the, er, the branches.
+1:04 Of the tree, yeah. Yeah. So see the functional locations as something, it's like the position where something is and the equipment is the thing itself.
+1:14 Yeah. Uhm, because of how we have to do it at times, because you just can't start off an equipment within a structure, it'd just get quite messy.
+1:22 Yeah. Say that line is the beginning of that, uhm, that part of the system. So we've had to say that that's a flock, give that its line number, and then all these assets are off that.
+1:34 So these other lines here, then have valves on them. So this abbreviation says that that's a hand valve. That's the number that's on the PID.
+1:45 That's a hand valve to that pressure instrument. So, and it's then saying NO. So NO means normally open. NC means normally closed.
+1:56 Uhm, it does say that on the drawings as well, whether the valves are normally open or normally closed. In the way it's noted on the PID.
+2:07 Uhm, so yeah, this is, this is what we're aiming to to build there. Some systems are easier than others to to create someone quite.
+2:16 Uhm, sort of start A to B. Other systems sort of feed into and you have to just make a decision where you're going.
+2:24 We're going to start with that so, uhm. Is this making sense? Yeah, yeah, yeah, yeah, yeah, yeah, super cool. And so the the excuse me set.
+2:38 The spreadsheets that we're going to create. Using the template you've given us. They will be up port. They will be imported into SAP.
+2:47 Imported into the system and you will essentially be looking at the information that we provide in this same way, right?
+2:52 So we're essentially creating this schema. Yes, awesome. Not this schema, but it's the sheet that I've, yeah, yeah. The sheets that we've been working on, I do have one up here actually.
+3:04 So this sheet, like you may have seen before in the examples, this is what I've put together to build. The data.
+3:15 So in this field, that's, that's the description. It's got a maximum character of 40. This builds the mask. So the mask is the function location.
+3:27 Uhm, code there. So that's called a function location mask. And the way it's built, it sort of breaks down to water systems.
+3:40 That's built in the name. So when you see that tank. And you see the function location, you can see that it's part of that makeup water system.
+3:51 Yeah. See how it drills down. Yeah. So shot on mill container board, 5001, CHP plant within that. And then. It builds on there, so you've got like the boiler building water systems, and then the water systems break down into the different water systems.
+4:10 We have on the plant. So you say you go to the feed water. That's and then it breaks down. So then being the component level, I have got a I've put it on the share folder, and I wrote like a bit of an SOP when we had our team manually doing it.
+4:33 Just, it's all there. So it goes into a little bit of a description of the methodology of how we get to building that mask.
+4:44 I think this will probably be quite helpful. Yeah. So technology. And then I've, I've broke down how to build the name of the assets as well.
+0:00 And then just left to become, uhm, where we're at with it now. So, I've got this SAP, I can, I'll share that in this chat, so, uhm.
+0:17 If I, I'll, I'll, I'll put it in the chat, I've got it on me, the folder, so it is on the share folder.
+0:26 Yeah. Uhm. And that's it, I'll just grab that now. Was it there yesterday? It was on the share folder yesterday, right?
+0:40 I've just added this to it. Oh, you've just added it to it, okay. It came to me, uhm, if I, how can I share that into this?
+0:48 I don't think I can do it from here. I'm not allowed to share that on here. So it's in that folder anyway.
+0:56 I was going to put it on the chat, but off settings won't let me do it. So, uh, you put it into the standard.
+1:04 Yeah, so that's where that document is and that that that will be really helpful to understanding how we've put the name in together as well.
+1:15 Uhm? So SAP. This is this is the end product when you. Go into the. Data that's behind these functional locations.
+1:30 So if I. Just. I just choose one. These fields here are where in the upload template we're also putting in.
+1:52 All the data. So these fields here, uhm, location, NSAP you need to upload all the locations before you put it on a, uhm, upload template.
+2:06 So you have to do an upload of locations. To then reference, if you put them in here. So, uhm, I don't think the drawing.
+2:16 Sorry, that's why we've got the two spreadsheets, is it? One of locations and one of equipment? Is that why they're separate?
+2:21 No, no, no, I'll, I'll explain in a minute. So, locations. I don't think the PIDs will have that information on them anyway, so I'd probably say that that that's probably outside of what we're going to be able to get out with the AI, to be honest.
+2:39 Uhm, but the one WorkCentre will be there. Criticality, uhm, there's been no criticality study yet, so that is likely to be, uhm, just set it as D, until we get we can update our data once the criticality study's been done.
+3:01 Uhm, and then the structure. So this part of it here says what child assets, uh, are against that.
+3:14 I'll explain that in a minute. So, basically, the, that object type it's carried through from a list, uhm, so if something comes up and it's not identified.
+3:30 So, if I show you this sheet here, so on that, that part, I'm saying whether something's a motor, electrical motor, shower, a pump, a paper machine roll.
+3:45 And that has a code against it. So, this object type here, if any need creating, this has to be uploaded in SAP as well.
+3:55 So, then reference this number. Yeah. So, that list. Is in, uhm, is in our share folder. Out there. So, if, if it's not in this list here.
+4:16 It'll need to need adding in, so this, it's not like a, a major task, but when it finds something it will, it'll say like, oh, if it could, if it could leave something blank, if it doesn't recognize what type of equipment it is, at least it identifies that it's it needs looking at.
+4:35 Yeah. So, uhm, that, that's in that folder anyway, but most things should be captured there, what I hear, it'll only be very specific things that we'll need a new one creating.
+4:49 Uhm, but I would almost say if it was blank, it's probably better that I just make that decision here, our end.
+0:00 doing are based at my desk, so if you have an urgent question, just give me a bell. Uhm, let's just, let's just pause there for a second.
+0:11 Um, Amir and Salas, have you got any questions? Are you following the, uhm, the example so far? Yeah, we are following it, uh, but what we wanted to understand was that from DWG file, how are we taking out the hierarchies and stuff?
+0:27 Yeah, sure. If that's possible, that would be really helpful. Yeah, yeah, we're gonna get to that in a sec. Yeah.
+0:32 Yeah. So, where are we now? Let me get my, uhm, it's on this sheet, isn't it? So, that's in the folder now.
+0:44 That's gonna be very useful. That explains, yeah, yeah, how the structure is put together, where it sits in the structure.
+0:53 So, these are the upload templates. So, first one that will be done is this functional location one. Uhm, so, you build the data in the background here.
+1:09 And here are the other fields like I've shown before, where if we have a manufacturer, we can add that in.
+1:15 Or, if we know the criticality. That goes in here as ADC indicator, uhm, and then, so on this it says the superior function, So, That's parent asset is there, and that one's parent asset is that one.
+1:44 So it's just the format that it needs to go in. This position here is what puts it in the order that it is in SAP.
+1:54 So, these position is here. That'll be 001, that'll be 002, that'll be 003, that'll be 004, and then, so if I click on that, you'll see there in the structure, that position.
+2:06 And is that position in port? That position is very important, because that's what builds the, like, in process order. So, the start of the feedwater process is at that line, and then it goes to, then it's the incandescent.
+2:25 So, it's in the order of the flow of the PID. So, we did have an issue when we uploaded it that all of this was messed up, and I had to go through it, uh, one by one, and make sure that it was all in the correct order.
+2:42 So, this would be equivalent to following the pipe on the diagram, and whatever equipment you come to in that order would be down in the order of this, yeah.
+2:51 Yeah, when you get to that, you'll see that that's the beginning of the process. So, that'll be, sorry, 001, 002, and then the next one will be 003, and it builds up like that.
+3:11 Uhm, the naming of things. So, we like to have the asset, uh, number, that's what's in the field, and then abbreviate down the name, and then, it's, it's a bit of a, an art in trying to get enough information so people might know what it is.
+3:31 Well, so that this comes from the abbreviation, uhm, name and abbreviation standard. Yeah. So all these abbreviations. They used to bring it down because we've got a maximum of 40 in that field.
+3:50 So you've got a maximum of 40 in the description here, characters. It can be quite challenging sometimes. Sometimes to get that abbreviated down, but I'm pretty sure something like AI, you'll probably not struggle as much as humans do for this, but.
+4:10 Is it every, uh, every text field in SAP is 40 or is it just some? No. So at the top of here, it tells you the max.
+4:18 So, oh yeah. Functioning locations, 30. Yeah. Um, that's the positioner. That's a four, um, digit number. Um, it says at the top there what your maximums are.
+4:33 There's some weird ones, like nobody would ever have 80 characters in your ABC indicator, but they allow you to have 80 characters in that.
+4:42 Don't know why. The, um, so I can't see what row it is. Is it row one? But essentially the top row that we can see at the moment.
+4:49 So the functional area, the technical area, so you've got technical area. That's the code that SAP recognizes that that field is what populate, that's what populates.
+0:00 Yeah, we've got the first row is TPLNR. And are we saying that TPLNR maps to a, uhm, a specific node in the hierarchy?
+0:15 Yeah, so that, that's it. That maps to that. So that's what, that is the, so when it's, when the sheet recognizes that it's filling that field with that.
+0:27 Yeah. That field will come from that one. PLTXT. Okay. Yeah. So this is what gives it the depth in the hierarchy.
+0:40 Is that a good way of thinking? Yes. So this is, this is where it gets that data from. Yeah. Those codes are just, it's how SAP recognises that field.
+0:51 So, so they're SAP codes rather than, um, sort of shot and mill plant codes? Yes. Yeah. Okay. Yeah. On those templates.
+0:59 Yeah. I see. That's why they were a little bit foreign to us. We were looking at those again. Where'd they come from?
+1:04 Yeah. So these, this is all SAP here, and then these descriptions here, that's more what I would understand that field as.
+1:14 Yeah. Superior function location. It's just what the parent to that one is. So that one's parent. It's that you have to tell it so that it maps to it in the, uhm, when you upload the data.
+1:28 Okay. So let's just, let's just, let's just go through this then. So column C is the parent of column B.
+1:36 Yes. Yep. Column D, column D tells SAP the order that these should be treated in. Yeah, so that tells you where that sits in the order.
+1:49 Yep. Yep. Column E is a child. Child of column B. Can we say that? Or not necessarily? Column E, no, no.
+1:58 Column E is the description. Oh yeah, okay, yeah. Column E is the description, yeah, okay. Oh yes, yeah, yeah, yeah.
+2:05 This goes in here. Ah, yeah, yeah, yeah, okay. Yeah. Okay, let's go. Let's keep going back to the spreadsheet then.
+2:10 This is super useful going through this. So column E is the description. Um, column F then? Column F, that's the object type.
+2:19 So object type is, it's here. So this tells. The system, whether it's a POM, a voter, this is the type it is.
+2:30 Yep, nice. Um, then this column here, WorkCentre, so that's telling the system what to the default WorkCentre that works on that type of equipment is.
+2:44 So, for a POM, it's going to be the mechanical team working on that. Yeah. So, that data goes in here.
+2:50 Yeah. Uhm, then this, this mask here, this tells SAP the structure of the mask. Uhm, got it. Can you show, can you show us a, uhm, can you show us a populated field that's used that mask in, in SAP?
+3:08 Yes. So, that field here. Ah, yeah. So, that uses that mask, but even though, like, this field here has fully followed that, if you put that in here, it, it recognizes that it's following that mask.
+3:29 But, because there's, there's sort of, like, Ah, this is like, this is like, almost like a validation field of the spreadsheet.
+3:38 Yes. So, there's a number of different default, uhm, mask structure indicators. Uhm, I would say don't, don't worry about that field.
+3:51 That is, it's one that is just copied all the way down. I see. Yeah, yeah. But, essentially, it's, uhm, it's a little bit of a helping hand in the spreadsheet to say column B, the data in column B should follow, should follow the format in column H.
+4:08 Yeah. So, the N is saying it needs to be a number. The X's means it can be a letter or a number.
+4:15 Alphanumeric, yeah. The A is saying is alphabetical, uhm, yeah. And then the X's again just means it can be a number or a letter.
+4:26 Yeah, got it. Uhm, the only things you have to be careful of are if you start putting question marks. And such like, but we're not going to be doing that.
+4:36 Yeah. So, so it's basically, then I have to use S, which means it's like anything. I see. Yeah, yeah, yeah.
+4:43 Okay. So it's numbers, letters, and hyphens basically. Yes. Okay. Uhm, and then say column I. Yeah. So column I is ABC indicator.
+4:53 So this is the criticality. Like I said, likelihood is, but.
+0:00 So these locations here indicate out in the field, like, this column number. Uhm, like I say, I doubt we're going to get this information out of the PRDs.
+0:16 Uhm, I would say this almost needs to be done as a survey, so it might be something that needs doing down the line.
+0:24 Do you think that information is just not in the P&ID, or it's too difficult to, uhm, interpret? I just don't, I just don't think it's in there.
+0:31 Okay. Uh, uhm. I doubt they're referencing column numbers in the P&IDs, to be honest, because the P&IDs will have been generated for most things before the building was even designed, so, uhm.
+0:50 There might be some data in there. If it could pull it out, we'd just need to make sure that we load in these into SAP before running this template.
+0:59 I see. If that makes sense, because these have got a reference point that's already in. SAP. Manufacturer. Yeah. So this says who makes that, uhm, that equipment here.
+1:14 Who makes that? And is that, that, that's a lookup that we will do from another one of the files you've given us, or is that information in there?
+1:20 The P, how do we get manufacturer basically? If from the PIDs, I doubt it's going to give you manufacturer data, to be honest.
+1:36 This was from, uhm, our old system, and some of this data was already in there, so I was able to pull it in.
+1:47 I see. So, that may also be a field that, unless manuals were, sort of, scanned, but that, I think that's outside the scope of this, that, that, that's more further down the line.
+2:02 So, again, that might, more likely be picked up later on, I think. Yeah. Yeah, yeah. We are not going through the manuals.
+2:14 I doubt that information is going to be on any PIDs to be honest. That's almost like the manufacturer. Serial number is the instance of the thing that's been procured.
+2:22 Isn't it? Yeah. So the PPI information is the PID, I guess, tells you what you need and then you go and buy it and then you have a serial number reference.
+2:30 Yeah. And once, once this is something that could be done down the line. So once this is in the system, you run this template again, but change any failed.
+2:40 So you could, you could do like an extraction from SAP and then update data, run the template again. It'll just update the fields that you've edited from what it was.
+2:52 So it is something that you could do down the line, but in the scope of what we're aiming to do, we're not going to be able to do that.
+3:02 Understood. Erm, functional location category, that's saying whether it's a material or I think everything here is just an element. Erm, so that again, just be populated with erm, maintenance plans.
+3:18 So this is important. So maintenance plans, we have two maintenance plans here. One is 5001 for container board, CHP, well, all except Tissue.
+3:30 Tissue has its own plant, maintenance plan, which is 6001. Okay. Erm, and you can see that, because I've already, erm.
+3:41 So essentially everything in that spreadsheet is going to be 5001, right? Except for the Tissue stuff, because that's going to sit here.
+3:51 The Tissue would have its own spreadsheet, yeah. Yeah, so Tissue here is against that maintenance plan. Yeah, I see, yeah.
+4:01 It's just the way the business is structured here. They wanted to separate Container Board from Tissue. Yeah, uhm, this is all CPS, CPS for Rob, so thank you.
+4:13 Yeah, yeah, yeah. Just for the purpose of the recording, we skipped a column. We skipped column O. Is that just going to be blank?
+4:20 Oh, yeah, the central location, yeah. OK, OK, let's move on to column Q. So column Q is Cost Center. Uhm, we didn't have.
+4:33 Have the cost centers available to us when we. Submitted this template, we have got cost centers now, uhm. Can add that data in, but it's probably better that we.
+4:49 Speak with our finance team to see where they want the cost centers to sit for the different areas. So again, I wouldn't worry about that.
+0:05 I go back to, So. We've just left that blank, to be honest. Yeah. So, yeah. See, the costs set to the, For what it is, it, It's probably better we decide where that sits.
+0:35 Cause we'll have to have a discussion with finance and say, where do you want the costs for PM3 to sit?
+0:43 Yeah. I'm sure they'll, Probably say, uh, PM operations, it's, uh, it might not even be settled yet, so that'll be a field that, we'll decide anyway.
+1:07 So should we leave Cost Centre for the moment, or is it a mandatory field? I would leave, I would, I would leave Cost Centre, yeah.
+1:12 Okay. So, I'd say the main fields that we'd be looking at, Are we got two? Let's just do those two.
+1:20 Can we just cover those last two quickly? Yeah, yeah, sure. So, uhm, just for completeness. So column R, yeah. Yeah.
+1:29 So planned, again, that will be 5,001. Or 6,001. Agreed. Or 6,001, yeah. Yeah. And the same thing. And then this will be 6,001.
+1:38 Yeah. So essentially, P, R, and S will be the same value, either 5,001 or 6,001. Yeah. Yeah, and it's only 6,001 for tissue.
+1:48 Okay, good. Yeah. Great. So, that's the functional location template. Amazing. Let's just pause there for a second. Uhm, Sales, Tsunami, have you got any questions on that?
+2:00 I don't know, on that. I know, on that. I know, on that. Oh, big echo there. Heh heh. Yep. So.
+2:08 Back. That gets us to here in building the structure. We need to then put in the equipment here. So I'll show you the upload template for equipments.
+2:26 So the equipment template, very similar in format. Yeah, you've got the name of the technical area, the format. So it tells you how many characters you have in that.
+2:39 Bye. And then it says whether it's mandatory field or content available. So if we can do the same, just go through each column quickly.
+2:51 Um, this is all just an FYI. It's making a lot of sense. It was that it was that row one with the.
+2:56 Those very foreign looking codes, those SAP codes. Oh, I can imagine without without explanation. I mean, if I'd just seen it before I'd started working with it, it'd be a nightmare.
+3:09 You know, it's, it's almost much more obvious, but it's just those columns. Yeah, if we can, if we can start with column A, then that'd be great.
+3:17 So, so column A is just, uh, the heading bit there. So column B is where we start. So the numbers SAP generates these numbers itself.
+3:29 Uhm, if I go to create a new equipment, uhm, when I click enter on that, I get and save it, it will create a new number.
+3:47 So, we don't really want to fill in that field, uhm, unless we could lock SAP. down and we know what the last of these numbers was, we could then fill in the, uhm, equipment.
+4:10 I guess that, I guess that this spreadsheet is being, is being generated from an export from SAP, right? That's why it's got the numbers in it.
+4:17 Uhm, yes, yeah, so I got, I sent them the template with all the names I wanted added in, they sent me one back.
+4:27 Where it's a bit confusing is you then have to map, uhm, where it's a Superior Equipment, uuuh. Can you explain what that means, Superior Equipment?
+4:45 Right, let me, I'm just trying to find, so. In SAP, they, that is a Superior Equipment to those two. Oh, I see.
+4:59 Yeah, yeah, okay. So it's not, uhm.
+0:00 So, I'm just seeing on this spreadsheet, here, I might need to double check whether I've got the final one that was submitted.
+0:12 Uhm, as you can imagine, this was done, uh, the week before Christmas, and I had rushed to get it in.
+0:23 Uh, it was a bit of a nightmare, so I'll, I'll just have to double check whether I've put on the share drive the, the final.
+0:33 Upload that we did do. Yeah, so this is, say, the parent. Flock. See where it's quite difficult was we had to run an upload in, give everything an equipment number.
+1:04 And then map it again to be able to say whether something was a parent asset to something else.
+1:16 Yeah, I see. And it was, was that a manual task that you had to do in SAP? A bit of dragging and dropping?
+1:24 No, we did it by running the template again. I see. Okay, so, so let me just work that through in my head.
+1:32 So, so you start off with no number. What's column B called again? Yeah, so you start off with no equipment number.
+1:38 Equipment number. Yeah. So you upload the empty template. Yeah. That puts all the data into SAP that gives you an equipment number.
+1:45 Yeah. You then do an export. And because you've got equipment numbers, you can now say that piece of equipment is subordinate to that piece of equipment.
+1:52 Yes. You can only do that once you've got the equipment numbers. Once you've got the numbers. It'd be a lot easier if we could just get the equipment numbers at that point and then map it and do one template.
+2:05 But because the system's live and somebody could create an equipment number. In the system, it could mess up the numbering.
+2:12 Yeah. We'll have a think about that because obviously we'll discover the relationship. So we'll discover that whether it's subordinate or not.
+2:22 Yeah. But we won't be able to. On the first pass, we won't be able to, uhm. And one thing I did learn was that uploading a massive template like this was a nightmare.
+2:36 We'd be better doing it almost drawing by drawing. So, so, say, if a drawing had this created for it, and then we'd, so we'd know what functional locations and what equipments are in, um, interpreted off a drawing.
+2:56 Kind of do it by drawing and drawing, because, one thing I did learn was. I think in our mind, we were, we well certainly I was anticipating that one template, so one spreadsheet, would be one.
+3:13 Would be one PID, and I, that's the way I would want to go forward. I, yeah, it was a nightmare having to do it the way I did it, and I think that's why there was some errors when it did go in with the likes of the positioner.
+3:25 So each PID would have one functional location spreadsheet and one equipment spreadsheet. That's, that's, yeah, that'll be, it'll be a lot easier to manage that way as well.
+3:37 Great. Is there, uhm, is there overlap? Does, does one, uuuhm, there will be some overlap here, I did find that, yeah, we did get that quite a bit.
+3:56 So before in the, so this, this template. This spreadsheet here, I'm just trying to find my, this spreadsheet here is like how I did it.
+4:09 And then before I put it in the template, I, I, I sort of filtered to see if there was anything duplicated and then.
+4:17 And chose where, I mean, I'm pretty sure AI would find that very easily whether something's duplicated or And if we did, if we did find a duplicate, would we have to choose which diagram was the master?
+4:35 The way that we did do it was deciding which system it sat in best and I have even, for a couple of items, I've found them and then had to go into SAP and delete them.
+4:49 Delete them, but move other bits of equipment that one drawing picked up that didn't, another didn't. I'll just say that they're in that.
+4:57 It's not an issue for equipment, but because the name,
+0:02 Valmet drawings, they were better than some of the ones that we had for the boiler to be honest. Yeah. Could we go back to the equipment, um, spreadsheet and just continue going through those columns because that was super useful.
+0:12 I took something a bit of a tangent. So it feels like we still need to do this, this double upload.
+0:16 But we'll certainly discover that subordinate relationship and then we'll think about how best to handle that. But I think what we'll do is, so our template wouldn't have, um, our first template wouldn't have the equipment number in it, because that's going to be generated by SAP.
+0:31 That's going to be blank, yeah. Um, but we will record the subordinate relationship. So once we've done one upload and then got an export, we can then, using the subordinate information we discovered, we can then update that column.
+0:44 We know that, but, yeah, I'm just trying to, find, So. When I had this sheet, it was quite easy because anything that's in grey, anything that's yellow is a flock, anything that's grey is an equipment, anything that's light grey is a sub-equipment.
+1:06 So, it's almost good having this to reference what you put in your template, but once these have got their equipment numbers here, you can put in your sub-equipment numbers there and, So, I'll use Salas, maybe it's, maybe the way to do this then is, like, we create a master schema that, that is, uhm,
+1:26 you know, our equivalent of this, this spreadsheet that Rob's showing us here. This is like Rob's working, work in progress that records all the relationships, and then we use that master spreadsheet to map to the template that SAP needs.
+1:40 And if we did that, we'd be able to record all of these support and the relationships that we discover, but we can't use on the first pass.
+1:49 Yeah, because, yeah, without that, yeah, you wouldn't, you'd be really struggling. So rather than going straight to the template, we have this intermediate master data set, and then we can, then it will be easy to then go from the master data set to the template, I think.
+2:03 Cool. Let's, let's keep on going. So we're on column D. So, equipment text. Yep. So this is your description here.
+2:08 Again, very similar limitations to the function location naming follows the same structure. So you've got asset name, description of what it is, and then if, if you have it, whether a process condition.
+2:24 So whether it's normally open or normally closed for the likes of valves, there'll be loads of valves in here, uhm, and you'll see if it's known whether it's normally open, normally closed, uhm, that's what builds up the name anyway, so.
+2:39 And do we have a. Asset identifier. Do we have a reference lookup for these, uhm, abbreviations, so sort of open, closed, or is that something that we need to learn?
+2:50 So, they are on the, uhm, the file here, so, that's what is in this Navy Mini VVVVVVVVVV standard. So, you got normally open, normally closed.
+3:04 It's in there. Most of the things we would pick it up on are full valves to be honest, so. If something is to try drain valve, like the others, it's normally closed.
+3:16 If something's a duty and standby pump, the duty pump's likely to be normally open, standby pump's normally closed. Yeah. Uhm.
+3:29 It's, it's just a gauge to see. I mean, duty and standby, it could get quite confusing. You could go in the field and see that they're using the, uh, the standby pump now.
+3:38 But yeah, in terms of normal operation, normal operation. Operations is the, is the right term for that. And is is that information, whether it's normally open, normally closed, is that always on the PID as well?
+3:53 Or is that something we'd have to infer? It should be. It should be on there. The valves, uh, the, the symbols.
+4:01 The symbol for the valve is usually different if it's normally open or normally closed. So if it's normally open, it'll be, uhm.
+4:09 I'll show you. It's normally closed. So, normally open, and normally closed, it'll be filled in. I see, yeah. But it'll say that on the key, on the drawer.
+4:33 Yeah, yeah, yeah, yeah. Uhm, so yeah. Okay. Sort field, object sort. Again, this is, object type refers to both equipment and functional locations, so, uhm, the object sort, uhm, we've put in here, uhm, the name of what type of equipment it is, so it's a little bit easier for people to search things,
+4:59 and the object.
+0:01 I think so. Gash, you can just go through that, just go through that last bit again, just show us the lookup.
+0:07 Yeah, so, yeah, so these, this is your object sort and the object code. I'll just show you. Sorting it, that sort is nothing to do with sorting and descending, is it?
+0:21 It's like the type of, yeah. So, yeah, that'll be the code, that'll be the sort, yeah, it'll just say whether it's a, as in what sort of, as in what sort of object is it?
+0:32 Yes, all of sort of thing it is, not, er. Not as in sort it alphabetically sort of thing? No. Okay, got it.
+0:38 Yep. So that's that, that's that. Yep. Erm, equipment type, P, it's always P. It's always, er, process equipment. Yep. Erm, position order, so this is where we get into our, erm, what puts it in the order of the hierarchy.
+0:57 Yep. So that'll be 01, that'll be 02. Yep, it's that one. Technical object reference. So I've put the asset code in here.
+1:14 So what's in the field? It was, uh, I would just put that in there. So it was really important, actually, because we had renamed, we'd looked into how we were going to rename, uh, so loops, rather than being.
+1:36 Uhm, our, just trying to think now of the best way to explain this. Our instruments used to be a loop number, rather than the specific instrument itself.
+1:50 The decision was made to make it a bit clearer of. Whether it's a temperature instrument or whether it's a pressure instrument in the name of it.
+1:58 So the PID will show that whether it's a temperature control, temperature instrument, uhm, or pressure instrument, and we've got that in the name there now.
+2:10 So to map it to our old system, we still had to use, we had to have somewhere where we could reference the loop to get the spurs and stuff crossed over.
+2:21 But for new equipment going in, just put the PID. The asset number, like what's at the front of that. So as it is in the field, just goes in there.
+2:35 So, so that, that code there, yeah. 42 V 8 0 1. If I went out in the field and found that fan, that would be on a little field switch isolator and it would be on a little tag on that piece of equipment.
+2:51 I see. And, and, and that's a duplicate of the prefix of JIRA. The, um, column B, is it? Yes. Yeah.
+3:00 Yeah. Could you just show us that example just so we can picture that. So that, um, Yeah. So that bit here, that, that, that crane number there.
+3:09 Yeah. I see. Yeah. That's the asset number for it. Yeah. And then we've got. We've got an asset number there.
+3:14 Yeah. Um, it, it just makes it a little bit easier to find, um, find things. So manufacturer again, as with the, um, folks location sheet.
+3:29 This sort of data, I doubt we're going to have in this phase, if we went further down the line and interpret what's in the manuals, you would get this data from the manuals and you could do another 10 pages.
+3:45 Complete upload with that information in it, but in the scope of what we're doing, we're not going to be able to do that.
+3:52 Okay, so columns, uh, what's that? J, K, and L, and M will be blank. Yeah. Okay. Yep. Um, G, N, W, R, K.
+4:06 So this is your work centre. Like with the functional location one, this is the, if it's a motor, electrical motor, it's going to be a LAC, if it's a mechanical.
+4:17 asset, like a pump, it'll be MEC, um, facilities. I, they are, so I've got a list of work centres. I'll double check that I've set it sent them to you.
+4:37 But this is going to be an inferred lookup. Yeah. So we, we, we have to work out that this is an electrical thing, therefore it is in WorkCentre Elect.
+4:46 No. So there's a hard lookup. It's a hard lookup. Basically, on the, on this sheet.
+0:00 It was basically just filtering down in this sheet here to, to populate the sheets.
+0:11 So, I made, like, I made this so it. It kind of builds that up. I see, yeah. If you get me.
+0:20 Yep, yep. Uhm. So, each discrete part of the mask is a separate column and then you just use concatenate or something to join them, yeah?
+0:28 Yes. Yeah. Yeah. I'll share this with you. Yeah, so you can see, uh, this is one that I'm working on, uhm, there is no PID.
+0:39 Oh, there is no PID for that one. Yeah, this is, if you see the drawing behind me here, the massive paper machine drawing.
+0:46 Oh, yeah. Oh, yeah. That's what I'm doing there, so I'm, yeah. And interestingly, that's not based off a PID, is it?
+0:53 That's based off something else. It's based off a technical drawing. I see. And just, yeah, this would be an absolute nightmare if you never worked on a paper machine, it would be.
+1:03 Yeah, yeah. Yeah, but I'll share this with somebody so you can sort of see. See the patterns. Like, yeah, see the patterns in it, yeah.
+1:13 I'll add it to that folder, uhm, shortly. So, let's get back. Yeah, back to it. So, yeah, that WorkCentre, it'll become a little bit more evident when I've shared that as to where that's picking that data out from.
+1:31 Uhm, then we've got ParentFlock, so that's saying what functional location is the parent to that.
+1:44 So, that's just saying where it sits in the structure. And this is your ABC indicator again, so this is your, you your criticality.
+1:54 Yeah. So, we'll put them all in D, yeah? Just put them in D, yeah, because D is no criticality. So, until we've done a criticality analysis of the plant, it's going to be a D.
+2:08 No criticality, because we don't know it yet. So, location again, this needs background data, and I don't think we're going to have that from interpreting the PIDs.
+2:23 Okay, so column Q, we will put in, uh, leave blank for the moment. Yeah, yeah. And then, P01, it's always P01.
+2:33 So this is the planning group. This is like where I was saying on the function location, where it said 5001 for that field.
+2:39 Yeah. I don't think that was right. I think they've just left it blank, to be honest, when, when we've sent it to, uhm, the, our colleagues uploading the templates into SAP, I think they've just left it blank on the function locations.
+2:53 But on these equipments, we do want the planning group to be P01. So, we've got five planning groups, and they indicate which planner work goes to, but we want everything to go to the lead planner, and then he will distribute workload between the other planners.
+3:13 So, everything goes to PO1, or goes to the planning manager, basically, that is what that means. Okay, so, Column A will always be PO1?
+3:22 Yeah. That's the same for all REM tissue, is it? Yes. So, we've actually got, to set up a separate planning group for them, because the planning group has to sit in a plant.
+3:36 Okay. So, but it's still PO1. I see, yeah, I got it. PO1 sits in 6,000. Under 6,000. PO1, 6,000, yeah.
+3:45 So, but it's still the same field, PO1, uuuhm, maintenance planning plant, always 5,001, uuuhm, maintenance plant, always 5,001, and then again, cost centre, 5 We were awaiting at the time, but we'll, we'll fill that information in, uuuhm, because we'll have to just speak with our finance, where they
+4:13 want these beans to be counted. Yeah, yeah. So column, just for the recording then, column U, V, W and X, we'll leave blank then for the moment.
+4:24 Yes, yeah, yeah, I'll leave them blank. Yeah, okay. So, uuuhm, I've, I've forgotten. If I did that into the folder, I'll add in my master sheet as I've done.
+4:41 So you can see that as well, how my logic in putting all that data together, and then when it goes into a, a, a, would it help if I shared one for CHP-1, so you could see how I built the data that has gone into those templates?
+4:59 Yeah, yeah, the more, the more you can.
+0:00 Let's just, let's just pause for thought there for a minute, uhm, yeah, so Amir, have you got, uh, Amir, have you got any questions you'd like to ask?
+0:13 No, not yet, uh, we'll do some R&D on the, uh, the structure, uh, we just saw the new template, so I think we'll do some more R&D and if you have any questions, we'll ask you.
+0:26 Yeah, I think, Rob, from our point of view, there's, there's, uhm. There's going to be, the next questions we have will be around, uhm, sort of data that we either think we can't find or where we, or where we're not sure where it goes, basically.
+0:42 So I think we have an understanding now of what data is expected and we just need to now go and find it in the, in the database.
+0:48 DWGs and, uhm, and there might be some additional data we find in DWGs that doesn't necessarily obviously have a home.
+0:56 So we'll, um, we might come back with those questions as well. Uh, a little update on the, getting DW. DWGs rather than PDFs.
+1:06 So I've sent the question out to the champions and I've seen them asking their contacts at the firm. So hopefully, uhm, we should, shouldn't have an issue getting the DWGs.
+1:18 Great. Because I know that'll make it a bit, bit better. For everyone. So, yeah, yeah, amazing. Yeah, yeah, yeah. Much better, much more accurate, I think.
+1:25 So you've still got access to that share? Yeah, yeah, I'm on it right now. I've downloaded the SAP doc as well, so that's good.
+1:34 If, if you ever lose access to it, let me know. And I'll try and resend the link. Yeah, probably timed out after a number of days, doesn't it?
+1:43 I, I'm hopeful they'll find a more permanent solution, because it's, it's not great. And it's so closed off, like, our system.
+1:52 Now, like, I just can't share anything with, uhm, people not in our organisation. It's, it's difficult. Uhm, well that, that is super useful.
+2:05 Thank you so much for taking an hour out of your busy day. No problem, yeah. We really appreciate it, yeah.
+2:08 Yeah, we'll, we'll, we'll keep working and we'll come back with some questions. Brilliant, yeah. Thanks, Rob. Yeah, cheers. Thank you very much.
+2:18 Thanks. Bye. Thank you, Rob. Bye.

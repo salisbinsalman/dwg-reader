@@ -1,0 +1,10 @@
+{
+  "input_file": "/Users/code-huddle-ensemble/Desktop/dwg-reader/inputs/Broke System.dwg",
+  "workbook": "/Users/code-huddle-ensemble/Desktop/dwg-reader/outputs/Broke System.full_dump.xlsx",
+  "forensic_json": "/Users/code-huddle-ensemble/Desktop/dwg-reader/outputs/jsons/Broke System.pure_forensic_dump.json",
+  "structural_json": "/Users/code-huddle-ensemble/Desktop/dwg-reader/outputs/jsons/Broke System.structural_dump.json",
+  "structural_error": "",
+  "evidence_dir": "/Users/code-huddle-ensemble/Desktop/dwg-reader/outputs/evidence",
+  "jsons_dir": "/Users/code-huddle-ensemble/Desktop/dwg-reader/outputs/jsons",
+  "logs_dir": "/Users/code-huddle-ensemble/Desktop/dwg-reader/outputs/logs"
+}

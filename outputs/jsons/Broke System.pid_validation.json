@@ -1,0 +1,204 @@
+{
+  "all_pass": true,
+  "checks": [
+    {
+      "category": "tanks",
+      "ground_truth_inserts": 7,
+      "inventory_inserts": 7,
+      "inventory_text_labels": 7,
+      "delta_inserts": 0,
+      "pass": true
+    },
+    {
+      "category": "pumps",
+      "ground_truth_inserts": 42,
+      "inventory_inserts": 42,
+      "inventory_text_labels": 13,
+      "delta_inserts": 0,
+      "pass": true
+    },
+    {
+      "category": "motors",
+      "ground_truth_inserts": 25,
+      "inventory_inserts": 25,
+      "inventory_text_labels": 3,
+      "delta_inserts": 0,
+      "pass": true
+    },
+    {
+      "category": "agitators",
+      "ground_truth_inserts": 7,
+      "inventory_inserts": 7,
+      "inventory_text_labels": 2,
+      "delta_inserts": 0,
+      "pass": true
+    },
+    {
+      "category": "valves",
+      "ground_truth_inserts": 227,
+      "inventory_inserts": 227,
+      "inventory_text_labels": 0,
+      "delta_inserts": 0,
+      "pass": true
+    },
+    {
+      "category": "control_valves",
+      "ground_truth_inserts": 94,
+      "inventory_inserts": 94,
+      "inventory_text_labels": 0,
+      "delta_inserts": 0,
+      "pass": true
+    },
+    {
+      "category": "process_equipment",
+      "ground_truth_inserts": 14,
+      "inventory_inserts": 14,
+      "inventory_text_labels": 65,
+      "delta_inserts": 0,
+      "pass": true
+    },
+    {
+      "category": "instruments",
+      "ground_truth_inserts": 402,
+      "inventory_inserts": 402,
+      "inventory_text_labels": 0,
+      "delta_inserts": 0,
+      "pass": true
+    },
+    {
+      "category": "fittings",
+      "ground_truth_inserts": 27,
+      "inventory_inserts": 27,
+      "inventory_text_labels": 0,
+      "delta_inserts": 0,
+      "pass": true
+    },
+    {
+      "category": "terminals",
+      "ground_truth_inserts": 6,
+      "inventory_inserts": 6,
+      "inventory_text_labels": 0,
+      "delta_inserts": 0,
+      "pass": true
+    },
+    {
+      "category": "symbols",
+      "ground_truth_inserts": 393,
+      "inventory_inserts": 393,
+      "inventory_text_labels": 0,
+      "delta_inserts": 0,
+      "pass": true
+    },
+    {
+      "category": "ventilation",
+      "ground_truth_inserts": 335,
+      "inventory_inserts": 335,
+      "inventory_text_labels": 0,
+      "delta_inserts": 0,
+      "pass": true
+    },
+    {
+      "category": "line_markers",
+      "ground_truth_inserts": 328,
+      "inventory_inserts": 328,
+      "inventory_text_labels": 0,
+      "delta_inserts": 0,
+      "pass": true
+    },
+    {
+      "category": "revisions",
+      "ground_truth_inserts": 60,
+      "inventory_inserts": 60,
+      "inventory_text_labels": 0,
+      "delta_inserts": 0,
+      "pass": true
+    },
+    {
+      "category": "delivery_limits",
+      "ground_truth_inserts": 42,
+      "inventory_inserts": 42,
+      "inventory_text_labels": 0,
+      "delta_inserts": 0,
+      "pass": true
+    },
+    {
+      "category": "sheet_graphics",
+      "ground_truth_inserts": 14,
+      "inventory_inserts": 14,
+      "inventory_text_labels": 0,
+      "delta_inserts": 0,
+      "pass": true
+    },
+    {
+      "category": "other_inserts",
+      "ground_truth_inserts": 35,
+      "inventory_inserts": 35,
+      "inventory_text_labels": 0,
+      "delta_inserts": 0,
+      "pass": true
+    },
+    {
+      "category": "lines",
+      "ground_truth_inserts": 215,
+      "inventory_inserts": 215,
+      "inventory_text_labels": 0,
+      "delta_inserts": 0,
+      "pass": true
+    },
+    {
+      "category": "masks",
+      "ground_truth_inserts": 124,
+      "inventory_inserts": 124,
+      "inventory_text_labels": 0,
+      "delta_inserts": 0,
+      "pass": true
+    },
+    {
+      "category": "pollution_checks",
+      "ground_truth_inserts": 0,
+      "inventory_inserts": 0,
+      "inventory_text_labels": 0,
+      "delta_inserts": 0,
+      "pass": true,
+      "notes": "bad_instruments=0; valve_line_number_fp=0"
+    },
+    {
+      "category": "insert_coverage",
+      "ground_truth_inserts": 2058,
+      "inventory_inserts": 2058,
+      "inventory_text_labels": 0,
+      "delta_inserts": 0,
+      "pass": true,
+      "notes": "missing=0; cross_category_dups=0"
+    }
+  ],
+  "counts": {
+    "tanks": 14,
+    "process_equipment": 79,
+    "agitators": 9,
+    "pumps": 55,
+    "motors": 28,
+    "valves": 227,
+    "control_valves": 94,
+    "instruments": 402,
+    "fittings": 27,
+    "terminals": 6,
+    "symbols": 393,
+    "ventilation": 335,
+    "line_markers": 328,
+    "revisions": 60,
+    "delivery_limits": 42,
+    "sheet_graphics": 14,
+    "other_inserts": 35,
+    "lines": 215,
+    "interconnections": 18,
+    "masks": 124,
+    "connections": 599,
+    "pipe_connectivity": 1214,
+    "pipe_segments": 1214,
+    "primary_components": 851,
+    "functions": 177
+  },
+  "missing_insert_handles": [],
+  "cross_category_duplicates": {}
+}
