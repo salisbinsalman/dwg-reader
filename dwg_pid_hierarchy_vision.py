@@ -12,6 +12,8 @@ Design (anti-hallucination):
 
 from __future__ import annotations
 
+import dwg_warn  # noqa: F401 — silence boto3 Python 3.9 deprecation noise
+
 import argparse
 import csv
 import json

@@ -207,6 +207,13 @@ def write_floc_workbook(
     wb = load_workbook(template_path)
     ws = wb[SHEET_NAME] if SHEET_NAME in wb.sheetnames else wb.active
 
+    # Strip template comments (Turkish column metadata) — openpyxl restructures
+    # them to a different internal XML path, which breaks some xlsx readers.
+    for row in ws.iter_rows():
+        for cell in row:
+            if cell.comment is not None:
+                cell.comment = None
+
     # Template data starts at Excel row 8 (1-based) = index 7 in examples.
     # Clear any previous data rows below the header block (rows 1-7).
     if ws.max_row > 7:

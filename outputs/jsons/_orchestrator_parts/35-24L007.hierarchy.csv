@@ -1,0 +1,20 @@
+ORDER,SITE,LINE,PROCESS,SUB-PROCESS,FUNCTION,EQUIPMENT,SUB-EQUIPMENT,MASK,DESCRIPTION
+1,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,,,5001-PM03-BR,BROKE SYSTEM
+2,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,BR1,,,,5001-PM03-BR-BR1,BROKE SYSTEM
+3,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,BR1,35-24L007,,,5001-PM03-BR-BR1-35-24L007,35-24L007 SLABBING PLPR HP-33G2
+4,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,35-24-007.1,,,35-24-007.1 PLPR RTR MTR 200KW
+5,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,35-24-007.2,,,35-24-007.2 PLPR RTR MTR 200KW
+6,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,35-24-023,,,35-24-023 PP-200 IN LN
+7,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,,35-24-160,,35-24-160 VLV AV NC
+8,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,,35-24LV1-518,,35-24LV1-518 LVL CTRL VLV AV
+9,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,,35-24LV2-518,,35-24LV2-518 LVL CTRL VLV AV
+10,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,,35-24-164,,35-24-164 VLV HV
+11,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,,35-24-1095,,35-24-1095 VLV NC
+12,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,35-24-025,,,35-24-025 PP-600 PLPR FD LN
+13,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,,35-24-1106,,35-24-1106 VLV NC
+14,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,,35-24-227,,35-24-227 VLV HV
+15,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,35-24-027,,,35-24-027 PP-250 DIS LN
+16,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,,35-24-1096,,35-24-1096 VLV NC
+17,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,35-24-216,,,35-24-216 VLV HV
+18,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,35-24L007.1,,,35-24L007.1
+19,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,35-24L007.2,,,35-24L007.2

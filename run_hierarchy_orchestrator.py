@@ -12,8 +12,10 @@ Flow:
 """
 
 from __future__ import annotations
+import dwg_warn  # noqa: F401 — silence boto3 Python 3.9 deprecation noise (subprocesses too via env)
 
 import argparse
+import concurrent.futures
 import csv
 import json
 import os
@@ -114,6 +116,8 @@ def run_hierarchy_for_tag(
     region: str,
     prompt_file: str,
     inventory_json: Path,
+    per_tag_csv: Path,
+    per_tag_json: Path,
     reuse_shots: bool,
     no_clean_prev: bool,
     aws_profile: str,
@@ -135,6 +139,10 @@ def run_hierarchy_for_tag(
         prompt_file,
         "--inventory-json",
         str(inventory_json),
+        "--hierarchy-csv-out",
+        str(per_tag_csv),
+        "--hierarchy-json-out",
+        str(per_tag_json),
     ]
     if reuse_shots:
         cmd.append("--reuse-shots")
@@ -185,6 +193,12 @@ def main() -> int:
     parser.add_argument("--model-id", default="eu.anthropic.claude-sonnet-4-6")
     parser.add_argument("--region", default="eu-west-2")
     parser.add_argument("--prompt-file", default="pid_hierarchy_gt_v7_floc.md")
+    parser.add_argument(
+        "--jobs",
+        type=int,
+        default=1,
+        help="Parallel FUNCTION workers (default: 1).",
+    )
     parser.add_argument("--aws-profile", default=os.environ.get("AWS_PROFILE", "foundrydev"))
     parser.add_argument(
         "--reuse-shots",
@@ -215,6 +229,11 @@ def main() -> int:
         "--no-export-equipment",
         action="store_true",
         help="Skip SAP Equipment workbook export at the end",
+    )
+    parser.add_argument(
+        "--no-valve-classify",
+        action="store_true",
+        help="Skip per-tag tight-crop valve classification before SAP export",
     )
     args = parser.parse_args()
 
@@ -258,7 +277,8 @@ def main() -> int:
     combined_csv = out_dir / f"{base}.hierarchy_orchestrator.csv"
     report_json = json_path(out_dir, f"{base}.hierarchy_orchestrator_report.json")
     log_path = log_dir / "hierarchy-orchestrator.log"
-    per_tag_csv = out_dir / f"{base}.hierarchy.csv"
+    parts_dir = out_dir / "jsons" / "_orchestrator_parts"
+    parts_dir.mkdir(parents=True, exist_ok=True)
 
     combined_rows: List[Dict[str, str]] = []
     per_function_scores: List[Dict[str, Any]] = []
@@ -294,7 +314,14 @@ def main() -> int:
         combined_rows = existing
         print(f"[score-only] scoring {combined_csv}", flush=True)
     else:
-        for idx, tag in enumerate(tags):
+        jobs = max(1, int(args.jobs or 1))
+        if jobs > 1:
+            print(f"[parallel] running up to {jobs} FUNCTIONs concurrently")
+        tag_results: Dict[str, Dict[str, Any]] = {}
+
+        def _run_one(tag: str, index: int) -> Dict[str, Any]:
+            tag_csv = parts_dir / f"{tag}.hierarchy.csv"
+            tag_json = parts_dir / f"{tag}.hierarchy_ai.json"
             rc = run_hierarchy_for_tag(
                 tag=tag,
                 input_path=input_path,
@@ -303,11 +330,46 @@ def main() -> int:
                 region=args.region,
                 prompt_file=args.prompt_file,
                 inventory_json=inv_path,
+                per_tag_csv=tag_csv,
+                per_tag_json=tag_json,
                 reuse_shots=args.reuse_shots,
-                no_clean_prev=(idx > 0) or args.reuse_shots or bool(combined_rows),
+                # Parallel workers must never clear shared outputs.
+                no_clean_prev=True if jobs > 1 else (index > 0) or args.reuse_shots or bool(combined_rows),
                 aws_profile=args.aws_profile,
             )
-            tag_rows = rows_for_function(read_hierarchy_csv(per_tag_csv), tag)
+            rows = rows_for_function(read_hierarchy_csv(tag_csv), tag)
+            return {"function": tag, "exit_code": rc, "rows": rows}
+
+        if jobs == 1:
+            for idx, tag in enumerate(tags):
+                result = _run_one(tag, idx)
+                tag_results[tag] = result
+        else:
+            with concurrent.futures.ThreadPoolExecutor(max_workers=jobs) as pool:
+                fut_to_tag = {
+                    pool.submit(_run_one, tag, idx): tag
+                    for idx, tag in enumerate(tags)
+                }
+                # Workers run in parallel; this loop is single-threaded —
+                # merge and CSV writes happen sequentially as futures complete.
+                for fut in concurrent.futures.as_completed(fut_to_tag):
+                    tag = fut_to_tag[fut]
+                    try:
+                        tag_results[tag] = fut.result()
+                    except Exception as exc:
+                        print(f"[error] {tag}: {exc}", file=sys.stderr, flush=True)
+                        tag_results[tag] = {"function": tag, "exit_code": 99, "rows": [], "error": str(exc)}
+                    r = tag_results[tag]
+                    print(
+                        f"[done] {tag} exit={r.get('exit_code')} rows={len(r.get('rows') or [])}",
+                        flush=True,
+                    )
+
+        # Merge in original inventory/tag order for deterministic output.
+        for tag in tags:
+            result = tag_results.get(tag) or {"function": tag, "exit_code": 99, "rows": []}
+            rc = int(result.get("exit_code", 99))
+            tag_rows = result.get("rows") or []
             if not tag_rows:
                 print(f"[warn] no rows for {tag} (exit={rc}); not appending stale CSV")
                 per_function_scores.append(
@@ -320,7 +382,6 @@ def main() -> int:
                     }
                 )
                 continue
-
             combined_rows.extend(tag_rows)
             write_hierarchy_csv(combined_csv, combined_rows)
             score = score_function(tag, tag_rows, gt_rows)
@@ -397,6 +458,34 @@ def main() -> int:
 
     if combined_csv.exists() and combined_csv.stat().st_size > 0:
         limit_s = str(args.limit if args.limit > 0 else 0)
+        if not args.no_valve_classify:
+            valve_cmd = [
+                sys.executable,
+                "-u",
+                str(Path(__file__).resolve().parent / "dwg_valve_classify.py"),
+                "--input",
+                str(input_path),
+                "--output-dir",
+                str(out_dir),
+                "--hierarchy-csv",
+                str(combined_csv),
+                "--model-id",
+                args.model_id,
+                "--region",
+                args.region,
+                "--jobs",
+                str(max(1, int(getattr(args, "jobs", 1) or 1))),
+            ]
+            if args.skip_existing:
+                valve_cmd.append("--skip-existing")
+            print("\n---------- valve classify (tight crop + legend) ----------")
+            print(" ".join(valve_cmd), flush=True)
+            env = os.environ.copy()
+            env["PYTHONUNBUFFERED"] = "1"
+            if args.aws_profile:
+                env["AWS_PROFILE"] = args.aws_profile
+            subprocess.run(valve_cmd, check=False, env=env)
+
         if not args.no_export_floc:
             floc_cmd = [
                 sys.executable,

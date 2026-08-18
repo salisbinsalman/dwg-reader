@@ -10,11 +10,12 @@ AWS_REGION ?= eu-west-2
 AWS_PROFILE ?= foundrydev
 TAGS ?= 35-24L009,35-24P519
 LIMIT ?= 10
+JOBS ?= 1
 SKIP_EXISTING ?=
 # Empty = all inventory FUNCTION kinds (equipment + instrument + line).
 KINDS ?=
 
-.PHONY: help check-odafc run run-json run-json-splits semantic semantic-run inventory inventory-run enrich hierarchy hierarchy-cad hierarchy-ai hierarchy-orch hierarchy-orch-dry floc equipment sap floc-test equipment-test hierarchy-experiments hierarchy-vendors hierarchy-eval all all-prep full forensic structural structural-aspose clean-prev clean-outputs abbreviations-json
+.PHONY: help check-odafc run run-json run-json-splits semantic semantic-run inventory inventory-run enrich hierarchy hierarchy-cad hierarchy-ai hierarchy-orch hierarchy-orch-dry floc equipment sap floc-test equipment-test valve-classify valve-test hierarchy-experiments hierarchy-vendors hierarchy-eval all all-prep full forensic structural structural-aspose clean-prev clean-outputs abbreviations-json
 
 help:
 	@echo "Targets:"
@@ -25,13 +26,15 @@ help:
 	@echo "  make enrich                 # tags/line-binding/loops/tables enrichment"
 	@echo "  make hierarchy              # CAD connectivity hierarchy + local DWG crops"
 	@echo "  make hierarchy-ai           # viewer shots + Bedrock hierarchy (best model/prompt)"
-	@echo "  make hierarchy-orch         # inventory FUNCTIONs → hierarchy one-by-one vs GT (LIMIT=$(LIMIT))"
+	@echo "  make hierarchy-orch         # inventory FUNCTIONs → hierarchy vs GT (LIMIT=$(LIMIT), JOBS=$(JOBS))"
 	@echo "  make hierarchy-orch-dry     # list first LIMIT inventory FUNCTIONs + GT child counts"
 	@echo "  make floc                   # hierarchy CSV → SAP Functional Location xlsx"
 	@echo "  make equipment              # hierarchy CSV → SAP Equipment xlsx"
+	@echo "  make valve-classify         # tight per-valve crop + legend → valve_types.json"
 	@echo "  make sap                    # both SAP templates (floc + equipment)"
 	@echo "  make floc-test              # unit tests for FLOC path/export (no Bedrock)"
 	@echo "  make equipment-test         # unit tests for Equipment export (no Bedrock)"
+	@echo "  make valve-test             # unit tests for per-tag valve locate/parent/type"
 	@echo "  make abbreviations-json     # rebuild inputs/sml_abbreviations.json from SML xlsx"
 	@echo "  make hierarchy-experiments  # sweep models/prompts vs GT"
 	@echo "  make hierarchy-vendors      # Kimi/Mistral/Gemma/Nova/Qwen/OpenAI-OSS sweep"
@@ -47,6 +50,7 @@ help:
 	@echo "Best hierarchy: MODEL_ID=$(MODEL_ID)"
 	@echo "                PROMPT_FILE=$(PROMPT_FILE)"
 	@echo "LIMIT=$(LIMIT)  (hierarchy + FLOC + Equipment; 0 = all inventory FUNCTIONs)"
+	@echo "JOBS=$(JOBS)    (orchestrator parallel workers; 1 = sequential)"
 	@echo "KINDS=$(KINDS)  (empty = all kinds; e.g. KINDS=equipment)"
 	@echo "Example:        make all LIMIT=10"
 	@echo "                make all LIMIT=0   # full drawing, all 177 FUNCTIONs"
@@ -89,13 +93,17 @@ hierarchy-orch-dry:
 
 hierarchy-orch:
 	@mkdir -p "$(OUT)/logs"
-	AWS_PROFILE="$(AWS_PROFILE)" PYTHONUNBUFFERED=1 $(PYTHON) run_hierarchy_orchestrator.py --input "$(INPUT)" --output-dir "$(OUT)" --limit $(LIMIT) $(if $(KINDS),--kinds "$(KINDS)",) --model-id "$(MODEL_ID)" --region "$(AWS_REGION)" --prompt-file "$(PROMPT_FILE)" --aws-profile "$(AWS_PROFILE)" $(if $(SKIP_EXISTING),--skip-existing,) 2>&1 | tee "$(OUT)/logs/hierarchy-orchestrator.log"
+	AWS_PROFILE="$(AWS_PROFILE)" PYTHONUNBUFFERED=1 $(PYTHON) run_hierarchy_orchestrator.py --input "$(INPUT)" --output-dir "$(OUT)" --limit $(LIMIT) --jobs $(JOBS) $(if $(KINDS),--kinds "$(KINDS)",) --model-id "$(MODEL_ID)" --region "$(AWS_REGION)" --prompt-file "$(PROMPT_FILE)" --aws-profile "$(AWS_PROFILE)" $(if $(SKIP_EXISTING),--skip-existing,) 2>&1 | tee "$(OUT)/logs/hierarchy-orchestrator.log"
 
 floc:
 	$(PYTHON) export_sap_floc.py --input "$(INPUT)" --output-dir "$(OUT)" --limit $(LIMIT)
 
 equipment:
 	$(PYTHON) export_sap_equipment.py --input "$(INPUT)" --output-dir "$(OUT)" --limit $(LIMIT)
+
+valve-classify:
+	@mkdir -p "$(OUT)/logs"
+	AWS_PROFILE="$(AWS_PROFILE)" PYTHONUNBUFFERED=1 $(PYTHON) dwg_valve_classify.py --input "$(INPUT)" --output-dir "$(OUT)" --model-id "$(MODEL_ID)" --region "$(AWS_REGION)" --jobs $(JOBS) $(if $(SKIP_EXISTING),--skip-existing,) 2>&1 | tee "$(OUT)/logs/valve-classify.log"
 
 sap: floc equipment
 
@@ -107,6 +115,9 @@ abbreviations-json:
 
 equipment-test:
 	$(PYTHON) -m unittest test_equipment_export.py -v
+
+valve-test:
+	$(PYTHON) -m unittest test_valve_classify.py test_sit_valve_classification.py -v
 
 hierarchy-experiments:
 	@mkdir -p "$(OUT)/logs"
@@ -128,7 +139,6 @@ hierarchy-cad: hierarchy
 all-prep: run-json inventory enrich
 
 # End-to-end: dump → inventory → enrich → hierarchy (LIMIT) → FLOC + Equipment.
-# hierarchy-orch exports both SAP templates using the same LIMIT.
 all: all-prep hierarchy-orch
 
 full: all
@@ -153,4 +163,8 @@ clean-outputs:
 	rm -f "$(OUT)"/*.json
 	rm -f "$(OUT)"/jsons/*.json
 	rm -f "$(OUT)"/logs/*.log
-	@echo "Cleared Excel, CSV, evidence, jsons/, and logs/ under $(OUT)/"
+	rm -f "$(OUT)"/evidence/_valve_crops/*.png
+	rm -f "$(OUT)"/evidence/_valve_crops/*.meta.json
+	rm -f "$(OUT)"/jsons/_orchestrator_parts/*.csv
+	rm -f "$(OUT)"/jsons/_orchestrator_parts/*.json
+	@echo "Cleared Excel, CSV, evidence, jsons/, logs/, valve crops, and orchestrator parts under $(OUT)/"

@@ -1,24 +1,195 @@
 {
   "hierarchy_csv": "/Users/code-huddle-ensemble/Desktop/dwg-reader/outputs/Broke System.hierarchy_orchestrator.csv",
   "output": "/Users/code-huddle-ensemble/Desktop/dwg-reader/outputs/Broke System.functional_locations.xlsx",
-  "function_count": 5,
-  "floc_row_count": 9,
+  "function_count": 50,
+  "floc_row_count": 54,
   "functions": [
     "35-24L001",
     "35-24L002",
     "35-24L003",
     "35-24L004",
-    "35-24L005"
+    "35-24L005",
+    "35-24L006",
+    "35-24L007",
+    "35-24L008",
+    "35-24L009",
+    "35-24L010",
+    "35-24L011",
+    "35-24P501",
+    "35-24P502",
+    "35-24P503",
+    "35-24P504",
+    "35-24P505",
+    "35-24P506",
+    "35-24P507",
+    "35-24P508",
+    "35-24P509",
+    "35-24P510",
+    "35-24P511",
+    "35-24P512",
+    "35-24P513",
+    "35-24P514",
+    "35-24P515",
+    "35-24P516",
+    "35-24P517",
+    "35-24P518",
+    "35-24P519",
+    "35-24P520",
+    "35-24T601",
+    "35-24T602",
+    "35-24T603",
+    "35-24T604",
+    "35-24T605",
+    "35-24T606",
+    "35-24T607",
+    "35-24ES-508",
+    "35-24ES-601",
+    "35-24ES-662",
+    "35-24ES-663",
+    "35-24ES-683",
+    "35-24HI-501",
+    "35-24HI-503",
+    "35-24HI-516",
+    "35-24HI-529",
+    "35-24HI-532",
+    "35-24HI-534",
+    "35-24HI-552"
   ],
   "gt_eval": {
-    "functions_compared": 5,
-    "mask_hit": 5,
+    "functions_compared": 49,
+    "mask_hit": 49,
     "mask_miss": 0,
     "mask_accuracy": 1.0,
-    "description_exact": 5,
-    "description_total": 5,
-    "description_accuracy": 1.0,
+    "description_exact": 18,
+    "description_total": 49,
+    "description_accuracy": 0.3673469387755102,
     "details": [
+      {
+        "function": "35-24L009",
+        "tplnr_pred": "5001-PM03-BR-BR1-35-24L009",
+        "tplnr_gt": "5001-PM03-BR-BR1-35-24L009",
+        "mask_match": true,
+        "pltxt_pred": "35-24L009 BROKE ROLL PLPR",
+        "pltxt_gt": "35-24L009 BROKE ROLL PLPR",
+        "pltxt_exact": true
+      },
+      {
+        "function": "35-24P519",
+        "tplnr_pred": "5001-PM03-BR-BR1-35-24P519",
+        "tplnr_gt": "5001-PM03-BR-BR1-35-24P519",
+        "mask_match": true,
+        "pltxt_pred": "35-24P519 BROKE ROLL PLPR PMP",
+        "pltxt_gt": "35-24P519 BROKE ROLL PLPR PMP",
+        "pltxt_exact": true
+      },
+      {
+        "function": "35-24ES-683",
+        "tplnr_pred": "5001-PM03-BR-BR1-35-24ES-683",
+        "tplnr_gt": "5001-PM03-BR-BR1-35-24ES-683",
+        "mask_match": true,
+        "pltxt_pred": "35-24ES-683 BROK ROLL PLPR EMRG STOP",
+        "pltxt_gt": "35-24ES-683 BROKE ROLL PLPR E-STOP",
+        "pltxt_exact": false
+      },
+      {
+        "function": "35-24L008",
+        "tplnr_pred": "5001-PM03-BR-BR1-35-24L008",
+        "tplnr_gt": "5001-PM03-BR-BR1-35-24L008",
+        "mask_match": true,
+        "pltxt_pred": "35-24L008 WINDER PLPR",
+        "pltxt_gt": "35-24L008 WINDER PLPR",
+        "pltxt_exact": true
+      },
+      {
+        "function": "35-24P509",
+        "tplnr_pred": "5001-PM03-BR-BR1-35-24P509",
+        "tplnr_gt": "5001-PM03-BR-BR1-35-24P509",
+        "mask_match": true,
+        "pltxt_pred": "35-24P509 GB OL PMP",
+        "pltxt_gt": "35-24P509 WINDER PLPR PMP",
+        "pltxt_exact": false
+      },
+      {
+        "function": "35-24ES-508",
+        "tplnr_pred": "5001-PM03-BR-BR1-35-24ES-508",
+        "tplnr_gt": "5001-PM03-BR-BR1-35-24ES-508",
+        "mask_match": true,
+        "pltxt_pred": "35-24ES-508 WINDER AREA EMERG STOP",
+        "pltxt_gt": "35-24ES-508 WINDER AREA E-STOP",
+        "pltxt_exact": false
+      },
+      {
+        "function": "35-24HI-516",
+        "tplnr_pred": "5001-PM03-BR-BR1-35-24HI-516",
+        "tplnr_gt": "5001-PM03-BR-BR1-35-24HI-516",
+        "mask_match": true,
+        "pltxt_pred": "35-24HI-516 WNDR PLPR SHW S1 S2 IND",
+        "pltxt_gt": "35-24HI-516 WINDER PLPR SHOWERS S1 S2",
+        "pltxt_exact": false
+      },
+      {
+        "function": "35-24HI-501",
+        "tplnr_pred": "5001-PM03-BR-BR1-35-24HI-501",
+        "tplnr_gt": "5001-PM03-BR-BR1-35-24HI-501",
+        "mask_match": true,
+        "pltxt_pred": "35-24HI-501 HI VLV POSITION IND",
+        "pltxt_gt": "35-24HI-501 WINDER PLPR SHW S3",
+        "pltxt_exact": false
+      },
+      {
+        "function": "35-24HI-503",
+        "tplnr_pred": "5001-PM03-BR-BR1-35-24HI-503",
+        "tplnr_gt": "5001-PM03-BR-BR1-35-24HI-503",
+        "mask_match": true,
+        "pltxt_pred": "35-24HI-503 WNDR PLPR SHW S5 S6 IND",
+        "pltxt_gt": "35-24HI-501 WINDER PLPR SHW S5 S6",
+        "pltxt_exact": false
+      },
+      {
+        "function": "35-24L007",
+        "tplnr_pred": "5001-PM03-BR-BR1-35-24L007",
+        "tplnr_gt": "5001-PM03-BR-BR1-35-24L007",
+        "mask_match": true,
+        "pltxt_pred": "35-24L007 SLABBING PLPR",
+        "pltxt_gt": "35-24L007 SLABBING PLPR",
+        "pltxt_exact": true
+      },
+      {
+        "function": "35-24P508",
+        "tplnr_pred": "5001-PM03-BR-BR1-35-24P508",
+        "tplnr_gt": "5001-PM03-BR-BR1-35-24P508",
+        "mask_match": true,
+        "pltxt_pred": "35-24P508 SLABBING PLPR PMP",
+        "pltxt_gt": "35-24P508 SLABBING PLPR PMP",
+        "pltxt_exact": true
+      },
+      {
+        "function": "35-24HI-529",
+        "tplnr_pred": "5001-PM03-BR-BR1-35-24HI-529",
+        "tplnr_gt": "5001-PM03-BR-BR1-35-24HI-529",
+        "mask_match": true,
+        "pltxt_pred": "35-24HI-529 SLBG PLPR SHW S1 IND",
+        "pltxt_gt": "35-24HI-529 SLABBING PLPR SHW S1",
+        "pltxt_exact": false
+      },
+      {
+        "function": "35-24HI-532",
+        "tplnr_pred": "5001-PM03-BR-BR1-35-24HI-532",
+        "tplnr_gt": "5001-PM03-BR-BR1-35-24HI-532",
+        "mask_match": true,
+        "pltxt_pred": "35-24HI-532 HIGH IND INSTR",
+        "pltxt_gt": "35-24HI-532 SLABBING PLPR SHW S2",
+        "pltxt_exact": false
+      },
+      {
+        "function": "35-24L006",
+        "tplnr_pred": "5001-PM03-BR-BR1-35-24L006",
+        "tplnr_gt": "5001-PM03-BR-BR1-35-24L006",
+        "mask_match": true,
+        "pltxt_pred": "35-24L006 BROKE CVYR 3",
+        "pltxt_gt": "35-24L006 BROKE CVYR 3",
+        "pltxt_exact": true
+      },
       {
         "function": "35-24L005",
         "tplnr_pred": "5001-PM03-BR-BR1-35-24L005",
@@ -27,6 +198,42 @@
         "pltxt_pred": "35-24L005 REEL PLPR",
         "pltxt_gt": "35-24L005 REEL PLPR",
         "pltxt_exact": true
+      },
+      {
+        "function": "35-24P506",
+        "tplnr_pred": "5001-PM03-BR-BR1-35-24P506",
+        "tplnr_gt": "5001-PM03-BR-BR1-35-24P506",
+        "mask_match": true,
+        "pltxt_pred": "35-24P506 REEL PLPR PMP",
+        "pltxt_gt": "35-24P506 REEL PLPR PMP",
+        "pltxt_exact": true
+      },
+      {
+        "function": "35-24P507",
+        "tplnr_pred": "5001-PM03-BR-BR1-35-24P507",
+        "tplnr_gt": "5001-PM03-BR-BR1-35-24P507",
+        "mask_match": true,
+        "pltxt_pred": "35-24P507 BROKE CONV 3 PMP",
+        "pltxt_gt": "35-24P507 REEL PLPR PIT PMP",
+        "pltxt_exact": false
+      },
+      {
+        "function": "35-24P520",
+        "tplnr_pred": "5001-PM03-BR-BR1-35-24P520",
+        "tplnr_gt": "5001-PM03-BR-BR1-35-24P520",
+        "mask_match": true,
+        "pltxt_pred": "35-24P520 REEL PULPR PMP",
+        "pltxt_gt": "35-24P520 RELL PLPR RECIRC P,P",
+        "pltxt_exact": false
+      },
+      {
+        "function": "35-24HI-552",
+        "tplnr_pred": "5001-PM03-BR-BR1-35-24HI-552",
+        "tplnr_gt": "5001-PM03-BR-BR1-35-24HI-552",
+        "mask_match": true,
+        "pltxt_pred": "35-24HI-552 REEL PLPR TAIL SHW ST IND",
+        "pltxt_gt": "35-24HI-552 REEL PLPR TAIL SHW ST",
+        "pltxt_exact": false
       },
       {
         "function": "35-24L004",
@@ -47,6 +254,51 @@
         "pltxt_exact": true
       },
       {
+        "function": "35-24P505",
+        "tplnr_pred": "5001-PM03-BR-BR1-35-24P505",
+        "tplnr_gt": "5001-PM03-BR-BR1-35-24P505",
+        "mask_match": true,
+        "pltxt_pred": "35-24P505 SIZE PRESS PLPR PMP",
+        "pltxt_gt": "35-24P505 SIZE PRESS PLPR PMP",
+        "pltxt_exact": true
+      },
+      {
+        "function": "35-24T603",
+        "tplnr_pred": "5001-PM03-BR-BR1-35-24T603",
+        "tplnr_gt": "5001-PM03-BR-BR1-35-24T603",
+        "mask_match": true,
+        "pltxt_pred": "35-24T603 BROKE COLLECTION TNK 40M3",
+        "pltxt_gt": "35-24T603 BROKE COLLECTION TNK",
+        "pltxt_exact": false
+      },
+      {
+        "function": "35-24P510",
+        "tplnr_pred": "5001-PM03-BR-BR1-35-24P510",
+        "tplnr_gt": "5001-PM03-BR-BR1-35-24P510",
+        "mask_match": true,
+        "pltxt_pred": "35-24P510 BROKE PMP",
+        "pltxt_gt": "35-24P510 BROKE COLLECTION TNK PMP 1",
+        "pltxt_exact": false
+      },
+      {
+        "function": "35-24P511",
+        "tplnr_pred": "5001-PM03-BR-BR1-35-24P511",
+        "tplnr_gt": "5001-PM03-BR-BR1-35-24P511",
+        "mask_match": true,
+        "pltxt_pred": "35-24P511 BROKE COLL PMP 60L/S",
+        "pltxt_gt": "35-24P511 BROKE COLLECTION TNK PMP 2",
+        "pltxt_exact": false
+      },
+      {
+        "function": "35-24L011",
+        "tplnr_pred": "5001-PM03-BR-BR1-35-24L011",
+        "tplnr_gt": "5001-PM03-BR-BR1-35-24L011",
+        "mask_match": true,
+        "pltxt_pred": "35-24L011 BROKE CVYR 1",
+        "pltxt_gt": "35-24L011 BROKE CVYR 1",
+        "pltxt_exact": true
+      },
+      {
         "function": "35-24L001",
         "tplnr_pred": "5001-PM03-BR-BR1-35-24L001",
         "tplnr_gt": "5001-PM03-BR-BR1-35-24L001",
@@ -56,6 +308,87 @@
         "pltxt_exact": true
       },
       {
+        "function": "35-24P503",
+        "tplnr_pred": "5001-PM03-BR-BR1-35-24P503",
+        "tplnr_gt": "5001-PM03-BR-BR1-35-24P503",
+        "mask_match": true,
+        "pltxt_pred": "35-24P503 PRESS PLPR GRBX OL PMP",
+        "pltxt_gt": "35-24P503 PRESS PLPR PMP",
+        "pltxt_exact": false
+      },
+      {
+        "function": "35-24P504",
+        "tplnr_pred": "5001-PM03-BR-BR1-35-24P504",
+        "tplnr_gt": "5001-PM03-BR-BR1-35-24P504",
+        "mask_match": true,
+        "pltxt_pred": "35-24P504 BROKE CONV 1 PMP",
+        "pltxt_gt": "35-24P504 PRESS PLPR PIT PMP",
+        "pltxt_exact": false
+      },
+      {
+        "function": "35-24T601",
+        "tplnr_pred": "5001-PM03-BR-BR1-35-24T601",
+        "tplnr_gt": "5001-PM03-BR-BR1-35-24T601",
+        "mask_match": true,
+        "pltxt_pred": "35-24T601 COUCH PIT TNK 176M3",
+        "pltxt_gt": "35-24T601 COUCH PIT",
+        "pltxt_exact": false
+      },
+      {
+        "function": "35-24P501",
+        "tplnr_pred": "5001-PM03-BR-BR1-35-24P501",
+        "tplnr_gt": "5001-PM03-BR-BR1-35-24P501",
+        "mask_match": true,
+        "pltxt_pred": "35-24P501 COUCH PIT PMP",
+        "pltxt_gt": "35-24P501 COUCH PIT PMP",
+        "pltxt_exact": true
+      },
+      {
+        "function": "35-24P502",
+        "tplnr_pred": "5001-PM03-BR-BR1-35-24P502",
+        "tplnr_gt": "5001-PM03-BR-BR1-35-24P502",
+        "mask_match": true,
+        "pltxt_pred": "35-24P502 COUCH PIT PMP",
+        "pltxt_gt": "35-24P502 COUCH PIT TRIM PMP",
+        "pltxt_exact": false
+      },
+      {
+        "function": "35-24ES-601",
+        "tplnr_pred": "5001-PM03-BR-BR1-35-24ES-601",
+        "tplnr_gt": "5001-PM03-BR-BR1-35-24ES-601",
+        "mask_match": true,
+        "pltxt_pred": "35-24ES-601 UTM E-STOP",
+        "pltxt_gt": "35-24ES-601 COUCH PIT UTM E-STOP",
+        "pltxt_exact": false
+      },
+      {
+        "function": "35-24T602",
+        "tplnr_pred": "5001-PM03-BR-BR1-35-24T602",
+        "tplnr_gt": "5001-PM03-BR-BR1-35-24T602",
+        "mask_match": true,
+        "pltxt_pred": "35-24T602 BROKE STOR TWR 4000M3",
+        "pltxt_gt": "35-24T602 BROKE STOR TWR",
+        "pltxt_exact": false
+      },
+      {
+        "function": "35-24P514",
+        "tplnr_pred": "5001-PM03-BR-BR1-35-24P514",
+        "tplnr_gt": "5001-PM03-BR-BR1-35-24P514",
+        "mask_match": true,
+        "pltxt_pred": "35-24P514 BROKE STOR PMP",
+        "pltxt_gt": "35-24P514 BROKE > OCC PMP",
+        "pltxt_exact": false
+      },
+      {
+        "function": "35-24P512",
+        "tplnr_pred": "5001-PM03-BR-BR1-35-24P512",
+        "tplnr_gt": "5001-PM03-BR-BR1-35-24P512",
+        "mask_match": true,
+        "pltxt_pred": "35-24P512 BROKE PMP",
+        "pltxt_gt": "35-24P512 BROKE STOR TWR PMP",
+        "pltxt_exact": false
+      },
+      {
         "function": "35-24L002",
         "tplnr_pred": "5001-PM03-BR-BR1-35-24L002",
         "tplnr_gt": "5001-PM03-BR-BR1-35-24L002",
@@ -63,6 +396,114 @@
         "pltxt_pred": "35-24L002 BROKE THICKENER",
         "pltxt_gt": "35-24L002 BROKE THICKENER",
         "pltxt_exact": true
+      },
+      {
+        "function": "35-24ES-662",
+        "tplnr_pred": "5001-PM03-BR-BR1-35-24ES-662",
+        "tplnr_gt": "5001-PM03-BR-BR1-35-24ES-662",
+        "mask_match": true,
+        "pltxt_pred": "35-24ES-662 BROKE THICKENER EMRG STOP",
+        "pltxt_gt": "35-24ES-662 BROKE THICKENER E-STOP",
+        "pltxt_exact": false
+      },
+      {
+        "function": "35-24ES-663",
+        "tplnr_pred": "5001-PM03-BR-BR1-35-24ES-663",
+        "tplnr_gt": "5001-PM03-BR-BR1-35-24ES-663",
+        "mask_match": true,
+        "pltxt_pred": "35-24ES-663 BROKE THICKENER E-STOP",
+        "pltxt_gt": "35-24ES-663 BROKE THICKENER E-STOP",
+        "pltxt_exact": true
+      },
+      {
+        "function": "35-24T604",
+        "tplnr_pred": "5001-PM03-BR-BR1-35-24T604",
+        "tplnr_gt": "5001-PM03-BR-BR1-35-24T604",
+        "mask_match": true,
+        "pltxt_pred": "35-24T604 BROKE FLTRT TNK 40M3",
+        "pltxt_gt": "35-24T604 BROKE FLTRT TNK",
+        "pltxt_exact": false
+      },
+      {
+        "function": "35-24P516",
+        "tplnr_pred": "5001-PM03-BR-BR1-35-24P516",
+        "tplnr_gt": "5001-PM03-BR-BR1-35-24P516",
+        "mask_match": true,
+        "pltxt_pred": "35-24P516 BROKE FLTRT PMP",
+        "pltxt_gt": "35-24P516 BROKE FLTRT TNK PMP",
+        "pltxt_exact": false
+      },
+      {
+        "function": "35-24T605",
+        "tplnr_pred": "5001-PM03-BR-BR1-35-24T605",
+        "tplnr_gt": "5001-PM03-BR-BR1-35-24T605",
+        "mask_match": true,
+        "pltxt_pred": "35-24T605 THICKENED BROKE TNK 70M3",
+        "pltxt_gt": "35-24T605 THICKENED BROKE TNK",
+        "pltxt_exact": false
+      },
+      {
+        "function": "35-24P513",
+        "tplnr_pred": "5001-PM03-BR-BR1-35-24P513",
+        "tplnr_gt": "5001-PM03-BR-BR1-35-24P513",
+        "mask_match": true,
+        "pltxt_pred": "35-24P513 BR1 BROKE PMP",
+        "pltxt_gt": "35-24P513 BROKE SCNG FD PMP",
+        "pltxt_exact": false
+      },
+      {
+        "function": "35-24P515",
+        "tplnr_pred": "5001-PM03-BR-BR1-35-24P515",
+        "tplnr_gt": "5001-PM03-BR-BR1-35-24P515",
+        "mask_match": true,
+        "pltxt_pred": "35-24P515 THICKENED BROKE PMP",
+        "pltxt_gt": "35-24P515 BROKE CIRC PMP",
+        "pltxt_exact": false
+      },
+      {
+        "function": "35-24L010",
+        "tplnr_pred": "5001-PM03-BR-BR1-35-24L010",
+        "tplnr_gt": "5001-PM03-BR-BR1-35-24L010",
+        "mask_match": true,
+        "pltxt_pred": "35-24L010 BROKE SCRN",
+        "pltxt_gt": "35-24L010 BROKE SCRN",
+        "pltxt_exact": true
+      },
+      {
+        "function": "35-24T606",
+        "tplnr_pred": "5001-PM03-BR-BR1-35-24T606",
+        "tplnr_gt": "5001-PM03-BR-BR1-35-24T606",
+        "mask_match": true,
+        "pltxt_pred": "35-24T606 BROKE REJ TNK 15M3",
+        "pltxt_gt": "35-24T606 BROKE REJ TNK",
+        "pltxt_exact": false
+      },
+      {
+        "function": "35-24P518",
+        "tplnr_pred": "5001-PM03-BR-BR1-35-24P518",
+        "tplnr_gt": "5001-PM03-BR-BR1-35-24P518",
+        "mask_match": true,
+        "pltxt_pred": "35-24P518 BROKE REJ PMP",
+        "pltxt_gt": "35-24P518 BROKE REJ PMP",
+        "pltxt_exact": true
+      },
+      {
+        "function": "35-24T607",
+        "tplnr_pred": "5001-PM03-BR-BR1-35-24T607",
+        "tplnr_gt": "5001-PM03-BR-BR1-35-24T607",
+        "mask_match": true,
+        "pltxt_pred": "35-24T607 BROKE DOS TNK 35M3",
+        "pltxt_gt": "35-24T607 BROKE DOS TNK",
+        "pltxt_exact": false
+      },
+      {
+        "function": "35-24P517",
+        "tplnr_pred": "5001-PM03-BR-BR1-35-24P517",
+        "tplnr_gt": "5001-PM03-BR-BR1-35-24P517",
+        "mask_match": true,
+        "pltxt_pred": "35-24P517 BROKE DOS PMP",
+        "pltxt_gt": "35-24P517 BROKE DOS TNK PMP",
+        "pltxt_exact": false
       }
     ]
   }

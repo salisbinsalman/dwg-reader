@@ -1,0 +1,207 @@
+{
+  "input": "/Users/code-huddle-ensemble/Desktop/dwg-reader/inputs/Broke System.dwg",
+  "mode": "viewer_shot_ai_gt",
+  "evidence_dir": "/Users/code-huddle-ensemble/Desktop/dwg-reader/outputs/evidence",
+  "site": "Shotton Paper Mill, United Kingdom",
+  "line": "Shotton PM3",
+  "process": "Broke System",
+  "sub_process": "BR1",
+  "model_id": "eu.anthropic.claude-sonnet-4-6",
+  "region": "eu-west-2",
+  "prompt_file": "pid_hierarchy_gt_v7_floc.md",
+  "legend": "/Users/code-huddle-ensemble/Desktop/dwg-reader/inputs/legend.png",
+  "results": [
+    {
+      "tag": "35-24HI-534",
+      "shot": "/Users/code-huddle-ensemble/Desktop/dwg-reader/outputs/evidence/Broke System.viewer_35-24HI-534.png",
+      "parent": {
+        "category": "instruments",
+        "block_name": "",
+        "handle": "",
+        "layer": "P-INSTRPOS_TEXTS",
+        "x": 2068.868799603728,
+        "y": 171.0805104993219,
+        "resolved_tag": "35-24HI-534",
+        "nearby_tags": "HI; 534; 35-24",
+        "nearby_descriptions": "HI 534 (35-24)",
+        "confidence": "high"
+      },
+      "candidates": [
+        "35-24",
+        "35-24HI-534",
+        "35-24-057",
+        "35-24-036",
+        "35-24HV-534",
+        "35-24HV-652",
+        "35-24-035",
+        "35-24-056",
+        "35-24HV-653",
+        "35-24-055",
+        "35-24HV-555",
+        "35-24KV-553",
+        "35-24-053",
+        "35-24-054",
+        "35-24-207",
+        "35-24-134",
+        "35-24-058",
+        "35-24HV-552",
+        "35-24-052",
+        "35-24-133",
+        "35-24-138",
+        "35-24-132",
+        "35-24P507",
+        "35-24FV-550",
+        "35-24XV-668",
+        "35-24P510",
+        "35-24-060",
+        "35-24-205",
+        "35-24LV2-559",
+        "35-24-049",
+        "35-24-131",
+        "35-24-051",
+        "35-24LV1-559",
+        "35-24-061",
+        "35-24-063",
+        "35-24-062",
+        "35-24-135",
+        "35-24-1118",
+        "35-24L006",
+        "35-24P511"
+      ],
+      "dossier": "Parent tag: 35-24HI-534\nParent category/block: instruments / \nParent XY: (2068.868799603728, 171.0805104993219)\nNearby descriptions: HI 534 (35-24)\n\nSame-tag CAD family:\n- (none)\n\nNearby line numbers (short ids preferred in output):\n- 35-25-034/2-WAF-500-E10H2A  full=35-25-034/2-WAF-500-E10H2A  d=168  layer=P-LINEPOS\n- 35-24-207  full=35-24-207-PP-100-E10H2A  d=95  layer=P-LINEPOS\n- 35-24-035  full=35-24-035-WAF-350-E10H2A  d=37  layer=P-LINEPOS\n- 35-24-057  full=35-24-057-WAF-350-E10H2A  d=21  layer=P-LINEPOS\n- 35-24-036  full=35-24-036-WAF-350-E10H2A  d=21  layer=P-LINEPOS\n- 35-24-052  full=35-24-052-WAF-300-E10H2A  d=111  layer=P-LINEPOS\n- 35-24-053  full=35-24-053-WAF-100-E10H2A  d=82  layer=P-LINEPOS\n- 35-24-055  full=35-24-055-WAF-100-E10H2A  d=60  layer=P-LINEPOS\n- 35-24-056  full=35-24-056-WAF-350-E10H2A  d=39  layer=P-LINEPOS\n- 35-24-054  full=35-24-054-WAF-500-E10H2A  d=82  layer=P-LINEPOS\n- 35-24-058  full=35-24-058-WAB-15-E10H2A  d=101  layer=P-LINEPOS\n- 35-24-060  full=35-24-060-PP-800-E10H2A  d=172  layer=P-LINEPOS\n- 35-24-051  full=35-24-051-PP-100-E10H2A  d=194  layer=P-LINEPOS\n- 35-24-049  full=35-24-049-PP-800-E10H2A  d=190  layer=P-LINEPOS\n\nNearby devices (valves/instruments/pumps/\u2026):\n- line_markers: PPI_1100A  d=190  block=PPI_1100A\n- valves: PPI_0900A  d=198  block=PPI_0900A\n- control_valves: PPI_1000A  d=74  block=PPI_1000A\n- instruments: PPI_0100X  d=52  block=PPI_0100X\n- fittings: P7A1214  d=120  block=P7A1214\n\nNearby peer primary equipment (do NOT nest under parent):\n- (none)\n\nNearby drawing text tokens:\n- 35-24  d=58  layer=P-INSTRPOS_TEXTS\n- 653  d=24  layer=P-INSTRPOS_TEXTS\n- 547  d=157  layer=P-INSTRPOS_TEXTS\n- 550  d=124  layer=P-INSTRPOS_TEXTS\n- 552  d=91  layer=P-INSTRPOS_TEXTS\n- 555  d=46  layer=P-INSTRPOS_TEXTS\n- 553  d=68  layer=P-INSTRPOS_TEXTS\n- 668  d=160  layer=P-INSTRPOS_TEXTS\n- 652  d=22  layer=P-INSTRPOS_TEXTS\n- 534  d=4  layer=P-INSTRPOS_TEXTS\n- 35-24P507  d=196  layer=P-PUMP_POS\n- 20  d=195  layer=P-PUMP_POS\n- 10  d=183  layer=P-PUMP_POS\n- 4  d=193  layer=P-PUMP_POS\n- 1500  d=183  layer=P-PUMP_POS\n- 35-24-138  d=131  layer=P-VALVEPOS\n- 003-50  d=130  layer=P-VALVEPOS\n- 35-24-134  d=99  layer=P-VALVEPOS\n- 101-500  d=104  layer=P-VALVEPOS\n- 35-24-132  d=133  layer=P-VALVEPOS\n- 003-20  d=130  layer=P-VALVEPOS\n- 35-24-133  d=125  layer=P-VALVEPOS\n- 003-15  d=123  layer=P-VALVEPOS\n- 35-24-205  d=180  layer=P-VALVEPOS\n- 35-24-131  d=193  layer=P-VALVEPOS\n- 001-80  d=193  layer=P-VALVEPOS\n- 35-25-034/2-WAF-500-E10H2A  d=168  layer=P-LINEPOS\n- 35-24-207  d=95  layer=P-LINEPOS\n- 35-24-035  d=37  layer=P-LINEPOS\n- 35-24-057  d=21  layer=P-LINEPOS\n- 35-24-036  d=21  layer=P-LINEPOS\n- 35-24-052  d=111  layer=P-LINEPOS\n- 35-24-053  d=82  layer=P-LINEPOS\n- 35-24-055  d=60  layer=P-LINEPOS\n- 35-24-056  d=39  layer=P-LINEPOS\n- 35-24-054  d=82  layer=P-LINEPOS\n- 35-24-058  d=101  layer=P-LINEPOS\n- 35-24-060  d=172  layer=P-LINEPOS\n- 35-24-051  d=194  layer=P-LINEPOS\n- 35-24-049  d=190  layer=P-LINEPOS",
+      "ai": {
+        "raw_text": "Looking at the P&ID image, I can see:\n\n1. **35-24HI-534** is a High Indicator instrument (circle with \"HI 534\" inside, square border = local control panel instrument per legend)\n2. It has an associated **35-24HS-534** (the circle above it labeled \"HS\" with a line through it = hand switch/selector)\n3. It is paired with **35-24HV-534** \u2014 the hand valve below it on line **35-24-057** (WAF-350)\n4. The HV-534 valve symbol shows: outline/transparent bowtie triangles with no actuator circle \u2192 **HV** (hand valve)\n5. The instrument pair (HI+HS) sits on line **35-24-057-WAF-350-E10H2A**\n\nThe pattern visible: each column has HS (top) + HI (bottom) instrument pair + HV valve below, all associated with a WAF line. For 35-24HI-534, the associated line is **35-24-057** and valve is **35-24HV-534**.\n\nSince 35-24HI-534 is an instrument (High Indicator), it is the FUNCTION parent. Its direct circuit includes the associated hand switch (35-24HS-534), the connected line (35-24-057), and the hand valve (35-24HV-534) nested under that line.\n\nThe HV-534 valve: outline bowtie, no actuator \u2192 **HV**. The valve label shows \"250\" (DN250).\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24HI-534\",\n  \"description\": \"35-24HI-534 HIGH INDICATOR\",\n  \"rows\": [\n    {\"equipment\": \"35-24HS-534\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24HS-534 HIGH SWITCH\"},\n    {\"equipment\": \"35-24-057\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-057 WAF LINE DN350\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24HV-534\", \"mask\": \"\", \"description\": \"35-24HV-534 ISOL VLV HV\"}\n  ],\n  \"peers\": [\n    {\"tag\": \"35-24HI-652\", \"evidence\": \"separate HI instrument on adjacent column, own numeric base 652\"},\n    {\"tag\": \"35-24HV-652\", \"evidence\": \"hand valve paired with HI-652, different numeric base\"},\n    {\"tag\": \"35-24HI-653\", \"evidence\": \"separate HI instrument on adjacent column, own numeric base 653\"},\n    {\"tag\": \"35-24HV-653\", \"evidence\": \"hand valve paired with HI-653, different numeric base\"},\n    {\"tag\": \"35-24HI-555\", \"evidence\": \"separate HI instrument, numeric base 555\"},\n    {\"tag\": \"35-24HV-555\", \"evidence\": \"hand valve paired with HI-555, different numeric base\"},\n    {\"tag\": \"35-24KV-553\", \"evidence\": \"KS/KV instrument pair, numeric base 553, different function\"},\n    {\"tag\": \"35-24HI-552\", \"evidence\": \"separate HI instrument, numeric base 552\"},\n    {\"tag\": \"35-24HV-552\", \"evidence\": \"hand valve paired with HI-552, different numeric base\"}\n  ],\n  \"notes\": [\n    \"35-24HI-534 is a local control panel high indicator instrument paired with 35-24HS-534 on line 35-24-057-WAF-350\",\n    \"35-24HV-534 is a hand valve (outline bowtie, no actuator) DN250 on line 35-24-057\",\n    \"Peer instruments belong to adjacent but separate indicator/valve stations on the same header\"\n  ],\n  \"confidence\": \"high\"\n}\n```",
+        "parsed": {
+          "sub_process": "BR1",
+          "function": "35-24HI-534",
+          "description": "35-24HI-534 HIGH INDICATOR",
+          "rows": [
+            {
+              "equipment": "35-24HS-534",
+              "subequipment": "",
+              "mask": "",
+              "description": "35-24HS-534 HIGH SWITCH"
+            },
+            {
+              "equipment": "35-24-057",
+              "subequipment": "",
+              "mask": "",
+              "description": "35-24-057 WAF LINE DN350"
+            },
+            {
+              "equipment": "",
+              "subequipment": "35-24HV-534",
+              "mask": "",
+              "description": "35-24HV-534 ISOL VLV HV"
+            }
+          ],
+          "peers": [
+            {
+              "tag": "35-24HI-652",
+              "evidence": "separate HI instrument on adjacent column, own numeric base 652"
+            },
+            {
+              "tag": "35-24HV-652",
+              "evidence": "hand valve paired with HI-652, different numeric base"
+            },
+            {
+              "tag": "35-24HI-653",
+              "evidence": "separate HI instrument on adjacent column, own numeric base 653"
+            },
+            {
+              "tag": "35-24HV-653",
+              "evidence": "hand valve paired with HI-653, different numeric base"
+            },
+            {
+              "tag": "35-24HI-555",
+              "evidence": "separate HI instrument, numeric base 555"
+            },
+            {
+              "tag": "35-24HV-555",
+              "evidence": "hand valve paired with HI-555, different numeric base"
+            },
+            {
+              "tag": "35-24KV-553",
+              "evidence": "KS/KV instrument pair, numeric base 553, different function"
+            },
+            {
+              "tag": "35-24HI-552",
+              "evidence": "separate HI instrument, numeric base 552"
+            },
+            {
+              "tag": "35-24HV-552",
+              "evidence": "hand valve paired with HI-552, different numeric base"
+            }
+          ],
+          "notes": [
+            "35-24HI-534 is a local control panel high indicator instrument paired with 35-24HS-534 on line 35-24-057-WAF-350",
+            "35-24HV-534 is a hand valve (outline bowtie, no actuator) DN250 on line 35-24-057",
+            "Peer instruments belong to adjacent but separate indicator/valve stations on the same header"
+          ],
+          "confidence": "high"
+        },
+        "model_id": "eu.anthropic.claude-sonnet-4-6",
+        "region": "eu-west-2",
+        "prompt_file": "pid_hierarchy_gt_v7_floc.md",
+        "candidates": [
+          "35-24",
+          "35-24HI-534",
+          "35-24-057",
+          "35-24-036",
+          "35-24HV-534",
+          "35-24HV-652",
+          "35-24-035",
+          "35-24-056",
+          "35-24HV-653",
+          "35-24-055",
+          "35-24HV-555",
+          "35-24KV-553",
+          "35-24-053",
+          "35-24-054",
+          "35-24-207",
+          "35-24-134",
+          "35-24-058",
+          "35-24HV-552",
+          "35-24-052",
+          "35-24-133",
+          "35-24-138",
+          "35-24-132",
+          "35-24P507",
+          "35-24FV-550",
+          "35-24XV-668",
+          "35-24P510",
+          "35-24-060",
+          "35-24-205",
+          "35-24LV2-559",
+          "35-24-049",
+          "35-24-131",
+          "35-24-051",
+          "35-24LV1-559",
+          "35-24-061",
+          "35-24-063",
+          "35-24-062",
+          "35-24-135",
+          "35-24-1118",
+          "35-24L006",
+          "35-24P511"
+        ],
+        "prompt_chars": 10660,
+        "vision": true
+      },
+      "refined_rows": [
+        {
+          "equipment": "35-24-057",
+          "subequipment": "",
+          "mask": "",
+          "description": "35-24-057 WAF LN DN350"
+        },
+        {
+          "equipment": "",
+          "subequipment": "35-24HV-534",
+          "mask": "",
+          "description": "35-24HV-534 ISOL VLV HV"
+        }
+      ]
+    }
+  ]
+}

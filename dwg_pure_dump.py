@@ -25,6 +25,49 @@ from pathlib import Path
 from typing import Any, Dict, Iterable, List, Optional, Sequence, Tuple
 
 
+def _patch_odafc_no_focus() -> None:
+    """Monkey-patch ezdxf odafc on macOS to prevent ODA from stealing focus.
+
+    Injects no_focus_steal.dylib via DYLD_INSERT_LIBRARIES, which patches
+    -[NSApplication activateIgnoringOtherApps:] to a no-op at runtime so the
+    ODA process cannot bring itself to the foreground.
+    """
+    import platform
+    import subprocess
+    import types
+
+    if platform.system() != "Darwin":
+        return
+    try:
+        import ezdxf.addons.odafc as _odafc
+    except ImportError:
+        return
+
+    _dylib = Path(__file__).resolve().parent / "no_focus_steal.dylib"
+    _orig = _odafc._run_with_no_gui
+
+    def _darwin_no_focus(system, command, arguments):
+        if system != "Darwin":
+            return _orig(system, command, arguments)
+        env = os.environ.copy()
+        if _dylib.is_file():
+            existing = env.get("DYLD_INSERT_LIBRARIES", "")
+            env["DYLD_INSERT_LIBRARIES"] = (
+                f"{existing}:{_dylib}" if existing else str(_dylib)
+            )
+        proc = subprocess.run(
+            [command] + arguments, text=True, capture_output=True, env=env
+        )
+        return types.SimpleNamespace(
+            returncode=proc.returncode, stdout=proc.stdout, stderr=proc.stderr
+        )
+
+    _odafc._run_with_no_gui = _darwin_no_focus
+
+
+_patch_odafc_no_focus()
+
+
 def configure_odafc() -> Optional[str]:
     """Auto-detect ODA File Converter on macOS/Linux and configure ezdxf odafc."""
     import shutil

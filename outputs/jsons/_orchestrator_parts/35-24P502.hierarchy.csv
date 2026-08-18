@@ -1,0 +1,16 @@
+ORDER,SITE,LINE,PROCESS,SUB-PROCESS,FUNCTION,EQUIPMENT,SUB-EQUIPMENT,MASK,DESCRIPTION
+1,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,,,5001-PM03-BR,BROKE SYSTEM
+2,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,BR1,,,,5001-PM03-BR-BR1,BROKE SYSTEM
+3,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,BR1,35-24P502,,,5001-PM03-BR-BR1-35-24P502,35-24P502 COUCH PIT PMP
+4,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,35-24-117,,,35-24-117 SUCT LN PP-250
+5,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,,35-24-078,,35-24-078 ISOL VLV HV
+6,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,,35-24-075,,35-24-075 ISOL VLV NC
+7,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,,35-24-1125,,35-24-1125 ISOL VLV NC
+8,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,35-24-120,,,35-24-120 DIS LN PP-900
+9,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,,35-24-074,,35-24-074 ISOL VLV NC
+10,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,,35-24-1101,,35-24-1101 ISOL VLV NC
+11,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,35-24-119,,,35-24-119 DIS LN PP-300
+12,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,35-24P502.1,,,35-24P502.1
+13,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,35-24-502.1,,,35-24-502.1
+14,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,35-24P502.2,,,35-24P502.2
+15,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,35-24-502.2,,,35-24-502.2

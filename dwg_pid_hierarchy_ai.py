@@ -12,6 +12,8 @@ AI returns hierarchy rows for:
 
 from __future__ import annotations
 
+import dwg_warn  # noqa: F401 — silence boto3 Python 3.9 deprecation noise
+
 import argparse
 import csv
 import json
@@ -21,7 +23,6 @@ import sys
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
-from dwg_prompts import load_prompt
 from dwg_floc_context import (
     DEFAULT_FLOC_CONTEXT,
     build_tplnr,
@@ -30,6 +31,7 @@ from dwg_floc_context import (
     merge_floc_context,
     normalize_pltxt,
 )
+from dwg_prompts import load_prompt
 from dwg_pure_dump import (
     clear_evidence_outputs,
     clear_previous_outputs,
@@ -44,6 +46,7 @@ from dwg_pure_dump import (
 
 HIERARCHY_PROMPT_FILE = "pid_hierarchy_gt_v7_floc.md"
 DEFAULT_MODEL_ID = "eu.anthropic.claude-sonnet-4-6"
+LEGEND_PATH = Path("inputs/legend.png")
 
 # GT sheet columns (primary deliverable shape)
 GT_COLUMNS = [
@@ -531,6 +534,7 @@ def overlay_parent_box(
 ) -> bytes:
     """Draw red parent box; keep full frame so nearby objects stay visible."""
     from io import BytesIO
+
     from PIL import Image, ImageDraw, ImageFont
 
     im = Image.open(BytesIO(png_bytes)).convert("RGB")
@@ -705,10 +709,10 @@ def viewer_screenshot(
     dpi: int = 260,
 ) -> Path:
     """ODA-backed viewer raster: distance-adaptive zoom + red parent highlight."""
+    from ezdxf import bbox as ezbbox
     from ezdxf.addons.drawing import Frontend, RenderContext
     from ezdxf.addons.drawing import layout as ezlayout
     from ezdxf.addons.drawing import pymupdf as ez_pymupdf
-    from ezdxf import bbox as ezbbox
     from ezdxf.math import BoundingBox2d
 
     highlight = parent_highlight_box(doc, parent, tag, tag_register)
@@ -775,8 +779,9 @@ def viewer_screenshot(
 
     out_path.parent.mkdir(parents=True, exist_ok=True)
     out_path.write_bytes(png)
-    from PIL import Image
     from io import BytesIO
+
+    from PIL import Image
 
     im = Image.open(BytesIO(png))
     print(
@@ -869,6 +874,7 @@ def bedrock_hierarchy_from_shot(
     prompt_file: str = HIERARCHY_PROMPT_FILE,
     candidates: Optional[List[str]] = None,
     parent_dossier: str = "",
+    legend_path: Optional[Path] = None,
 ) -> Dict[str, Any]:
     import boto3
 
@@ -892,6 +898,10 @@ def bedrock_hierarchy_from_shot(
     content: List[Dict[str, Any]] = [{"text": prompt}]
     if use_vision:
         content.append({"image": {"format": "png", "source": {"bytes": image_path.read_bytes()}}})
+        if legend_path and legend_path.exists():
+            suffix = legend_path.suffix.lower().lstrip(".")
+            fmt = suffix if suffix in {"png", "jpg", "jpeg", "gif", "webp"} else "png"
+            content.append({"image": {"format": fmt, "source": {"bytes": legend_path.read_bytes()}}})
 
     client = boto3.client("bedrock-runtime", region_name=region)
     response = client.converse(
@@ -1315,9 +1325,24 @@ def main() -> int:
         help="Reuse existing evidence viewer PNGs instead of re-rendering",
     )
     parser.add_argument(
+        "--legend",
+        default=str(LEGEND_PATH),
+        help="Legend PNG sent as Image 2 for valve type classification (default: inputs/legend.png)",
+    )
+    parser.add_argument(
         "--inventory-json",
         default="",
         help="Optional pid_inventory.json for candidate tags (default: jsons/<stem>.pid_inventory.json)",
+    )
+    parser.add_argument(
+        "--hierarchy-csv-out",
+        default="",
+        help="Optional explicit path for hierarchy CSV output (default: <output-dir>/<stem>.hierarchy.csv)",
+    )
+    parser.add_argument(
+        "--hierarchy-json-out",
+        default="",
+        help="Optional explicit path for hierarchy AI JSON output (default: outputs/jsons/<stem>.hierarchy_ai.json)",
     )
     parser.add_argument("--no-clean-prev", action="store_true")
     args = parser.parse_args()
@@ -1329,8 +1354,22 @@ def main() -> int:
     log_dir = logs_dir(out_dir)
     base = safe_name(input_path)
     tags = [normalize_tag(t) for t in args.tags.split(",") if t.strip()]
-    out_csv = out_dir / f"{base}.hierarchy.csv"
-    out_json = json_path(out_dir, f"{base}.hierarchy_ai.json")
+    legend_path: Optional[Path] = Path(args.legend).expanduser().resolve() if args.legend else None
+    if legend_path and not legend_path.exists():
+        print(f"[warn] Legend not found at {legend_path}; valve type tokens will be omitted")
+        legend_path = None
+    elif legend_path:
+        print(f"[legend] {legend_path.name} will be sent as Image 2 for valve classification")
+    out_csv = (
+        Path(args.hierarchy_csv_out).expanduser().resolve()
+        if args.hierarchy_csv_out
+        else out_dir / f"{base}.hierarchy.csv"
+    )
+    out_json = (
+        Path(args.hierarchy_json_out).expanduser().resolve()
+        if args.hierarchy_json_out
+        else json_path(out_dir, f"{base}.hierarchy_ai.json")
+    )
     enr_path = find_json(out_dir, f"{base}.pid_enrichment.json")
     inv_path = (
         Path(args.inventory_json).expanduser()
@@ -1448,6 +1487,7 @@ def main() -> int:
                 prompt_file=args.prompt_file,
                 candidates=candidates,
                 parent_dossier=dossier,
+                legend_path=legend_path,
             )
             print(f"[3/3] Bedrock hierarchy received ({args.model_id})")
         except Exception as e:
@@ -1540,6 +1580,7 @@ def main() -> int:
             "model_id": args.model_id,
             "region": region,
             "prompt_file": args.prompt_file,
+            "legend": str(legend_path) if legend_path else None,
             "results": results,
         },
     )

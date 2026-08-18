@@ -1,0 +1,334 @@
+{
+  "input": "/Users/code-huddle-ensemble/Desktop/dwg-reader/inputs/Broke System.dwg",
+  "mode": "viewer_shot_ai_gt",
+  "evidence_dir": "/Users/code-huddle-ensemble/Desktop/dwg-reader/outputs/evidence",
+  "site": "Shotton Paper Mill, United Kingdom",
+  "line": "Shotton PM3",
+  "process": "Broke System",
+  "sub_process": "BR1",
+  "model_id": "eu.anthropic.claude-sonnet-4-6",
+  "region": "eu-west-2",
+  "prompt_file": "pid_hierarchy_gt_v7_floc.md",
+  "legend": "/Users/code-huddle-ensemble/Desktop/dwg-reader/inputs/legend.png",
+  "results": [
+    {
+      "tag": "35-24L007",
+      "shot": "/Users/code-huddle-ensemble/Desktop/dwg-reader/outputs/evidence/Broke System.viewer_35-24L007.png",
+      "parent": {
+        "category": "process_equipment",
+        "block_name": "PPI_1302A-25_0",
+        "handle": "642F6",
+        "layer": "P-EQUIPMENT_POS",
+        "x": 1190.0,
+        "y": 295.0,
+        "resolved_tag": "35-24L007",
+        "nearby_tags": "35-24L007; 35-24P508",
+        "nearby_descriptions": "SLABBING PULPER; HP-33G2; 800 BDTPD",
+        "confidence": "high"
+      },
+      "candidates": [
+        "35-24L007",
+        "35-24P508",
+        "35-24-160",
+        "35-24-227",
+        "35-24-025",
+        "35-24-1106",
+        "35-24-023",
+        "35-24-164",
+        "35-24-161",
+        "35-24-007.2",
+        "35-24",
+        "35-24LV2-518",
+        "35-24-007.1",
+        "35-24-027",
+        "35-24-029",
+        "35-24-1096",
+        "35-24-1095",
+        "35-24-216",
+        "35-24LV1-518",
+        "35-24NV-519",
+        "35-24-007.3",
+        "35-24-030",
+        "35-24-007.4",
+        "35-24-156",
+        "35-24-217",
+        "35-24TV-9261",
+        "35-24HV-693",
+        "35-24XV-666",
+        "35-24-165",
+        "35-24-019",
+        "35-24-218",
+        "35-24-166",
+        "35-24-163",
+        "35-24-167",
+        "35-24HV-694",
+        "35-24TV-9260"
+      ],
+      "dossier": "Parent tag: 35-24L007\nParent category/block: process_equipment / PPI_1302A-25_0\nParent XY: (1190.0, 295.0)\nNearby descriptions: SLABBING PULPER; HP-33G2; 800 BDTPD\n\nSame-tag CAD family:\n- process_equipment @ (1190.0,295.0) block=PPI_1302A-25_0 nearby=35-24L007; 35-24P508\n- valves @ (1192.5,307.5) block=PPI_0900A nearby=35-24L007\n- valves @ (1192.5,260.0) block=PPI_0900A nearby=35-24L007; 35-24P508\n- instruments @ (1235.0,267.5) block=PPI_0102B nearby=35-24L007\n- fittings @ (1185.0,337.5) block=P7A1220 nearby=35-24L007\n- fittings @ (1250.0,340.0) block=P7A1220 nearby=35-24L007; 35-24\n\nNearby line numbers (short ids preferred in output):\n- 35-24-217  full=35-24-217-WAF-150-E10H2A  d=192  layer=P-LINEPOS\n- 35-24-030  full=35-24-030-WAF-250-E10H2A  d=166  layer=P-LINEPOS\n- 35-24-029  full=35-24-029-PP-600-E10H2A  d=113  layer=P-LINEPOS\n- 35-24-027  full=35-24-027-PP-250-E10H2A  d=109  layer=P-LINEPOS\n- 35-24-023  full=35-24-023-PP-200-E10H2A  d=55  layer=P-LINEPOS\n- 35-24-025  full=35-24-025-PP-600-E10H2A  d=44  layer=P-LINEPOS\n\nNearby devices (valves/instruments/pumps/\u2026):\n- line_markers: PPI_1100A  d=45  block=PPI_1100A\n- valves: PPI_0900A  d=121  block=PPI_0900A\n- control_valves: PPI_1000A  d=166  block=PPI_1000A\n- instruments: PPI_1205A  d=176  block=PPI_1205A\n- pumps: P7A0200  d=49  block=P7A0200\n- motors: PPI_1504A-25_0  d=73  block=PPI_1504A-25_0\n- fittings: P7A1214  d=182  block=P7A1214\n\nNearby peer primary equipment (do NOT nest under parent):\n- 35-24P508 (pumps, d=49)\n\nNearby drawing text tokens:\n- 2 bar  d=38  layer=P-TEXT\n- 1 bar  d=60  layer=P-TEXT\n- S1  d=39  layer=P-TEXT\n- S2  d=68  layer=P-TEXT\n- GEARBOX 1  d=188  layer=P-OTHER\n- 800 BDTPD  d=24  layer=P-TEXT\n- 35-24  d=199  layer=P-INSTRPOS_TEXTS\n- 35-24L007  d=7  layer=P-EQUIPMENT_POS\n- HP-33G2  d=16  layer=P-EQUIPMENT_POS\n- 518  d=107  layer=P-INSTRPOS_TEXTS\n- 519  d=172  layer=P-INSTRPOS_TEXTS\n- 524  d=130  layer=P-INSTRPOS_TEXTS\n- 523  d=144  layer=P-INSTRPOS_TEXTS\n- 522  d=172  layer=P-INSTRPOS_TEXTS\n- SLABBING PULPER ROTOR 1  d=147  layer=P-TEXT\n- 666  d=169  layer=P-INSTRPOS_TEXTS\n- 690  d=158  layer=P-INSTRPOS_TEXTS\n- S4  d=130  layer=P-TEXT\n- S3  d=104  layer=P-TEXT\n- 693  d=194  layer=P-INSTRPOS_TEXTS\n- 532  d=197  layer=P-INSTRPOS_TEXTS\n- 35-24P508  d=79  layer=P-PUMP_POS\n- 300  d=84  layer=P-PUMP_POS\n- 28  d=79  layer=P-PUMP_POS\n- 110  d=89  layer=P-PUMP_POS\n- 1000  d=84  layer=P-PUMP_POS\n- 35-24-007.4  d=173  layer=P-MOTOR_POS\n- 1,5  d=176  layer=P-MOTOR_POS\n- 1500  d=171  layer=P-MOTOR_POS\n- 35-24-007.3  d=160  layer=P-MOTOR_POS\n- 35-24-007.1  d=94  layer=P-MOTOR_POS\n- 200  d=98  layer=P-MOTOR_POS\n- 35-24-007.2  d=78  layer=P-MOTOR_POS\n- 35-24-216  d=122  layer=P-VALVEPOS\n- 001-80  d=123  layer=P-VALVEPOS\n- 35-24-1095  d=114  layer=P-VALVEPOS\n- 003-50  d=114  layer=P-VALVEPOS\n- 35-24-164  d=63  layer=P-VALVEPOS\n- 003-15  d=64  layer=P-VALVEPOS\n- 35-24-160  d=14  layer=P-VALVEPOS",
+      "ai": {
+        "raw_text": "I'll analyze the P&ID image systematically, identifying all components connected to 35-24L007 (Slabbing Pulper).\n\n**Key observations from the image:**\n\n1. **35-24L007** = SLABBING PULPER, HP-33G2, 800 BDTPD\n2. **Motors**: 35-24-007.1 (200kW/1500rpm) and 35-24-007.2 (200kW/1500rpm) \u2014 both share numeric base 007 \u2713\n3. **Lines connected**: 35-24-023 (PP-200, inlet with level control), 35-24-025 (PP-600, main feed), 35-24-027 (PP-250, discharge side), 35-24-029 (PP-600)\n4. **Level instrument**: LC-518 (35-24LC-518 implied, but tag shown as 35-24LV1-518 and 35-24LV2-518 are valves on line 35-24-023)\n5. **Valve 35-24-160** (350-200) on line 35-24-023 \u2014 AV type (circle actuator, filled triangles = NC)\n6. **Valve 35-24-164** (003-15) \u2014 hand valve (outline bowtie, no actuator)\n7. **Valve 35-24-1095** (003-50) \u2014 NC (filled triangles, no actuator circle visible)\n8. **Valve 35-24-1106** (003-50) \u2014 NC\n9. **35-24LV1-518** and **35-24LV2-518** \u2014 level control valves on 35-24-023 circuit\n10. **35-24-216** (001-80) \u2014 hand valve on drain/return line\n11. **35-24-161** (001-80) \u2014 hand valve\n12. **Peer**: 35-24P508 (pump, separate equipment)\n\n**Valve symbol analysis:**\n- 35-24-160: circle actuator on top = AV; triangles appear filled = NC \u2192 `AV NC`\n- 35-24LV1-518: circle actuator = AV (level control valve)\n- 35-24LV2-518: circle actuator = AV\n- 35-24-164: outline bowtie, no actuator = HV\n- 35-24-1095: filled triangles, no actuator circle = NC\n- 35-24-1106: filled triangles, no actuator = NC\n- 35-24-216: outline bowtie = HV\n- 35-24-161: outline bowtie = HV\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24L007\",\n  \"description\": \"35-24L007 SLABBING PULPER HP-33G2\",\n  \"rows\": [\n    {\"equipment\": \"35-24-007.1\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-007.1 PULPER ROTOR MTR 200KW\"},\n    {\"equipment\": \"35-24-007.2\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-007.2 PULPER ROTOR MTR 200KW\"},\n    {\"equipment\": \"35-24-023\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-023 PP-200 INLET LINE\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-160\", \"mask\": \"\", \"description\": \"35-24-160 VLV AV NC\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24LV1-518\", \"mask\": \"\", \"description\": \"35-24LV1-518 LVL CTRL VLV AV\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24LV2-518\", \"mask\": \"\", \"description\": \"35-24LV2-518 LVL CTRL VLV AV\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-164\", \"mask\": \"\", \"description\": \"35-24-164 VLV HV\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-1095\", \"mask\": \"\", \"description\": \"35-24-1095 VLV NC\"},\n    {\"equipment\": \"35-24-025\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-025 PP-600 PULPER FEED LINE\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-1106\", \"mask\": \"\", \"description\": \"35-24-1106 VLV NC\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-227\", \"mask\": \"\", \"description\": \"35-24-227 VLV HV\"},\n    {\"equipment\": \"35-24-027\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-027 PP-250 DISCHARGE LINE\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-1096\", \"mask\": \"\", \"description\": \"35-24-1096 VLV NC\"},\n    {\"equipment\": \"35-24-216\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-216 VLV HV\"}\n  ],\n  \"peers\": [\n    {\"tag\": \"35-24P508\", \"evidence\": \"Peer pump adjacent to pulper, own data box 300l/s 28m 110kW 1000rpm \u2014 separate primary equipment\"},\n    {\"tag\": \"35-24-007.3\", \"evidence\": \"Motor tag visible in dossier but not confirmed on 007 rotor circuit in image crop\"},\n    {\"tag\": \"35-24-007.4\", \"evidence\": \"Motor tag in dossier at d=173, associated with separate rotor/gearbox circuit not clearly within L007 boundary\"},\n    {\"tag\": \"35-24-161\", \"evidence\": \"Hand valve 001-80 on discharge side, associated with P508 pump circuit rather than pulper vessel directly\"},\n    {\"tag\": \"35-24-029\", \"evidence\": \"PP-600 line visible at crop edge, connects to pulper but also serves wider circuit beyond L007 boundary\"}\n  ],\n  \"notes\": [\n    \"35-24LC-518 (LC instrument bubble) visible on left side of pulper \u2014 tagged as LC 518 on drawing; level control loop drives LV1-518 and LV2-518 on line 35-24-023\",\n    \"35-24-007.3 and 35-24-007.4 appear in dossier as motor positions but are not clearly visible/confirmed within the L007 vessel boundary in the image crop\",\n    \"35-24-216 listed as top-level EQUIPMENT as it appears on a return/drain spool directly off the pulper body rather than a numbered process line\",\n    \"800 BDTPD is the pulper capacity; HP-33G2 is the equipment model reference\"\n  ],\n  \"confidence\": \"high\"\n}\n```",
+        "parsed": {
+          "sub_process": "BR1",
+          "function": "35-24L007",
+          "description": "35-24L007 SLABBING PULPER HP-33G2",
+          "rows": [
+            {
+              "equipment": "35-24-007.1",
+              "subequipment": "",
+              "mask": "",
+              "description": "35-24-007.1 PULPER ROTOR MTR 200KW"
+            },
+            {
+              "equipment": "35-24-007.2",
+              "subequipment": "",
+              "mask": "",
+              "description": "35-24-007.2 PULPER ROTOR MTR 200KW"
+            },
+            {
+              "equipment": "35-24-023",
+              "subequipment": "",
+              "mask": "",
+              "description": "35-24-023 PP-200 INLET LINE"
+            },
+            {
+              "equipment": "",
+              "subequipment": "35-24-160",
+              "mask": "",
+              "description": "35-24-160 VLV AV NC"
+            },
+            {
+              "equipment": "",
+              "subequipment": "35-24LV1-518",
+              "mask": "",
+              "description": "35-24LV1-518 LVL CTRL VLV AV"
+            },
+            {
+              "equipment": "",
+              "subequipment": "35-24LV2-518",
+              "mask": "",
+              "description": "35-24LV2-518 LVL CTRL VLV AV"
+            },
+            {
+              "equipment": "",
+              "subequipment": "35-24-164",
+              "mask": "",
+              "description": "35-24-164 VLV HV"
+            },
+            {
+              "equipment": "",
+              "subequipment": "35-24-1095",
+              "mask": "",
+              "description": "35-24-1095 VLV NC"
+            },
+            {
+              "equipment": "35-24-025",
+              "subequipment": "",
+              "mask": "",
+              "description": "35-24-025 PP-600 PULPER FEED LINE"
+            },
+            {
+              "equipment": "",
+              "subequipment": "35-24-1106",
+              "mask": "",
+              "description": "35-24-1106 VLV NC"
+            },
+            {
+              "equipment": "",
+              "subequipment": "35-24-227",
+              "mask": "",
+              "description": "35-24-227 VLV HV"
+            },
+            {
+              "equipment": "35-24-027",
+              "subequipment": "",
+              "mask": "",
+              "description": "35-24-027 PP-250 DISCHARGE LINE"
+            },
+            {
+              "equipment": "",
+              "subequipment": "35-24-1096",
+              "mask": "",
+              "description": "35-24-1096 VLV NC"
+            },
+            {
+              "equipment": "35-24-216",
+              "subequipment": "",
+              "mask": "",
+              "description": "35-24-216 VLV HV"
+            }
+          ],
+          "peers": [
+            {
+              "tag": "35-24P508",
+              "evidence": "Peer pump adjacent to pulper, own data box 300l/s 28m 110kW 1000rpm \u2014 separate primary equipment"
+            },
+            {
+              "tag": "35-24-007.3",
+              "evidence": "Motor tag visible in dossier but not confirmed on 007 rotor circuit in image crop"
+            },
+            {
+              "tag": "35-24-007.4",
+              "evidence": "Motor tag in dossier at d=173, associated with separate rotor/gearbox circuit not clearly within L007 boundary"
+            },
+            {
+              "tag": "35-24-161",
+              "evidence": "Hand valve 001-80 on discharge side, associated with P508 pump circuit rather than pulper vessel directly"
+            },
+            {
+              "tag": "35-24-029",
+              "evidence": "PP-600 line visible at crop edge, connects to pulper but also serves wider circuit beyond L007 boundary"
+            }
+          ],
+          "notes": [
+            "35-24LC-518 (LC instrument bubble) visible on left side of pulper \u2014 tagged as LC 518 on drawing; level control loop drives LV1-518 and LV2-518 on line 35-24-023",
+            "35-24-007.3 and 35-24-007.4 appear in dossier as motor positions but are not clearly visible/confirmed within the L007 vessel boundary in the image crop",
+            "35-24-216 listed as top-level EQUIPMENT as it appears on a return/drain spool directly off the pulper body rather than a numbered process line",
+            "800 BDTPD is the pulper capacity; HP-33G2 is the equipment model reference"
+          ],
+          "confidence": "high"
+        },
+        "model_id": "eu.anthropic.claude-sonnet-4-6",
+        "region": "eu-west-2",
+        "prompt_file": "pid_hierarchy_gt_v7_floc.md",
+        "candidates": [
+          "35-24L007",
+          "35-24P508",
+          "35-24-160",
+          "35-24-227",
+          "35-24-025",
+          "35-24-1106",
+          "35-24-023",
+          "35-24-164",
+          "35-24-161",
+          "35-24-007.2",
+          "35-24",
+          "35-24LV2-518",
+          "35-24-007.1",
+          "35-24-027",
+          "35-24-029",
+          "35-24-1096",
+          "35-24-1095",
+          "35-24-216",
+          "35-24LV1-518",
+          "35-24NV-519",
+          "35-24-007.3",
+          "35-24-030",
+          "35-24-007.4",
+          "35-24-156",
+          "35-24-217",
+          "35-24TV-9261",
+          "35-24HV-693",
+          "35-24XV-666",
+          "35-24-165",
+          "35-24-019",
+          "35-24-218",
+          "35-24-166",
+          "35-24-163",
+          "35-24-167",
+          "35-24HV-694",
+          "35-24TV-9260"
+        ],
+        "prompt_chars": 10525,
+        "vision": true
+      },
+      "refined_rows": [
+        {
+          "equipment": "35-24-007.1",
+          "subequipment": "",
+          "mask": "",
+          "description": "35-24-007.1 PLPR RTR MTR 200KW"
+        },
+        {
+          "equipment": "35-24-007.2",
+          "subequipment": "",
+          "mask": "",
+          "description": "35-24-007.2 PLPR RTR MTR 200KW"
+        },
+        {
+          "equipment": "35-24-023",
+          "subequipment": "",
+          "mask": "",
+          "description": "35-24-023 PP-200 IN LN"
+        },
+        {
+          "equipment": "",
+          "subequipment": "35-24-160",
+          "mask": "",
+          "description": "35-24-160 VLV AV NC"
+        },
+        {
+          "equipment": "",
+          "subequipment": "35-24LV1-518",
+          "mask": "",
+          "description": "35-24LV1-518 LVL CTRL VLV AV"
+        },
+        {
+          "equipment": "",
+          "subequipment": "35-24LV2-518",
+          "mask": "",
+          "description": "35-24LV2-518 LVL CTRL VLV AV"
+        },
+        {
+          "equipment": "",
+          "subequipment": "35-24-164",
+          "mask": "",
+          "description": "35-24-164 VLV HV"
+        },
+        {
+          "equipment": "",
+          "subequipment": "35-24-1095",
+          "mask": "",
+          "description": "35-24-1095 VLV NC"
+        },
+        {
+          "equipment": "35-24-025",
+          "subequipment": "",
+          "mask": "",
+          "description": "35-24-025 PP-600 PLPR FD LN"
+        },
+        {
+          "equipment": "",
+          "subequipment": "35-24-1106",
+          "mask": "",
+          "description": "35-24-1106 VLV NC"
+        },
+        {
+          "equipment": "",
+          "subequipment": "35-24-227",
+          "mask": "",
+          "description": "35-24-227 VLV HV"
+        },
+        {
+          "equipment": "35-24-027",
+          "subequipment": "",
+          "mask": "",
+          "description": "35-24-027 PP-250 DIS LN"
+        },
+        {
+          "equipment": "",
+          "subequipment": "35-24-1096",
+          "mask": "",
+          "description": "35-24-1096 VLV NC"
+        },
+        {
+          "equipment": "35-24-216",
+          "subequipment": "",
+          "mask": "",
+          "description": "35-24-216 VLV HV"
+        },
+        {
+          "equipment": "35-24L007.1",
+          "subequipment": "",
+          "mask": "",
+          "description": "35-24L007.1"
+        },
+        {
+          "equipment": "35-24L007.2",
+          "subequipment": "",
+          "mask": "",
+          "description": "35-24L007.2"
+        }
+      ]
+    }
+  ]
+}

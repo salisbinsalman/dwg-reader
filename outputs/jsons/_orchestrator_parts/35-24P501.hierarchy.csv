@@ -1,0 +1,20 @@
+ORDER,SITE,LINE,PROCESS,SUB-PROCESS,FUNCTION,EQUIPMENT,SUB-EQUIPMENT,MASK,DESCRIPTION
+1,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,,,5001-PM03-BR,BROKE SYSTEM
+2,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,BR1,,,,5001-PM03-BR-BR1,BROKE SYSTEM
+3,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,BR1,35-24P501,,,5001-PM03-BR-BR1-35-24P501,35-24P501 COUCH PIT PMP
+4,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,35-24P501.1,,,35-24P501.1 PMP MTR 780KW 1000RPM
+5,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,35-24-120,,,35-24-120 PP-900 SUCT LN
+6,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,,35-24-079,,35-24-079 SUCT ISOL VLV NC
+7,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,,35-24-1125,,35-24-1125 SUCT VLV NC
+8,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,35-24-119,,,35-24-119 PP-300 DIS LN
+9,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,,35-24-072,,35-24-072 DIS VLV HV
+10,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,,35-24-1138,,35-24-1138 DIS VLV NC
+11,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,,35-24-235,,35-24-235 DIS LN VLV HV
+12,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,,35-24LV1-609,,35-24LV1-609 LVL CTRL VLV AV
+13,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,,35-24LV2-609,,35-24LV2-609 LVL CTRL VLV AV
+14,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,,35-24LV3-609,,35-24LV3-609 LVL CTRL VLV AV
+15,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,35-24-118,,,35-24-118 PP-200 RECIRC LN
+16,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,35-24-117,,,35-24-117 PP-250 SUCT HEADER
+17,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,35-24-501.1,,,35-24-501.1
+18,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,35-24P501.2,,,35-24P501.2
+19,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,35-24-501.2,,,35-24-501.2

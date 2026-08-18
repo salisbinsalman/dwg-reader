@@ -1,0 +1,182 @@
+{
+  "input": "/Users/code-huddle-ensemble/Desktop/dwg-reader/inputs/Broke System.dwg",
+  "mode": "viewer_shot_ai_gt",
+  "evidence_dir": "/Users/code-huddle-ensemble/Desktop/dwg-reader/outputs/evidence",
+  "site": "Shotton Paper Mill, United Kingdom",
+  "line": "Shotton PM3",
+  "process": "Broke System",
+  "sub_process": "BR1",
+  "model_id": "eu.anthropic.claude-sonnet-4-6",
+  "region": "eu-west-2",
+  "prompt_file": "pid_hierarchy_gt_v7_floc.md",
+  "legend": "/Users/code-huddle-ensemble/Desktop/dwg-reader/inputs/legend.png",
+  "results": [
+    {
+      "tag": "35-24HI-501",
+      "shot": "/Users/code-huddle-ensemble/Desktop/dwg-reader/outputs/evidence/Broke System.viewer_35-24HI-501.png",
+      "parent": {
+        "category": "instruments",
+        "block_name": "",
+        "handle": "",
+        "layer": "P-INSTRPOS_TEXTS",
+        "x": 916.3071881881882,
+        "y": 201.041625,
+        "resolved_tag": "35-24HI-501",
+        "nearby_tags": "HI; 501; 35-24",
+        "nearby_descriptions": "HI 501 (35-24)",
+        "confidence": "high"
+      },
+      "candidates": [
+        "35-24",
+        "35-24HI-501",
+        "35-24HV-501",
+        "35-24-006",
+        "35-24-004",
+        "35-24HV-503",
+        "35-24-205",
+        "35-24-018",
+        "35-24-021",
+        "35-24KV-517",
+        "35-24-016",
+        "35-24-167",
+        "35-24HV-516",
+        "35-24-017",
+        "35-24-166",
+        "35-24XV-666",
+        "35-24NV-504",
+        "35-24-171",
+        "35-24-170",
+        "35-24-015",
+        "35-24-174",
+        "35-24-013",
+        "35-24P508",
+        "35-24-169",
+        "35-24LV1-518",
+        "35-24-172",
+        "35-24TV-9260",
+        "35-24-019",
+        "35-24-216",
+        "35-24-020",
+        "35-24-1095",
+        "35-24-173",
+        "35-24-1100",
+        "35-24-168",
+        "35-24-011",
+        "35-24-175",
+        "35-24-007.3",
+        "35-24-007.4",
+        "35-24LV2-518",
+        "35-24L008",
+        "35-24-012",
+        "35-24L007"
+      ],
+      "dossier": "Parent tag: 35-24HI-501\nParent category/block: instruments / \nParent XY: (916.3071881881882, 201.041625)\nNearby descriptions: HI 501 (35-24)\n\nSame-tag CAD family:\n- (none)\n\nNearby line numbers (short ids preferred in output):\n- 35-24-205  full=35-24-205-PP-100-E10H2A  d=59  layer=P-LINEPOS\n- 35-24-006  full=35-24-006-WAF-200-E10H2A  d=44  layer=P-LINEPOS\n- 35-24-004  full=35-24-004-WAF-80-E10H2A  d=44  layer=P-LINEPOS\n- 35-24-015  full=35-24-015-WAF-125-E10H2A  d=136  layer=P-LINEPOS\n- 35-24-016  full=35-24-016-WAF-250-E10H2A  d=79  layer=P-LINEPOS\n- 35-24-018  full=35-24-018-WAF-100-E10H2A  d=59  layer=P-LINEPOS\n- 35-24-020  full=35-24-020-WFC-15-E10H2A  d=173  layer=P-LINEPOS\n- 35-24-011  full=35-24-011-PP-250-E10H2A  d=185  layer=P-LINEPOS\n- 35-24-017  full=35-24-017-WAF-300-E10H2A  d=97  layer=P-LINEPOS\n- 35-24-021  full=35-24-021-WAB-20-E10H2A  d=65  layer=P-LINEPOS\n- 35-24-019  full=35-24-019-PP-500-E10H2A  d=171  layer=P-LINEPOS\n- 35-24-013  full=35-24-013-PP-600-E10H2A  d=154  layer=P-LINEPOS\n\nNearby devices (valves/instruments/pumps/\u2026):\n- line_markers: PPI_1100A  d=154  block=PPI_1100A\n- valves: PPI_0900A  d=185  block=PPI_0900A\n- control_valves: PPI_1000A  d=108  block=PPI_1000A\n- instruments: PPI_1200A  d=196  block=PPI_1200A\n- motors: PPI_1504A-25_0  d=185  block=PPI_1504A-25_0\n- fittings: P7A1214  d=135  block=P7A1214\n\nNearby peer primary equipment (do NOT nest under parent):\n- (none)\n\nNearby drawing text tokens:\n- 2 bar  d=189  layer=P-TEXT\n- S2  d=192  layer=P-TEXT\n- S1  d=190  layer=P-TEXT\n- GEARBOX 2  d=145  layer=P-OTHER\n- 35-24  d=90  layer=P-INSTRPOS_TEXTS\n- 9260  d=156  layer=P-INSTRPOS_TEXTS\n- 518  d=183  layer=P-INSTRPOS_TEXTS\n- 503  d=29  layer=P-INSTRPOS_TEXTS\n- 516  d=78  layer=P-INSTRPOS_TEXTS\n- 504  d=109  layer=P-INSTRPOS_TEXTS\n- 512  d=181  layer=P-INSTRPOS_TEXTS\n- 9257  d=200  layer=P-INSTRPOS_TEXTS\n- 666  d=127  layer=P-INSTRPOS_TEXTS\n- 517  d=53  layer=P-INSTRPOS_TEXTS\n- 501  d=4  layer=P-INSTRPOS_TEXTS\n- 35-24-007.4  d=194  layer=P-MOTOR_POS\n- 1,5  d=196  layer=P-MOTOR_POS\n- 35-24-007.3  d=190  layer=P-MOTOR_POS\n- 35-24-1100  d=177  layer=P-VALVEPOS\n- 350-250  d=174  layer=P-VALVEPOS\n- 35-24-175  d=190  layer=P-VALVEPOS\n- 003-15  d=191  layer=P-VALVEPOS\n- 35-24-174  d=145  layer=P-VALVEPOS\n- 003-50  d=144  layer=P-VALVEPOS\n- 35-24-173  d=177  layer=P-VALVEPOS\n- 101-125  d=172  layer=P-VALVEPOS\n- 35-24-172  d=160  layer=P-VALVEPOS\n- 35-24-171  d=130  layer=P-VALVEPOS\n- 101-300  d=135  layer=P-VALVEPOS\n- 35-24-166  d=97  layer=P-VALVEPOS\n- 003-20  d=94  layer=P-VALVEPOS\n- 35-24-167  d=89  layer=P-VALVEPOS\n- 35-24-170  d=135  layer=P-VALVEPOS\n- 001-15  d=140  layer=P-VALVEPOS\n- 35-24-169  d=159  layer=P-VALVEPOS\n- 35-24-168  d=181  layer=P-VALVEPOS\n- 35-24-216  d=173  layer=P-VALVEPOS\n- 001-80  d=174  layer=P-VALVEPOS\n- 35-24-1095  d=177  layer=P-VALVEPOS\n- 35-24-205  d=59  layer=P-LINEPOS",
+      "ai": {
+        "raw_text": "Looking at the P&ID image, I can see:\n\n1. **35-24HI-501** is a Hand Indicator instrument (square box with \"HI 501\") with an **HS** (Hand Switch, circle above) paired together \u2014 this is a local hand indicator with hand switch on valve 35-24HV-501.\n\n2. The instrument pair (HS + HI-501) sits directly above valve **35-24HV-501** (size 150), which is connected to line **35-24-006** (WAF-200).\n\n3. Looking at the valve symbol for 35-24HV-501: it shows a bowtie with outline/transparent triangles and no actuator circle on top \u2192 **HV** (hand valve).\n\n4. The HI-501 instrument is a locally mounted indicator (plain circle/square = local instrument per legend).\n\n5. The parent FUNCTION is the instrument 35-24HI-501 itself. Per the rules: \"If 35-24HI-501 is an instrument and no labelled accessories sit on it, emit the FUNCTION header + description only.\"\n\nHowever, looking more carefully, 35-24HI-501 is paired with an HS (hand switch) above it, and both sit on valve 35-24HV-501. The HI is the position indicator for the valve. The associated valve 35-24HV-501 and its line are the physical children.\n\nThe HI-501 instrument has no sub-accessories of its own \u2014 it's a position indicator. The valve 35-24HV-501 is a peer instrument tag, not a child of HI-501.\n\nPer rules: HI-501 is an instrument \u2192 emit FUNCTION + description, empty rows.\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24HI-501\",\n  \"description\": \"35-24HI-501 HI VLV POSITION IND\",\n  \"rows\": [],\n  \"peers\": [\n    {\n      \"tag\": \"35-24HV-501\",\n      \"evidence\": \"Hand valve on line 35-24-006 that HI-501 monitors; separate instrument tag, not a child of HI\"\n    },\n    {\n      \"tag\": \"35-24-006\",\n      \"evidence\": \"WAF-200 line carrying valve 35-24HV-501; belongs to line circuit not to instrument HI-501\"\n    },\n    {\n      \"tag\": \"35-24HI-503\",\n      \"evidence\": \"Peer HI instrument on adjacent valve 35-24HV-503 visible in same crop\"\n    },\n    {\n      \"tag\": \"35-24HV-503\",\n      \"evidence\": \"Peer hand valve on line 35-24-004 visible in same crop\"\n    },\n    {\n      \"tag\": \"35-24HI-516\",\n      \"evidence\": \"Peer HI instrument on adjacent valve 35-24HV-516 visible in same crop\"\n    },\n    {\n      \"tag\": \"35-24HV-516\",\n      \"evidence\": \"Peer hand valve visible in same crop\"\n    },\n    {\n      \"tag\": \"35-24KV-517\",\n      \"evidence\": \"Peer KS/KV instrument on adjacent valve visible in same crop\"\n    },\n    {\n      \"tag\": \"35-24NV-504\",\n      \"evidence\": \"Peer NC valve on separate line visible in same crop\"\n    }\n  ],\n  \"notes\": [\n    \"35-24HI-501 is a locally mounted hand indicator (position indicator) paired with HS above it, monitoring valve 35-24HV-501 on line 35-24-006 (WAF-200 DN150)\",\n    \"As a standalone instrument tag with no sub-accessories, rows are empty per rules\",\n    \"Valve 35-24HV-501 symbol shows outline/transparent bowtie triangles with no actuator = HV (hand valve)\"\n  ],\n  \"confidence\": \"high\"\n}\n```",
+        "parsed": {
+          "sub_process": "BR1",
+          "function": "35-24HI-501",
+          "description": "35-24HI-501 HI VLV POSITION IND",
+          "rows": [],
+          "peers": [
+            {
+              "tag": "35-24HV-501",
+              "evidence": "Hand valve on line 35-24-006 that HI-501 monitors; separate instrument tag, not a child of HI"
+            },
+            {
+              "tag": "35-24-006",
+              "evidence": "WAF-200 line carrying valve 35-24HV-501; belongs to line circuit not to instrument HI-501"
+            },
+            {
+              "tag": "35-24HI-503",
+              "evidence": "Peer HI instrument on adjacent valve 35-24HV-503 visible in same crop"
+            },
+            {
+              "tag": "35-24HV-503",
+              "evidence": "Peer hand valve on line 35-24-004 visible in same crop"
+            },
+            {
+              "tag": "35-24HI-516",
+              "evidence": "Peer HI instrument on adjacent valve 35-24HV-516 visible in same crop"
+            },
+            {
+              "tag": "35-24HV-516",
+              "evidence": "Peer hand valve visible in same crop"
+            },
+            {
+              "tag": "35-24KV-517",
+              "evidence": "Peer KS/KV instrument on adjacent valve visible in same crop"
+            },
+            {
+              "tag": "35-24NV-504",
+              "evidence": "Peer NC valve on separate line visible in same crop"
+            }
+          ],
+          "notes": [
+            "35-24HI-501 is a locally mounted hand indicator (position indicator) paired with HS above it, monitoring valve 35-24HV-501 on line 35-24-006 (WAF-200 DN150)",
+            "As a standalone instrument tag with no sub-accessories, rows are empty per rules",
+            "Valve 35-24HV-501 symbol shows outline/transparent bowtie triangles with no actuator = HV (hand valve)"
+          ],
+          "confidence": "high"
+        },
+        "model_id": "eu.anthropic.claude-sonnet-4-6",
+        "region": "eu-west-2",
+        "prompt_file": "pid_hierarchy_gt_v7_floc.md",
+        "candidates": [
+          "35-24",
+          "35-24HI-501",
+          "35-24HV-501",
+          "35-24-006",
+          "35-24-004",
+          "35-24HV-503",
+          "35-24-205",
+          "35-24-018",
+          "35-24-021",
+          "35-24KV-517",
+          "35-24-016",
+          "35-24-167",
+          "35-24HV-516",
+          "35-24-017",
+          "35-24-166",
+          "35-24XV-666",
+          "35-24NV-504",
+          "35-24-171",
+          "35-24-170",
+          "35-24-015",
+          "35-24-174",
+          "35-24-013",
+          "35-24P508",
+          "35-24-169",
+          "35-24LV1-518",
+          "35-24-172",
+          "35-24TV-9260",
+          "35-24-019",
+          "35-24-216",
+          "35-24-020",
+          "35-24-1095",
+          "35-24-173",
+          "35-24-1100",
+          "35-24-168",
+          "35-24-011",
+          "35-24-175",
+          "35-24-007.3",
+          "35-24-007.4",
+          "35-24LV2-518",
+          "35-24L008",
+          "35-24-012",
+          "35-24L007"
+        ],
+        "prompt_chars": 10576,
+        "vision": true
+      },
+      "refined_rows": [
+        {
+          "equipment": "35-24-004",
+          "subequipment": "",
+          "mask": "",
+          "description": "35-24-004"
+        }
+      ]
+    }
+  ]
+}

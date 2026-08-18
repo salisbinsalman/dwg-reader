@@ -1,0 +1,1258 @@
+#!/usr/bin/env python3
+"""
+Per-tag valve classification: tight CAD crop + legend → cached type + parent fn.
+
+Fixes the four remaining valve gaps:
+  1. Tight crop around the valve insert (not the whole FUNCTION screenshot)
+  2. Full legend vocabulary including AV-M
+  3. Numeric tags on P-VALVEPOS / P-CVPOS are valves even without VLV in the text
+  4. Drain valves under a conveyor/pump are reassigned to the nearest pulper/tank
+
+Cache: outputs/jsons/<stem>.valve_types.json
+Export reads this cache; inputs/valve_type_overrides.json still wins.
+"""
+
+from __future__ import annotations
+
+import dwg_warn  # noqa: F401 — silence boto3 Python 3.9 deprecation noise
+
+import argparse
+import csv
+import json
+import os
+import re
+import sys
+import threading
+from concurrent.futures import ThreadPoolExecutor, as_completed
+from pathlib import Path
+from typing import Any, Dict, Iterable, List, Optional, Tuple
+
+from dwg_floc_context import (
+    ALLOWED_VALVE_TOKENS,
+    apply_sop_valve_type,
+    combine_valve_type,
+    is_valve_equipment,
+)
+from dwg_pure_dump import evidence_dir, find_json, json_path, safe_name, write_json
+
+LEGEND_PATH = Path("inputs/legend.png")
+DEFAULT_MODEL_ID = "eu.anthropic.claude-sonnet-4-6"
+VALVE_LAYERS = {"P-VALVEPOS", "P-CVPOS"}
+_CONVEYOR_RE = re.compile(r"\b(CVYR|CONVEYOR)\b", re.I)
+_VESSEL_HINT_RE = re.compile(r"\b(PLPR|PULPER|TNK|TANK|CHEST|VESSEL|THICKENER)\b", re.I)
+
+ONE_PASS_PROMPT = """\
+You MUST respond with ONLY a JSON object. No explanation, no markdown, no prose.
+Exactly this format: {{"type": "TOKEN", "attachment": "none"}}
+
+Allowed "type" tokens: NC, HV, AV, AV-M, CHK, PRV, SV, NO, UNKNOWN
+Allowed "attachment" values: none, DRN, FLS, SMP
+
+Classify the P&ID valve tagged {TAG}.
+
+IMAGES:
+  Image 1 = Full marked crop. Yellow ring marks the APPROXIMATE valve location.
+  Image 2 = Tight clean zoom on the target bowtie body (no ring — clearer fill detail).
+  Image 3 = Below-valve strip enlarged (check for floor drain / trough / drain arrows).
+  Image 4 = Wider branch context (check for D marker, sample funnel, or flush stub).
+  Image 5 = Legend (reference only).
+
+STEP 1 — IDENTIFY THE TARGET BOWTIE (Image 1):
+  Find the text label "{TAG}" and follow its LEADER LINE or TAG LINE to the bowtie
+  it connects to. That bowtie is the ONLY one to classify — ignore all others nearby.
+  If the leader line is unclear or absent: the bowtie CLOSEST to the yellow ring
+  center is the target. If two bowties are visible, pick the one AT the ring center.
+  Ignore any valve-type letter in the tag itself (HV/FV/LV); classify the SYMBOL only.
+  Return UNKNOWN only if NO bowtie symbol is visible ANYWHERE in the crop — not
+  because there are multiple bowties or the target is ambiguous.
+
+STEP 2 — BODY / ACTUATOR TYPE (Image 2):
+  Image 2 is a tight zoom centered on the TARGET BOWTIE from STEP 1. Classify only
+  the bowtie at the CENTER of Image 2 — any other bowtie visible near the edges is
+  a neighboring valve; ignore it entirely.
+  Check for a circle actuator on the bowtie stem FIRST:
+    AV-M : stem above bowtie leading to a circle with the letter M CLEARLY readable.
+           Only AV-M if you can explicitly read "M" inside the circle.
+    AV   : stem above bowtie leading to any circle (empty, HS/LS/FC/XS/HI with a number,
+           or any text that is NOT clearly "M"). When uncertain between AV and AV-M, use AV.
+           A circle actuator means AV even if triangles are outline-only.
+    ⇒ If AV or AV-M: set attachment = none and return immediately.
+
+  No circle actuator → hand valve — classify by BODY FILL (Image 2):
+    NC  : BOTH bowtie triangles SOLID / filled (white or solid interior) — normally closed
+    HV  : BOTH bowtie triangles TRANSPARENT / outline-only (background visible inside)
+    CHK : diagonal bar through the centre, or ONLY ONE triangle filled
+    PRV : extra line segments parallel to each triangle base
+    SV  : stem on top ending in a horizontal T-cap
+    NO  : running-open mark on an outline hand valve (very rare; never when solid filled)
+
+  NC and HV are mutually exclusive. Solid interior = NC. See-through interior = HV.
+
+STEP 3 — ATTACHMENT for hand valves (NC / HV / NO / CHK) only (Images 2, 3, 4):
+  Pick EXACTLY ONE attachment or "none". Check in this strict order and STOP at the
+  first match — do NOT continue to the next rule once a match is found:
+
+    DRN — the capital letter "D" appears on a pipe DIRECTLY connected to THIS bowtie's
+          inlet OR outlet (Images 2 and 4). In these P&IDs, drain taps are labelled
+          with a capital "D" text placed directly on the pipe — it appears in a
+          distinct color (typically orange or red-orange) against the dark background.
+          Look on BOTH sides of the bowtie (left = inlet, right = outlet). The D can
+          appear close to the bowtie body OR at the far end of the outlet pipe at a
+          vessel drain port — both mean DRN for this valve.
+          Also look in Image 1: search for a single capital letter "D" (not a number,
+          not inside a shape) in a distinct orange or red color on a PIPE that connects
+          to this bowtie — it may be at the far left or far right edge of Image 1.
+          NOTE: numbered revision bubbles (orange/red filled triangles or circles
+          containing numbers like "10", "A1", etc.) are NOT drain markers; ignore them.
+          Also DRN if downward drain arrows drop from THIS bowtie's outlet pipe into
+          a floor trough or sump in Image 3 — the arrows must be clearly attached to
+          this valve's own pipe, not the general floor area drain of the surroundings.
+          ⚑ Capital "D" on a connected pipe, OR drain arrows from this valve → DRN.
+
+    SMP — a branch pipe ends in a POINTED or FUNNEL-SHAPED sampling symbol at the
+          branch TIP (Image 4): a solid filled arrowhead (▲ or ►), pointed funnel,
+          or cup/cone shape. The symbol must be POINTED — NOT blunt, NOT T-shaped,
+          NOT a plain cut pipe end. A short branch with a pointed far end = SMP
+          even if the branch is close to the bowtie body.
+          Also SMP if a small sampling sub-branch (e.g. 003-15 = 15mm size) connects
+          off this valve's pipeline and that sub-branch's far end shows a pointing
+          arrowhead or sampling symbol.
+          NOTE: branch end at a floor drain channel (U-channel below) = FLS, not SMP.
+          ⚑ Pointed/funnel branch end → SMP. STOP.
+
+    FLS — a small dead-end stub DIRECTLY on THIS bowtie body side (Image 2) with a
+          BLUNT, T-SHAPED, or CUT-PIPE end (not pointed/funnel-shaped). Also FLS: a
+          flushing spool (often 003-50 = 50mm) whose far branch end is a CUT PIPE
+          with NO pointed symbol at its tip. Also FLS: any stub to a floor drain
+          U-channel (Image 3).
+          CRITICAL: if another BOWTIE SYMBOL (two solid or outline triangles) appears
+          on a pipe adjacent to this valve, that element is a SEPARATE VALVE — it is
+          NOT an FLS stub for this valve.
+          ⚑ Dead-end stub with blunt/cut end (no pointed tip) → FLS. STOP.
+
+    none — plain inline valve: no D marker, no pointed branch end, no dead-end stub.
+
+  Decision order: DRN first → SMP → FLS → none
+
+STEP 4 — RETURN JSON:
+  {{"type": "<body>", "attachment": "<SMP|FLS|DRN|none>"}}
+  Examples: {{"type": "NC", "attachment": "DRN"}}
+            {{"type": "NC", "attachment": "FLS"}}
+            {{"type": "NC", "attachment": "SMP"}}
+            {{"type": "AV", "attachment": "none"}}
+"""
+
+_EXCLUSIVE_ATTACHMENTS = frozenset({"DRN", "FLS", "SMP"})
+
+
+def _xy(obj: Any) -> Optional[Tuple[float, float]]:
+    if obj is None:
+        return None
+    if isinstance(obj, dict):
+        for key in ("insert", "position", "xy"):
+            got = _xy(obj.get(key))
+            if got:
+                return got
+        try:
+            return float(obj["x"]), float(obj["y"])
+        except (KeyError, TypeError, ValueError):
+            return None
+    if isinstance(obj, (list, tuple)) and len(obj) >= 2:
+        try:
+            return float(obj[0]), float(obj[1])
+        except (TypeError, ValueError):
+            return None
+    return None
+
+
+def _norm_tag(tag: str) -> str:
+    return re.sub(r"\s+", "", str(tag or "")).upper()
+
+
+def collect_text_locations(structural: Dict[str, Any]) -> Dict[str, Dict[str, Any]]:
+    """Map exact drawing text → {x,y,layer}. Prefers valve-layer entries for duplicate tags."""
+    all_locs: Dict[str, List[Dict[str, Any]]] = {}
+    for ent in structural.get("text_entities") or []:
+        if not isinstance(ent, dict):
+            continue
+        txt = _norm_tag(str(ent.get("text") or ""))
+        xy = _xy(ent)
+        if not txt or xy is None:
+            continue
+        layer = str(ent.get("layer") or "")
+        all_locs.setdefault(txt, []).append({"x": xy[0], "y": xy[1], "layer": layer})
+    out: Dict[str, Dict[str, Any]] = {}
+    for txt, locs in all_locs.items():
+        # When a tag label appears multiple times, prefer the valve-layer occurrence —
+        # reference copies on annotation layers would snap to the wrong position.
+        valve_locs = [loc for loc in locs if loc["layer"] in VALVE_LAYERS]
+        out[txt] = (valve_locs or locs)[0]
+    return out
+
+
+def collect_valve_inserts(structural: Dict[str, Any]) -> List[Dict[str, Any]]:
+    rows: List[Dict[str, Any]] = []
+    for ins in structural.get("inserts") or []:
+        if not isinstance(ins, dict):
+            continue
+        layer = str(ins.get("layer") or "")
+        if layer not in VALVE_LAYERS:
+            continue
+        xy = _xy(ins)
+        if xy is None:
+            continue
+        rows.append(
+            {
+                "x": xy[0],
+                "y": xy[1],
+                "layer": layer,
+                "name": str(ins.get("name") or ""),
+            }
+        )
+    return rows
+
+
+_DRAIN_HINT_RE = re.compile(r"DRAIN|TROUGH|SUMP|\bDRN\b", re.I)
+
+
+def collect_drain_markers(structural: Dict[str, Any]) -> List[Tuple[float, float]]:
+    """CAD points that look like drain troughs / DRN labels (SOP: drain sits below the valve)."""
+    pts: List[Tuple[float, float]] = []
+    for ins in structural.get("inserts") or []:
+        if not isinstance(ins, dict):
+            continue
+        blob = " ".join(
+            str(ins.get(k) or "")
+            for k in ("name", "block", "block_name", "layer", "type")
+        )
+        if not _DRAIN_HINT_RE.search(blob):
+            continue
+        xy = _xy(ins)
+        if xy:
+            pts.append(xy)
+    for ent in structural.get("text_entities") or []:
+        if not isinstance(ent, dict):
+            continue
+        if not _DRAIN_HINT_RE.search(str(ent.get("text") or "")):
+            continue
+        xy = _xy(ent)
+        if xy:
+            pts.append(xy)
+    return pts
+
+
+def drain_below_valve(
+    x: float,
+    y: float,
+    markers: List[Tuple[float, float]],
+    *,
+    dx: float = 60.0,   # lateral tolerance — ~3× bowtie half-width in CAD units
+    down: float = 160.0,  # vertical search depth — measured from drawing: trough is 80-150 units below valve
+) -> bool:
+    """True if a drain marker sits under the valve (CAD Y-up)."""
+    for mx, my in markers:
+        if abs(mx - x) <= dx and (y - down) <= my <= (y - 6):
+            return True
+    return False
+
+
+def collect_functions(inventory: Dict[str, Any]) -> List[Dict[str, Any]]:
+    rows: List[Dict[str, Any]] = []
+    for fn in inventory.get("functions") or []:
+        if not isinstance(fn, dict):
+            continue
+        tag = _norm_tag(str(fn.get("function") or ""))
+        xy = _xy(fn)
+        if not tag or xy is None:
+            continue
+        desc = str(fn.get("description") or fn.get("nearby_descriptions") or "")
+        rows.append(
+            {
+                "tag": tag,
+                "x": xy[0],
+                "y": xy[1],
+                "kind": str(fn.get("kind") or ""),
+                "description": desc,
+            }
+        )
+    return rows
+
+
+def nearest(rows: Iterable[Dict[str, Any]], x: float, y: float) -> Optional[Dict[str, Any]]:
+    best = None
+    best_d = None
+    for row in rows:
+        d = ((float(row["x"]) - x) ** 2 + (float(row["y"]) - y) ** 2) ** 0.5
+        if best_d is None or d < best_d:
+            best, best_d = row, d
+    if best is None:
+        return None
+    out = dict(best)
+    out["distance"] = best_d
+    return out
+
+
+def locate_valve(
+    tag: str,
+    *,
+    text_locations: Dict[str, Dict[str, Any]],
+    valve_inserts: List[Dict[str, Any]],
+) -> Optional[Dict[str, Any]]:
+    """Find drawing XY for a tag and snap to the nearest valve insert."""
+    want = _norm_tag(tag)
+    loc = text_locations.get(want)
+    if loc is None:
+        return None
+    x, y = float(loc["x"]), float(loc["y"])
+    snapped = nearest(valve_inserts, x, y)
+    if snapped is not None and snapped["distance"] <= 40.0:  # ~2× bowtie half-width snap tolerance
+        x, y = float(snapped["x"]), float(snapped["y"])
+        layer = str(snapped.get("layer") or loc.get("layer") or "")
+        block = str(snapped.get("name") or "")
+        dist = snapped["distance"]
+    else:
+        layer = str(loc.get("layer") or "")
+        block = ""
+        dist = 0.0
+    return {
+        "tag": want,
+        "x": x,
+        "y": y,
+        "layer": layer,
+        "block": block,
+        "text_layer": str(loc.get("layer") or ""),
+        "insert_distance": dist,
+        "is_valve": layer in VALVE_LAYERS or str(loc.get("layer") or "") in VALVE_LAYERS,
+    }
+
+
+def is_vessel_function(fn: Dict[str, Any]) -> bool:
+    tag = str(fn.get("tag") or "")
+    desc = str(fn.get("description") or "")
+    if _CONVEYOR_RE.search(desc) or _CONVEYOR_RE.search(tag):
+        return False
+    if re.match(r"^35-\d{2}[LT]\d+", tag, re.I):
+        return True
+    return bool(_VESSEL_HINT_RE.search(desc))
+
+
+def pick_parent_fn(
+    *,
+    x: float,
+    y: float,
+    hierarchy_fn: str,
+    functions: List[Dict[str, Any]],
+    valve_type: str = "",
+    radius: float = 250.0,
+) -> str:
+    """
+    Keep hierarchy ownership unless this is a drain on a conveyor/pump.
+
+    Drain valves on this drawing hang off pulpers/tanks; Euclidean nearest
+    often picks the neighbouring conveyor (L006 vs L005 for 35-24-137).
+    """
+    hier = _norm_tag(hierarchy_fn)
+    vtype = str(valve_type or "").upper()
+    if "DRN" not in vtype.split():
+        return hier
+
+    hier_row = next((f for f in functions if f["tag"] == hier), None)
+    if hier_row and is_vessel_function(hier_row):
+        return hier
+
+    vessels = []
+    for fn in functions:
+        if fn.get("kind") and fn["kind"] not in {"equipment", ""}:
+            continue
+        if not is_vessel_function(fn):
+            continue
+        d = ((fn["x"] - x) ** 2 + (fn["y"] - y) ** 2) ** 0.5
+        if d <= radius:
+            vessels.append((d, fn["tag"]))
+    if vessels:
+        vessels.sort()
+        return vessels[0][1]
+    return hier
+
+
+def strip_attachment_tokens(vtype: str) -> str:
+    """Remove mutually-exclusive attachment tokens (classified in a separate vision pass)."""
+    return " ".join(t for t in str(vtype or "").split() if t not in _EXCLUSIVE_ATTACHMENTS)
+
+
+def merge_body_and_attachment(body: str, attachment: str) -> str:
+    """Combine body classify + single attachment token; enforce exclusivity."""
+    parts = [t for t in strip_attachment_tokens(body).split() if t]
+    att = str(attachment or "").upper().strip()
+    if att in _EXCLUSIVE_ATTACHMENTS and att not in parts:
+        parts.append(att)
+    return apply_sop_valve_type(" ".join(parts))
+
+
+def parse_type_tokens(raw: str) -> str:
+    text = re.sub(r"[^A-Z0-9\-\s]", " ", str(raw or "").upper())
+    text = text.replace("AVM", "AV-M").replace("AV_M", "AV-M")
+    found: List[str] = []
+    # Longer tokens first so AV-M is not split into AV.
+    for tok in ("AV-M", "CHK", "PRV", "FLS", "SMP", "DRN", "AUTO", "AV", "NC", "NO", "SV", "HV"):
+        if re.search(rf"(?:^|\s){re.escape(tok)}(?:\s|$)", text):
+            mapped = "AV" if tok == "AUTO" else tok
+            if mapped in ALLOWED_VALVE_TOKENS and mapped not in found:
+                found.append(mapped)
+    if "UNKNOWN" in text.split() and not found:
+        return ""
+    return apply_sop_valve_type(strip_attachment_tokens(" ".join(found)))
+
+
+def _log(msg: str) -> None:
+    print(msg, flush=True)
+
+
+def build_entity_extent_index(doc) -> List[Tuple[Any, float, float, float, float]]:
+    """Compute modelspace bboxes once so each crop is a cheap window filter."""
+    from ezdxf import bbox as ezbbox
+
+    indexed: List[Tuple[Any, float, float, float, float]] = []
+    n = 0
+    for entity in doc.modelspace():
+        n += 1
+        try:
+            ext = ezbbox.extents([entity], fast=True)
+            if ext is None or not ext.has_data:
+                continue
+            indexed.append(
+                (
+                    entity,
+                    float(ext.extmin.x),
+                    float(ext.extmin.y),
+                    float(ext.extmax.x),
+                    float(ext.extmax.y),
+                )
+            )
+        except Exception:
+            continue
+        if n % 2000 == 0:
+            _log(f"  [index] scanned {n} entities...")
+    _log(f"  [index] {len(indexed)} drawable of {n} modelspace entities")
+    return indexed
+
+
+def tight_valve_screenshot(
+    doc,
+    x: float,
+    y: float,
+    out_path: Path,
+    half: float = 42.0,
+    dpi: int = 220,
+    extra_below: float = 0.0,
+    entity_index: Optional[List[Tuple[Any, float, float, float, float]]] = None,
+) -> Optional[Path]:
+    """ODA/PyMuPDF raster around the valve; extra_below zooms out toward the drain."""
+    try:
+        from ezdxf import bbox as ezbbox
+        from ezdxf.addons.drawing import Frontend, RenderContext
+        from ezdxf.addons.drawing import layout as ezlayout
+        from ezdxf.addons.drawing import pymupdf as ez_pymupdf
+        from ezdxf.math import BoundingBox2d
+    except Exception as exc:
+        _log(f"[warn] CAD render unavailable: {exc}")
+        return None
+
+    below = max(0.0, float(extra_below or 0.0))
+    xmin, ymin, xmax, ymax = x - half, y - half - below, x + half, y + half
+    ents = []
+    if entity_index is not None:
+        for entity, ex0, ey0, ex1, ey1 in entity_index:
+            if ex1 < xmin or ex0 > xmax or ey1 < ymin or ey0 > ymax:
+                continue
+            ents.append(entity)
+    else:
+        for entity in doc.modelspace():
+            try:
+                ext = ezbbox.extents([entity], fast=True)
+                if ext is None or not ext.has_data:
+                    continue
+                if ext.extmax.x < xmin or ext.extmin.x > xmax or ext.extmax.y < ymin or ext.extmin.y > ymax:
+                    continue
+                ents.append(entity)
+            except Exception:
+                continue
+    if not ents:
+        return None
+
+    ctx = RenderContext(doc)
+    backend = ez_pymupdf.PyMuPdfBackend()
+    Frontend(ctx, backend).draw_entities(ents)
+    backend.finalize()
+    span = max(xmax - xmin, ymax - ymin, 1.0)
+    page = ezlayout.Page(120, 120, units=ezlayout.Units.mm)
+    settings = ezlayout.Settings(
+        fit_page=False,
+        scale=120.0 / span,
+        page_alignment=ezlayout.PageAlignment.MIDDLE_CENTER,
+    )
+    png = backend.get_pixmap_bytes(
+        page=page,
+        settings=settings,
+        dpi=dpi,
+        fmt="png",
+        render_box=BoundingBox2d([(xmin, ymin), (xmax, ymax)]),
+    )
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    out_path.write_bytes(png)
+    return out_path
+
+
+def valve_ring_frac(half: float, extra_below: float) -> Tuple[float, float]:
+    """Yellow-ring position in the PNG (cx, cy from top-left, 0-1)."""
+    height = max(2.0 * half + max(0.0, extra_below), 1.0)
+    return 0.5, half / height
+
+
+def annotate_valve_crop(
+    crop_path: Path,
+    tag: str,
+    cx_frac: float = 0.5,
+    cy_frac: float = 0.5,
+) -> Path:
+    """Yellow ring on the TARGET valve + tag label."""
+    from PIL import Image, ImageDraw, ImageFont
+
+    im = Image.open(crop_path).convert("RGB")
+    w, h = im.size
+    cx, cy = int(w * cx_frac), int(h * cy_frac)
+    r = max(28, min(w, h) // 8)
+    draw = ImageDraw.Draw(im)
+    for t in (4, 2):
+        draw.ellipse((cx - r, cy - r, cx + r, cy + r), outline="#FFD400", width=t)
+    label = str(tag or "")
+    try:
+        font = ImageFont.truetype("Arial", 12)
+    except Exception:
+        try:
+            font = ImageFont.load_default()
+        except Exception:
+            font = None
+    draw.rectangle((6, 6, 6 + 7 * max(len(label), 1) + 8, 24), fill="#000000")
+    draw.text((10, 8), label, fill="#FFD400", font=font)
+    marked = crop_path.with_name(f"{crop_path.stem}.marked.png")
+    im.save(marked)
+    return marked
+
+
+def zoom_center_png(
+    crop_path: Path,
+    frac: float = 0.32,
+    cx_frac: float = 0.5,
+    cy_frac: float = 0.5,
+) -> bytes:
+    """Bytes of a zoom around the TARGET (not necessarily the image centre)."""
+    from PIL import Image
+    from io import BytesIO
+
+    im = Image.open(crop_path).convert("RGB")
+    w, h = im.size
+    cw = max(32, int(w * frac))
+    ch = max(32, int(h * frac))
+    cx, cy = int(w * cx_frac), int(h * cy_frac)
+    x0 = min(max(0, cx - cw // 2), max(0, w - cw))
+    y0 = min(max(0, cy - ch // 2), max(0, h - ch))
+    resample = getattr(getattr(Image, "Resampling", Image), "LANCZOS", Image.NEAREST)
+    zoom = im.crop((x0, y0, x0 + cw, y0 + ch)).resize((w, h), resample)
+    buf = BytesIO()
+    zoom.save(buf, format="PNG")
+    return buf.getvalue()
+
+
+def below_valve_png(
+    crop_path: Path,
+    *,
+    half: float = 42.0,
+    extra_below: float = 60.0,
+    include_drop_frac: float = 0.08,
+) -> bytes:
+    """Enlarged bottom strip — the extra_below zone where drain troughs appear."""
+    from PIL import Image
+    from io import BytesIO
+
+    im = Image.open(crop_path).convert("RGB")
+    w, h = im.size
+    total = max(2.0 * half + max(0.0, extra_below), 1.0)
+    below_frac = max(0.25, min(0.65, extra_below / total + include_drop_frac))
+    y0 = max(0, int(h * (1.0 - below_frac)))
+    strip = im.crop((0, y0, w, h))
+    resample = getattr(getattr(Image, "Resampling", Image), "LANCZOS", Image.NEAREST)
+    zoom = strip.resize((w, h), resample)
+    buf = BytesIO()
+    zoom.save(buf, format="PNG")
+    return buf.getvalue()
+
+
+_bedrock_lock = threading.Lock()
+_bedrock_clients: Dict[Tuple[str, str], Any] = {}
+_legend_bytes: Optional[bytes] = None
+
+
+def body_zoom_png(
+    crop_path: Path,
+    cx_frac: float = 0.5,
+    cy_frac: float = 0.5,
+) -> bytes:
+    """Bowtie zoom biased slightly below the tag so the leader-line valve is centred."""
+    return zoom_center_png(
+        crop_path,
+        frac=0.46,
+        cx_frac=cx_frac,
+        cy_frac=min(0.82, cy_frac + 0.07),
+    )
+
+
+def branch_context_png(
+    crop_path: Path,
+    frac: float = 0.62,
+    cx_frac: float = 0.5,
+    cy_frac: float = 0.5,
+) -> bytes:
+    """Wider zoom around the target valve — shows side/down branches for attachment typing."""
+    return zoom_center_png(crop_path, frac=frac, cx_frac=cx_frac, cy_frac=cy_frac)
+
+
+ATTACHMENT_VALUES = frozenset({"DRN", "FLS", "SMP", "NONE"})
+
+ATTACHMENT_PROMPT = """\
+You MUST respond with ONLY a JSON object. No explanation, no markdown, no steps.
+Format: {{"attachment": "none"}} or {{"attachment": "DRN"}} or {{"attachment": "FLS"}} or {{"attachment": "SMP"}}
+
+Valve {TAG}. Image 1 = marked crop (yellow ring ≈ target). Image 2 = bowtie zoom.
+Image 3 = branch context (pipes connected to target). Image 4 = legend. Image 5 = below valve.
+
+Find label "{TAG}" in Image 1 and follow its leader/tag line to the bowtie it
+attaches to. Pick EXACTLY ONE attachment for THAT valve only, not other nearby
+bowties. If the tag points to the UPPER valve on a vertical branch and a separate
+downstream valve drains to floor, the upper valve is not DRN unless its own pipe
+enters the floor recess.
+
+Pick EXACTLY ONE (mutually exclusive — never combine):
+
+  SMP — sample take-off branch from the target valve's pipe ending in a sampling
+        ARROWHEAD or funnel/cup symbol (Image 3), per legend SAMPLING. The branch
+        does NOT discharge into a floor sump. Angled sample spool (003-50) ending
+        in a sample point = SMP.
+
+  FLS — small L-hook / stub welded to the SIDE of the target bowtie body (Image 2),
+        per legend FLUSHING (horizontal stub + short vertical leg on the bowtie).
+        OR a horizontal spool/tee branch (003-50) from a process header holding an
+        isolation bowtie — flush connection, NOT a sample funnel.
+
+  DRN — the pipe FROM the target valve runs downward and discharges into a floor
+        trough, sump recess, U-channel, or open drain (Image 5). Downward arrow at
+        branch end directly BELOW the target bowtie (no other valve in between).
+        Vessel/tank bottom outlet line turning downward after the valve (often
+        marked "D") = DRN. Size 001-80 often appears under the tag.
+
+  none — plain in-line valve; no sample funnel, no L-hook, no floor drain
+         directly below THIS bowtie. If a second downstream valve on the same
+         branch reaches the floor drain, the upper valve is none.
+
+Decision order (first match wins):
+  1. Sample funnel/cup/arrowhead on branch, NOT into floor → SMP
+  2. L-hook on target bowtie side → FLS (ignore unrelated floor lines elsewhere)
+  3. This valve's pipe drops into floor recess/trough/U-channel → DRN
+  4. else → none
+"""
+
+
+def parse_attachment_response(raw: str) -> str:
+    """Parse attachment token from JSON or truncated prose."""
+    text = str(raw or "").strip()
+    if not text:
+        return ""
+    try:
+        obj = json.loads(re.sub(r"^```(?:json)?\s*|\s*```$", "", text))
+        if isinstance(obj, dict):
+            val = str(obj.get("attachment") or "none").upper().strip()
+            return "" if val in {"", "NONE", "NULL"} else val if val in _EXCLUSIVE_ATTACHMENTS else ""
+    except Exception:
+        pass
+    for m in re.finditer(r'"attachment"\s*:\s*"(DRN|FLS|SMP|none)"', text, re.I):
+        val = m.group(1).upper()
+        if val in _EXCLUSIVE_ATTACHMENTS:
+            return val
+    upper = text.upper()
+    # Prose fallback when JSON is truncated (maxTokens cut-off).
+    for tok in ("FLS", "SMP", "DRN"):
+        if re.search(rf"\b{tok}\b", upper):
+            return tok
+    if re.search(r"\b(NONE|PLAIN|NO ATTACHMENT)\b", upper):
+        return ""
+    return ""
+
+
+DRAIN_RETRY_PROMPT = """\
+You MUST respond with ONLY a JSON object.
+Format: {{"attachment": "DRN"}} or {{"attachment": "none"}}
+
+Valve {TAG}. Follow the leader line from label "{TAG}" to its bowtie.
+
+DRN — vessel/tank bottom outlet line, OR pipe turns downward to floor/sump/U-channel
+      directly below THIS bowtie.
+
+none — plain in-line valve; or upper valve on a branch whose downstream neighbour
+       reaches the drain (not this bowtie's pipe).
+"""
+
+DRN_DIRECT_RETRY_PROMPT = """\
+You MUST respond with ONLY a JSON object.
+Format: {{"attachment": "DRN"}} or {{"attachment": "none"}}
+
+Valve {TAG}. Is the drain arrow/sump directly connected below THIS bowtie's outlet
+with NO other valve between the target bowtie and the floor drain?
+
+If two bowties are stacked on the same vertical branch, only the LOWER bowtie
+(closest to the floor drain arrow) is DRN — the upper bowtie is none.
+"""
+
+VESSEL_DRN_RETRY_PROMPT = """\
+You MUST respond with ONLY a JSON object.
+Format: {{"attachment": "DRN"}} or {{"attachment": "none"}}
+
+Valve {TAG} on a line leaving a vessel/tank bottom: horizontal run through the
+bowtie then an elbow turning downward with a flow arrow = DRN.
+Otherwise none.
+"""
+
+SMP_CONFIRM_PROMPT = """\
+You MUST respond with ONLY a JSON object.
+Format: {{"attachment": "SMP"}} or {{"attachment": "FLS"}}
+
+Valve {TAG}. Follow leader line to bowtie. Look at the branch end:
+  SMP — sample funnel, cup, or sampling arrowhead is visible at branch end.
+  FLS — no funnel; horizontal spool / tee flush on a vertical leg, or L-hook on bowtie.
+"""
+
+
+def _bedrock_attachment_ask(
+    prompt: str,
+    marked: Path,
+    *,
+    model_id: str,
+    region: str,
+    extra_images: Optional[List[bytes]] = None,
+) -> str:
+    content: List[Dict[str, Any]] = [
+        {"text": prompt},
+        {"image": {"format": "png", "source": {"bytes": marked.read_bytes()}}},
+    ]
+    for img in extra_images or []:
+        content.append({"image": {"format": "png", "source": {"bytes": img}}})
+    client = _bedrock_client(region)
+    response = client.converse(
+        modelId=model_id,
+        messages=[{"role": "user", "content": content}],
+        inferenceConfig={"maxTokens": 80, "temperature": 0},
+    )
+    parts = [b["text"] for b in response.get("output", {}).get("message", {}).get("content", []) if "text" in b]
+    return parse_attachment_response("\n".join(parts).strip())
+
+
+def refine_attachment(
+    attachment: str,
+    *,
+    tag: str,
+    marked: Path,
+    crop_path: Path,
+    model_id: str,
+    region: str,
+    cx_frac: float,
+    cy_frac: float,
+    crop_half: float,
+    extra_below: float,
+    body: str,
+) -> str:
+    """Targeted retries when the first attachment pass is empty or ambiguous."""
+    att = str(attachment or "").upper().strip()
+    body_tokens = set(strip_attachment_tokens(body).split())
+
+    if not att and body_tokens & {"NC", "HV", "NO"}:
+        att = _bedrock_attachment_ask(
+            DRAIN_RETRY_PROMPT.replace("{TAG}", tag),
+            marked,
+            model_id=model_id,
+            region=region,
+            extra_images=[
+                branch_context_png(marked, cx_frac=cx_frac, cy_frac=cy_frac),
+                below_valve_png(crop_path, half=crop_half, extra_below=extra_below),
+            ],
+        )
+        if not att:
+            att = _bedrock_attachment_ask(
+                VESSEL_DRN_RETRY_PROMPT.replace("{TAG}", tag),
+                marked,
+                model_id=model_id,
+                region=region,
+                extra_images=[branch_context_png(marked, cx_frac=cx_frac, cy_frac=cy_frac)],
+            )
+
+    if att == "DRN":
+        direct = _bedrock_attachment_ask(
+            DRN_DIRECT_RETRY_PROMPT.replace("{TAG}", tag),
+            marked,
+            model_id=model_id,
+            region=region,
+            extra_images=[branch_context_png(marked, cx_frac=cx_frac, cy_frac=cy_frac)],
+        )
+        if not direct:
+            att = ""
+
+    if att == "SMP":
+        confirm = _bedrock_attachment_ask(
+            SMP_CONFIRM_PROMPT.replace("{TAG}", tag),
+            marked,
+            model_id=model_id,
+            region=region,
+            extra_images=[branch_context_png(marked, cx_frac=cx_frac, cy_frac=cy_frac)],
+        )
+        if confirm in ("FLS", "SMP"):
+            att = confirm
+
+    return att
+
+
+def bedrock_classify_attachment(
+    crop_path: Path,
+    legend_path: Path,
+    *,
+    tag: str,
+    model_id: str,
+    region: str,
+    cx_frac: float = 0.5,
+    cy_frac: float = 0.5,
+    crop_half: float = 42.0,
+    extra_below: float = 60.0,
+    marked_path: Optional[Path] = None,
+) -> str:
+    """Vision pass: exactly one of DRN / FLS / SMP / none."""
+    global _legend_bytes
+    marked = marked_path or crop_path
+    content: List[Dict[str, Any]] = [
+        {"text": ATTACHMENT_PROMPT.replace("{TAG}", tag or crop_path.stem)},
+        {"image": {"format": "png", "source": {"bytes": marked.read_bytes()}}},
+        {
+            "image": {
+                "format": "png",
+                "source": {"bytes": zoom_center_png(marked, cx_frac=cx_frac, cy_frac=cy_frac)},
+            }
+        },
+        {
+            "image": {
+                "format": "png",
+                "source": {"bytes": branch_context_png(marked, cx_frac=cx_frac, cy_frac=cy_frac)},
+            }
+        },
+    ]
+    if legend_path.exists():
+        if _legend_bytes is None:
+            with _bedrock_lock:
+                if _legend_bytes is None:
+                    _legend_bytes = legend_path.read_bytes()
+        suffix = legend_path.suffix.lower().lstrip(".")
+        fmt = suffix if suffix in {"png", "jpg", "jpeg", "gif", "webp"} else "png"
+        content.append({"image": {"format": fmt, "source": {"bytes": _legend_bytes}}})
+    content.append(
+        {
+            "image": {
+                "format": "png",
+                "source": {"bytes": below_valve_png(crop_path, half=crop_half, extra_below=extra_below)},
+            }
+        }
+    )
+
+    client = _bedrock_client(region)
+    response = client.converse(
+        modelId=model_id,
+        messages=[{"role": "user", "content": content}],
+        inferenceConfig={"maxTokens": 200, "temperature": 0},
+    )
+    parts = [b["text"] for b in response.get("output", {}).get("message", {}).get("content", []) if "text" in b]
+    return parse_attachment_response("\n".join(parts).strip())
+
+
+def _bedrock_client(region: str):
+    import boto3
+    from botocore.config import Config
+
+    # Key on (region, profile) so that credential changes are not silently ignored.
+    key = (region, os.environ.get("AWS_PROFILE", ""))
+    with _bedrock_lock:
+        client = _bedrock_clients.get(key)
+        if client is None:
+            client = boto3.client(
+                "bedrock-runtime",
+                region_name=region,
+                config=Config(
+                    connect_timeout=15,
+                    read_timeout=120,
+                    retries={"max_attempts": 2, "mode": "standard"},
+                ),
+            )
+            _bedrock_clients[key] = client
+        return client
+
+
+def _parse_one_pass(raw: str) -> str:
+    """Parse {"type": "NC", "attachment": "DRN"} → "NC DRN"."""
+    text = re.sub(r"^```(?:json)?\s*|\s*```$", "", raw.strip())
+    try:
+        obj = json.loads(text)
+        if isinstance(obj, dict):
+            body = strip_attachment_tokens(parse_type_tokens(str(obj.get("type") or "")))
+            att_raw = str(obj.get("attachment") or "none").upper().strip()
+            attachment = att_raw if att_raw in _EXCLUSIVE_ATTACHMENTS else ""
+            if "AV" in body.split() or "AV-M" in body.split():
+                return body
+            return merge_body_and_attachment(body, attachment)
+    except Exception:
+        pass
+    # Fallback: extract tokens from raw text
+    body = strip_attachment_tokens(parse_type_tokens(raw))
+    attachment = parse_attachment_response(raw)
+    if body and ("AV" in body.split() or "AV-M" in body.split()):
+        return body
+    return merge_body_and_attachment(body, attachment) if body else ""
+
+
+def bedrock_classify_crop(
+    crop_path: Path,
+    legend_path: Path,
+    *,
+    model_id: str,
+    region: str,
+    tag: str = "",
+    cx_frac: float = 0.5,
+    cy_frac: float = 0.5,
+    crop_half: float = 42.0,
+    extra_below: float = 60.0,
+) -> str:
+    """Single Bedrock call: body + attachment classified together from 5 images."""
+    global _legend_bytes
+
+    marked = annotate_valve_crop(crop_path, tag, cx_frac=cx_frac, cy_frac=cy_frac)
+    prompt = ONE_PASS_PROMPT.replace("{TAG}", tag or crop_path.stem)
+
+    if legend_path.exists() and _legend_bytes is None:
+        with _bedrock_lock:
+            if _legend_bytes is None:
+                _legend_bytes = legend_path.read_bytes()
+
+    content: List[Dict[str, Any]] = [
+        {"text": prompt},
+        # Image 1: full marked crop with yellow ring + tag label (for locating the target)
+        {"image": {"format": "png", "source": {"bytes": marked.read_bytes()}}},
+        # Image 2: tight bowtie zoom from clean crop (no ring overlay — clearer for NC vs HV fill)
+        {"image": {"format": "png", "source": {"bytes": body_zoom_png(crop_path, cx_frac=cx_frac, cy_frac=cy_frac)}}},
+        # Image 3: below-valve strip (drain detection)
+        {"image": {"format": "png", "source": {"bytes": below_valve_png(crop_path, half=crop_half, extra_below=extra_below)}}},
+        # Image 4: branch context (sample funnel / flush branch detection)
+        {"image": {"format": "png", "source": {"bytes": branch_context_png(crop_path, cx_frac=cx_frac, cy_frac=cy_frac)}}},
+    ]
+    if _legend_bytes is not None:
+        suffix = legend_path.suffix.lower().lstrip(".")
+        fmt = suffix if suffix in {"png", "jpg", "jpeg", "gif", "webp"} else "png"
+        content.append({"image": {"format": fmt, "source": {"bytes": _legend_bytes}}})
+
+    client = _bedrock_client(region)
+    response = client.converse(
+        modelId=model_id,
+        messages=[{"role": "user", "content": content}],
+        inferenceConfig={"maxTokens": 200, "temperature": 0},
+    )
+    parts = [b["text"] for b in response.get("output", {}).get("message", {}).get("content", []) if "text" in b]
+    return _parse_one_pass("\n".join(parts).strip())
+
+
+def hierarchy_valve_rows(hierarchy_rows: List[Dict[str, str]]) -> List[Dict[str, str]]:
+    """One record per EQUIPMENT/SUB-EQUIPMENT that might be a valve.
+
+    Relies on FUNCTION header rows appearing before their children in the CSV,
+    which is the invariant maintained by write_hierarchy_csv / the orchestrator.
+    """
+    out: List[Dict[str, str]] = []
+    current_fn = ""
+    seen = set()
+    for row in hierarchy_rows:
+        fn = str(row.get("FUNCTION") or "").strip().upper().replace(" ", "")
+        eq = str(row.get("EQUIPMENT") or "").strip().upper().replace(" ", "")
+        sub = str(row.get("SUB-EQUIPMENT") or "").strip().upper().replace(" ", "")
+        desc = str(row.get("DESCRIPTION") or "")
+        if fn and not eq and not sub:
+            current_fn = fn
+            continue
+        tag = eq or sub
+        if not tag or tag in seen:
+            continue
+        seen.add(tag)
+        out.append({"tag": tag, "fn": current_fn, "description": desc})
+    return out
+
+
+def load_valve_cache(path: Path) -> Dict[str, Dict[str, Any]]:
+    if not path.exists():
+        return {}
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except (json.JSONDecodeError, OSError):
+        return {}
+    if not isinstance(data, dict):
+        return {}
+    # Allow {"tags": {...}} wrapper or a flat tag map.
+    blob = data.get("tags") if isinstance(data.get("tags"), dict) else data
+    out: Dict[str, Dict[str, Any]] = {}
+    for k, v in blob.items():
+        if k in {"input", "model_id", "region", "legend", "tags"}:
+            continue
+        if isinstance(v, dict) and ("type" in v or "is_valve" in v or "layer" in v):
+            out[_norm_tag(k)] = v
+    return out
+
+
+def _crop_meta_path(crop_path: Path) -> Path:
+    return crop_path.with_suffix(".meta.json")
+
+
+def crop_matches_window(crop_path: Path, half: float, extra_below: float) -> bool:
+    meta = _crop_meta_path(crop_path)
+    if not crop_path.exists() or crop_path.stat().st_size <= 0 or not meta.exists():
+        return False
+    try:
+        data = json.loads(meta.read_text(encoding="utf-8"))
+    except (json.JSONDecodeError, OSError):
+        return False
+    return abs(float(data.get("half") or 0) - half) < 0.5 and abs(
+        float(data.get("extra_below") or 0) - extra_below
+    ) < 0.5
+
+
+def write_crop_meta(crop_path: Path, half: float, extra_below: float) -> None:
+    _crop_meta_path(crop_path).write_text(
+        json.dumps({"half": half, "extra_below": extra_below}, indent=2),
+        encoding="utf-8",
+    )
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description="Per-tag tight-crop valve classification")
+    parser.add_argument("--input", default="inputs/Broke System.dwg")
+    parser.add_argument("--output-dir", default="outputs")
+    parser.add_argument("--hierarchy-csv", default="")
+    parser.add_argument("--legend", default=str(LEGEND_PATH))
+    parser.add_argument("--model-id", default=DEFAULT_MODEL_ID)
+    parser.add_argument("--region", default=os.environ.get("AWS_REGION") or "eu-west-2")
+    parser.add_argument("--jobs", type=int, default=4)
+    parser.add_argument("--crop-half", type=float, default=42.0)
+    parser.add_argument(
+        "--extra-below",
+        type=float,
+        default=60.0,
+        help="Extra CAD units below the valve so the drain trough is in the crop (SOP zoom-out)",
+    )
+    parser.add_argument("--skip-existing", action="store_true")
+    parser.add_argument("--locate-only", action="store_true", help="Write CAD locations, skip Bedrock")
+    parser.add_argument("--limit", type=int, default=0, help="Max tags to classify (0 = all candidates)")
+    args = parser.parse_args()
+
+    input_path = Path(args.input).expanduser().resolve()
+    out_dir = Path(args.output_dir).expanduser().resolve()
+    base = safe_name(input_path)
+    legend_path = Path(args.legend).expanduser().resolve()
+    cache_path = json_path(out_dir, f"{base}.valve_types.json")
+
+    hier_path = Path(args.hierarchy_csv).expanduser().resolve() if args.hierarchy_csv else out_dir / f"{base}.hierarchy_orchestrator.csv"
+    struct_path = find_json(out_dir, f"{base}.structural_dump.json")
+    inv_path = find_json(out_dir, f"{base}.pid_inventory.json")
+    if not hier_path.exists():
+        print(f"[error] Missing hierarchy CSV: {hier_path}", file=sys.stderr)
+        return 2
+    if not struct_path.exists():
+        print(f"[error] Missing structural dump: {struct_path}", file=sys.stderr)
+        return 2
+
+    with hier_path.open(encoding="utf-8", newline="") as f:
+        hierarchy_rows = [{k: str(v or "").strip() for k, v in row.items()} for row in csv.DictReader(f)]
+    structural = json.loads(struct_path.read_text(encoding="utf-8"))
+    inventory = json.loads(inv_path.read_text(encoding="utf-8")) if inv_path.exists() else {}
+
+    text_locations = collect_text_locations(structural)
+    valve_inserts = collect_valve_inserts(structural)
+    drain_markers = collect_drain_markers(structural)
+    functions = collect_functions(inventory)
+    cache = load_valve_cache(cache_path) if args.skip_existing else {}
+
+    candidates = hierarchy_valve_rows(hierarchy_rows)
+    located: List[Dict[str, Any]] = []
+    for rec in candidates:
+        loc = locate_valve(rec["tag"], text_locations=text_locations, valve_inserts=valve_inserts)
+        if loc is None:
+            continue
+        desc = rec.get("description") or ""
+        is_valve = bool(loc["is_valve"] or is_valve_equipment(rec["tag"], desc))
+        if not is_valve:
+            continue
+        loc["fn_hierarchy"] = rec["fn"]
+        loc["description"] = desc
+        loc["is_valve"] = True
+        located.append(loc)
+
+    if args.limit > 0:
+        located = located[: args.limit]
+
+    _log(f"[valve-classify] {len(located)} CAD-located valves (of {len(candidates)} hierarchy tags)")
+    crop_dir = evidence_dir(out_dir) / "_valve_crops"
+    crop_dir.mkdir(parents=True, exist_ok=True)
+
+    to_vision: List[Dict[str, Any]] = []
+    for loc in located:
+        tag = loc["tag"]
+        prev = cache.get(tag) or {}
+        if args.skip_existing and prev.get("type"):
+            continue
+        to_vision.append(loc)
+
+    extra_below = float(args.extra_below or 0.0)
+    cx_frac, cy_frac = valve_ring_frac(args.crop_half, extra_below)
+
+    def _crop_path(tag: str) -> Path:
+        # Sanitize the tag so characters like '/' don't traverse into subdirectories.
+        safe = re.sub(r"[^\w.\-]", "_", tag)
+        return crop_dir / f"{safe}.png"
+
+    if not args.locate_only and to_vision:
+        need_render: List[Dict[str, Any]] = []
+        for loc in to_vision:
+            crop_path = _crop_path(loc["tag"])
+            if crop_matches_window(crop_path, args.crop_half, extra_below):
+                loc["crop"] = str(crop_path)
+            else:
+                need_render.append(loc)
+
+        if need_render:
+            from dwg_pid_hierarchy_ai import load_drawing
+
+            _log(
+                f"[valve-classify] opening DWG for {len(need_render)} zoom-out crops "
+                f"(half={args.crop_half:.0f}, extra_below={extra_below:.0f})..."
+            )
+            doc = load_drawing(input_path)
+            _log("[valve-classify] DWG open; indexing entity extents...")
+            entity_index = build_entity_extent_index(doc)
+            for i, loc in enumerate(need_render, 1):
+                crop_path = _crop_path(loc["tag"])
+                _log(f"  [crop] {i}/{len(need_render)} {loc['tag']}")
+                rendered = tight_valve_screenshot(
+                    doc,
+                    loc["x"],
+                    loc["y"],
+                    crop_path,
+                    half=args.crop_half,
+                    extra_below=extra_below,
+                    entity_index=entity_index,
+                )
+                loc["crop"] = str(rendered) if rendered else ""
+                if rendered is not None:
+                    write_crop_meta(crop_path, args.crop_half, extra_below)
+                else:
+                    _log(f"  [warn] no crop for {loc['tag']}")
+        else:
+            _log(f"[valve-classify] reusing {len(to_vision)} zoom-out crop PNGs (skip DWG)")
+
+        jobs = max(1, int(args.jobs or 1))
+
+        def _one(loc: Dict[str, Any]) -> Tuple[str, str]:
+            crop = Path(loc.get("crop") or "")
+            if not crop.exists():
+                return loc["tag"], ""
+            _log(f"  [vision] start {loc['tag']}")
+            try:
+                return loc["tag"], bedrock_classify_crop(
+                    crop,
+                    legend_path,
+                    model_id=args.model_id,
+                    region=args.region,
+                    tag=loc["tag"],
+                    cx_frac=cx_frac,
+                    cy_frac=cy_frac,
+                    crop_half=float(args.crop_half),
+                    extra_below=extra_below,
+                )
+            except Exception as exc:
+                _log(f"  [warn] Bedrock failed for {loc['tag']}: {exc}")
+                return loc["tag"], ""
+
+        types: Dict[str, str] = {}
+        # _record is only ever called from the main thread (sequential or as_completed loop),
+        # so no lock is needed on the counter.
+        done_n = 0
+
+        def _record(tag: str, vtype: str) -> None:
+            nonlocal done_n
+            types[tag] = vtype
+            done_n += 1
+            _log(f"  [vision] {done_n}/{len(to_vision)} {tag} → {vtype or 'UNKNOWN'}")
+
+        if jobs == 1:
+            for loc in to_vision:
+                tag, vtype = _one(loc)
+                _record(tag, vtype)
+        else:
+            _log(f"[valve-classify] {jobs} parallel Bedrock workers for {len(to_vision)} tags")
+            with ThreadPoolExecutor(max_workers=jobs) as pool:
+                futs = {pool.submit(_one, loc): loc["tag"] for loc in to_vision}
+                for fut in as_completed(futs):
+                    tag, vtype = fut.result()
+                    _record(tag, vtype)
+        for loc in to_vision:
+            loc["type"] = types.get(loc["tag"] or "") or loc.get("type") or ""
+    else:
+        for loc in to_vision:
+            loc.setdefault("type", "")
+
+    # Merge into cache with parent inference.
+    for loc in located:
+        tag = loc["tag"]
+        vtype = combine_valve_type(
+            str(loc.get("type") or (cache.get(tag) or {}).get("type") or ""),
+            str(loc.get("description") or ""),
+        )
+        parent = pick_parent_fn(
+            x=float(loc["x"]),
+            y=float(loc["y"]),
+            hierarchy_fn=str(loc.get("fn_hierarchy") or ""),
+            functions=functions,
+            valve_type=vtype,
+        )
+        cache[tag] = {
+            "type": vtype,
+            "fn": parent,
+            "fn_hierarchy": loc.get("fn_hierarchy") or "",
+            "layer": loc.get("layer") or "",
+            "block": loc.get("block") or "",
+            "x": loc["x"],
+            "y": loc["y"],
+            "is_valve": True,
+            "source": "vision" if vtype else "cad_layer",
+        }
+
+    payload = {
+        "input": str(input_path),
+        "legend": str(legend_path) if legend_path.exists() else None,
+        "model_id": args.model_id,
+        "region": args.region,
+        "count": len(cache),
+        "tags": cache,
+    }
+    write_json(cache_path, payload)
+    _log(f"[valve-classify] wrote {cache_path} ({len(cache)} tags)")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

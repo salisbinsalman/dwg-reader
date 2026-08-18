@@ -1,0 +1,395 @@
+{
+  "input": "/Users/code-huddle-ensemble/Desktop/dwg-reader/inputs/Broke System.dwg",
+  "mode": "viewer_shot_ai_gt",
+  "evidence_dir": "/Users/code-huddle-ensemble/Desktop/dwg-reader/outputs/evidence",
+  "site": "Shotton Paper Mill, United Kingdom",
+  "line": "Shotton PM3",
+  "process": "Broke System",
+  "sub_process": "BR1",
+  "model_id": "eu.anthropic.claude-sonnet-4-6",
+  "region": "eu-west-2",
+  "prompt_file": "pid_hierarchy_gt_v7_floc.md",
+  "legend": "/Users/code-huddle-ensemble/Desktop/dwg-reader/inputs/legend.png",
+  "results": [
+    {
+      "tag": "35-24L005",
+      "shot": "/Users/code-huddle-ensemble/Desktop/dwg-reader/outputs/evidence/Broke System.viewer_35-24L005.png",
+      "parent": {
+        "category": "process_equipment",
+        "block_name": "PPI_1302A-25_0",
+        "handle": "642FF",
+        "layer": "P-EQUIPMENT_POS",
+        "x": 1715.0,
+        "y": 272.5,
+        "resolved_tag": "35-24L005",
+        "nearby_tags": "35-24L005; 35-24; 35-24P520; 35-24; 35-24P506",
+        "nearby_descriptions": "REEL PULPER; HP-63G2; 2621 ADTPD",
+        "confidence": "high"
+      },
+      "candidates": [
+        "35-24L005",
+        "35-24",
+        "35-24P506",
+        "35-24P520",
+        "35-24FV-696",
+        "35-24-222",
+        "35-24-233",
+        "35-24-140",
+        "35-24-1131",
+        "35-24-228",
+        "35-24-044",
+        "35-24-232",
+        "35-24-1128",
+        "35-24-043",
+        "35-24-223",
+        "35-24L006",
+        "35-24-141",
+        "35-24-1112",
+        "35-24-145",
+        "35-24-220",
+        "35-24-005.2",
+        "35-24-147",
+        "35-24LV2-537",
+        "35-24-005.1",
+        "35-24P507",
+        "35-24-137",
+        "35-24-046",
+        "35-24-047",
+        "35-24LV1-537",
+        "35-24-005.3",
+        "35-24-040",
+        "35-24XV-667",
+        "35-24HV-548",
+        "35-24-005.4",
+        "35-24-148",
+        "35-24-1108",
+        "35-24TV-9269",
+        "35-24-039",
+        "35-24-206",
+        "35-24-051",
+        "35-24-049",
+        "35-24-146",
+        "35-24-1107",
+        "35-24TV-9268",
+        "35-24-139",
+        "35-24-1123",
+        "35-24-042",
+        "35-24-045",
+        "35-24-136"
+      ],
+      "dossier": "Parent tag: 35-24L005\nParent category/block: process_equipment / PPI_1302A-25_0\nParent XY: (1715.0, 272.5)\nNearby descriptions: REEL PULPER; HP-63G2; 2621 ADTPD\n\nSame-tag CAD family:\n- process_equipment @ (1715.0,272.5) block=PPI_1302A-25_0 nearby=35-24L005; 35-24; 35-24P520; 35-24; 35-24P506\n- pumps @ (1700.0,265.0) block=P7A0200 nearby=35-24L005; 35-24; 35-24P520; 35-24; 35-24P506\n- motors @ (1737.5,207.5) block=PPI_1504A-25_0 nearby=35-24L005; 35-24P506\n- valves @ (1748.25,263.0) block=PPI_0900A nearby=35-24L005; 35-24; 35-24L006\n- valves @ (1745.0,225.0) block=PPI_0900A nearby=35-24L005; 35-24P506\n- valves @ (1712.5,222.5) block=PPI_0900A nearby=35-24L005; 35-24P506; 35-24P520; 35-24; 35-24\n- valves @ (1746.25,252.5) block=PPI_0900A nearby=35-24L005; 35-24; 35-24L006\n- valves @ (1735.0,305.0) block=PPI_0900A nearby=35-24; 35-24L005; 35-24P520\n- valves @ (1735.0,295.0) block=PPI_0900A nearby=35-24L005; 35-24; 35-24P520; 35-24L006\n- control_valves @ (1720.0,277.5) block=PPI_1000A nearby=35-24L005; 35-24; 35-24P520; 35-24\n- instruments @ (1760.225680162351,247.5) block=PPI_0100X nearby=35-24L005; 35-24L006; 35-24\n- instruments @ (1705.0,287.5) block=PPI_0102B nearby=35-24; 35-24L005; 35-24P520; 35-24\n\nNearby line numbers (short ids preferred in output):\n- 35-24-223  full=35-24-223-PP-100-E10H2A  d=49  layer=P-LINEPOS\n- 35-24-222  full=35-24-222-PP-400-E10H2A  d=29  layer=P-LINEPOS\n- 35-24-220  full=35-24-220-PP-80-E10H2A  d=69  layer=P-LINEPOS\n- 35-24-206  full=35-24-206-PP-100-E10H2A  d=181  layer=P-LINEPOS\n- 35-24-039  full=35-24-039-WAB-20-E10H2A  d=179  layer=P-LINEPOS\n- 35-24-051  full=35-24-051-PP-100-E10H2A  d=187  layer=P-LINEPOS\n- 35-24-047  full=35-24-047-PP-150-E10H2A  d=117  layer=P-LINEPOS\n- 35-24-046  full=35-24-046-PP-250-E10H2A  d=112  layer=P-LINEPOS\n- 35-24-049  full=35-24-049-PP-800-E10H2A  d=188  layer=P-LINEPOS\n- 35-24-040  full=35-24-040-PP-700-E10H2A  d=137  layer=P-LINEPOS\n- 35-24-043  full=35-24-043-PP-300-E10H2A  d=48  layer=P-LINEPOS\n- 35-24-044  full=35-24-044-PP-900-E10H2A  d=37  layer=P-LINEPOS\n\nNearby devices (valves/instruments/pumps/\u2026):\n- line_markers: PPI_1100A  d=38  block=PPI_1100A\n- valves: PPI_0900A  d=39  block=PPI_0900A\n- control_valves: PPI_1000A  d=112  block=PPI_1000A\n- instruments: PPI_0100X  d=185  block=PPI_0100X\n- pumps: P7A0200  d=41  block=P7A0200\n- motors: PPI_1504A-25_0  d=68  block=PPI_1504A-25_0\n- fittings: P7A1220  d=47  block=P7A1220\n\nNearby peer primary equipment (do NOT nest under parent):\n- 35-24L006 (process_equipment, d=109)\n- 35-24P506 (pumps, d=41)\n- 35-24P507 (pumps, d=170)\n- 35-24P520 (pumps, d=60)\n\nNearby drawing text tokens:\n- S3  d=59  layer=P-TEXT\n- S2  d=86  layer=P-TEXT\n- A1  d=61  layer=P-TEXT\n- S4  d=49  layer=P-TEXT\n- 2 bar  d=77  layer=P-TEXT\n- GEARBOX 1  d=163  layer=P-OTHER\n- S1/ST1  d=97  layer=P-TEXT\n- 2621 ADTPD  d=21  layer=P-TEXT\n- 35-24  d=191  layer=P-INSTRPOS_TEXTS\n- SHOWER S1  d=194  layer=P-TEXT\n- 35-24L006  d=114  layer=P-EQUIPMENT_POS\n- BROKE CONVEYOR 3  d=108  layer=P-EQUIPMENT_POS\n- 35-24L005  d=11  layer=P-EQUIPMENT_POS\n- HP-63G2  d=15  layer=P-EQUIPMENT_POS\n- 660  d=154  layer=P-INSTRPOS_TEXTS\n- 541  d=158  layer=P-INSTRPOS_TEXTS\n- 9269  d=176  layer=P-INSTRPOS_TEXTS\n- 548  d=173  layer=P-INSTRPOS_TEXTS\n- 540  d=183  layer=P-INSTRPOS_TEXTS\n- 9270  d=187  layer=P-INSTRPOS_TEXTS\n- 544  d=127  layer=P-INSTRPOS_TEXTS\n- 543  d=142  layer=P-INSTRPOS_TEXTS\n- 542  d=159  layer=P-INSTRPOS_TEXTS\n- 9272  d=184  layer=P-INSTRPOS_TEXTS\n- 9274  d=197  layer=P-INSTRPOS_TEXTS\n- 545  d=191  layer=P-INSTRPOS_TEXTS\n- 555  d=186  layer=P-INSTRPOS_TEXTS\n- 538  d=103  layer=P-INSTRPOS_TEXTS\n- 537  d=69  layer=P-INSTRPOS_TEXTS\n- 9273  d=186  layer=P-INSTRPOS_TEXTS\n- 9271  d=185  layer=P-INSTRPOS_TEXTS\n- REEL PULPER ROTOR 1  d=129  layer=P-TEXT\n- 667  d=109  layer=P-INSTRPOS_TEXTS\n- 696  d=29  layer=P-INSTRPOS_TEXTS\n- 35-24P520  d=55  layer=P-PUMP_POS\n- 21  d=56  layer=P-PUMP_POS\n- 17  d=43  layer=P-PUMP_POS\n- 35-24P506  d=80  layer=P-PUMP_POS\n- 860  d=85  layer=P-PUMP_POS\n- 22  d=78  layer=P-PUMP_POS",
+      "ai": {
+        "raw_text": "I'll analyze the P&ID image carefully, focusing on what's inside the red boundary box for 35-24L005 (REEL PULPER HP-63G2).\n\n**Key observations from the image:**\n\n1. **Parent**: 35-24L005 = REEL PULPER HP-63G2, 2621 ADTPD\n2. **Lines directly connected to the pulper vessel**:\n   - 35-24-222 (PP-400) \u2014 discharge/connected line\n   - 35-24-223 (PP-100) \u2014 connected line\n   - 35-24-043 (PP-300) \u2014 connected line\n   - 35-24-044 (PP-900) \u2014 connected line\n   - 35-24-220 (PP-80) \u2014 connected line\n   - 35-24-1131 (350-400) \u2014 branch line\n   - 35-24-1112 (003-15) \u2014 branch line\n   - 35-24-1128 (003-50) \u2014 branch line\n   - 35-24-140 (350-300) \u2014 branch line\n   - 35-24-228 (350-500) \u2014 branch line\n\n3. **Instruments on the vessel**:\n   - 35-24LC-537 (level controller, LC bubble visible on vessel)\n   - 35-24LV1-537 and 35-24LV2-537 (level valves associated with LC-537)\n   - 35-24FV-696 (flow control valve, FC 696 visible)\n   - 35-24XV-667 (XS/XV visible near vessel)\n\n4. **Valve analysis**:\n   - 35-24FV-696: Has FC circle actuator \u2192 AV\n   - 35-24LV1-537: Has actuator circle \u2192 AV\n   - 35-24LV2-537: Has actuator circle \u2192 AV\n   - 35-24XV-667: Has XS box \u2192 AV\n   - 35-24HV-548: Hand valve (outline bowtie, no actuator) \u2192 HV\n   - Valves on lines 35-24-223, 35-24-043 area: appear as NC (filled triangles)\n\n5. **Peers** (outside scope or peer equipment):\n   - 35-24P506, 35-24P520 (pumps \u2014 peer equipment)\n   - 35-24L006 (adjacent vessel)\n   - 35-24P507 (pump)\n\n**Nesting logic**: Valves/instruments nest under the line they sit on.\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24L005\",\n  \"description\": \"35-24L005 REEL PULPER HP-63G2\",\n  \"rows\": [\n    {\"equipment\": \"35-24LC-537\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24LC-537 LVL CTRL\"},\n    {\"equipment\": \"35-24-223\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-223 PP-100 LINE\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24FV-696\", \"mask\": \"\", \"description\": \"35-24FV-696 FLOW CTRL VLV AV\"},\n    {\"equipment\": \"35-24-043\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-043 PP-300 LINE\"},\n    {\"equipment\": \"35-24-222\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-222 PP-400 LINE\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24LV2-537\", \"mask\": \"\", \"description\": \"35-24LV2-537 LVL VLV AV\"},\n    {\"equipment\": \"35-24-044\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-044 PP-900 LINE\"},\n    {\"equipment\": \"35-24-220\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-220 PP-80 LINE\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24LV1-537\", \"mask\": \"\", \"description\": \"35-24LV1-537 LVL VLV AV\"},\n    {\"equipment\": \"35-24-1131\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-1131 350-400 BRANCH\"},\n    {\"equipment\": \"35-24-1112\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-1112 003-15 BRANCH\"},\n    {\"equipment\": \"35-24-1128\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-1128 003-50 BRANCH\"},\n    {\"equipment\": \"35-24-140\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-140 350-300 LINE\"},\n    {\"equipment\": \"35-24-228\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-228 350-500 LINE\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24HV-548\", \"mask\": \"\", \"description\": \"35-24HV-548 ISOL VLV HV\"},\n    {\"equipment\": \"35-24XV-667\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24XV-667 SHUT OFF VLV AV\"}\n  ],\n  \"peers\": [\n    {\"tag\": \"35-24P506\", \"evidence\": \"peer pump adjacent to pulper, own tag block\"},\n    {\"tag\": \"35-24P520\", \"evidence\": \"peer pump adjacent to pulper, own tag block\"},\n    {\"tag\": \"35-24P507\", \"evidence\": \"peer pump nearby, separate equipment\"},\n    {\"tag\": \"35-24L006\", \"evidence\": \"adjacent vessel, separate FUNCTION boundary\"}\n  ],\n  \"notes\": [\n    \"35-24LC-537 level controller bubble visible on vessel body\",\n    \"35-24FV-696 flow control valve on line 35-24-223 with FC actuator circle\",\n    \"35-24LV1-537 and 35-24LV2-537 are level control valves associated with LC-537 loop\",\n    \"35-24XV-667 shown with XS/XV symbol near vessel inlet\",\n    \"35-24HV-548 visible as outline bowtie hand valve on connected line\",\n    \"Lines 35-24-1131, 35-24-1112, 35-24-1128 are short branch/spool lines within pulper boundary\",\n    \"2621 ADTPD is capacity descriptor, not a tag\"\n  ],\n  \"confidence\": \"medium\"\n}\n```",
+        "parsed": {
+          "sub_process": "BR1",
+          "function": "35-24L005",
+          "description": "35-24L005 REEL PULPER HP-63G2",
+          "rows": [
+            {
+              "equipment": "35-24LC-537",
+              "subequipment": "",
+              "mask": "",
+              "description": "35-24LC-537 LVL CTRL"
+            },
+            {
+              "equipment": "35-24-223",
+              "subequipment": "",
+              "mask": "",
+              "description": "35-24-223 PP-100 LINE"
+            },
+            {
+              "equipment": "",
+              "subequipment": "35-24FV-696",
+              "mask": "",
+              "description": "35-24FV-696 FLOW CTRL VLV AV"
+            },
+            {
+              "equipment": "35-24-043",
+              "subequipment": "",
+              "mask": "",
+              "description": "35-24-043 PP-300 LINE"
+            },
+            {
+              "equipment": "35-24-222",
+              "subequipment": "",
+              "mask": "",
+              "description": "35-24-222 PP-400 LINE"
+            },
+            {
+              "equipment": "",
+              "subequipment": "35-24LV2-537",
+              "mask": "",
+              "description": "35-24LV2-537 LVL VLV AV"
+            },
+            {
+              "equipment": "35-24-044",
+              "subequipment": "",
+              "mask": "",
+              "description": "35-24-044 PP-900 LINE"
+            },
+            {
+              "equipment": "35-24-220",
+              "subequipment": "",
+              "mask": "",
+              "description": "35-24-220 PP-80 LINE"
+            },
+            {
+              "equipment": "",
+              "subequipment": "35-24LV1-537",
+              "mask": "",
+              "description": "35-24LV1-537 LVL VLV AV"
+            },
+            {
+              "equipment": "35-24-1131",
+              "subequipment": "",
+              "mask": "",
+              "description": "35-24-1131 350-400 BRANCH"
+            },
+            {
+              "equipment": "35-24-1112",
+              "subequipment": "",
+              "mask": "",
+              "description": "35-24-1112 003-15 BRANCH"
+            },
+            {
+              "equipment": "35-24-1128",
+              "subequipment": "",
+              "mask": "",
+              "description": "35-24-1128 003-50 BRANCH"
+            },
+            {
+              "equipment": "35-24-140",
+              "subequipment": "",
+              "mask": "",
+              "description": "35-24-140 350-300 LINE"
+            },
+            {
+              "equipment": "35-24-228",
+              "subequipment": "",
+              "mask": "",
+              "description": "35-24-228 350-500 LINE"
+            },
+            {
+              "equipment": "",
+              "subequipment": "35-24HV-548",
+              "mask": "",
+              "description": "35-24HV-548 ISOL VLV HV"
+            },
+            {
+              "equipment": "35-24XV-667",
+              "subequipment": "",
+              "mask": "",
+              "description": "35-24XV-667 SHUT OFF VLV AV"
+            }
+          ],
+          "peers": [
+            {
+              "tag": "35-24P506",
+              "evidence": "peer pump adjacent to pulper, own tag block"
+            },
+            {
+              "tag": "35-24P520",
+              "evidence": "peer pump adjacent to pulper, own tag block"
+            },
+            {
+              "tag": "35-24P507",
+              "evidence": "peer pump nearby, separate equipment"
+            },
+            {
+              "tag": "35-24L006",
+              "evidence": "adjacent vessel, separate FUNCTION boundary"
+            }
+          ],
+          "notes": [
+            "35-24LC-537 level controller bubble visible on vessel body",
+            "35-24FV-696 flow control valve on line 35-24-223 with FC actuator circle",
+            "35-24LV1-537 and 35-24LV2-537 are level control valves associated with LC-537 loop",
+            "35-24XV-667 shown with XS/XV symbol near vessel inlet",
+            "35-24HV-548 visible as outline bowtie hand valve on connected line",
+            "Lines 35-24-1131, 35-24-1112, 35-24-1128 are short branch/spool lines within pulper boundary",
+            "2621 ADTPD is capacity descriptor, not a tag"
+          ],
+          "confidence": "medium"
+        },
+        "model_id": "eu.anthropic.claude-sonnet-4-6",
+        "region": "eu-west-2",
+        "prompt_file": "pid_hierarchy_gt_v7_floc.md",
+        "candidates": [
+          "35-24L005",
+          "35-24",
+          "35-24P506",
+          "35-24P520",
+          "35-24FV-696",
+          "35-24-222",
+          "35-24-233",
+          "35-24-140",
+          "35-24-1131",
+          "35-24-228",
+          "35-24-044",
+          "35-24-232",
+          "35-24-1128",
+          "35-24-043",
+          "35-24-223",
+          "35-24L006",
+          "35-24-141",
+          "35-24-1112",
+          "35-24-145",
+          "35-24-220",
+          "35-24-005.2",
+          "35-24-147",
+          "35-24LV2-537",
+          "35-24-005.1",
+          "35-24P507",
+          "35-24-137",
+          "35-24-046",
+          "35-24-047",
+          "35-24LV1-537",
+          "35-24-005.3",
+          "35-24-040",
+          "35-24XV-667",
+          "35-24HV-548",
+          "35-24-005.4",
+          "35-24-148",
+          "35-24-1108",
+          "35-24TV-9269",
+          "35-24-039",
+          "35-24-206",
+          "35-24-051",
+          "35-24-049",
+          "35-24-146",
+          "35-24-1107",
+          "35-24TV-9268",
+          "35-24-139",
+          "35-24-1123",
+          "35-24-042",
+          "35-24-045",
+          "35-24-136"
+        ],
+        "prompt_chars": 11806,
+        "vision": true
+      },
+      "refined_rows": [
+        {
+          "equipment": "35-24LC-537",
+          "subequipment": "",
+          "mask": "",
+          "description": "35-24LC-537 LVL CTRL"
+        },
+        {
+          "equipment": "35-24-223",
+          "subequipment": "",
+          "mask": "",
+          "description": "35-24-223 PP-100 LN"
+        },
+        {
+          "equipment": "",
+          "subequipment": "35-24FV-696",
+          "mask": "",
+          "description": "35-24FV-696 FL CTRL VLV AV"
+        },
+        {
+          "equipment": "35-24-043",
+          "subequipment": "",
+          "mask": "",
+          "description": "35-24-043 PP-300 LN"
+        },
+        {
+          "equipment": "35-24-222",
+          "subequipment": "",
+          "mask": "",
+          "description": "35-24-222 PP-400 LN"
+        },
+        {
+          "equipment": "",
+          "subequipment": "35-24LV2-537",
+          "mask": "",
+          "description": "35-24LV2-537 LVL VLV AV"
+        },
+        {
+          "equipment": "35-24-044",
+          "subequipment": "",
+          "mask": "",
+          "description": "35-24-044 PP-900 LN"
+        },
+        {
+          "equipment": "35-24-220",
+          "subequipment": "",
+          "mask": "",
+          "description": "35-24-220 PP-80 LN"
+        },
+        {
+          "equipment": "",
+          "subequipment": "35-24LV1-537",
+          "mask": "",
+          "description": "35-24LV1-537 LVL VLV AV"
+        },
+        {
+          "equipment": "35-24-1131",
+          "subequipment": "",
+          "mask": "",
+          "description": "35-24-1131 350-400 BRANCH"
+        },
+        {
+          "equipment": "35-24-1112",
+          "subequipment": "",
+          "mask": "",
+          "description": "35-24-1112 003-15 BRANCH"
+        },
+        {
+          "equipment": "35-24-1128",
+          "subequipment": "",
+          "mask": "",
+          "description": "35-24-1128 003-50 BRANCH"
+        },
+        {
+          "equipment": "35-24-140",
+          "subequipment": "",
+          "mask": "",
+          "description": "35-24-140 350-300 LN"
+        },
+        {
+          "equipment": "35-24-228",
+          "subequipment": "",
+          "mask": "",
+          "description": "35-24-228 350-500 LN"
+        },
+        {
+          "equipment": "",
+          "subequipment": "35-24HV-548",
+          "mask": "",
+          "description": "35-24HV-548 ISOL VLV HV"
+        },
+        {
+          "equipment": "35-24XS-667",
+          "subequipment": "",
+          "mask": "",
+          "description": "35-24XV-667 SO VLV AV"
+        },
+        {
+          "equipment": "35-24L005.1",
+          "subequipment": "",
+          "mask": "",
+          "description": "35-24L005.1"
+        },
+        {
+          "equipment": "35-24L005.2",
+          "subequipment": "",
+          "mask": "",
+          "description": "35-24L005.2"
+        },
+        {
+          "equipment": "35-24-005.2",
+          "subequipment": "",
+          "mask": "",
+          "description": "35-24-005.2"
+        },
+        {
+          "equipment": "35-24-005.1",
+          "subequipment": "",
+          "mask": "",
+          "description": "35-24-005.1"
+        }
+      ]
+    }
+  ]
+}

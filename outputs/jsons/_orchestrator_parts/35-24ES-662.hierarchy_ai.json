@@ -1,0 +1,150 @@
+{
+  "input": "/Users/code-huddle-ensemble/Desktop/dwg-reader/inputs/Broke System.dwg",
+  "mode": "viewer_shot_ai_gt",
+  "evidence_dir": "/Users/code-huddle-ensemble/Desktop/dwg-reader/outputs/evidence",
+  "site": "Shotton Paper Mill, United Kingdom",
+  "line": "Shotton PM3",
+  "process": "Broke System",
+  "sub_process": "BR1",
+  "model_id": "eu.anthropic.claude-sonnet-4-6",
+  "region": "eu-west-2",
+  "prompt_file": "pid_hierarchy_gt_v7_floc.md",
+  "legend": "/Users/code-huddle-ensemble/Desktop/dwg-reader/inputs/legend.png",
+  "results": [
+    {
+      "tag": "35-24ES-662",
+      "shot": "/Users/code-huddle-ensemble/Desktop/dwg-reader/outputs/evidence/Broke System.viewer_35-24ES-662.png",
+      "parent": {
+        "category": "instruments",
+        "block_name": "",
+        "handle": "",
+        "layer": "P-INSTRPOS_TEXTS",
+        "x": 4820.838813813813,
+        "y": 518.5875,
+        "resolved_tag": "35-24ES-662",
+        "nearby_tags": "ES; 662; 35-24",
+        "nearby_descriptions": "ES 662 (35-24)",
+        "confidence": "high"
+      },
+      "candidates": [
+        "35-24",
+        "35-24ES-662",
+        "35-24L002",
+        "35-24-033",
+        "35-24-002.1",
+        "35-24-032",
+        "35-24-149",
+        "35-24-030",
+        "35-24HV-623",
+        "35-24-029",
+        "35-24LV-622",
+        "35-24T605",
+        "35-24-1110",
+        "35-24-150",
+        "35-24HV-626",
+        "35-24-152",
+        "35-24HV-628",
+        "35-24-151"
+      ],
+      "dossier": "Parent tag: 35-24ES-662\nParent category/block: instruments / \nParent XY: (4820.838813813813, 518.5875)\nNearby descriptions: ES 662 (35-24)\n\nSame-tag CAD family:\n- (none)\n\nNearby line numbers (short ids preferred in output):\n- 35-24-149  full=35-24-149-WAA-300-E10H2A  d=114  layer=P-LINEPOS\n- 35-24-152  full=35-24-152-PP-300-E10H2A  d=182  layer=P-LINEPOS\n- 35-24-151  full=35-24-151-PP-600-E10H2A  d=199  layer=P-LINEPOS\n- 35-24-150  full=35-24-150-WAA-400-E10H2A  d=156  layer=P-LINEPOS\n\nNearby devices (valves/instruments/pumps/\u2026):\n- line_markers: PPI_1100A  d=157  block=PPI_1100A\n- valves: PPI_0900A  d=146  block=PPI_0900A\n- control_valves: PPI_1000A  d=148  block=PPI_1000A\n- instruments: PPI_1204A  d=160  block=PPI_1204A\n- motors: PPI_1504A-25_0  d=69  block=PPI_1504A-25_0\n\nNearby peer primary equipment (do NOT nest under parent):\n- 35-24L002 (process_equipment, d=49)\n\nNearby drawing text tokens:\n- 35-24L002  d=52  layer=P-EQUIPMENT_POS\n- GT-2540  d=65  layer=P-EQUIPMENT_POS\n- DN500  d=89  layer=P-PTERMINAL_POS\n- DN600  d=137  layer=P-PTERMINAL_POS\n- DN300  d=111  layer=P-PTERMINAL_POS\n- DN\u00d860  d=124  layer=P-PTERMINAL_POS\n- 623  d=104  layer=P-INSTRPOS_TEXTS\n- 35-24  d=93  layer=P-INSTRPOS_TEXTS\n- 626  d=167  layer=P-INSTRPOS_TEXTS\n- 628  d=176  layer=P-INSTRPOS_TEXTS\n- 625  d=160  layer=P-INSTRPOS_TEXTS\n- 622  d=162  layer=P-INSTRPOS_TEXTS\n- 662  d=4  layer=P-INSTRPOS_TEXTS\n- 35-24-002.1  d=72  layer=P-MOTOR_POS\n- 15  d=77  layer=P-MOTOR_POS\n- 1500  d=78  layer=P-MOTOR_POS\n- 35-24-033  d=56  layer=P-VALVEPOS\n- 003-15  d=61  layer=P-VALVEPOS\n- 35-24-032  d=105  layer=P-VALVEPOS\n- 35-24-1110  d=154  layer=P-VALVEPOS\n- 003-25  d=160  layer=P-VALVEPOS\n- 35-24-030  d=128  layer=P-VALVEPOS\n- 001-65  d=130  layer=P-VALVEPOS\n- 35-24-029  d=140  layer=P-VALVEPOS\n- 35-24-149  d=114  layer=P-LINEPOS\n- 35-24-152  d=182  layer=P-LINEPOS\n- 35-24-151  d=199  layer=P-LINEPOS\n- 35-24-150  d=156  layer=P-LINEPOS\n- 35-24HV-623  d=129  layer=P-CVPOS\n- 65  d=137  layer=P-CVPOS\n- 35-24HV-626  d=175  layer=P-CVPOS\n- 300  d=182  layer=P-CVPOS\n- 35-24HV-628  d=185  layer=P-CVPOS\n- 35-24LV-622  d=143  layer=P-CVPOS",
+      "ai": {
+        "raw_text": "Looking at the P&ID image, I can see:\n\n- **35-24ES-662** is labeled \"BROKE THICKENER EMERGENCY STOP\" \u2014 it's an instrument (ES = Emergency Stop)\n- It sits adjacent to the Broke Thickener equipment (35-24L002, GT-2540)\n- The ES instrument has no child instruments, valves, or lines directly attached to it \u2014 it's a standalone instrument tag\n- The nearby equipment (35-24L002, motor 35-24-002.1, valves, lines) all belong to the thickener circuit, not to the ES instrument itself\n\nPer Rule 8 and the worked examples: *\"If 35-24ES-662 is an instrument (LC/PI/FV/XS/\u2026) and no labelled accessories sit on it, emit the FUNCTION header + description only \u2014 empty `rows` is correct.\"*\n\nThe ES instrument is a standalone emergency stop pushbutton/device. No sub-instruments, no lines, no valves are tagged as children of the ES itself. All surrounding equipment belongs to 35-24L002 (the thickener vessel) which is a peer.\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24ES-662\",\n  \"description\": \"35-24ES-662 BROKE THICKENER EMRG STOP\",\n  \"rows\": [],\n  \"peers\": [\n    {\n      \"tag\": \"35-24L002\",\n      \"evidence\": \"Broke Thickener vessel GT-2540 \u2014 peer primary equipment, not a child of the ES instrument\"\n    },\n    {\n      \"tag\": \"35-24-002.1\",\n      \"evidence\": \"Motor branch for 35-24L002 thickener drive, numeric base 002 does not match ES-662\"\n    },\n    {\n      \"tag\": \"35-24-033\",\n      \"evidence\": \"Hand valve on thickener circuit, belongs to 35-24L002 circuit not ES instrument\"\n    },\n    {\n      \"tag\": \"35-24-032\",\n      \"evidence\": \"Hand valve on thickener circuit, belongs to 35-24L002 circuit\"\n    },\n    {\n      \"tag\": \"35-24-029\",\n      \"evidence\": \"Hand valve on thickener circuit, belongs to 35-24L002 circuit\"\n    },\n    {\n      \"tag\": \"35-24-030\",\n      \"evidence\": \"Hand valve on thickener circuit, belongs to 35-24L002 circuit\"\n    },\n    {\n      \"tag\": \"35-24-1110\",\n      \"evidence\": \"Valve on thickener discharge circuit, belongs to 35-24L002\"\n    },\n    {\n      \"tag\": \"35-24HV-623\",\n      \"evidence\": \"Control valve on thickener circuit, belongs to 35-24L002\"\n    },\n    {\n      \"tag\": \"35-24HV-626\",\n      \"evidence\": \"Control valve on thickener circuit, belongs to 35-24L002\"\n    },\n    {\n      \"tag\": \"35-24LV-622\",\n      \"evidence\": \"Level control valve on thickener circuit, belongs to 35-24L002\"\n    },\n    {\n      \"tag\": \"35-24-149\",\n      \"evidence\": \"Process line WAA-300 on thickener circuit, belongs to 35-24L002\"\n    },\n    {\n      \"tag\": \"35-24-150\",\n      \"evidence\": \"Process line WAA-400 on thickener circuit, belongs to 35-24L002\"\n    },\n    {\n      \"tag\": \"35-24-151\",\n      \"evidence\": \"Process line PP-600 on thickener circuit, belongs to 35-24L002\"\n    },\n    {\n      \"tag\": \"35-24-152\",\n      \"evidence\": \"Process line PP-300 on thickener circuit, belongs to 35-24L002\"\n    }\n  ],\n  \"notes\": [\n    \"35-24ES-662 is a standalone Emergency Stop instrument for the Broke Thickener GT-2540; no child tags are directly subordinate to the ES device itself\",\n    \"All surrounding valves, lines and instruments belong to the 35-24L002 thickener vessel circuit\"\n  ],\n  \"confidence\": \"high\"\n}\n```",
+        "parsed": {
+          "sub_process": "BR1",
+          "function": "35-24ES-662",
+          "description": "35-24ES-662 BROKE THICKENER EMRG STOP",
+          "rows": [],
+          "peers": [
+            {
+              "tag": "35-24L002",
+              "evidence": "Broke Thickener vessel GT-2540 \u2014 peer primary equipment, not a child of the ES instrument"
+            },
+            {
+              "tag": "35-24-002.1",
+              "evidence": "Motor branch for 35-24L002 thickener drive, numeric base 002 does not match ES-662"
+            },
+            {
+              "tag": "35-24-033",
+              "evidence": "Hand valve on thickener circuit, belongs to 35-24L002 circuit not ES instrument"
+            },
+            {
+              "tag": "35-24-032",
+              "evidence": "Hand valve on thickener circuit, belongs to 35-24L002 circuit"
+            },
+            {
+              "tag": "35-24-029",
+              "evidence": "Hand valve on thickener circuit, belongs to 35-24L002 circuit"
+            },
+            {
+              "tag": "35-24-030",
+              "evidence": "Hand valve on thickener circuit, belongs to 35-24L002 circuit"
+            },
+            {
+              "tag": "35-24-1110",
+              "evidence": "Valve on thickener discharge circuit, belongs to 35-24L002"
+            },
+            {
+              "tag": "35-24HV-623",
+              "evidence": "Control valve on thickener circuit, belongs to 35-24L002"
+            },
+            {
+              "tag": "35-24HV-626",
+              "evidence": "Control valve on thickener circuit, belongs to 35-24L002"
+            },
+            {
+              "tag": "35-24LV-622",
+              "evidence": "Level control valve on thickener circuit, belongs to 35-24L002"
+            },
+            {
+              "tag": "35-24-149",
+              "evidence": "Process line WAA-300 on thickener circuit, belongs to 35-24L002"
+            },
+            {
+              "tag": "35-24-150",
+              "evidence": "Process line WAA-400 on thickener circuit, belongs to 35-24L002"
+            },
+            {
+              "tag": "35-24-151",
+              "evidence": "Process line PP-600 on thickener circuit, belongs to 35-24L002"
+            },
+            {
+              "tag": "35-24-152",
+              "evidence": "Process line PP-300 on thickener circuit, belongs to 35-24L002"
+            }
+          ],
+          "notes": [
+            "35-24ES-662 is a standalone Emergency Stop instrument for the Broke Thickener GT-2540; no child tags are directly subordinate to the ES device itself",
+            "All surrounding valves, lines and instruments belong to the 35-24L002 thickener vessel circuit"
+          ],
+          "confidence": "high"
+        },
+        "model_id": "eu.anthropic.claude-sonnet-4-6",
+        "region": "eu-west-2",
+        "prompt_file": "pid_hierarchy_gt_v7_floc.md",
+        "candidates": [
+          "35-24",
+          "35-24ES-662",
+          "35-24L002",
+          "35-24-033",
+          "35-24-002.1",
+          "35-24-032",
+          "35-24-149",
+          "35-24-030",
+          "35-24HV-623",
+          "35-24-029",
+          "35-24LV-622",
+          "35-24T605",
+          "35-24-1110",
+          "35-24-150",
+          "35-24HV-626",
+          "35-24-152",
+          "35-24HV-628",
+          "35-24-151"
+        ],
+        "prompt_chars": 9553,
+        "vision": true
+      },
+      "refined_rows": []
+    }
+  ]
+}
