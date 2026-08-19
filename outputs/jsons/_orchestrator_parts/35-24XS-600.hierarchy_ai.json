@@ -1,0 +1,205 @@
+{
+  "input": "/Users/code-huddle-ensemble/Desktop/dwg-reader/inputs/Broke System.dwg",
+  "mode": "viewer_shot_ai_gt",
+  "evidence_dir": "/Users/code-huddle-ensemble/Desktop/dwg-reader/outputs/evidence",
+  "site": "Shotton Paper Mill, United Kingdom",
+  "line": "Shotton PM3",
+  "process": "Broke System",
+  "sub_process": "BR1",
+  "model_id": "eu.anthropic.claude-sonnet-4-6",
+  "region": "eu-west-2",
+  "prompt_file": "pid_hierarchy_gt_v7_floc.md",
+  "legend": "/Users/code-huddle-ensemble/Desktop/dwg-reader/inputs/legend.png",
+  "results": [
+    {
+      "tag": "35-24XS-600",
+      "shot": "/Users/code-huddle-ensemble/Desktop/dwg-reader/outputs/evidence/Broke System.viewer_35-24XS-600.png",
+      "parent": {
+        "category": "instruments",
+        "block_name": "",
+        "handle": "",
+        "layer": "P-INSTRPOS_TEXTS",
+        "x": 3883.408826128629,
+        "y": 361.04166625,
+        "resolved_tag": "35-24XS-600",
+        "nearby_tags": "XS; 600; 35-24",
+        "nearby_descriptions": "XS 600 (35-24)",
+        "confidence": "high"
+      },
+      "candidates": [
+        "35-24",
+        "35-24XS-600",
+        "35-24P502",
+        "35-24P501",
+        "35-24-072",
+        "35-24T601",
+        "35-24-118",
+        "35-24LV3-609",
+        "35-24-079",
+        "35-24-1138",
+        "35-24-119",
+        "35-24-1101",
+        "35-24LV2-609",
+        "35-24-126",
+        "35-24-120",
+        "35-24-235",
+        "35-24-1125",
+        "35-24-074",
+        "35-24LV1-609",
+        "35-24L401",
+        "35-24L403",
+        "35-24-075",
+        "35-24-078",
+        "35-24-065",
+        "35-24-117",
+        "35-24-062",
+        "35-24-063",
+        "35-24-1120",
+        "35-24-113",
+        "35-24-127"
+      ],
+      "dossier": "Parent tag: 35-24XS-600\nParent category/block: instruments / \nParent XY: (3883.408826128629, 361.04166625)\nNearby descriptions: XS 600 (35-24)\n\nSame-tag CAD family:\n- (none)\n\nNearby line numbers (short ids preferred in output):\n- 35-24-126  full=35-24-126-PP-200-E10H2A  d=121  layer=P-LINEPOS\n- 35-24-117  full=35-24-117-PP-250-E10H2A  d=169  layer=P-LINEPOS\n- 35-24-113  full=35-24-113-PP-800-E10H2A  d=199  layer=P-LINEPOS\n- 35-24-119  full=35-24-119-PP-300-E10H2A  d=108  layer=P-LINEPOS\n- 35-24-120  full=35-24-120-PP-900-E10H2A  d=121  layer=P-LINEPOS\n- 35-24-118  full=35-24-118-PP-200-E10H2A  d=95  layer=P-LINEPOS\n\nNearby devices (valves/instruments/pumps/\u2026):\n- line_markers: PPI_1100A  d=96  block=PPI_1100A\n- valves: PPI_0900A  d=101  block=PPI_0900A\n- control_valves: PPI_1000A  d=146  block=PPI_1000A\n- instruments: PPI_1204A  d=144  block=PPI_1204A\n- pumps: P7A0200  d=96  block=P7A0200\n\nNearby peer primary equipment (do NOT nest under parent):\n- 35-24T601 (tanks, d=148)\n- 35-24L401 (agitators, d=184)\n- 35-24L403 (agitators, d=178)\n- 35-24P502 (pumps, d=96)\n- 35-24P501 (pumps, d=111)\n\nNearby drawing text tokens:\n- S1  d=125  layer=P-TEXT\n- A1  d=137  layer=P-TEXT\n- A2  d=125  layer=P-TEXT\n- 2 bar  d=131  layer=P-TEXT\n- 2621 ADTPD  d=160  layer=P-TEXT\n- SFVPT-110-2  d=164  layer=P-TEXT\n- 35-24L403  d=177  layer=P-AGITATOR_POS\n- 35-24L401  d=183  layer=P-AGITATOR_POS\n- 600  d=4  layer=P-INSTRPOS_TEXTS\n- 35-24  d=11  layer=P-INSTRPOS_TEXTS\n- 601  d=19  layer=P-INSTRPOS_TEXTS\n- 603  d=49  layer=P-INSTRPOS_TEXTS\n- 602  d=34  layer=P-INSTRPOS_TEXTS\n- 609  d=118  layer=P-INSTRPOS_TEXTS\n- 607  d=144  layer=P-INSTRPOS_TEXTS\n- 597  d=43  layer=P-INSTRPOS_TEXTS\n- SHOWER S1  d=44  layer=P-TEXT\n- 664  d=59  layer=P-INSTRPOS_TEXTS\n- 671  d=192  layer=P-INSTRPOS_TEXTS\n- 35-24T601  d=146  layer=P-TANK_POS\n- 176 m\u00b3  d=158  layer=P-TANK_POS\n- 2,8 %  d=162  layer=P-TANK_POS\n- 35-24P501  d=153  layer=P-PUMP_POS\n- 1300  d=158  layer=P-PUMP_POS\n- 50  d=159  layer=P-PUMP_POS\n- 780  d=163  layer=P-PUMP_POS\n- 1000  d=164  layer=P-PUMP_POS\n- 35-24P502  d=155  layer=P-PUMP_POS\n- 60  d=160  layer=P-PUMP_POS\n- 55  d=158  layer=P-PUMP_POS\n- 1500  d=163  layer=P-PUMP_POS\n- 35-24-1125  d=130  layer=P-VALVEPOS\n- 001-80  d=133  layer=P-VALVEPOS\n- 35-24-079  d=105  layer=P-VALVEPOS\n- 350-200  d=108  layer=P-VALVEPOS\n- 35-24-078  d=155  layer=P-VALVEPOS\n- 350-250  d=159  layer=P-VALVEPOS\n- 35-24-1101  d=117  layer=P-VALVEPOS\n- 003-50  d=119  layer=P-VALVEPOS\n- 35-24-075  d=146  layer=P-VALVEPOS",
+      "ai": {
+        "raw_text": "Looking at the P&ID image, I can see that 35-24XS-600 is a LOCAL PANEL instrument block containing several instruments:\n\n- **35-24XS-600** \u2014 MCS SIGNALS (the parent, square symbol with diamond = MCS control)\n- **35-24ES-601** \u2014 UTM EMERGENCY STOP\n- **35-24KJ-602** \u2014 COUCH PIT START\n- **35-24KJ-603** \u2014 COUCH PIT STOP\n- **35-24HS-664** \u2014 COUCH PIT START/STOP (local panel, square symbol)\n- **35-24HI-597** \u2014 COUCH PIT SHOWER S1 (locally mounted, circle symbol)\n- **35-24HS-600** (the circle HS above HI-597) \u2014 appears to be a separate HS instrument at 35-24\n\nThe red bounding box clearly encloses XS-600, ES-601, KJ-602, KJ-603 as the core panel instruments. HS-664 and HI-597 are in the local panel section but slightly outside/adjacent.\n\nThe nearby instruments 35-24LC-609, 35-24LV3-609, 35-24LV2-609, 35-24LV1-609 are clearly separate level control instruments not part of this panel.\n\nPeers are the major equipment visible: 35-24T601, 35-24P501, 35-24P502, 35-24L401, 35-24L403.\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24XS-600\",\n  \"description\": \"35-24XS-600 COUCH PIT MCS SIGNALS\",\n  \"rows\": [\n    {\"equipment\": \"35-24ES-601\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24ES-601 UTM EMERGENCY STOP\"},\n    {\"equipment\": \"35-24KJ-602\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24KJ-602 COUCH PIT START\"},\n    {\"equipment\": \"35-24KJ-603\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24KJ-603 COUCH PIT STOP\"},\n    {\"equipment\": \"35-24HS-664\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24HS-664 COUCH PIT START STOP\"},\n    {\"equipment\": \"35-24HI-597\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24HI-597 COUCH PIT SHOWER S1\"}\n  ],\n  \"peers\": [\n    {\"tag\": \"35-24T601\", \"evidence\": \"separate vessel tag visible nearby, not part of XS-600 panel\"},\n    {\"tag\": \"35-24P501\", \"evidence\": \"separate pump, peer major equipment\"},\n    {\"tag\": \"35-24P502\", \"evidence\": \"separate pump, peer major equipment\"},\n    {\"tag\": \"35-24L401\", \"evidence\": \"separate agitator, peer major equipment\"},\n    {\"tag\": \"35-24L403\", \"evidence\": \"separate agitator, peer major equipment\"},\n    {\"tag\": \"35-24LC-609\", \"evidence\": \"level controller on tank circuit, not part of XS-600 panel\"},\n    {\"tag\": \"35-24LV3-609\", \"evidence\": \"level control valve on tank circuit, not part of XS-600 panel\"},\n    {\"tag\": \"35-24LV2-609\", \"evidence\": \"level control valve on tank circuit, not part of XS-600 panel\"},\n    {\"tag\": \"35-24LV1-609\", \"evidence\": \"level control valve on tank circuit, not part of XS-600 panel\"}\n  ],\n  \"notes\": [\n    \"35-24XS-600 is a LOCAL PANEL instrument block labelled MCS SIGNALS; the red crop boundary encloses ES-601, KJ-602, KJ-603 as direct panel children\",\n    \"35-24HS-664 and 35-24HI-597 are shown in the LOCAL PANEL section and are included as equipment children of this panel function\",\n    \"Line tags 35-24-118, 35-24-119, 35-24-120 visible at bottom of crop belong to the piping circuit, not to this instrument panel FUNCTION\"\n  ],\n  \"confidence\": \"high\"\n}\n```",
+        "parsed": {
+          "sub_process": "BR1",
+          "function": "35-24XS-600",
+          "description": "35-24XS-600 COUCH PIT MCS SIGNALS",
+          "rows": [
+            {
+              "equipment": "35-24ES-601",
+              "subequipment": "",
+              "mask": "",
+              "description": "35-24ES-601 UTM EMERGENCY STOP"
+            },
+            {
+              "equipment": "35-24KJ-602",
+              "subequipment": "",
+              "mask": "",
+              "description": "35-24KJ-602 COUCH PIT START"
+            },
+            {
+              "equipment": "35-24KJ-603",
+              "subequipment": "",
+              "mask": "",
+              "description": "35-24KJ-603 COUCH PIT STOP"
+            },
+            {
+              "equipment": "35-24HS-664",
+              "subequipment": "",
+              "mask": "",
+              "description": "35-24HS-664 COUCH PIT START STOP"
+            },
+            {
+              "equipment": "35-24HI-597",
+              "subequipment": "",
+              "mask": "",
+              "description": "35-24HI-597 COUCH PIT SHOWER S1"
+            }
+          ],
+          "peers": [
+            {
+              "tag": "35-24T601",
+              "evidence": "separate vessel tag visible nearby, not part of XS-600 panel"
+            },
+            {
+              "tag": "35-24P501",
+              "evidence": "separate pump, peer major equipment"
+            },
+            {
+              "tag": "35-24P502",
+              "evidence": "separate pump, peer major equipment"
+            },
+            {
+              "tag": "35-24L401",
+              "evidence": "separate agitator, peer major equipment"
+            },
+            {
+              "tag": "35-24L403",
+              "evidence": "separate agitator, peer major equipment"
+            },
+            {
+              "tag": "35-24LC-609",
+              "evidence": "level controller on tank circuit, not part of XS-600 panel"
+            },
+            {
+              "tag": "35-24LV3-609",
+              "evidence": "level control valve on tank circuit, not part of XS-600 panel"
+            },
+            {
+              "tag": "35-24LV2-609",
+              "evidence": "level control valve on tank circuit, not part of XS-600 panel"
+            },
+            {
+              "tag": "35-24LV1-609",
+              "evidence": "level control valve on tank circuit, not part of XS-600 panel"
+            }
+          ],
+          "notes": [
+            "35-24XS-600 is a LOCAL PANEL instrument block labelled MCS SIGNALS; the red crop boundary encloses ES-601, KJ-602, KJ-603 as direct panel children",
+            "35-24HS-664 and 35-24HI-597 are shown in the LOCAL PANEL section and are included as equipment children of this panel function",
+            "Line tags 35-24-118, 35-24-119, 35-24-120 visible at bottom of crop belong to the piping circuit, not to this instrument panel FUNCTION"
+          ],
+          "confidence": "high"
+        },
+        "model_id": "eu.anthropic.claude-sonnet-4-6",
+        "region": "eu-west-2",
+        "prompt_file": "pid_hierarchy_gt_v7_floc.md",
+        "candidates": [
+          "35-24",
+          "35-24XS-600",
+          "35-24P502",
+          "35-24P501",
+          "35-24-072",
+          "35-24T601",
+          "35-24-118",
+          "35-24LV3-609",
+          "35-24-079",
+          "35-24-1138",
+          "35-24-119",
+          "35-24-1101",
+          "35-24LV2-609",
+          "35-24-126",
+          "35-24-120",
+          "35-24-235",
+          "35-24-1125",
+          "35-24-074",
+          "35-24LV1-609",
+          "35-24L401",
+          "35-24L403",
+          "35-24-075",
+          "35-24-078",
+          "35-24-065",
+          "35-24-117",
+          "35-24-062",
+          "35-24-063",
+          "35-24-1120",
+          "35-24-113",
+          "35-24-127"
+        ],
+        "prompt_chars": 10063,
+        "vision": true
+      },
+      "refined_rows": [
+        {
+          "equipment": "35-24-118",
+          "subequipment": "",
+          "mask": "",
+          "description": "35-24-118"
+        },
+        {
+          "equipment": "35-24-119",
+          "subequipment": "",
+          "mask": "",
+          "description": "35-24-119"
+        },
+        {
+          "equipment": "35-24-120",
+          "subequipment": "",
+          "mask": "",
+          "description": "35-24-120"
+        }
+      ]
+    }
+  ]
+}

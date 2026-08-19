@@ -1,14 +1,23 @@
 ORDER,SITE,LINE,PROCESS,SUB-PROCESS,FUNCTION,EQUIPMENT,SUB-EQUIPMENT,MASK,DESCRIPTION
 1,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,,,5001-PM03-BR,BROKE SYSTEM
 2,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,BR1,,,,5001-PM03-BR-BR1,BROKE SYSTEM
-3,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,BR1,35-24P512,,,5001-PM03-BR-BR1-35-24P512,35-24P512 BROKE PMP
-4,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,35-24-049,,,35-24-049 SUCT ISOL VLV NC
-5,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,35-24-048,,,35-24-048 SUCT DRN VLV NC
-6,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,35-24-209,,,35-24-209 DIS CTL VLV AV FLS
-7,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,35-24HV-618,,,35-24HV-618 DIS ISOL VLV AV-M
-8,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,35-24NV-616,,,35-24NV-616 RECIRC VLV AV NC
-9,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,35-24-047,,,35-24-047 BRANCH VLV NC
-10,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,35-24P512.1,,,35-24P512.1
-11,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,35-24-512.1,,,35-24-512.1
-12,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,35-24P512.2,,,35-24P512.2
-13,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,35-24-512.2,,,35-24-512.2
+3,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,BR1,35-24P512,,,5001-PM03-BR-BR1-35-24P512,35-24P512 BROKE SYS PMP
+4,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,35-24-137,,,35-24-137 SUCT LN WAF-125
+5,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,,35-24-049,,35-24-049 ISOL VLV NC
+6,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,35-24-134,,,35-24-134 SUCT LN WAF-125
+7,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,,35-24-209,,35-24-209 ISOL VLV AV
+8,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,,35-24-048,,35-24-048 ISOL VLV NC
+9,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,35-24-135,,,35-24-135 DIS LN PP-400
+10,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,,35-24-045,,35-24-045 CHK VLV CHK
+11,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,,35-24-047,,35-24-047 ISOL VLV NC
+12,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,,35-24HV-618,,35-24HV-618 CTRL VLV AV
+13,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,,35-24NV-616,,35-24NV-616 ISOL VLV AV NC
+14,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,35-24-044,,,35-24-044 ISOL VLV HV
+15,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,35-24P512.1,,,35-24P512.1
+16,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,35-24-512.1,,,35-24-512.1
+17,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,35-24P512.2,,,35-24P512.2
+18,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,35-24-512.2,,,35-24-512.2
+19,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,35-24P512.3,,,35-24P512.3
+20,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,35-24-512.3,,,35-24-512.3
+21,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,35-24P512.4,,,35-24P512.4
+22,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,35-24-512.4,,,35-24-512.4

@@ -1,0 +1,10 @@
+ORDER,SITE,LINE,PROCESS,SUB-PROCESS,FUNCTION,EQUIPMENT,SUB-EQUIPMENT,MASK,DESCRIPTION
+1,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,,,5001-PM03-BR,BROKE SYSTEM
+2,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,BR1,,,,5001-PM03-BR-BR1,BROKE SYSTEM
+3,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,BR1,35-24-117,,,5001-PM03-BR-BR1-35-24-117,35-24-117 PP-250 COUCH PIT LN
+4,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,35-24-117,,,35-24-117 PP-250 PROS LN
+5,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,35-24-078,,,35-24-078 PP-350 BRANCH SPOOL
+6,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,,35-24-075,,35-24-075 VLV HV
+7,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,35-24-074,,,35-24-074 BRANCH SPOOL 003-50
+8,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,35-24-401.2,,,35-24-401.2
+9,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,35-24-403.2,,,35-24-403.2

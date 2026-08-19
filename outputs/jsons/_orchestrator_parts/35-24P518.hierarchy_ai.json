@@ -291,6 +291,30 @@
           "subequipment": "",
           "mask": "",
           "description": "35-24-518.2"
+        },
+        {
+          "equipment": "35-24P518.3",
+          "subequipment": "",
+          "mask": "",
+          "description": "35-24P518.3"
+        },
+        {
+          "equipment": "35-24-518.3",
+          "subequipment": "",
+          "mask": "",
+          "description": "35-24-518.3"
+        },
+        {
+          "equipment": "35-24P518.4",
+          "subequipment": "",
+          "mask": "",
+          "description": "35-24P518.4"
+        },
+        {
+          "equipment": "35-24-518.4",
+          "subequipment": "",
+          "mask": "",
+          "description": "35-24-518.4"
         }
       ]
     }

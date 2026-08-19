@@ -1,0 +1,138 @@
+{
+  "input": "/Users/code-huddle-ensemble/Desktop/dwg-reader/inputs/Broke System.dwg",
+  "mode": "viewer_shot_ai_gt",
+  "evidence_dir": "/Users/code-huddle-ensemble/Desktop/dwg-reader/outputs/evidence",
+  "site": "Shotton Paper Mill, United Kingdom",
+  "line": "Shotton PM3",
+  "process": "Broke System",
+  "sub_process": "BR1",
+  "model_id": "eu.anthropic.claude-sonnet-4-6",
+  "region": "eu-west-2",
+  "prompt_file": "pid_hierarchy_gt_v7_floc.md",
+  "legend": "/Users/code-huddle-ensemble/Desktop/dwg-reader/inputs/legend.png",
+  "results": [
+    {
+      "tag": "35-24HS-653",
+      "shot": "/Users/code-huddle-ensemble/Desktop/dwg-reader/outputs/evidence/Broke System.viewer_35-24HS-653.png",
+      "parent": {
+        "category": "instruments",
+        "block_name": "",
+        "handle": "",
+        "layer": "P-INSTRPOS_TEXTS",
+        "x": 1895.770232732733,
+        "y": 411.3073000000001,
+        "resolved_tag": "35-24HS-653",
+        "nearby_tags": "HS; 653; 35-24",
+        "nearby_descriptions": "HS 653 (35-24)",
+        "confidence": "high"
+      },
+      "candidates": [
+        "35-24",
+        "35-24HS-653",
+        "35-24P507",
+        "35-24L006",
+        "35-24HV-548",
+        "35-24-051",
+        "35-24-049",
+        "35-24L005",
+        "35-24-232",
+        "35-24-233",
+        "35-24-140",
+        "35-24P520"
+      ],
+      "dossier": "Parent tag: 35-24HS-653\nParent category/block: instruments / \nParent XY: (1895.770232732733, 411.3073000000001)\nNearby descriptions: HS 653 (35-24)\n\nSame-tag CAD family:\n- (none)\n\nNearby line numbers (short ids preferred in output):\n- 35-24-051  full=35-24-051-PP-100-E10H2A  d=150  layer=P-LINEPOS\n- 35-24-049  full=35-24-049-PP-800-E10H2A  d=158  layer=P-LINEPOS\n\nNearby devices (valves/instruments/pumps/\u2026):\n- line_markers: PPI_1100A  d=159  block=PPI_1100A\n- valves: PPI_0900A  d=193  block=PPI_0900A\n- control_valves: PPI_1000A  d=147  block=PPI_1000A\n- instruments: PPI_1205A  d=91  block=PPI_1205A\n- pumps: PPI_0521A-25_0  d=185  block=PPI_0521A-25_0\n- fittings: P7A1220  d=189  block=P7A1220\n\nNearby peer primary equipment (do NOT nest under parent):\n- 35-24L006 (process_equipment, d=146)\n- 35-24P507 (pumps, d=185)\n\nNearby drawing text tokens:\n- S3  d=181  layer=P-TEXT\n- S2  d=162  layer=P-TEXT\n- S4  d=185  layer=P-TEXT\n- 2 bar  d=168  layer=P-TEXT\n- S1/ST1  d=143  layer=P-TEXT\n- 35-24  d=61  layer=P-INSTRPOS_TEXTS\n- SHOWER S1  d=41  layer=P-TEXT\n- 35-24L006  d=147  layer=P-EQUIPMENT_POS\n- BROKE CONVEYOR 3  d=156  layer=P-EQUIPMENT_POS\n- 541  d=168  layer=P-INSTRPOS_TEXTS\n- 548  d=142  layer=P-INSTRPOS_TEXTS\n- 544  d=168  layer=P-INSTRPOS_TEXTS\n- 543  d=168  layer=P-INSTRPOS_TEXTS\n- 542  d=94  layer=P-INSTRPOS_TEXTS\n- 552  d=51  layer=P-INSTRPOS_TEXTS\n- 555  d=52  layer=P-INSTRPOS_TEXTS\n- 653  d=8  layer=P-INSTRPOS_TEXTS\n- 652  d=14  layer=P-INSTRPOS_TEXTS\n- 534  d=43  layer=P-INSTRPOS_TEXTS\n- 35-24P507  d=188  layer=P-PUMP_POS\n- 20  d=193  layer=P-PUMP_POS\n- 10  d=193  layer=P-PUMP_POS\n- 4  d=198  layer=P-PUMP_POS\n- 1500  d=198  layer=P-PUMP_POS\n- 35-24-232  d=198  layer=P-VALVEPOS\n- 001-80  d=199  layer=P-VALVEPOS\n- 35-24-051  d=150  layer=P-LINEPOS\n- 35-24-049  d=158  layer=P-LINEPOS\n- 35-24HV-548  d=148  layer=P-CVPOS\n- 80  d=151  layer=P-CVPOS",
+      "ai": {
+        "raw_text": "Looking at the P&ID image, I can see that 35-24HS-653 is a hand switch (HS) instrument paired with 35-24HI-653, labeled \"REEL PULPER SHOWER S2\". It appears in a local panel alongside other HS/HI pairs (542, 552/555, 653/534, 652).\n\nThe instrument 35-24HS-653 is a standalone hand switch (selector/pushbutton) on the local panel for controlling Reel Pulper Shower S2. Its companion indicator is 35-24HI-653 (visible directly below it in the image).\n\nFrom the dossier, nearby instrument text tokens include 653 and 652 very close together, and 534 also nearby. The HS-653 and HI-653 form a paired set for \"SHOWER S2\".\n\nSince 35-24HS-653 is an instrument (hand switch), per Rule 8/Example C guidance: if it's an instrument with no labelled accessories sitting on it as children, emit the FUNCTION header + description only \u2014 but I can see 35-24HI-653 is clearly paired/associated with it on the same panel position.\n\nThe HI-653 is a companion indicator to HS-653 \u2014 it sits directly below the HS on the same panel position, making it a child instrument of this function.\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24HS-653\",\n  \"description\": \"35-24HS-653 REEL PLPR SHOWER S2 HS\",\n  \"rows\": [\n    {\n      \"equipment\": \"35-24HI-653\",\n      \"subequipment\": \"\",\n      \"mask\": \"\",\n      \"description\": \"35-24HI-653 REEL PLPR SHOWER S2 HI\"\n    }\n  ],\n  \"peers\": [\n    {\n      \"tag\": \"35-24HS-542\",\n      \"evidence\": \"Separate HS instrument on same local panel \u2014 REEL PULPER START/STOP, different function\"\n    },\n    {\n      \"tag\": \"35-24HS-652\",\n      \"evidence\": \"Peer HS instrument on same panel \u2014 REEL PULPER SHOWER S4, different numeric base\"\n    },\n    {\n      \"tag\": \"35-24HI-652\",\n      \"evidence\": \"Companion HI to peer HS-652, different numeric base\"\n    },\n    {\n      \"tag\": \"35-24HS-534\",\n      \"evidence\": \"Peer HS instrument on same panel \u2014 REEL PULPER SHOWER S3, different numeric base\"\n    },\n    {\n      \"tag\": \"35-24HI-534\",\n      \"evidence\": \"Companion HI to peer HS-534, different numeric base\"\n    },\n    {\n      \"tag\": \"35-24HS-552\",\n      \"evidence\": \"Peer HS instrument on same panel \u2014 REEL PULPER TAIL SHOWER ST, different numeric base\"\n    },\n    {\n      \"tag\": \"35-24HI-552\",\n      \"evidence\": \"Companion HI to peer HS-552, different numeric base\"\n    },\n    {\n      \"tag\": \"35-24HS-555\",\n      \"evidence\": \"Peer HS instrument on same panel \u2014 REEL PULPER SHOWER S1, different numeric base\"\n    },\n    {\n      \"tag\": \"35-24HI-555\",\n      \"evidence\": \"Companion HI to peer HS-555, different numeric base\"\n    },\n    {\n      \"tag\": \"35-24L006\",\n      \"evidence\": \"Nearby peer process equipment (broke conveyor/vessel), not a child of an instrument function\"\n    },\n    {\n      \"tag\": \"35-24P507\",\n      \"evidence\": \"Nearby peer pump, not a child of an instrument function\"\n    },\n    {\n      \"tag\": \"35-24HV-548\",\n      \"evidence\": \"Nearby control valve on adjacent line, belongs to its own line circuit not to this HS\"\n    }\n  ],\n  \"notes\": [\n    \"35-24HS-653 is a local panel hand switch for REEL PULPER SHOWER S2 control\",\n    \"35-24HI-653 is the paired hand indicator directly associated with this HS on the same panel position\",\n    \"All other HS/HI pairs on the same local panel are peers with different numeric bases\"\n  ],\n  \"confidence\": \"high\"\n}\n```",
+        "parsed": {
+          "sub_process": "BR1",
+          "function": "35-24HS-653",
+          "description": "35-24HS-653 REEL PLPR SHOWER S2 HS",
+          "rows": [
+            {
+              "equipment": "35-24HI-653",
+              "subequipment": "",
+              "mask": "",
+              "description": "35-24HI-653 REEL PLPR SHOWER S2 HI"
+            }
+          ],
+          "peers": [
+            {
+              "tag": "35-24HS-542",
+              "evidence": "Separate HS instrument on same local panel \u2014 REEL PULPER START/STOP, different function"
+            },
+            {
+              "tag": "35-24HS-652",
+              "evidence": "Peer HS instrument on same panel \u2014 REEL PULPER SHOWER S4, different numeric base"
+            },
+            {
+              "tag": "35-24HI-652",
+              "evidence": "Companion HI to peer HS-652, different numeric base"
+            },
+            {
+              "tag": "35-24HS-534",
+              "evidence": "Peer HS instrument on same panel \u2014 REEL PULPER SHOWER S3, different numeric base"
+            },
+            {
+              "tag": "35-24HI-534",
+              "evidence": "Companion HI to peer HS-534, different numeric base"
+            },
+            {
+              "tag": "35-24HS-552",
+              "evidence": "Peer HS instrument on same panel \u2014 REEL PULPER TAIL SHOWER ST, different numeric base"
+            },
+            {
+              "tag": "35-24HI-552",
+              "evidence": "Companion HI to peer HS-552, different numeric base"
+            },
+            {
+              "tag": "35-24HS-555",
+              "evidence": "Peer HS instrument on same panel \u2014 REEL PULPER SHOWER S1, different numeric base"
+            },
+            {
+              "tag": "35-24HI-555",
+              "evidence": "Companion HI to peer HS-555, different numeric base"
+            },
+            {
+              "tag": "35-24L006",
+              "evidence": "Nearby peer process equipment (broke conveyor/vessel), not a child of an instrument function"
+            },
+            {
+              "tag": "35-24P507",
+              "evidence": "Nearby peer pump, not a child of an instrument function"
+            },
+            {
+              "tag": "35-24HV-548",
+              "evidence": "Nearby control valve on adjacent line, belongs to its own line circuit not to this HS"
+            }
+          ],
+          "notes": [
+            "35-24HS-653 is a local panel hand switch for REEL PULPER SHOWER S2 control",
+            "35-24HI-653 is the paired hand indicator directly associated with this HS on the same panel position",
+            "All other HS/HI pairs on the same local panel are peers with different numeric bases"
+          ],
+          "confidence": "high"
+        },
+        "model_id": "eu.anthropic.claude-sonnet-4-6",
+        "region": "eu-west-2",
+        "prompt_file": "pid_hierarchy_gt_v7_floc.md",
+        "candidates": [
+          "35-24",
+          "35-24HS-653",
+          "35-24P507",
+          "35-24L006",
+          "35-24HV-548",
+          "35-24-051",
+          "35-24-049",
+          "35-24L005",
+          "35-24-232",
+          "35-24-233",
+          "35-24-140",
+          "35-24P520"
+        ],
+        "prompt_chars": 9228,
+        "vision": true
+      },
+      "refined_rows": []
+    }
+  ]
+}

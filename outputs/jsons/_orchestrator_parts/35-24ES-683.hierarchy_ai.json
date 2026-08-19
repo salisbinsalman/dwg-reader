@@ -49,7 +49,7 @@
       ],
       "dossier": "Parent tag: 35-24ES-683\nParent category/block: instruments / \nParent XY: (137.754416985986, 443.54146625)\nNearby descriptions: ES 683 (35-24)\n\nSame-tag CAD family:\n- (none)\n\nNearby line numbers (short ids preferred in output):\n- 35-24-186  full=35-24-186-WAF-100-E10H2A  d=166  layer=P-LINEPOS\n- 35-24-187  full=35-24-187-WAF-100-E10H2A  d=199  layer=P-LINEPOS\n- 35-24-193  full=35-24-193-PP-100-E10H2A  d=157  layer=P-LINEPOS\n- 35-24-192  full=35-24-192-PP-200-E10H2A  d=143  layer=P-LINEPOS\n- 35-24-191  full=35-24-191-PP-250-E10H2A  d=198  layer=P-LINEPOS\n\nNearby devices (valves/instruments/pumps/\u2026):\n- line_markers: PPI_1100A  d=199  block=PPI_1100A\n- valves: PPI_0900A  d=199  block=PPI_0900A\n- control_valves: PPI_1000A  d=186  block=PPI_1000A\n- instruments: PPI_0102B  d=196  block=PPI_0102B\n- pumps: P7A0200  d=198  block=P7A0200\n\nNearby peer primary equipment (do NOT nest under parent):\n- 35-24L009 (process_equipment, d=186)\n- 35-24P519 (pumps, d=198)\n\nNearby drawing text tokens:\n- 141 BDTPD  d=162  layer=P-TEXT\n- 674  d=180  layer=P-INSTRPOS_TEXTS\n- 35-24  d=176  layer=P-INSTRPOS_TEXTS\n- 35-24L009  d=146  layer=P-EQUIPMENT_POS\n- 681  d=189  layer=P-INSTRPOS_TEXTS\n- SHOWER S1  d=137  layer=P-TEXT\n- 682  d=71  layer=P-INSTRPOS_TEXTS\n- 683  d=4  layer=P-INSTRPOS_TEXTS\n- 684  d=19  layer=P-INSTRPOS_TEXTS\n- 685  d=34  layer=P-INSTRPOS_TEXTS\n- 692  d=11  layer=P-INSTRPOS_TEXTS\n- 35-24-198  d=198  layer=P-VALVEPOS\n- 35-24-199  d=184  layer=P-VALVEPOS\n- 003-15  d=189  layer=P-VALVEPOS\n- 35-24-196  d=198  layer=P-VALVEPOS\n- 35-24-220  d=172  layer=P-VALVEPOS\n- 001-100  d=177  layer=P-VALVEPOS\n- 35-24-186  d=166  layer=P-LINEPOS\n- 35-24-187  d=199  layer=P-LINEPOS\n- 35-24-193  d=157  layer=P-LINEPOS\n- 35-24-192  d=143  layer=P-LINEPOS\n- 35-24-191  d=198  layer=P-LINEPOS\n- 35-24XV-681  d=188  layer=P-CVPOS\n- 35-24LV1-674  d=194  layer=P-CVPOS\n- 150  d=197  layer=P-CVPOS\n- 35-24LV2-674  d=185  layer=P-CVPOS\n- 80  d=190  layer=P-CVPOS",
       "ai": {
-        "raw_text": "Looking at the P&ID image, I can see that 35-24ES-683 is an Emergency Stop instrument (ES = Emergency Stop) labeled \"BROK ROLL PULPER EMERGENCY STOP\" in the local panel/MCS signal group. It's a standalone instrument with no child lines, valves, or sub-instruments hanging off it directly.\n\nThe image shows a cluster of instruments in a panel box:\n- 35-24XS-692 (MCS SIGNAL)\n- 35-24ES-683 (BROK ROLL PULPER EMERGENCY STOP) \u2190 our parent\n- 35-24KJ-684 (BROKE ROLL PULPER START)\n- 35-24KJ-685 (BROKE ROLL PULPER STOP)\n\nThese are peer instruments in the same panel, not children of ES-683.\n\nThe nearby equipment 35-24L009 (BROKE ROLL PULPER) and 35-24P519 are clearly peer primary equipment.\n\nSince 35-24ES-683 is a standalone instrument (Emergency Stop pushbutton/switch) with no labelled accessories or sub-instruments directly attached to it, the correct output is the FUNCTION header with an empty `rows` array.\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24ES-683\",\n  \"description\": \"35-24ES-683 BROK ROLL PLPR EMRG STOP\",\n  \"rows\": [],\n  \"peers\": [\n    {\n      \"tag\": \"35-24L009\",\n      \"evidence\": \"Primary process equipment (Broke Roll Pulper vessel) \u2014 peer, not child of instrument\"\n    },\n    {\n      \"tag\": \"35-24P519\",\n      \"evidence\": \"Pump \u2014 peer primary equipment, not child of instrument\"\n    },\n    {\n      \"tag\": \"35-24XS-692\",\n      \"evidence\": \"Peer instrument in same panel (MCS Signal), not a child of ES-683\"\n    },\n    {\n      \"tag\": \"35-24KJ-684\",\n      \"evidence\": \"Peer instrument in same panel (Broke Roll Pulper Start), not a child of ES-683\"\n    },\n    {\n      \"tag\": \"35-24KJ-685\",\n      \"evidence\": \"Peer instrument in same panel (Broke Roll Pulper Stop), not a child of ES-683\"\n    }\n  ],\n  \"notes\": [\n    \"35-24ES-683 is a standalone Emergency Stop instrument (pushbutton/switch) for the Broke Roll Pulper; no child lines, valves, or sub-instruments are directly attached to it on the P&ID\",\n    \"Instrument symbol shown as local panel instrument (square with horizontal line) per legend\",\n    \"Nearby line numbers 35-24-192, 35-24-193, 35-24-186, 35-24-187, 35-24-191 belong to the L009 vessel/pump circuit, not to this instrument\"\n  ],\n  \"confidence\": \"high\"\n}\n```",
+        "raw_text": "Looking at the P&ID image, I can see that 35-24ES-683 is an Emergency Stop instrument (ES = Emergency Stop) labeled \"BROK ROLL PULPER EMERGENCY STOP\" in the local panel area. It's a standalone instrument with no child equipment/lines directly attached to it \u2014 it's part of a control panel grouping alongside XS-692, KJ-684, and KJ-685.\n\nThe instrument is clearly an ES (Emergency Stop) device associated with the Broke Roll Pulper (35-24L009). It has no piping lines, valves, or sub-instruments nested under it. The nearby instruments (XS-692, KJ-684, KJ-685, HS-682, HI-676, HS on local panel) are peer instruments in the same panel, not children of ES-683.\n\nThe peers are:\n- 35-24L009: the Broke Roll Pulper vessel it monitors (peer primary equipment)\n- 35-24P519: nearby pump (peer)\n- 35-24XS-692: peer instrument in same panel\n- 35-24KJ-684: peer instrument in same panel\n- 35-24KJ-685: peer instrument in same panel\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24ES-683\",\n  \"description\": \"35-24ES-683 BROK ROLL PLPR EMRG STOP\",\n  \"rows\": [],\n  \"peers\": [\n    {\n      \"tag\": \"35-24L009\",\n      \"evidence\": \"Broke Roll Pulper vessel \u2014 primary equipment that ES-683 monitors; peer not child\"\n    },\n    {\n      \"tag\": \"35-24P519\",\n      \"evidence\": \"Nearby pump \u2014 separate primary equipment, not under ES instrument\"\n    },\n    {\n      \"tag\": \"35-24XS-692\",\n      \"evidence\": \"MCS Signal instrument in same local panel grouping \u2014 peer instrument, not child of ES-683\"\n    },\n    {\n      \"tag\": \"35-24KJ-684\",\n      \"evidence\": \"Broke Roll Pulper Start pushbutton in same panel \u2014 peer instrument\"\n    },\n    {\n      \"tag\": \"35-24KJ-685\",\n      \"evidence\": \"Broke Roll Pulper Stop pushbutton in same panel \u2014 peer instrument\"\n    }\n  ],\n  \"notes\": [\n    \"35-24ES-683 is a standalone Emergency Stop instrument for the Broke Roll Pulper; no piping lines, valves or sub-instruments are children of this tag\",\n    \"XS-692, KJ-684, KJ-685 visible in same panel box but are peer instruments with their own tags, not nested under ES-683\",\n    \"HS-682 and HI-676 visible on local panel to the right are also peer instruments\"\n  ],\n  \"confidence\": \"high\"\n}\n```",
         "parsed": {
           "sub_process": "BR1",
           "function": "35-24ES-683",
@@ -58,29 +58,29 @@
           "peers": [
             {
               "tag": "35-24L009",
-              "evidence": "Primary process equipment (Broke Roll Pulper vessel) \u2014 peer, not child of instrument"
+              "evidence": "Broke Roll Pulper vessel \u2014 primary equipment that ES-683 monitors; peer not child"
             },
             {
               "tag": "35-24P519",
-              "evidence": "Pump \u2014 peer primary equipment, not child of instrument"
+              "evidence": "Nearby pump \u2014 separate primary equipment, not under ES instrument"
             },
             {
               "tag": "35-24XS-692",
-              "evidence": "Peer instrument in same panel (MCS Signal), not a child of ES-683"
+              "evidence": "MCS Signal instrument in same local panel grouping \u2014 peer instrument, not child of ES-683"
             },
             {
               "tag": "35-24KJ-684",
-              "evidence": "Peer instrument in same panel (Broke Roll Pulper Start), not a child of ES-683"
+              "evidence": "Broke Roll Pulper Start pushbutton in same panel \u2014 peer instrument"
             },
             {
               "tag": "35-24KJ-685",
-              "evidence": "Peer instrument in same panel (Broke Roll Pulper Stop), not a child of ES-683"
+              "evidence": "Broke Roll Pulper Stop pushbutton in same panel \u2014 peer instrument"
             }
           ],
           "notes": [
-            "35-24ES-683 is a standalone Emergency Stop instrument (pushbutton/switch) for the Broke Roll Pulper; no child lines, valves, or sub-instruments are directly attached to it on the P&ID",
-            "Instrument symbol shown as local panel instrument (square with horizontal line) per legend",
-            "Nearby line numbers 35-24-192, 35-24-193, 35-24-186, 35-24-187, 35-24-191 belong to the L009 vessel/pump circuit, not to this instrument"
+            "35-24ES-683 is a standalone Emergency Stop instrument for the Broke Roll Pulper; no piping lines, valves or sub-instruments are children of this tag",
+            "XS-692, KJ-684, KJ-685 visible in same panel box but are peer instruments with their own tags, not nested under ES-683",
+            "HS-682 and HI-676 visible on local panel to the right are also peer instruments"
           ],
           "confidence": "high"
         },

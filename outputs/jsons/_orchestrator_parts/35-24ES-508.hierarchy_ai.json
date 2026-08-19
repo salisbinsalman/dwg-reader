@@ -49,38 +49,37 @@
       ],
       "dossier": "Parent tag: 35-24ES-508\nParent category/block: instruments / \nParent XY: (670.9088261286287, 441.04166625)\nNearby descriptions: ES 508 (35-24)\n\nSame-tag CAD family:\n- (none)\n\nNearby line numbers (short ids preferred in output):\n- 35-24-007  full=35-24-007-PP-200-E10H2A  d=165  layer=P-LINEPOS\n- 35-24-002  full=35-24-002-PP-500-E10H2A  d=194  layer=P-LINEPOS\n- 35-24-009  full=35-24-009-PP-600-E10H2A  d=190  layer=P-LINEPOS\n\nNearby devices (valves/instruments/pumps/\u2026):\n- line_markers: PPI_1100A  d=192  block=PPI_1100A\n- valves: PPI_0900A  d=199  block=PPI_0900A\n- instruments: PPI_1205A  d=82  block=PPI_1205A\n- pumps: P7A0200  d=195  block=P7A0200\n\nNearby peer primary equipment (do NOT nest under parent):\n- 35-24L008 (process_equipment, d=144)\n- 35-24P509 (pumps, d=195)\n\nNearby drawing text tokens:\n- A1  d=192  layer=P-TEXT\n- A2  d=182  layer=P-TEXT\n- 2 bar  d=155  layer=P-TEXT\n- 1 bar  d=164  layer=P-TEXT\n- S2  d=154  layer=P-TEXT\n- S6  d=139  layer=P-TEXT\n- S1  d=153  layer=P-TEXT\n- S5  d=132  layer=P-TEXT\n- S3  d=111  layer=P-TEXT\n- 800 BDTPD  d=168  layer=P-TEXT\n- 35-24  d=125  layer=P-INSTRPOS_TEXTS\n- SHOWERS S1 & S2  d=147  layer=P-TEXT\n- SHOWER S3  d=150  layer=P-TEXT\n- 35-24L008  d=147  layer=P-EQUIPMENT_POS\n- HP-33G2  d=160  layer=P-EQUIPMENT_POS\n- 503  d=185  layer=P-INSTRPOS_TEXTS\n- 516  d=135  layer=P-INSTRPOS_TEXTS\n- 511  d=34  layer=P-INSTRPOS_TEXTS\n- 510  d=19  layer=P-INSTRPOS_TEXTS\n- 509  d=80  layer=P-INSTRPOS_TEXTS\n- 508  d=4  layer=P-INSTRPOS_TEXTS\n- 691  d=11  layer=P-INSTRPOS_TEXTS\n- 501  d=138  layer=P-INSTRPOS_TEXTS\n- 35-24-184  d=199  layer=P-VALVEPOS\n- 35-24-226  d=182  layer=P-VALVEPOS\n- 350-300  d=186  layer=P-VALVEPOS\n- 35-24-180  d=131  layer=P-VALVEPOS\n- 350-200  d=136  layer=P-VALVEPOS\n- 35-24-181  d=197  layer=P-VALVEPOS\n- 35-24-178  d=108  layer=P-VALVEPOS\n- 001-50  d=113  layer=P-VALVEPOS\n- 35-24-1094  d=128  layer=P-VALVEPOS\n- 35-24-173  d=170  layer=P-VALVEPOS\n- 101-125  d=174  layer=P-VALVEPOS\n- 35-24-172  d=184  layer=P-VALVEPOS\n- 35-24-007  d=165  layer=P-LINEPOS\n- 35-24-002  d=194  layer=P-LINEPOS\n- 35-24-009  d=190  layer=P-LINEPOS",
       "ai": {
-        "raw_text": "Looking at the P&ID image, I can see that **35-24ES-508** is an instrument tag \u2014 specifically an **Emergency Stop (ES)** pushbutton/switch located on a local panel. The image shows it labeled \"ES 508 (35-24)\" with the description \"WINDER AREA EMERGENCY STOP.\"\n\nFrom the image, the instrument panel box (red-bordered area) contains:\n- 35-24 XS-691 \u2014 MCS SIGNAL\n- 35-24 ES-508 \u2014 WINDER AREA EMERGENCY STOP (the parent)\n- 35-24 KJ-510 \u2014 WINDER PULPER START\n- 35-24 KJ-511 \u2014 WINDER PULPER STOP\n\nThese are **peer instruments** on the same local panel, not children of ES-508. ES-508 is a standalone instrument (emergency stop switch) \u2014 it has no sub-instruments, valves, or lines hanging off it.\n\nPer the rules: *\"If 35-24ES-508 is an instrument and no labelled accessories sit on it, emit the FUNCTION header + description only \u2014 empty `rows` is correct.\"*\n\nThe nearby instruments (XS-691, KJ-510, KJ-511) share the same panel but are independent instruments, not accessories of ES-508. The pump 35-24P509 and vessel 35-24L008 are clearly peer equipment.\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24ES-508\",\n  \"description\": \"35-24ES-508 WINDER AREA EMERG STOP\",\n  \"rows\": [],\n  \"peers\": [\n    {\n      \"tag\": \"35-24XS-691\",\n      \"evidence\": \"Peer instrument on same local panel \u2014 MCS SIGNAL, independent tag\"\n    },\n    {\n      \"tag\": \"35-24KJ-510\",\n      \"evidence\": \"Peer instrument on same local panel \u2014 WINDER PULPER START, independent tag\"\n    },\n    {\n      \"tag\": \"35-24KJ-511\",\n      \"evidence\": \"Peer instrument on same local panel \u2014 WINDER PULPER STOP, independent tag\"\n    },\n    {\n      \"tag\": \"35-24L008\",\n      \"evidence\": \"Peer process equipment \u2014 WINDER PULPER HP-33G2 vessel, different equipment class\"\n    },\n    {\n      \"tag\": \"35-24P509\",\n      \"evidence\": \"Peer pump equipment \u2014 nearby pump, different equipment class\"\n    }\n  ],\n  \"notes\": [\n    \"35-24ES-508 is a standalone emergency stop instrument with no child accessories visible on P&ID\",\n    \"Local panel also contains XS-691, KJ-510, KJ-511 \u2014 all peers, not children of ES-508\",\n    \"Nearby lines 35-24-007, 35-24-002, 35-24-009 belong to the pulper/shower circuit, not to this instrument\"\n  ],\n  \"confidence\": \"high\"\n}\n```",
+        "raw_text": "Looking at the P&ID image, I can see that **35-24ES-508** is an instrument tag \u2014 specifically an **Emergency Stop (ES)** pushbutton/switch located on a local panel. The image shows it labeled \"ES 508 (35-24)\" with the description \"WINDER AREA EMERGENCY STOP.\"\n\nFrom the image, the instrument panel box (red-bordered area) contains:\n- **35-24XS-691** \u2014 MCS SIGNAL\n- **35-24ES-508** \u2014 WINDER AREA EMERGENCY STOP (the parent)\n- **35-24KJ-510** \u2014 WINDER PULPER START\n- **35-24KJ-511** \u2014 WINDER PULPER STOP\n\nThese are all discrete instruments on the same local panel. Per the rules:\n- ES-508 is an instrument (electrical/control type), not a vessel, pump, or line\n- The nearby instruments (XS-691, KJ-510, KJ-511) are **siblings on the same panel**, not children of ES-508\n- No labelled accessories or sub-instruments sit physically on/under ES-508 itself\n- Peer equipment: 35-24L008 (vessel), 35-24P509 (pump) are clearly separate major equipment\n\nSince 35-24ES-508 is a standalone instrument with no child accessories, the `rows` array is empty per Rule 12 guidance (\"emit the FUNCTION header + description only\").\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24ES-508\",\n  \"description\": \"35-24ES-508 WINDER AREA EMRG STOP\",\n  \"rows\": [],\n  \"peers\": [\n    {\n      \"tag\": \"35-24XS-691\",\n      \"evidence\": \"Sibling instrument on same local panel \u2014 MCS SIGNAL, not a child of ES-508\"\n    },\n    {\n      \"tag\": \"35-24KJ-510\",\n      \"evidence\": \"Sibling instrument on same local panel \u2014 WINDER PULPER START, not a child of ES-508\"\n    },\n    {\n      \"tag\": \"35-24KJ-511\",\n      \"evidence\": \"Sibling instrument on same local panel \u2014 WINDER PULPER STOP, not a child of ES-508\"\n    },\n    {\n      \"tag\": \"35-24L008\",\n      \"evidence\": \"Peer major equipment \u2014 WINDER PULPER vessel HP-33G2, separate function\"\n    },\n    {\n      \"tag\": \"35-24P509\",\n      \"evidence\": \"Peer major equipment \u2014 pump, separate function tag\"\n    }\n  ],\n  \"notes\": [\n    \"35-24ES-508 is a standalone emergency stop instrument on the Winder Area local panel; no sub-instruments or accessories are attached to it on the P&ID\",\n    \"Panel also contains 35-24XS-691, 35-24KJ-510, 35-24KJ-511 as siblings \u2014 all separate FUNCTION entries\"\n  ],\n  \"confidence\": \"high\"\n}\n```",
         "parsed": {
           "sub_process": "BR1",
           "function": "35-24ES-508",
-          "description": "35-24ES-508 WINDER AREA EMERG STOP",
+          "description": "35-24ES-508 WINDER AREA EMRG STOP",
           "rows": [],
           "peers": [
             {
               "tag": "35-24XS-691",
-              "evidence": "Peer instrument on same local panel \u2014 MCS SIGNAL, independent tag"
+              "evidence": "Sibling instrument on same local panel \u2014 MCS SIGNAL, not a child of ES-508"
             },
             {
               "tag": "35-24KJ-510",
-              "evidence": "Peer instrument on same local panel \u2014 WINDER PULPER START, independent tag"
+              "evidence": "Sibling instrument on same local panel \u2014 WINDER PULPER START, not a child of ES-508"
             },
             {
               "tag": "35-24KJ-511",
-              "evidence": "Peer instrument on same local panel \u2014 WINDER PULPER STOP, independent tag"
+              "evidence": "Sibling instrument on same local panel \u2014 WINDER PULPER STOP, not a child of ES-508"
             },
             {
               "tag": "35-24L008",
-              "evidence": "Peer process equipment \u2014 WINDER PULPER HP-33G2 vessel, different equipment class"
+              "evidence": "Peer major equipment \u2014 WINDER PULPER vessel HP-33G2, separate function"
             },
             {
               "tag": "35-24P509",
-              "evidence": "Peer pump equipment \u2014 nearby pump, different equipment class"
+              "evidence": "Peer major equipment \u2014 pump, separate function tag"
             }
           ],
           "notes": [
-            "35-24ES-508 is a standalone emergency stop instrument with no child accessories visible on P&ID",
-            "Local panel also contains XS-691, KJ-510, KJ-511 \u2014 all peers, not children of ES-508",
-            "Nearby lines 35-24-007, 35-24-002, 35-24-009 belong to the pulper/shower circuit, not to this instrument"
+            "35-24ES-508 is a standalone emergency stop instrument on the Winder Area local panel; no sub-instruments or accessories are attached to it on the P&ID",
+            "Panel also contains 35-24XS-691, 35-24KJ-510, 35-24KJ-511 as siblings \u2014 all separate FUNCTION entries"
           ],
           "confidence": "high"
         },

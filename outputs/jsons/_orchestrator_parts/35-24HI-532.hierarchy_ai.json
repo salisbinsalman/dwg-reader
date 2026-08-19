@@ -75,7 +75,7 @@
       ],
       "dossier": "Parent tag: 35-24HI-532\nParent category/block: instruments / \nParent XY: (1426.307188188188, 191.041625)\nNearby descriptions: HI 532 (35-24)\n\nSame-tag CAD family:\n- (none)\n\nNearby line numbers (short ids preferred in output):\n- 35-24-218  full=35-24-218-WAF-150-E10H2A  d=43  layer=P-LINEPOS\n- 35-24-217  full=35-24-217-WAF-150-E10H2A  d=67  layer=P-LINEPOS\n- 35-24-206  full=35-24-206-PP-100-E10H2A  d=114  layer=P-LINEPOS\n- 35-24-030  full=35-24-030-WAF-250-E10H2A  d=96  layer=P-LINEPOS\n- 35-24-031  full=35-24-031-WAF-150-E10H2A  d=39  layer=P-LINEPOS\n- 35-24-033  full=35-24-033-WAF-100-E10H2A  d=22  layer=P-LINEPOS\n- 35-24-034  full=35-24-034-WAF-150-E10H2A  d=19  layer=P-LINEPOS\n- 35-24-037  full=35-24-037-WFC-15-E10H2A  d=171  layer=P-LINEPOS\n- 35-24-028  full=35-24-028-WFL-15-E10H2A  d=179  layer=P-LINEPOS\n- 35-24-029  full=35-24-029-PP-600-E10H2A  d=146  layer=P-LINEPOS\n- 35-24-027  full=35-24-027-PP-250-E10H2A  d=165  layer=P-LINEPOS\n- 35-24-032  full=35-24-032-WAF-300-E10H2A  d=85  layer=P-LINEPOS\n- 35-24-039  full=35-24-039-WAB-20-E10H2A  d=117  layer=P-LINEPOS\n- 35-24-040  full=35-24-040-PP-700-E10H2A  d=181  layer=P-LINEPOS\n\nNearby devices (valves/instruments/pumps/\u2026):\n- line_markers: PPI_1100A  d=180  block=PPI_1100A\n- valves: PPI_0900A  d=163  block=PPI_0900A\n- control_valves: PPI_1000A  d=191  block=PPI_1000A\n- instruments: PPI_1200A  d=179  block=PPI_1200A\n- fittings: P7A1214  d=103  block=P7A1214\n\nNearby peer primary equipment (do NOT nest under parent):\n- (none)\n\nNearby drawing text tokens:\n- GEARBOX 2  d=154  layer=P-OTHER\n- 35-24  d=19  layer=P-INSTRPOS_TEXTS\n- 661  d=141  layer=P-INSTRPOS_TEXTS\n- 9268  d=163  layer=P-INSTRPOS_TEXTS\n- 529  d=25  layer=P-INSTRPOS_TEXTS\n- 530  d=26  layer=P-INSTRPOS_TEXTS\n- 519  d=115  layer=P-INSTRPOS_TEXTS\n- 527  d=158  layer=P-INSTRPOS_TEXTS\n- 525  d=198  layer=P-INSTRPOS_TEXTS\n- 9267  d=175  layer=P-INSTRPOS_TEXTS\n- 9266  d=183  layer=P-INSTRPOS_TEXTS\n- 667  d=186  layer=P-INSTRPOS_TEXTS\n- S4  d=184  layer=P-TEXT\n- 693  d=76  layer=P-INSTRPOS_TEXTS\n- 694  d=51  layer=P-INSTRPOS_TEXTS\n- 532  d=4  layer=P-INSTRPOS_TEXTS\n- 1500  d=195  layer=P-MOTOR_POS\n- 35-24-1096  d=151  layer=P-VALVEPOS\n- 350-250  d=148  layer=P-VALVEPOS\n- 35-24-157  d=166  layer=P-VALVEPOS\n- 003-15  d=168  layer=P-VALVEPOS\n- 35-24-156  d=118  layer=P-VALVEPOS\n- 003-50  d=118  layer=P-VALVEPOS\n- 35-24-155  d=116  layer=P-VALVEPOS\n- 101-300  d=122  layer=P-VALVEPOS\n- 35-24-154  d=138  layer=P-VALVEPOS\n- 001-15  d=142  layer=P-VALVEPOS\n- 35-24-148  d=145  layer=P-VALVEPOS\n- 003-20  d=145  layer=P-VALVEPOS\n- 35-24-1108  d=140  layer=P-VALVEPOS\n- 35-24-1111  d=164  layer=P-VALVEPOS\n- 35-24-1123  d=187  layer=P-VALVEPOS\n- 35-24-218  d=43  layer=P-LINEPOS\n- 35-24-217  d=67  layer=P-LINEPOS\n- 35-24-206  d=114  layer=P-LINEPOS\n- 35-24-030  d=96  layer=P-LINEPOS\n- 35-24-031  d=39  layer=P-LINEPOS\n- 35-24-033  d=22  layer=P-LINEPOS\n- 35-24-034  d=19  layer=P-LINEPOS\n- 35-24-037  d=171  layer=P-LINEPOS",
       "ai": {
-        "raw_text": "Looking at the P&ID image, I can see that 35-24HI-532 is a High Indicator instrument (HI bubble) with an associated HS (Hand Switch) above it, and it's paired with valve 35-24HV-532 on line 35-24-034-WAF-150-E10H2A.\n\nThe red box in the image groups together a set of similar instrument+valve assemblies (HI-693/HV-693, HI-694/HV-694, KS-530/KV-530, HI-532/HV-532, HI-529/HV-529), each mounted on their respective WAF lines.\n\n**Analysis of 35-24HI-532:**\n- It is a locally mounted HI instrument (plain circle = locally mounted instrument per legend)\n- It sits on line 35-24-034 (closest line, d=19)\n- Associated valve 35-24HV-532 is visible below it on the same line\n- The HS above it (35-24) is the hand switch for the same assembly\n- The valve 35-24HV-532 symbol shows outline/transparent bowtie triangles with no actuator circle \u2192 `HV` (hand valve)\n\n**Peers:** The other HI/HV/KV/HS instruments in the red box belong to their own functions and are peers.\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24HI-532\",\n  \"description\": \"35-24HI-532 HIGH IND INSTR\",\n  \"rows\": [\n    {\"equipment\": \"35-24-034\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-034 WAF 150 LINE\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24HV-532\", \"mask\": \"\", \"description\": \"35-24HV-532 ISOL VLV HV\"}\n  ],\n  \"peers\": [\n    {\"tag\": \"35-24HI-693\", \"evidence\": \"separate HI instrument on line 35-24-217, own assembly\"},\n    {\"tag\": \"35-24HV-693\", \"evidence\": \"hand valve paired with HI-693, not HI-532\"},\n    {\"tag\": \"35-24HI-694\", \"evidence\": \"separate HI instrument on line 35-24-218, own assembly\"},\n    {\"tag\": \"35-24HV-694\", \"evidence\": \"hand valve paired with HI-694, not HI-532\"},\n    {\"tag\": \"35-24KV-530\", \"evidence\": \"separate KV valve on line 35-24-218 area, own assembly\"},\n    {\"tag\": \"35-24HI-529\", \"evidence\": \"separate HI instrument on line 35-24-031, own assembly\"},\n    {\"tag\": \"35-24HV-529\", \"evidence\": \"hand valve paired with HI-529, not HI-532\"},\n    {\"tag\": \"35-24NV-519\", \"evidence\": \"separate NV instrument visible left of crop boundary\"},\n    {\"tag\": \"35-24-031\", \"evidence\": \"WAF-150 line serving HI-529/HV-529 assembly, not HI-532\"},\n    {\"tag\": \"35-24-033\", \"evidence\": \"WAF-100 line in crop but not the line HI-532 sits on\"},\n    {\"tag\": \"35-24-217\", \"evidence\": \"WAF-150 line serving HI-694/HV-694 assembly\"},\n    {\"tag\": \"35-24-218\", \"evidence\": \"WAF-150 line serving KS-530/KV-530 assembly\"}\n  ],\n  \"notes\": [\n    \"35-24HI-532 is a locally mounted high indicator on line 35-24-034-WAF-150\",\n    \"Associated HS (hand switch) visible above HI-532 bubble; tagged as part of same instrument loop but no separate HS tag confirmed in candidate list\",\n    \"35-24HV-532 symbol shows outline/transparent bowtie with no actuator \u2014 classified HV (hand valve)\",\n    \"Red box groups five similar assemblies; only the 35-24-034 / HI-532 / HV-532 assembly is within scope of this FUNCTION\"\n  ],\n  \"confidence\": \"high\"\n}\n```",
+        "raw_text": "Looking at the P&ID image, I can see that 35-24HI-532 is a High Indicator instrument (HI bubble) with an associated HS (Hand Switch) above it, and it's paired with valve 35-24HV-532 on line 35-24-034. The instrument is locally mounted (plain circle per legend).\n\nThe crop shows a group of similar instrument+valve assemblies on WAF lines. The parent 35-24HI-532 sits on line 35-24-034-WAF-150-E10H2A, with:\n- 35-24HV-532 (the hand valve below the HI bubble) \u2014 looking at the symbol, it shows an outline/transparent bowtie with no actuator circle = HV (hand valve)\n- The HS above is part of the same instrument cluster\n\nSince 35-24HI-532 is a standalone instrument (indicator), its FUNCTION row has no pipe-line children of its own \u2014 the valve 35-24HV-532 and the line 35-24-034 are the directly associated items.\n\nThe valve 35-24HV-532 shows a transparent/outline bowtie with no actuator = `HV` (hand valve, normally open by default \u2014 no fill).\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24HI-532\",\n  \"description\": \"35-24HI-532 HIGH IND INSTR\",\n  \"rows\": [\n    {\"equipment\": \"35-24-034\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-034 WAF 150 LINE\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24HV-532\", \"mask\": \"\", \"description\": \"35-24HV-532 ISOL VLV HV\"}\n  ],\n  \"peers\": [\n    {\"tag\": \"35-24HV-693\", \"evidence\": \"separate instrument cluster on line 35-24-217/218, different numeric base\"},\n    {\"tag\": \"35-24HI-693\", \"evidence\": \"peer HI instrument on adjacent line, different numeric base\"},\n    {\"tag\": \"35-24HV-694\", \"evidence\": \"separate instrument cluster, different numeric base\"},\n    {\"tag\": \"35-24HI-694\", \"evidence\": \"peer HI instrument, different numeric base\"},\n    {\"tag\": \"35-24KV-530\", \"evidence\": \"separate KV valve on adjacent line 35-24-218, different numeric base\"},\n    {\"tag\": \"35-24KS-530\", \"evidence\": \"KS instrument paired with KV-530, different numeric base\"},\n    {\"tag\": \"35-24HV-529\", \"evidence\": \"separate instrument cluster on line 35-24-031, different numeric base\"},\n    {\"tag\": \"35-24HI-529\", \"evidence\": \"peer HI instrument on line 35-24-031, different numeric base\"},\n    {\"tag\": \"35-24NV-519\", \"evidence\": \"NC valve visible at left edge, different numeric base and sub-circuit\"},\n    {\"tag\": \"35-24-033\", \"evidence\": \"adjacent WAF-100 line, not the line carrying HI-532\"},\n    {\"tag\": \"35-24-031\", \"evidence\": \"adjacent WAF-150 line carrying HV-529/HI-529 cluster\"},\n    {\"tag\": \"35-24-218\", \"evidence\": \"adjacent WAF-150 line carrying KV-530/KS-530 cluster\"},\n    {\"tag\": \"35-24-217\", \"evidence\": \"adjacent WAF-150 line carrying HV-694/HI-694 cluster\"}\n  ],\n  \"notes\": [\n    \"35-24HI-532 is a locally mounted high indicator instrument on line 35-24-034-WAF-150\",\n    \"35-24HV-532 is the associated hand valve (outline bowtie, no actuator) nested under line 35-24-034\",\n    \"HS bubble above HI-532 is the hand switch; tagged as part of same instrument cluster but no separate CMMS tag confirmed in dossier\",\n    \"Neighbouring clusters (693/694/530/529) are peer assemblies on adjacent lines\"\n  ],\n  \"confidence\": \"high\"\n}\n```",
         "parsed": {
           "sub_process": "BR1",
           "function": "35-24HI-532",
@@ -96,59 +96,63 @@
           ],
           "peers": [
             {
-              "tag": "35-24HI-693",
-              "evidence": "separate HI instrument on line 35-24-217, own assembly"
-            },
-            {
               "tag": "35-24HV-693",
-              "evidence": "hand valve paired with HI-693, not HI-532"
+              "evidence": "separate instrument cluster on line 35-24-217/218, different numeric base"
             },
             {
-              "tag": "35-24HI-694",
-              "evidence": "separate HI instrument on line 35-24-218, own assembly"
+              "tag": "35-24HI-693",
+              "evidence": "peer HI instrument on adjacent line, different numeric base"
             },
             {
               "tag": "35-24HV-694",
-              "evidence": "hand valve paired with HI-694, not HI-532"
+              "evidence": "separate instrument cluster, different numeric base"
+            },
+            {
+              "tag": "35-24HI-694",
+              "evidence": "peer HI instrument, different numeric base"
             },
             {
               "tag": "35-24KV-530",
-              "evidence": "separate KV valve on line 35-24-218 area, own assembly"
+              "evidence": "separate KV valve on adjacent line 35-24-218, different numeric base"
             },
             {
-              "tag": "35-24HI-529",
-              "evidence": "separate HI instrument on line 35-24-031, own assembly"
+              "tag": "35-24KS-530",
+              "evidence": "KS instrument paired with KV-530, different numeric base"
             },
             {
               "tag": "35-24HV-529",
-              "evidence": "hand valve paired with HI-529, not HI-532"
+              "evidence": "separate instrument cluster on line 35-24-031, different numeric base"
+            },
+            {
+              "tag": "35-24HI-529",
+              "evidence": "peer HI instrument on line 35-24-031, different numeric base"
             },
             {
               "tag": "35-24NV-519",
-              "evidence": "separate NV instrument visible left of crop boundary"
-            },
-            {
-              "tag": "35-24-031",
-              "evidence": "WAF-150 line serving HI-529/HV-529 assembly, not HI-532"
+              "evidence": "NC valve visible at left edge, different numeric base and sub-circuit"
             },
             {
               "tag": "35-24-033",
-              "evidence": "WAF-100 line in crop but not the line HI-532 sits on"
+              "evidence": "adjacent WAF-100 line, not the line carrying HI-532"
             },
             {
-              "tag": "35-24-217",
-              "evidence": "WAF-150 line serving HI-694/HV-694 assembly"
+              "tag": "35-24-031",
+              "evidence": "adjacent WAF-150 line carrying HV-529/HI-529 cluster"
             },
             {
               "tag": "35-24-218",
-              "evidence": "WAF-150 line serving KS-530/KV-530 assembly"
+              "evidence": "adjacent WAF-150 line carrying KV-530/KS-530 cluster"
+            },
+            {
+              "tag": "35-24-217",
+              "evidence": "adjacent WAF-150 line carrying HV-694/HI-694 cluster"
             }
           ],
           "notes": [
-            "35-24HI-532 is a locally mounted high indicator on line 35-24-034-WAF-150",
-            "Associated HS (hand switch) visible above HI-532 bubble; tagged as part of same instrument loop but no separate HS tag confirmed in candidate list",
-            "35-24HV-532 symbol shows outline/transparent bowtie with no actuator \u2014 classified HV (hand valve)",
-            "Red box groups five similar assemblies; only the 35-24-034 / HI-532 / HV-532 assembly is within scope of this FUNCTION"
+            "35-24HI-532 is a locally mounted high indicator instrument on line 35-24-034-WAF-150",
+            "35-24HV-532 is the associated hand valve (outline bowtie, no actuator) nested under line 35-24-034",
+            "HS bubble above HI-532 is the hand switch; tagged as part of same instrument cluster but no separate CMMS tag confirmed in dossier",
+            "Neighbouring clusters (693/694/530/529) are peer assemblies on adjacent lines"
           ],
           "confidence": "high"
         },

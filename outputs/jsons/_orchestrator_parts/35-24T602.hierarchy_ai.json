@@ -60,11 +60,11 @@
       ],
       "dossier": "Parent tag: 35-24T602\nParent category/block: tanks / PPI_0700A-25_0\nParent XY: (4220.0, 350.0)\nNearby descriptions: BROKE STORAGE TOWER; 4000 m\u00b3; 3,5 %\n\nSame-tag CAD family:\n- tanks @ (4220.0,350.0) block=PPI_0700A-25_0 nearby=35-24T602; 35-24\n\nNearby line numbers (short ids preferred in output):\n- 35-47-009  full=35-47-009-DNH-15-E10L4D  d=81  layer=P-LINEPOS\n- 35-24-210  full=35-24-210-PP-100-E10H2A  d=157  layer=P-LINEPOS\n- 35-24-135  full=35-24-135-PP-400-E10H2A  d=125  layer=P-LINEPOS\n- 35-24-132  full=35-24-132-PP-500-E10H2A  d=113  layer=P-LINEPOS\n- 35-24-124  full=35-24-124-WAB-20-E10H2A  d=152  layer=P-LINEPOS\n- 35-24-130  full=35-24-130-PP-200-E10H2A  d=144  layer=P-LINEPOS\n- 35-24-131  full=35-24-131-PP-700-E10H2A  d=93  layer=P-LINEPOS\n- 35-24-133  full=35-24-133-PP-500-E10H2A  d=123  layer=P-LINEPOS\n- 35-24-127  full=35-24-127-PP-800-E10H2A  d=127  layer=P-LINEPOS\n\nNearby devices (valves/instruments/pumps/\u2026):\n- line_markers: PPI_1100A  d=127  block=PPI_1100A\n- valves: PPI_0900A  d=138  block=PPI_0900A\n- control_valves: PPI_1000A  d=189  block=PPI_1000A\n- instruments: PPI_0100X  d=93  block=PPI_0100X\n- pumps: P7A0200  d=155  block=P7A0200\n\nNearby peer primary equipment (do NOT nest under parent):\n- 35-24L402 (process_equipment, d=113)\n- 35-24P514 (pumps, d=155)\n\nNearby drawing text tokens:\n- 35-24L402  d=122  layer=P-AGITATOR_POS\n- 615  d=162  layer=P-INSTRPOS_TEXTS\n- 35-24  d=150  layer=P-INSTRPOS_TEXTS\n- 613  d=133  layer=P-INSTRPOS_TEXTS\n- 611  d=82  layer=P-INSTRPOS_TEXTS\n- 671  d=180  layer=P-INSTRPOS_TEXTS\n- 35-24T602  d=7  layer=P-TANK_POS\n- 4000 m\u00b3  d=16  layer=P-TANK_POS\n- 3,5 %  d=21  layer=P-TANK_POS\n- 35-24P514  d=114  layer=P-PUMP_POS\n- 190  d=116  layer=P-PUMP_POS\n- 65  d=127  layer=P-PUMP_POS\n- 200  d=118  layer=P-PUMP_POS\n- 1500  d=128  layer=P-PUMP_POS\n- 35-24-069  d=143  layer=P-VALVEPOS\n- 003-20  d=144  layer=P-VALVEPOS\n- 35-24-1129  d=138  layer=P-VALVEPOS\n- 35-24-056  d=134  layer=P-VALVEPOS\n- 350-200  d=139  layer=P-VALVEPOS\n- 35-24-058  d=103  layer=P-VALVEPOS\n- 350-500  d=108  layer=P-VALVEPOS\n- 35-24-057  d=92  layer=P-VALVEPOS\n- 35-24-055  d=152  layer=P-VALVEPOS\n- 001-80  d=157  layer=P-VALVEPOS\n- 35-24-1132  d=140  layer=P-VALVEPOS\n- 003-50  d=145  layer=P-VALVEPOS\n- 35-24-1104  d=160  layer=P-VALVEPOS\n- 35-24-1133  d=172  layer=P-VALVEPOS\n- 600-125  d=177  layer=P-VALVEPOS\n- 35-24-051  d=191  layer=P-VALVEPOS\n- 101-125  d=196  layer=P-VALVEPOS\n- 35-24-049  d=164  layer=P-VALVEPOS\n- 003-15  d=168  layer=P-VALVEPOS\n- 35-24-048  d=185  layer=P-VALVEPOS\n- 35-24-209  d=192  layer=P-VALVEPOS\n- 35-47-009  d=81  layer=P-LINEPOS\n- 35-24-210  d=157  layer=P-LINEPOS\n- 35-24-135  d=125  layer=P-LINEPOS\n- 35-24-132  d=113  layer=P-LINEPOS\n- 35-24-124  d=152  layer=P-LINEPOS",
       "ai": {
-        "raw_text": "I'll analyze the P&ID image systematically, identifying what's directly connected to tank 35-24T602 (BROKE STORAGE TOWER, 4000 m\u00b3, 3.5%).\n\n**Tank children (lines connected to the vessel):**\n- **35-24-131** (PP-700) \u2014 visible on right side of tank going down\n- **35-24-132** (PP-500) \u2014 visible bottom right area\n- **35-24-133** (PP-500) \u2014 visible bottom area\n- **35-24-135** (PP-400) \u2014 visible top right\n- **35-24-127** (PP-800) \u2014 visible left side\n- **35-24-124** (WAB-20) \u2014 visible left side (water/biocide addition)\n- **35-24-130** (PP-200) \u2014 visible bottom\n- **35-47-009** (DNH-15) \u2014 biocide line entering top (different sub-process, peer)\n\n**Instruments on tank:**\n- **35-24LI-611** \u2014 level instrument visible on tank left side (LI in circle)\n- **35-24FC-613** \u2014 flow controller visible right side\n- **35-24HI-615** \u2014 hand indicator visible far right\n\n**Valves visible and attributable:**\n- **35-24-057** (350-500) on line 35-24-131/132 area \u2014 NC (filled triangles)\n- **35-24-058** (350-500) \u2014 NC\n- **35-24-056** (350-200) \u2014 on 35-24-130\n- **35-24-055** (001-80) \u2014 NC\n- **35-24-1132** (003-50) \u2014 AV-M (motor actuator visible)\n- **35-24-1129** (003-20) \u2014 AV-M\n- **35-24-1104** (001-80) \u2014 NC\n- **35-24-1133** (600-125) \u2014 AV-M\n- **35-24-069** (003-20) \u2014 HV\n- **35-24-049** (003-15) \u2014 HV\n- **35-24-051** (101-125) \u2014 NC\n- **35-24-048** (003-15) \u2014 HV\n- **35-24XV-671** \u2014 AV (automatic valve visible left)\n\n**Peers:** 35-24L402 (agitator), 35-24P514 (pump), 35-47-009 (different sub-process line)\n\nNow nesting valves under their respective lines per the rules:\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24T602\",\n  \"description\": \"35-24T602 BROKE STORAGE TOWER 4000M3\",\n  \"rows\": [\n    {\"equipment\": \"35-24LI-611\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24LI-611 TANK LVL INDICATOR\"},\n    {\"equipment\": \"35-24FC-613\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24FC-613 FLOW CONTROLLER\"},\n    {\"equipment\": \"35-24HI-615\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24HI-615 HI INDICATOR\"},\n    {\"equipment\": \"35-24-127\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-127 PP-800 LINE\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24XV-671\", \"mask\": \"\", \"description\": \"35-24XV-671 VLV AV\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-1129\", \"mask\": \"\", \"description\": \"35-24-1129 VLV AV-M\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-069\", \"mask\": \"\", \"description\": \"35-24-069 VLV HV\"},\n    {\"equipment\": \"35-24-124\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-124 WAB-20 LINE\"},\n    {\"equipment\": \"35-24-135\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-135 PP-400 LINE\"},\n    {\"equipment\": \"35-24-131\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-131 PP-700 LINE\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-057\", \"mask\": \"\", \"description\": \"35-24-057 VLV NC\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-058\", \"mask\": \"\", \"description\": \"35-24-058 VLV NC\"},\n    {\"equipment\": \"35-24-132\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-132 PP-500 LINE\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-1132\", \"mask\": \"\", \"description\": \"35-24-1132 VLV AV-M\"},\n    {\"equipment\": \"35-24-133\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-133 PP-500 LINE\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-1133\", \"mask\": \"\", \"description\": \"35-24-1133 VLV AV-M\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-1104\", \"mask\": \"\", \"description\": \"35-24-1104 VLV NC\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-055\", \"mask\": \"\", \"description\": \"35-24-055 VLV NC\"},\n    {\"equipment\": \"35-24-130\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-130 PP-200 LINE\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-056\", \"mask\": \"\", \"description\": \"35-24-056 VLV HV\"},\n    {\"equipment\": \"35-24-049\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-049 VLV HV\"},\n    {\"equipment\": \"35-24-048\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-048 VLV HV\"},\n    {\"equipment\": \"35-24-051\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-051 VLV NC\"}\n  ],\n  \"peers\": [\n    {\"tag\": \"35-24L402\", \"evidence\": \"agitator \u2014 peer primary equipment, not child of tank\"},\n    {\"tag\": \"35-24P514\", \"evidence\": \"pump \u2014 peer primary equipment on discharge circuit\"},\n    {\"tag\": \"35-47-009\", \"evidence\": \"biocide line from sub-process 47, different sub-process code\"},\n    {\"tag\": \"35-24-210\", \"evidence\": \"PP-100 line visible but connects to neighbouring circuit, not directly tank nozzle\"},\n    {\"tag\": \"35-24-209\", \"evidence\": \"valve on 35-24-210 circuit, belongs to peer line\"}\n  ],\n  \"notes\": [\n    \"35-24T602 is BROKE STORAGE TOWER 4000m3 at 3.5% consistency\",\n    \"35-24LI-611 locally mounted level indicator visible on tank left wall\",\n    \"35-24FC-613 and 35-24HI-615 visible right side \u2014 OCC DUMP TOWER LEVEL INTERLOCKING label nearby\",\n    \"35-47-009 biocide line enters tank top but belongs to sub-process 47 \u2014 treated as peer\",\n    \"Valve fill assessment: solid-filled triangles = NC; outline triangles no actuator = HV; circle-M actuator = AV-M; plain circle actuator = AV\",\n    \"35-24-057 and 35-24-058 both labelled 350-500 on lines 35-24-131/132 area \u2014 NC based on filled bowtie symbols\"\n  ],\n  \"confidence\": \"medium\"\n}\n```",
+        "raw_text": "I'll analyze the P&ID image systematically, identifying what's directly connected to tank 35-24T602 (BROKE STORAGE TOWER, 4000 m\u00b3, 3.5%).\n\n**Tank children (lines connected to the vessel):**\n- **35-24-131** (PP-700) \u2014 visible on right side of tank going down\n- **35-24-132** (PP-500) \u2014 visible bottom right area\n- **35-24-133** (PP-500) \u2014 visible bottom area\n- **35-24-135** (PP-400) \u2014 visible top right\n- **35-24-127** (PP-800) \u2014 visible left side\n- **35-24-124** (WAB-20) \u2014 visible left side (water/biocide addition)\n- **35-24-130** (PP-200) \u2014 visible bottom\n- **35-47-009** (DNH-15) \u2014 biocide line from top (different sub-process, peer)\n\n**Instruments on tank:**\n- **35-24LI-611** \u2014 level instrument visible on tank left side (LI in circle)\n- **35-24FC-613** \u2014 flow controller visible right side\n- **35-24HI-615** \u2014 hand indicator visible far right\n\n**Valves visible:**\n- **35-24-057** (350-500) \u2014 on line 35-24-131/132 area, solid filled = NC\n- **35-24-058** (350-500) \u2014 nearby, solid filled = NC\n- **35-24-056** (350-200) \u2014 bottom area, outline = HV\n- **35-24-055** (001-80) \u2014 bottom, solid filled = NC\n- **35-24-1132** (003-50) \u2014 bottom, solid filled = NC, with \"10\" marker = AV-M\n- **35-24-1129** (003-20) \u2014 left side, with actuator = AV\n- **35-24-069** (003-20) \u2014 left side, outline = HV\n- **35-24-1104** (001-80) \u2014 bottom area\n- **35-24-1133** (600-125) \u2014 bottom right, with \"10\" = AV-M\n- **35-24-049** (003-15) \u2014 right side, outline = HV\n- **35-24-048** (003-15) \u2014 far right, outline = HV\n- **35-24-051** (101-125) \u2014 bottom right, solid = NC\n- **35-24XV-671** \u2014 left side, automatic valve\n\n**Peers:** 35-24L402 (agitator), 35-24P514 (pump), 35-47-009 (different sub-process line)\n\nNow nesting valves under their respective lines:\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24T602\",\n  \"description\": \"35-24T602 BROKE STORAGE TOWER TNK\",\n  \"rows\": [\n    {\"equipment\": \"35-24LI-611\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24LI-611 TANK LVL INDICATOR\"},\n    {\"equipment\": \"35-24FC-613\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24FC-613 FLOW CONTROLLER\"},\n    {\"equipment\": \"35-24HI-615\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24HI-615 HAND INDICATOR\"},\n    {\"equipment\": \"35-24-127\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-127 PP-800 INLET LINE\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24XV-671\", \"mask\": \"\", \"description\": \"35-24XV-671 ISOL VLV AV NC\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-1129\", \"mask\": \"\", \"description\": \"35-24-1129 VLV AV\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-069\", \"mask\": \"\", \"description\": \"35-24-069 VLV HV\"},\n    {\"equipment\": \"35-24-124\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-124 WAB-20 WATER ADD LINE\"},\n    {\"equipment\": \"35-24-135\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-135 PP-400 LINE\"},\n    {\"equipment\": \"35-24-131\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-131 PP-700 OUTLET LINE\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-057\", \"mask\": \"\", \"description\": \"35-24-057 VLV NC\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-058\", \"mask\": \"\", \"description\": \"35-24-058 VLV NC\"},\n    {\"equipment\": \"35-24-132\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-132 PP-500 LINE\"},\n    {\"equipment\": \"35-24-133\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-133 PP-500 LINE\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-1132\", \"mask\": \"\", \"description\": \"35-24-1132 VLV AV-M NC\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-055\", \"mask\": \"\", \"description\": \"35-24-055 VLV NC\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-1104\", \"mask\": \"\", \"description\": \"35-24-1104 VLV NC\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-1133\", \"mask\": \"\", \"description\": \"35-24-1133 VLV AV-M NC\"},\n    {\"equipment\": \"35-24-130\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-130 PP-200 OUTLET LINE\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-056\", \"mask\": \"\", \"description\": \"35-24-056 VLV HV\"},\n    {\"equipment\": \"35-24-049\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-049 VLV HV\"},\n    {\"equipment\": \"35-24-048\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-048 VLV HV\"},\n    {\"equipment\": \"35-24-051\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-051 VLV NC\"}\n  ],\n  \"peers\": [\n    {\"tag\": \"35-24L402\", \"evidence\": \"agitator \u2014 peer primary equipment, not child of tank\"},\n    {\"tag\": \"35-24P514\", \"evidence\": \"pump \u2014 peer primary equipment on discharge circuit\"},\n    {\"tag\": \"35-47-009\", \"evidence\": \"biocide line from sub-process 47, different sub-process boundary\"}\n  ],\n  \"notes\": [\n    \"35-24T602 is BROKE STORAGE TOWER 4000m3 at 3.5% consistency\",\n    \"35-24LI-611 locally mounted level indicator visible on tank body\",\n    \"35-24FC-613 and 35-24HI-615 on right side instrumentation\",\n    \"Valve fill states assessed from image: solid white triangles=NC, outline=HV, circle actuator=AV, M-circle=AV-M\",\n    \"35-24-1132 and 35-24-1133 carry red '10' marker indicating AV-M actuator type\",\n    \"35-24-210 (PP-100) not directly attached to tank body \u2014 omitted pending clearer evidence\"\n  ],\n  \"confidence\": \"medium\"\n}\n```",
         "parsed": {
           "sub_process": "BR1",
           "function": "35-24T602",
-          "description": "35-24T602 BROKE STORAGE TOWER 4000M3",
+          "description": "35-24T602 BROKE STORAGE TOWER TNK",
           "rows": [
             {
               "equipment": "35-24LI-611",
@@ -82,25 +82,25 @@
               "equipment": "35-24HI-615",
               "subequipment": "",
               "mask": "",
-              "description": "35-24HI-615 HI INDICATOR"
+              "description": "35-24HI-615 HAND INDICATOR"
             },
             {
               "equipment": "35-24-127",
               "subequipment": "",
               "mask": "",
-              "description": "35-24-127 PP-800 LINE"
+              "description": "35-24-127 PP-800 INLET LINE"
             },
             {
               "equipment": "",
               "subequipment": "35-24XV-671",
               "mask": "",
-              "description": "35-24XV-671 VLV AV"
+              "description": "35-24XV-671 ISOL VLV AV NC"
             },
             {
               "equipment": "",
               "subequipment": "35-24-1129",
               "mask": "",
-              "description": "35-24-1129 VLV AV-M"
+              "description": "35-24-1129 VLV AV"
             },
             {
               "equipment": "",
@@ -112,7 +112,7 @@
               "equipment": "35-24-124",
               "subequipment": "",
               "mask": "",
-              "description": "35-24-124 WAB-20 LINE"
+              "description": "35-24-124 WAB-20 WATER ADD LINE"
             },
             {
               "equipment": "35-24-135",
@@ -124,7 +124,7 @@
               "equipment": "35-24-131",
               "subequipment": "",
               "mask": "",
-              "description": "35-24-131 PP-700 LINE"
+              "description": "35-24-131 PP-700 OUTLET LINE"
             },
             {
               "equipment": "",
@@ -145,12 +145,6 @@
               "description": "35-24-132 PP-500 LINE"
             },
             {
-              "equipment": "",
-              "subequipment": "35-24-1132",
-              "mask": "",
-              "description": "35-24-1132 VLV AV-M"
-            },
-            {
               "equipment": "35-24-133",
               "subequipment": "",
               "mask": "",
@@ -158,9 +152,15 @@
             },
             {
               "equipment": "",
-              "subequipment": "35-24-1133",
+              "subequipment": "35-24-1132",
               "mask": "",
-              "description": "35-24-1133 VLV AV-M"
+              "description": "35-24-1132 VLV AV-M NC"
+            },
+            {
+              "equipment": "",
+              "subequipment": "35-24-055",
+              "mask": "",
+              "description": "35-24-055 VLV NC"
             },
             {
               "equipment": "",
@@ -170,15 +170,15 @@
             },
             {
               "equipment": "",
-              "subequipment": "35-24-055",
+              "subequipment": "35-24-1133",
               "mask": "",
-              "description": "35-24-055 VLV NC"
+              "description": "35-24-1133 VLV AV-M NC"
             },
             {
               "equipment": "35-24-130",
               "subequipment": "",
               "mask": "",
-              "description": "35-24-130 PP-200 LINE"
+              "description": "35-24-130 PP-200 OUTLET LINE"
             },
             {
               "equipment": "",
@@ -216,24 +216,16 @@
             },
             {
               "tag": "35-47-009",
-              "evidence": "biocide line from sub-process 47, different sub-process code"
-            },
-            {
-              "tag": "35-24-210",
-              "evidence": "PP-100 line visible but connects to neighbouring circuit, not directly tank nozzle"
-            },
-            {
-              "tag": "35-24-209",
-              "evidence": "valve on 35-24-210 circuit, belongs to peer line"
+              "evidence": "biocide line from sub-process 47, different sub-process boundary"
             }
           ],
           "notes": [
             "35-24T602 is BROKE STORAGE TOWER 4000m3 at 3.5% consistency",
-            "35-24LI-611 locally mounted level indicator visible on tank left wall",
-            "35-24FC-613 and 35-24HI-615 visible right side \u2014 OCC DUMP TOWER LEVEL INTERLOCKING label nearby",
-            "35-47-009 biocide line enters tank top but belongs to sub-process 47 \u2014 treated as peer",
-            "Valve fill assessment: solid-filled triangles = NC; outline triangles no actuator = HV; circle-M actuator = AV-M; plain circle actuator = AV",
-            "35-24-057 and 35-24-058 both labelled 350-500 on lines 35-24-131/132 area \u2014 NC based on filled bowtie symbols"
+            "35-24LI-611 locally mounted level indicator visible on tank body",
+            "35-24FC-613 and 35-24HI-615 on right side instrumentation",
+            "Valve fill states assessed from image: solid white triangles=NC, outline=HV, circle actuator=AV, M-circle=AV-M",
+            "35-24-1132 and 35-24-1133 carry red '10' marker indicating AV-M actuator type",
+            "35-24-210 (PP-100) not directly attached to tank body \u2014 omitted pending clearer evidence"
           ],
           "confidence": "medium"
         },
@@ -292,19 +284,19 @@
           "equipment": "35-24-127",
           "subequipment": "",
           "mask": "",
-          "description": "35-24-127 PP-800 LN"
+          "description": "35-24-127 PP-800 IN LN"
         },
         {
           "equipment": "",
           "subequipment": "35-24XS-671",
           "mask": "",
-          "description": "35-24XV-671 VLV AV"
+          "description": "35-24XV-671 ISOL VLV AV NC"
         },
         {
           "equipment": "",
           "subequipment": "35-24-1129",
           "mask": "",
-          "description": "35-24-1129 VLV AV-M"
+          "description": "35-24-1129 VLV AV"
         },
         {
           "equipment": "",
@@ -316,7 +308,7 @@
           "equipment": "35-24-124",
           "subequipment": "",
           "mask": "",
-          "description": "35-24-124 WAB-20 LN"
+          "description": "35-24-124 WAB-20 WTR ADD LN"
         },
         {
           "equipment": "35-24-135",
@@ -328,7 +320,7 @@
           "equipment": "35-24-131",
           "subequipment": "",
           "mask": "",
-          "description": "35-24-131 PP-700 LN"
+          "description": "35-24-131 PP-700 OUT LN"
         },
         {
           "equipment": "",
@@ -349,12 +341,6 @@
           "description": "35-24-132 PP-500 LN"
         },
         {
-          "equipment": "",
-          "subequipment": "35-24-1132",
-          "mask": "",
-          "description": "35-24-1132 VLV AV-M"
-        },
-        {
           "equipment": "35-24-133",
           "subequipment": "",
           "mask": "",
@@ -362,9 +348,15 @@
         },
         {
           "equipment": "",
-          "subequipment": "35-24-1133",
+          "subequipment": "35-24-1132",
           "mask": "",
-          "description": "35-24-1133 VLV AV-M"
+          "description": "35-24-1132 VLV AV-M NC"
+        },
+        {
+          "equipment": "",
+          "subequipment": "35-24-055",
+          "mask": "",
+          "description": "35-24-055 VLV NC"
         },
         {
           "equipment": "",
@@ -374,15 +366,15 @@
         },
         {
           "equipment": "",
-          "subequipment": "35-24-055",
+          "subequipment": "35-24-1133",
           "mask": "",
-          "description": "35-24-055 VLV NC"
+          "description": "35-24-1133 VLV AV-M NC"
         },
         {
           "equipment": "35-24-130",
           "subequipment": "",
           "mask": "",
-          "description": "35-24-130 PP-200 LN"
+          "description": "35-24-130 PP-200 OUT LN"
         },
         {
           "equipment": "",
@@ -431,6 +423,30 @@
           "subequipment": "",
           "mask": "",
           "description": "35-24-602.2"
+        },
+        {
+          "equipment": "35-24T602.3",
+          "subequipment": "",
+          "mask": "",
+          "description": "35-24T602.3"
+        },
+        {
+          "equipment": "35-24-602.3",
+          "subequipment": "",
+          "mask": "",
+          "description": "35-24-602.3"
+        },
+        {
+          "equipment": "35-24T602.4",
+          "subequipment": "",
+          "mask": "",
+          "description": "35-24T602.4"
+        },
+        {
+          "equipment": "35-24-602.4",
+          "subequipment": "",
+          "mask": "",
+          "description": "35-24-602.4"
         }
       ]
     }

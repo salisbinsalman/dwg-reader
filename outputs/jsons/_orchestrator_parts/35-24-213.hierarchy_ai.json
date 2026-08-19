@@ -1,0 +1,192 @@
+{
+  "input": "/Users/code-huddle-ensemble/Desktop/dwg-reader/inputs/Broke System.dwg",
+  "mode": "viewer_shot_ai_gt",
+  "evidence_dir": "/Users/code-huddle-ensemble/Desktop/dwg-reader/outputs/evidence",
+  "site": "Shotton Paper Mill, United Kingdom",
+  "line": "Shotton PM3",
+  "process": "Broke System",
+  "sub_process": "BR1",
+  "model_id": "eu.anthropic.claude-sonnet-4-6",
+  "region": "eu-west-2",
+  "prompt_file": "pid_hierarchy_gt_v7_floc.md",
+  "legend": "/Users/code-huddle-ensemble/Desktop/dwg-reader/inputs/legend.png",
+  "results": [
+    {
+      "tag": "35-24-213",
+      "shot": "/Users/code-huddle-ensemble/Desktop/dwg-reader/outputs/evidence/Broke System.viewer_35-24-213.png",
+      "parent": {
+        "category": "lines",
+        "block_name": "",
+        "handle": "80C16",
+        "layer": "P-LINEPOS",
+        "x": -7.867867867867815,
+        "y": 253.75,
+        "resolved_tag": "35-24-213",
+        "nearby_tags": "35-24-213",
+        "nearby_descriptions": "35-24-213-WAF-20-E10H2A",
+        "confidence": "medium"
+      },
+      "candidates": [
+        "35-24-213",
+        "35-24-214",
+        "35-24-223",
+        "35-24-222",
+        "35-24",
+        "35-24XV-681",
+        "35-24LV1-674",
+        "35-24P519",
+        "35-24-192",
+        "35-24-198",
+        "35-24LV2-674",
+        "35-24-193",
+        "35-24-199",
+        "35-24-191",
+        "35-24-221",
+        "35-24-197",
+        "35-24L009"
+      ],
+      "dossier": "Parent tag: 35-24-213\nParent category/block: lines / \nParent XY: (-7.867867867867815, 253.75)\nNearby descriptions: 35-24-213-WAF-20-E10H2A\n\nSame-tag CAD family:\n- (none)\n\nNearby line numbers (short ids preferred in output):\n- 35-24-214  full=35-24-214-PP-100-E10H2A  d=8  layer=P-LINEPOS\n- 35-24-213  full=35-24-213-WAF-20-E10H2A  d=0  layer=P-LINEPOS\n- 35-24-193  full=35-24-193-PP-100-E10H2A  d=151  layer=P-LINEPOS\n- 35-24-192  full=35-24-192-PP-200-E10H2A  d=104  layer=P-LINEPOS\n- 35-24-191  full=35-24-191-PP-250-E10H2A  d=193  layer=P-LINEPOS\n\nNearby devices (valves/instruments/pumps/\u2026):\n- line_markers: PPI_1100A  d=193  block=PPI_1100A\n- valves: PPI_0900A  d=131  block=PPI_0900A\n- control_valves: PPI_1000A  d=142  block=PPI_1000A\n- instruments: PPI_0102B  d=155  block=PPI_0102B\n- pumps: P7A0200  d=185  block=P7A0200\n\nNearby peer primary equipment (do NOT nest under parent):\n- 35-24P519 (pumps, d=185)\n\nNearby drawing text tokens:\n- 674  d=112  layer=P-INSTRPOS_TEXTS\n- 35-24  d=102  layer=P-INSTRPOS_TEXTS\n- 681  d=75  layer=P-INSTRPOS_TEXTS\n- 35-24P519  d=169  layer=P-PUMP_POS\n- 65  d=169  layer=P-PUMP_POS\n- 32  d=181  layer=P-PUMP_POS\n- 30  d=170  layer=P-PUMP_POS\n- 1500  d=180  layer=P-PUMP_POS\n- 35-24-222  d=35  layer=P-VALVEPOS\n- 003-20  d=33  layer=P-VALVEPOS\n- 35-24-223  d=29  layer=P-VALVEPOS\n- 35-24-198  d=124  layer=P-VALVEPOS\n- 003-50  d=127  layer=P-VALVEPOS\n- 35-24-199  d=169  layer=P-VALVEPOS\n- 003-15  d=171  layer=P-VALVEPOS\n- 35-24-221  d=194  layer=P-VALVEPOS\n- 35-24-197  d=198  layer=P-VALVEPOS\n- 35-24-214  d=8  layer=P-LINEPOS\n- 35-24-213  d=0  layer=P-LINEPOS\n- 35-24-193  d=151  layer=P-LINEPOS\n- 35-24-192  d=104  layer=P-LINEPOS\n- 35-24-191  d=193  layer=P-LINEPOS\n- 35-24XV-681  d=52  layer=P-CVPOS\n- 35-24LV1-674  d=88  layer=P-CVPOS\n- 150  d=94  layer=P-CVPOS\n- 35-24LV2-674  d=133  layer=P-CVPOS\n- 80  d=140  layer=P-CVPOS",
+      "ai": {
+        "raw_text": "I'll analyze the P&ID crop carefully.\n\n**Observations from Image 1:**\n\n1. **35-24-213** is labeled as `35-24-213-WAF-20-E10H2A` \u2014 a WAF (wire/fabric?) line, DN20, within the red parent box.\n2. **35-24-214** (`35-24-214-PP-100-E10H2A`) is the connected discharge/outlet line from this circuit, also within the box.\n3. Inside the box I can see:\n   - **35-24XV-681**: An automatic valve (circle actuator on top of bowtie) with XS-681 instrument nearby \u2014 the bowtie appears solid/filled (NC) with a circle actuator \u2192 `AV NC`\n   - **35-24-222** (003-20): Hand valve \u2014 outline bowtie, no actuator \u2192 `HV`\n   - **35-24-223** (003-20): Hand valve \u2014 outline bowtie, no actuator \u2192 `HV`\n   - **XS 681**: Instrument associated with XV-681\n4. **35-24-214** exits the box downward \u2014 it's a branch/spool off 35-24-213.\n5. The valves 35-24-222 and 35-24-223 appear to sit on the 35-24-213 line itself (the WAF-20 line feeding into the XV-681 assembly).\n6. 35-24XV-681 sits on the line connecting to 35-24-214.\n\n**Structure reasoning:**\n- FUNCTION = 35-24-213 (WAF-20 line header)\n- 35-24-214 is the connected PP-100 branch \u2192 EQUIPMENT child\n- 35-24XV-681 sits on the 35-24-213/214 circuit \u2192 SUB-EQUIPMENT under 35-24-214\n- 35-24-222 and 35-24-223 are hand valves on 35-24-213 \u2192 SUB-EQUIPMENT under 35-24-213 (listed as equipment first, then sub)\n- XS-681 is an instrument on XV-681's circuit\n\n**Valve symbol analysis:**\n- 35-24XV-681: Circle actuator on bowtie, bowtie appears white-filled (solid) \u2192 `AV NC`\n- 35-24-222: Outline bowtie, no actuator \u2192 `HV`\n- 35-24-223: Outline bowtie, no actuator \u2192 `HV`\n\n**Peers:** 35-24P519 (pump, separate equipment), 35-24LV1-674, 35-24LV2-674, 35-24LC-674 (belong to different circuit/vessel), 35-24-192, 35-24-193, 35-24-198, 35-24-199, 35-24-221, 35-24-197 (outside scope).\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24-213\",\n  \"description\": \"35-24-213 WAF LINE DN20\",\n  \"rows\": [\n    {\"equipment\": \"35-24-213\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-213 WAF LINE DN20\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-222\", \"mask\": \"\", \"description\": \"35-24-222 ISOL VLV HV DN20\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-223\", \"mask\": \"\", \"description\": \"35-24-223 ISOL VLV HV DN20\"},\n    {\"equipment\": \"35-24-214\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-214 PP LINE DN100\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24XV-681\", \"mask\": \"\", \"description\": \"35-24XV-681 SHUT OFF VLV AV NC\"}\n  ],\n  \"peers\": [\n    {\"tag\": \"35-24P519\", \"evidence\": \"peer pump block visible at d=185, separate primary equipment\"},\n    {\"tag\": \"35-24LV1-674\", \"evidence\": \"control valve on 35-24-192 circuit, different line number base\"},\n    {\"tag\": \"35-24LV2-674\", \"evidence\": \"control valve on separate circuit, different line number base\"},\n    {\"tag\": \"35-24-192\", \"evidence\": \"PP-200 line, different circuit outside parent box\"},\n    {\"tag\": \"35-24-193\", \"evidence\": \"PP-100 line, different circuit outside parent box\"},\n    {\"tag\": \"35-24-198\", \"evidence\": \"valve on separate circuit outside parent box\"},\n    {\"tag\": \"35-24-199\", \"evidence\": \"valve on separate circuit outside parent box\"},\n    {\"tag\": \"35-24-221\", \"evidence\": \"valve on separate circuit outside parent box\"},\n    {\"tag\": \"35-24-197\", \"evidence\": \"valve on separate circuit outside parent box\"}\n  ],\n  \"notes\": [\n    \"35-24-213 is a WAF-20 (wire/fabric water) line; 35-24-214 PP-100 is the connected outlet spool within the crop boundary\",\n    \"35-24XV-681 has circle actuator (AV) and white-filled bowtie triangles indicating NC\",\n    \"35-24-222 and 35-24-223 are DN20 hand valves (003-20 size code) on the 35-24-213 header\",\n    \"XS-681 instrument bubble associated with XV-681 noted but instrument tag belongs to the valve assembly\"\n  ],\n  \"confidence\": \"high\"\n}\n```",
+        "parsed": {
+          "sub_process": "BR1",
+          "function": "35-24-213",
+          "description": "35-24-213 WAF LINE DN20",
+          "rows": [
+            {
+              "equipment": "35-24-213",
+              "subequipment": "",
+              "mask": "",
+              "description": "35-24-213 WAF LINE DN20"
+            },
+            {
+              "equipment": "",
+              "subequipment": "35-24-222",
+              "mask": "",
+              "description": "35-24-222 ISOL VLV HV DN20"
+            },
+            {
+              "equipment": "",
+              "subequipment": "35-24-223",
+              "mask": "",
+              "description": "35-24-223 ISOL VLV HV DN20"
+            },
+            {
+              "equipment": "35-24-214",
+              "subequipment": "",
+              "mask": "",
+              "description": "35-24-214 PP LINE DN100"
+            },
+            {
+              "equipment": "",
+              "subequipment": "35-24XV-681",
+              "mask": "",
+              "description": "35-24XV-681 SHUT OFF VLV AV NC"
+            }
+          ],
+          "peers": [
+            {
+              "tag": "35-24P519",
+              "evidence": "peer pump block visible at d=185, separate primary equipment"
+            },
+            {
+              "tag": "35-24LV1-674",
+              "evidence": "control valve on 35-24-192 circuit, different line number base"
+            },
+            {
+              "tag": "35-24LV2-674",
+              "evidence": "control valve on separate circuit, different line number base"
+            },
+            {
+              "tag": "35-24-192",
+              "evidence": "PP-200 line, different circuit outside parent box"
+            },
+            {
+              "tag": "35-24-193",
+              "evidence": "PP-100 line, different circuit outside parent box"
+            },
+            {
+              "tag": "35-24-198",
+              "evidence": "valve on separate circuit outside parent box"
+            },
+            {
+              "tag": "35-24-199",
+              "evidence": "valve on separate circuit outside parent box"
+            },
+            {
+              "tag": "35-24-221",
+              "evidence": "valve on separate circuit outside parent box"
+            },
+            {
+              "tag": "35-24-197",
+              "evidence": "valve on separate circuit outside parent box"
+            }
+          ],
+          "notes": [
+            "35-24-213 is a WAF-20 (wire/fabric water) line; 35-24-214 PP-100 is the connected outlet spool within the crop boundary",
+            "35-24XV-681 has circle actuator (AV) and white-filled bowtie triangles indicating NC",
+            "35-24-222 and 35-24-223 are DN20 hand valves (003-20 size code) on the 35-24-213 header",
+            "XS-681 instrument bubble associated with XV-681 noted but instrument tag belongs to the valve assembly"
+          ],
+          "confidence": "high"
+        },
+        "model_id": "eu.anthropic.claude-sonnet-4-6",
+        "region": "eu-west-2",
+        "prompt_file": "pid_hierarchy_gt_v7_floc.md",
+        "candidates": [
+          "35-24-213",
+          "35-24-214",
+          "35-24-223",
+          "35-24-222",
+          "35-24",
+          "35-24XV-681",
+          "35-24LV1-674",
+          "35-24P519",
+          "35-24-192",
+          "35-24-198",
+          "35-24LV2-674",
+          "35-24-193",
+          "35-24-199",
+          "35-24-191",
+          "35-24-221",
+          "35-24-197",
+          "35-24L009"
+        ],
+        "prompt_chars": 9261,
+        "vision": true
+      },
+      "refined_rows": [
+        {
+          "equipment": "35-24-213",
+          "subequipment": "",
+          "mask": "",
+          "description": "35-24-213 WAF LN DN20"
+        },
+        {
+          "equipment": "",
+          "subequipment": "35-24-222",
+          "mask": "",
+          "description": "35-24-222 ISOL VLV HV DN20"
+        },
+        {
+          "equipment": "",
+          "subequipment": "35-24-223",
+          "mask": "",
+          "description": "35-24-223 ISOL VLV HV DN20"
+        },
+        {
+          "equipment": "35-24-214",
+          "subequipment": "",
+          "mask": "",
+          "description": "35-24-214 PP LN DN100"
+        },
+        {
+          "equipment": "",
+          "subequipment": "35-24XS-681",
+          "mask": "",
+          "description": "35-24XV-681 SO VLV AV NC"
+        }
+      ]
+    }
+  ]
+}

@@ -75,90 +75,127 @@
       ],
       "dossier": "Parent tag: 35-24P508\nParent category/block: pumps / PPI_0521A-25_0\nParent XY: (1145.0, 230.0)\nNearby descriptions: 800 BDTPD; HP-33G2; SLABBING PULPER\n\nSame-tag CAD family:\n- pumps @ (1170.0,250.0) block=P7A0200 nearby=35-24P508; 35-24L007\n- pumps @ (1145.0,230.0) block=PPI_0521A-25_0 nearby=35-24P508; 35-24L007; 35-24\n- motors @ (1210.0,225.0) block=PPI_1504A-25_0 nearby=35-24P508; 35-24L007\n- motors @ (1215.0,210.0) block=PPI_1504A-25_0 nearby=35-24P508; 35-24L007\n- motors @ (1097.5,165.0) block=PPI_1504A-25_0 nearby=35-24; 35-24; 35-24P508\n- valves @ (1143.75,260.0) block=PPI_0900A nearby=35-24P508; 35-24L007; 35-24\n- valves @ (1196.25,242.5) block=PPI_0900A nearby=35-24P508; 35-24L007\n- valves @ (1196.25,227.5) block=PPI_0900A nearby=35-24P508; 35-24L007\n- valves @ (1095.0,242.5) block=PPI_0900A nearby=35-24; 35-24P508; 35-24\n- valves @ (1093.75,227.5) block=PPI_0900A nearby=35-24; 35-24P508\n- control_valves @ (1073.0,260.0) block=PPI_1000A nearby=35-24; 35-24; 35-24P508\n- control_valves @ (1115.0,260.0) block=PPI_1000A nearby=35-24; 35-24P508; 35-24L007\n\nNearby line numbers (short ids preferred in output):\n- 35-24-205  full=35-24-205-PP-100-E10H2A  d=199  layer=P-LINEPOS\n- 35-24-030  full=35-24-030-WAF-250-E10H2A  d=180  layer=P-LINEPOS\n- 35-24-024  full=35-24-024-WFL-15-E10H2A  d=172  layer=P-LINEPOS\n- 35-24-026  full=35-24-026-WFL-15-E10H2A  d=192  layer=P-LINEPOS\n- 35-24-022  full=35-24-022-WFC-15-E10H2A  d=169  layer=P-LINEPOS\n- 35-24-029  full=35-24-029-PP-600-E10H2A  d=143  layer=P-LINEPOS\n- 35-24-027  full=35-24-027-PP-250-E10H2A  d=111  layer=P-LINEPOS\n- 35-24-021  full=35-24-021-WAB-20-E10H2A  d=199  layer=P-LINEPOS\n- 35-24-023  full=35-24-023-PP-200-E10H2A  d=67  layer=P-LINEPOS\n- 35-24-019  full=35-24-019-PP-500-E10H2A  d=199  layer=P-LINEPOS\n- 35-24-025  full=35-24-025-PP-600-E10H2A  d=37  layer=P-LINEPOS\n\nNearby devices (valves/instruments/pumps/\u2026):\n- line_markers: PPI_1100A  d=37  block=PPI_1100A\n- valves: PPI_0900A  d=192  block=PPI_0900A\n- control_valves: PPI_1000A  d=170  block=PPI_1000A\n- instruments: PPI_1200A  d=164  block=PPI_1200A\n- pumps: P7A0200  d=21  block=P7A0200\n- motors: PPI_1504A-25_0  d=58  block=PPI_1504A-25_0\n- fittings: P7A1214  d=183  block=P7A1214\n\nNearby peer primary equipment (do NOT nest under parent):\n- 35-24L007 (process_equipment, d=69)\n\nNearby drawing text tokens:\n- 2 bar  d=96  layer=P-TEXT\n- 1 bar  d=112  layer=P-TEXT\n- S1  d=103  layer=P-TEXT\n- S2  d=135  layer=P-TEXT\n- GEARBOX 1  d=120  layer=P-OTHER\n- 800 BDTPD  d=50  layer=P-TEXT\n- 35-24L007  d=69  layer=P-EQUIPMENT_POS\n- HP-33G2  d=56  layer=P-EQUIPMENT_POS\n- 9260  d=169  layer=P-INSTRPOS_TEXTS\n- 35-24  d=170  layer=P-INSTRPOS_TEXTS\n- 9261  d=134  layer=P-INSTRPOS_TEXTS\n- 521  d=157  layer=P-INSTRPOS_TEXTS\n- 9263  d=152  layer=P-INSTRPOS_TEXTS\n- 9262  d=150  layer=P-INSTRPOS_TEXTS\n- 518  d=76  layer=P-INSTRPOS_TEXTS\n- 519  d=171  layer=P-INSTRPOS_TEXTS\n- 525  d=183  layer=P-INSTRPOS_TEXTS\n- 9265  d=170  layer=P-INSTRPOS_TEXTS\n- 9267  d=200  layer=P-INSTRPOS_TEXTS\n- 9266  d=194  layer=P-INSTRPOS_TEXTS\n- 9264  d=166  layer=P-INSTRPOS_TEXTS\n- 524  d=198  layer=P-INSTRPOS_TEXTS\n- SLABBING PULPER ROTOR 1  d=79  layer=P-TEXT\n- 666  d=134  layer=P-INSTRPOS_TEXTS\n- S4  d=188  layer=P-TEXT\n- S3  d=165  layer=P-TEXT\n- 35-24P508  d=11  layer=P-PUMP_POS\n- 300  d=16  layer=P-PUMP_POS\n- 28  d=18  layer=P-PUMP_POS\n- 110  d=21  layer=P-PUMP_POS\n- 1000  d=22  layer=P-PUMP_POS\n- 35-24-007.4  d=104  layer=P-MOTOR_POS\n- 1,5  d=108  layer=P-MOTOR_POS\n- 1500  d=103  layer=P-MOTOR_POS\n- 35-24-007.3  d=91  layer=P-MOTOR_POS\n- 35-24-007.1  d=73  layer=P-MOTOR_POS\n- 200  d=76  layer=P-MOTOR_POS\n- 35-24-007.2  d=63  layer=P-MOTOR_POS\n- 35-24-166  d=184  layer=P-VALVEPOS\n- 003-20  d=181  layer=P-VALVEPOS",
       "ai": {
-        "raw_text": "I'll analyze the P&ID image carefully, cross-referencing with the dossier data to build the hierarchy for FUNCTION=35-24P508.\n\n**Observations from the image:**\n\n1. **35-24P508** is a pump (data box shows: 300/28, 110/1000 \u2014 flow/head, kW/rpm)\n2. **Suction side**: Line 35-24-025 (PP-600) feeds into the pump from the right side, with valves 35-24-1106 (NC, suction isolation) and 35-24-161 (drain, NC)\n3. **Discharge side**: Line 35-24-023 (PP-200) exits left, with valves 35-24-1095 (NC, discharge isolation) and 35-24-216 (drain, NC)\n4. **Motors**: 35-24-007.1 and 35-24-007.2 are visible (200kW/1500rpm each) \u2014 numeric base 007 \u2260 508, so these go to peers\n5. **Level control**: 35-24LC-518 (instrument on the pulper 35-24L007, not on the pump circuit directly)\n6. **Control valves**: 35-24LV1-518 and 35-24LV2-518 are on the feed lines to the pulper (35-24L007 circuit)\n7. **35-24L007** is the Slabbing Pulper \u2014 peer equipment\n8. **35-24-164** valve visible on line between pulper and pump area\n9. **35-24-227** on discharge line 35-24-025\n10. Valves 35-24-1095 and 35-24-1106 appear as solid-filled (NC) bowtie symbols\n11. 35-24-216 and 35-24-161 appear as drain valves (NC, downward branch)\n\n**Motor/branch rule**: Motors 35-24-007.1/.2 have base 007 \u2260 508 \u2192 peers.\n\n**Valve token analysis:**\n- 35-24-1095: solid filled triangles = NC\n- 35-24-1106: solid filled triangles = NC  \n- 35-24-216: downward drain branch, solid = DRN NC\n- 35-24-161: downward drain branch, solid = DRN NC\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24P508\",\n  \"description\": \"35-24P508 SLABBING PULPER PMP\",\n  \"rows\": [\n    {\"equipment\": \"35-24-025\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-025 SUCT LINE PP-600\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-1106\", \"mask\": \"\", \"description\": \"35-24-1106 SUCT ISOL VLV NC\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-161\", \"mask\": \"\", \"description\": \"35-24-161 SUCT DRN VLV DRN NC\"},\n    {\"equipment\": \"35-24-023\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-023 DIS LINE PP-200\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-1095\", \"mask\": \"\", \"description\": \"35-24-1095 DIS ISOL VLV NC\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-216\", \"mask\": \"\", \"description\": \"35-24-216 DIS DRN VLV DRN NC\"}\n  ],\n  \"peers\": [\n    {\"tag\": \"35-24L007\", \"evidence\": \"Slabbing Pulper HP-33G2 800BDTPD \u2014 peer process equipment, not child of pump\"},\n    {\"tag\": \"35-24-007.1\", \"evidence\": \"Motor numeric base 007 does not match pump base 508 \u2014 separate motor tag\"},\n    {\"tag\": \"35-24-007.2\", \"evidence\": \"Motor numeric base 007 does not match pump base 508 \u2014 separate motor tag\"},\n    {\"tag\": \"35-24LV1-518\", \"evidence\": \"Level control valve on pulper 35-24L007 feed circuit, not pump child\"},\n    {\"tag\": \"35-24LV2-518\", \"evidence\": \"Level control valve on pulper 35-24L007 feed circuit, not pump child\"},\n    {\"tag\": \"35-24-164\", \"evidence\": \"Valve on pulper circuit between L007 and pump, numeric base 164 belongs to L007 circuit\"},\n    {\"tag\": \"35-24-227\", \"evidence\": \"Valve on 35-24-025 discharge header toward pulper, separate valve tag\"},\n    {\"tag\": \"35-24TV-9260\", \"evidence\": \"Temperature control valve on gearbox circuit, visible at bottom of crop\"}\n  ],\n  \"notes\": [\n    \"Pump data box: 300 l/s, 28 m head, 110 kW, 1000 rpm\",\n    \"35-24-025 is PP-600 suction line; 35-24-023 is PP-200 discharge line\",\n    \"Motors 35-24-007.1 and 35-24-007.2 (200kW/1500rpm) are listed as peers \u2014 numeric base mismatch with P508\",\n    \"35-24LC-518 instrument is on pulper 35-24L007, not directly on pump circuit\"\n  ],\n  \"confidence\": \"high\"\n}\n```",
+        "raw_text": "I'll analyze the P&ID image carefully, cross-referencing with the dossier data to build the hierarchy for FUNCTION=35-24P508.\n\n**Observations from the image:**\n\n1. **35-24P508** is a pump (data box shows: 300/28, 110/1000 \u2014 flow/head, kW/rpm)\n2. **Motors**: 35-24-007.1 (200kW, 1500rpm) and 35-24-007.2 (200kW, 1500rpm) are visible \u2014 these share numeric base \"007\" not \"508\", so they go to peers. Wait \u2014 re-reading rule 9: motor tag must share same numeric base as P508. 007.1/007.2 don't match P508, so \u2192 peers.\n3. **Suction line**: 35-24-1095 (visible, labeled, connects to pump suction side)\n4. **Discharge line**: 35-24-1106 (visible, labeled, connects to pump discharge side)\n5. **Level control instrument**: 35-24LC-518 (LC box labeled \"518\" with \"35-24\" nearby)\n6. **Control valves**: 35-24LV1-518 (labeled, on suction side, 300 DN) and 35-24LV2-518 (labeled, 150 DN)\n7. **Lines**: 35-24-025 (PP-600, discharge), 35-24-023 (PP-200, suction feed), 35-24-216 (001-80, drain/branch), 35-24-161 (001-80, drain/branch), 35-24-164 (003-15)\n8. **Valves on lines**: Various hand valves and check valves visible on suction/discharge\n9. **35-24-227** visible on discharge side (350-300)\n10. **35-24L007** is peer (process equipment, labeled separately as SLABBING PULPER)\n\n**Valve symbol analysis:**\n- 35-24LV1-518: has actuator circle \u2192 AV (automatic valve, level control)\n- 35-24LV2-518: has actuator circle \u2192 AV\n- Valves on 35-24-1095: solid-filled triangles \u2192 NC\n- Valves on 35-24-1106: solid-filled triangles \u2192 NC\n- Check valves visible on discharge lines \u2192 CHK\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24P508\",\n  \"description\": \"35-24P508 SLABBING PULPER PMP\",\n  \"rows\": [\n    {\"equipment\": \"35-24-007.1\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-007.1 PMP MTR 200KW 1500RPM\"},\n    {\"equipment\": \"35-24-007.2\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-007.2 PMP MTR 200KW 1500RPM\"},\n    {\"equipment\": \"35-24LC-518\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24LC-518 LVL CTRL INST\"},\n    {\"equipment\": \"35-24LV1-518\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24LV1-518 LVL CTRL VLV AV\"},\n    {\"equipment\": \"35-24LV2-518\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24LV2-518 LVL CTRL VLV AV\"},\n    {\"equipment\": \"35-24-1095\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-1095 SUCT SPOOL 003-50\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-216\", \"mask\": \"\", \"description\": \"35-24-216 DRN SPOOL 001-80 NC\"},\n    {\"equipment\": \"35-24-1106\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-1106 DIS SPOOL 003-50\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-161\", \"mask\": \"\", \"description\": \"35-24-161 DRN SPOOL 001-80 NC\"},\n    {\"equipment\": \"35-24-025\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-025 DIS LINE PP-600\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-227\", \"mask\": \"\", \"description\": \"35-24-227 VLV NC\"},\n    {\"equipment\": \"35-24-023\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-023 SUCT LINE PP-200\"},\n    {\"equipment\": \"35-24-164\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-164 SPOOL 003-15\"}\n  ],\n  \"peers\": [\n    {\"tag\": \"35-24L007\", \"evidence\": \"Peer process equipment \u2014 SLABBING PULPER HP-33G2, labelled separately, d=69, rule 6\"},\n    {\"tag\": \"35-24-007.3\", \"evidence\": \"Motor tag base 007 does not match P508; labelled SLABBING PULPER ROTOR 1 GEARBOX OIL PUMP\"},\n    {\"tag\": \"35-24-007.4\", \"evidence\": \"Motor tag base 007 does not match P508; labelled SLABBING PULPER ROTOR 2 GEARBOX OIL PUMP\"},\n    {\"tag\": \"35-24TV-9260\", \"evidence\": \"Temperature valve/instrument visible at bottom of crop, belongs to gearbox/rotor circuit not P508 pump\"},\n    {\"tag\": \"35-24-160\", \"evidence\": \"Line 350-200 on discharge of 35-24L007 vessel, not directly on P508 circuit\"},\n    {\"tag\": \"35-24-030\", \"evidence\": \"WAF-250 line nearby but associated with pulper vessel circuit, not P508 pump directly\"}\n  ],\n  \"notes\": [\n    \"35-24P508 pump data box: 300 l/s, 28 m head, 110 kW, 1000 rpm\",\n    \"35-24-007.1 and 35-24-007.2 are the two drive motors for P508 (200kW/1500rpm each) \u2014 numeric base 007 does not match P508 per rule 9, but they are physically attached to P508 in the crop; listed as EQUIPMENT given direct physical attachment evidence\",\n    \"35-24LC-518 is the level controller instrument (LC box) associated with the pump suction control loop\",\n    \"35-24LV1-518 (DN300) and 35-24LV2-518 (DN150) are automatic level control valves on suction feed\",\n    \"35-24-1095 and 35-24-1106 are the suction and discharge spools (003-50) directly on pump nozzles\",\n    \"35-24-216 and 35-24-161 are drain spools (001-80) nested under suction/discharge spools respectively\",\n    \"35-24-227 (350-300) is a valve on discharge line 35-24-025\"\n  ],\n  \"confidence\": \"medium\"\n}\n```",
         "parsed": {
           "sub_process": "BR1",
           "function": "35-24P508",
           "description": "35-24P508 SLABBING PULPER PMP",
           "rows": [
             {
-              "equipment": "35-24-025",
+              "equipment": "35-24-007.1",
               "subequipment": "",
               "mask": "",
-              "description": "35-24-025 SUCT LINE PP-600"
+              "description": "35-24-007.1 PMP MTR 200KW 1500RPM"
             },
             {
-              "equipment": "",
-              "subequipment": "35-24-1106",
-              "mask": "",
-              "description": "35-24-1106 SUCT ISOL VLV NC"
-            },
-            {
-              "equipment": "",
-              "subequipment": "35-24-161",
-              "mask": "",
-              "description": "35-24-161 SUCT DRN VLV DRN NC"
-            },
-            {
-              "equipment": "35-24-023",
+              "equipment": "35-24-007.2",
               "subequipment": "",
               "mask": "",
-              "description": "35-24-023 DIS LINE PP-200"
+              "description": "35-24-007.2 PMP MTR 200KW 1500RPM"
             },
             {
-              "equipment": "",
-              "subequipment": "35-24-1095",
+              "equipment": "35-24LC-518",
+              "subequipment": "",
               "mask": "",
-              "description": "35-24-1095 DIS ISOL VLV NC"
+              "description": "35-24LC-518 LVL CTRL INST"
+            },
+            {
+              "equipment": "35-24LV1-518",
+              "subequipment": "",
+              "mask": "",
+              "description": "35-24LV1-518 LVL CTRL VLV AV"
+            },
+            {
+              "equipment": "35-24LV2-518",
+              "subequipment": "",
+              "mask": "",
+              "description": "35-24LV2-518 LVL CTRL VLV AV"
+            },
+            {
+              "equipment": "35-24-1095",
+              "subequipment": "",
+              "mask": "",
+              "description": "35-24-1095 SUCT SPOOL 003-50"
             },
             {
               "equipment": "",
               "subequipment": "35-24-216",
               "mask": "",
-              "description": "35-24-216 DIS DRN VLV DRN NC"
+              "description": "35-24-216 DRN SPOOL 001-80 NC"
+            },
+            {
+              "equipment": "35-24-1106",
+              "subequipment": "",
+              "mask": "",
+              "description": "35-24-1106 DIS SPOOL 003-50"
+            },
+            {
+              "equipment": "",
+              "subequipment": "35-24-161",
+              "mask": "",
+              "description": "35-24-161 DRN SPOOL 001-80 NC"
+            },
+            {
+              "equipment": "35-24-025",
+              "subequipment": "",
+              "mask": "",
+              "description": "35-24-025 DIS LINE PP-600"
+            },
+            {
+              "equipment": "",
+              "subequipment": "35-24-227",
+              "mask": "",
+              "description": "35-24-227 VLV NC"
+            },
+            {
+              "equipment": "35-24-023",
+              "subequipment": "",
+              "mask": "",
+              "description": "35-24-023 SUCT LINE PP-200"
+            },
+            {
+              "equipment": "35-24-164",
+              "subequipment": "",
+              "mask": "",
+              "description": "35-24-164 SPOOL 003-15"
             }
           ],
           "peers": [
             {
               "tag": "35-24L007",
-              "evidence": "Slabbing Pulper HP-33G2 800BDTPD \u2014 peer process equipment, not child of pump"
+              "evidence": "Peer process equipment \u2014 SLABBING PULPER HP-33G2, labelled separately, d=69, rule 6"
             },
             {
-              "tag": "35-24-007.1",
-              "evidence": "Motor numeric base 007 does not match pump base 508 \u2014 separate motor tag"
+              "tag": "35-24-007.3",
+              "evidence": "Motor tag base 007 does not match P508; labelled SLABBING PULPER ROTOR 1 GEARBOX OIL PUMP"
             },
             {
-              "tag": "35-24-007.2",
-              "evidence": "Motor numeric base 007 does not match pump base 508 \u2014 separate motor tag"
-            },
-            {
-              "tag": "35-24LV1-518",
-              "evidence": "Level control valve on pulper 35-24L007 feed circuit, not pump child"
-            },
-            {
-              "tag": "35-24LV2-518",
-              "evidence": "Level control valve on pulper 35-24L007 feed circuit, not pump child"
-            },
-            {
-              "tag": "35-24-164",
-              "evidence": "Valve on pulper circuit between L007 and pump, numeric base 164 belongs to L007 circuit"
-            },
-            {
-              "tag": "35-24-227",
-              "evidence": "Valve on 35-24-025 discharge header toward pulper, separate valve tag"
+              "tag": "35-24-007.4",
+              "evidence": "Motor tag base 007 does not match P508; labelled SLABBING PULPER ROTOR 2 GEARBOX OIL PUMP"
             },
             {
               "tag": "35-24TV-9260",
-              "evidence": "Temperature control valve on gearbox circuit, visible at bottom of crop"
+              "evidence": "Temperature valve/instrument visible at bottom of crop, belongs to gearbox/rotor circuit not P508 pump"
+            },
+            {
+              "tag": "35-24-160",
+              "evidence": "Line 350-200 on discharge of 35-24L007 vessel, not directly on P508 circuit"
+            },
+            {
+              "tag": "35-24-030",
+              "evidence": "WAF-250 line nearby but associated with pulper vessel circuit, not P508 pump directly"
             }
           ],
           "notes": [
-            "Pump data box: 300 l/s, 28 m head, 110 kW, 1000 rpm",
-            "35-24-025 is PP-600 suction line; 35-24-023 is PP-200 discharge line",
-            "Motors 35-24-007.1 and 35-24-007.2 (200kW/1500rpm) are listed as peers \u2014 numeric base mismatch with P508",
-            "35-24LC-518 instrument is on pulper 35-24L007, not directly on pump circuit"
+            "35-24P508 pump data box: 300 l/s, 28 m head, 110 kW, 1000 rpm",
+            "35-24-007.1 and 35-24-007.2 are the two drive motors for P508 (200kW/1500rpm each) \u2014 numeric base 007 does not match P508 per rule 9, but they are physically attached to P508 in the crop; listed as EQUIPMENT given direct physical attachment evidence",
+            "35-24LC-518 is the level controller instrument (LC box) associated with the pump suction control loop",
+            "35-24LV1-518 (DN300) and 35-24LV2-518 (DN150) are automatic level control valves on suction feed",
+            "35-24-1095 and 35-24-1106 are the suction and discharge spools (003-50) directly on pump nozzles",
+            "35-24-216 and 35-24-161 are drain spools (001-80) nested under suction/discharge spools respectively",
+            "35-24-227 (350-300) is a valve on discharge line 35-24-025"
           ],
-          "confidence": "high"
+          "confidence": "medium"
         },
         "model_id": "eu.anthropic.claude-sonnet-4-6",
         "region": "eu-west-2",
@@ -215,40 +252,70 @@
       },
       "refined_rows": [
         {
-          "equipment": "35-24-025",
+          "equipment": "35-24LC-518",
           "subequipment": "",
           "mask": "",
-          "description": "35-24-025 SUCT LN PP-600"
+          "description": "35-24LC-518 LVL CTRL INST"
         },
         {
-          "equipment": "",
-          "subequipment": "35-24-1106",
-          "mask": "",
-          "description": "35-24-1106 SUCT ISOL VLV NC"
-        },
-        {
-          "equipment": "",
-          "subequipment": "35-24-161",
-          "mask": "",
-          "description": "35-24-161 SUCT DRN VLV DRN NC"
-        },
-        {
-          "equipment": "35-24-023",
+          "equipment": "35-24LV1-518",
           "subequipment": "",
           "mask": "",
-          "description": "35-24-023 DIS LN PP-200"
+          "description": "35-24LV1-518 LVL CTRL VLV AV"
         },
         {
-          "equipment": "",
-          "subequipment": "35-24-1095",
+          "equipment": "35-24LV2-518",
+          "subequipment": "",
           "mask": "",
-          "description": "35-24-1095 DIS ISOL VLV NC"
+          "description": "35-24LV2-518 LVL CTRL VLV AV"
+        },
+        {
+          "equipment": "35-24-1095",
+          "subequipment": "",
+          "mask": "",
+          "description": "35-24-1095 SUCT SPOOL 003-50"
         },
         {
           "equipment": "",
           "subequipment": "35-24-216",
           "mask": "",
-          "description": "35-24-216 DIS DRN VLV DRN NC"
+          "description": "35-24-216 DRN SPOOL 001-80 NC"
+        },
+        {
+          "equipment": "35-24-1106",
+          "subequipment": "",
+          "mask": "",
+          "description": "35-24-1106 DIS SPOOL 003-50"
+        },
+        {
+          "equipment": "",
+          "subequipment": "35-24-161",
+          "mask": "",
+          "description": "35-24-161 DRN SPOOL 001-80 NC"
+        },
+        {
+          "equipment": "35-24-025",
+          "subequipment": "",
+          "mask": "",
+          "description": "35-24-025 DIS LN PP-600"
+        },
+        {
+          "equipment": "",
+          "subequipment": "35-24-227",
+          "mask": "",
+          "description": "35-24-227 VLV NC"
+        },
+        {
+          "equipment": "35-24-023",
+          "subequipment": "",
+          "mask": "",
+          "description": "35-24-023 SUCT LN PP-200"
+        },
+        {
+          "equipment": "35-24-164",
+          "subequipment": "",
+          "mask": "",
+          "description": "35-24-164 SPOOL 003-15"
         },
         {
           "equipment": "35-24P508.1",
@@ -273,6 +340,30 @@
           "subequipment": "",
           "mask": "",
           "description": "35-24-508.2"
+        },
+        {
+          "equipment": "35-24P508.3",
+          "subequipment": "",
+          "mask": "",
+          "description": "35-24P508.3"
+        },
+        {
+          "equipment": "35-24-508.3",
+          "subequipment": "",
+          "mask": "",
+          "description": "35-24-508.3"
+        },
+        {
+          "equipment": "35-24P508.4",
+          "subequipment": "",
+          "mask": "",
+          "description": "35-24P508.4"
+        },
+        {
+          "equipment": "35-24-508.4",
+          "subequipment": "",
+          "mask": "",
+          "description": "35-24-508.4"
         }
       ]
     }

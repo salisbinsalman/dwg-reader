@@ -7,10 +7,12 @@ import unittest
 
 from dwg_floc_context import apply_sop_valve_type, combine_valve_type, infer_valve_type, is_valve_equipment
 from dwg_valve_classify import (
+    apply_wfl_drain_attachment,
     drain_below_valve,
     locate_valve,
     parse_type_tokens,
     pick_parent_fn,
+    _parse_one_pass,
 )
 from export_sap_equipment import build_equipment_rows
 
@@ -33,6 +35,12 @@ class ParseTypeTokensTests(unittest.TestCase):
         self.assertEqual(parse_type_tokens("AV NC"), "AV")
         self.assertEqual(parse_type_tokens("AV NO HV"), "AV")
         self.assertEqual(parse_type_tokens("AV-M NC"), "AV-M")
+
+    def test_av_with_drn_attachment(self) -> None:
+        self.assertEqual(
+            _parse_one_pass('{"type": "AV", "attachment": "DRN"}'),
+            "AV DRN",
+        )
 
     def test_hand_drain_keeps_nc(self) -> None:
         self.assertEqual(parse_type_tokens("DRN NC"), "DRN NC")
@@ -87,6 +95,53 @@ class LocateValveTests(unittest.TestCase):
 
     def test_missing_text_returns_none(self) -> None:
         self.assertIsNone(locate_valve("35-24-999", text_locations={}, valve_inserts=[]))
+
+    def test_wfl_121_snaps_to_symb_drain_bowtie(self) -> None:
+        texts = {"35-24-121": {"x": 2385.97, "y": 258.77, "layer": "P-VALVEPOS"}}
+        inserts = [
+            {"x": 2392.5, "y": 257.5, "layer": "P-VALVEPOS", "name": "PPI_0900A"},
+            {"x": 2392.25, "y": 220.0, "layer": "P-VALVEPOS", "name": "PPI_0900A"},
+        ]
+        symb = [{"x": 2383.72, "y": 235.0, "layer": "P-SYMB", "name": "P7A1305"}]
+        loc = locate_valve(
+            "35-24-121",
+            text_locations=texts,
+            valve_inserts=inserts,
+            symb_inserts=symb,
+            wfl_drain_hint=True,
+        )
+        self.assertIsNotNone(loc)
+        assert loc is not None
+        self.assertEqual(loc["x"], 2383.72)
+        self.assertEqual(loc["y"], 235.0)
+        self.assertEqual(loc["layer"], "P-SYMB")
+
+    def test_wfl_123_keeps_nearest_valvepos(self) -> None:
+        texts = {"35-24-123": {"x": 2358.43, "y": 228.73, "layer": "P-VALVEPOS"}}
+        inserts = [{"x": 2364.97, "y": 227.47, "layer": "P-VALVEPOS", "name": "PPI_0900A"}]
+        symb = [{"x": 2383.72, "y": 235.0, "layer": "P-SYMB", "name": "P7A1305"}]
+        loc = locate_valve(
+            "35-24-123",
+            text_locations=texts,
+            valve_inserts=inserts,
+            symb_inserts=symb,
+            wfl_drain_hint=True,
+        )
+        self.assertIsNotNone(loc)
+        assert loc is not None
+        self.assertEqual(loc["x"], 2364.97)
+        self.assertEqual(loc["layer"], "P-VALVEPOS")
+
+
+class WflDrainAttachmentTests(unittest.TestCase):
+    def test_adds_drn_to_nc_body(self) -> None:
+        self.assertEqual(apply_wfl_drain_attachment("NC", wfl_drain_hint=True), "DRN NC")
+
+    def test_leaves_existing_drn(self) -> None:
+        self.assertEqual(apply_wfl_drain_attachment("DRN NC", wfl_drain_hint=True), "DRN NC")
+
+    def test_no_hint_unchanged(self) -> None:
+        self.assertEqual(apply_wfl_drain_attachment("NC", wfl_drain_hint=False), "NC")
 
 
 class DrainParentTests(unittest.TestCase):

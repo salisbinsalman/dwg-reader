@@ -15,12 +15,16 @@ from typing import Dict, List
 from dwg_floc_context import infer_valve_type
 from dwg_pure_dump import evidence_dir, find_json, safe_name
 from dwg_valve_classify import (
+    apply_wfl_drain_attachment,
     bedrock_classify_crop,
+    collect_symb_bowtie_inserts,
     collect_text_locations,
     collect_valve_inserts,
     locate_valve,
+    pipe_dn_label_near_tag,
     tight_valve_screenshot,
     valve_ring_frac,
+    wfl_drain_line_hint,
 )
 
 
@@ -32,21 +36,32 @@ ALIASES = {
 
 EXPECTED_TYPES = {
     "35-24-1105": {"NC", "FLS"},
-    "35-24-093": {"NC"},
+    "35-24-093": {"DRN"},
     "35-24-001": {"HV"},
     "35-24-215": {"NC", "FLS"},
-    "35-24-108": {"NC", "SMP"},
+    "35-24-108": {"NC", "FLS"},
     "35-24LV1-560": {"AV"},
     "35-24-137": {"DRN", "NC"},
     "35-24-107": {"DRN", "NC"},
+    "35-24-110": {"DRN", "NC"},
     "35-24-230": {"HV"},
     "35-24-105": {"DRN", "NC"},
     "35-24HV-618": {"AV"},
+    "35-24-217": {"DRN", "NC"},
+    "35-24-121": {"DRN", "NC"},
+    "35-24-123": {"DRN", "NC"},
+    "35-24-191": {"DRN"},
+    "35-24-192": {"DRN"},
+    "35-24XV-665": {"DRN"},
+    "35-24-198": {"NC", "FLS"},
+    "35-24-199": {"NC"},
+    "35-24-196": {"HV"},
 }
 
 DEFAULT_TAGS = (
     "35-32-1105,35-24-093,35-24-001,34-24-215,35-24-108,35-24LV1-560,35-24-137,"
-    "35-24-107,35-24-230,35-24-105,35-24HV-618"
+    "35-24-107,35-24-110,35-24-230,35-24-105,35-24HV-618,35-24-217,35-24-121,35-24-123,"
+    "35-24-191,35-24-192,35-24XV-665,35-24-198,35-24-199,35-24-196"
 )
 
 
@@ -126,8 +141,11 @@ def main() -> int:
 
     hierarchy = load_hierarchy_rows(hier_path)
     structural = json.loads(struct_path.read_text(encoding="utf-8"))
+    inv_path = find_json(out_dir, f"{base}.pid_inventory.json")
+    inventory = json.loads(inv_path.read_text(encoding="utf-8")) if inv_path.exists() else {}
     text_locations = collect_text_locations(structural)
     valve_inserts = collect_valve_inserts(structural)
+    symb_inserts = collect_symb_bowtie_inserts(structural)
 
     tags = [_norm(t) for t in args.tags.split(",") if t.strip()]
     rows: List[Dict[str, str]] = []
@@ -147,7 +165,13 @@ def main() -> int:
         meta = hierarchy.get(tag) or {"fn": "", "description": ""}
         desc = meta.get("description") or ""
         fn = meta.get("fn") or ""
-        loc = locate_valve(tag, text_locations=text_locations, valve_inserts=valve_inserts)
+        loc = locate_valve(
+            tag,
+            text_locations=text_locations,
+            valve_inserts=valve_inserts,
+            symb_inserts=symb_inserts,
+            wfl_drain_hint=wfl_drain_line_hint(tag, inventory),
+        )
         cad_type = infer_valve_type(tag, desc) if desc else ""
         vision_type = ""
         crop_file = ""
@@ -167,16 +191,20 @@ def main() -> int:
                 crop_file = str(rendered)
                 if not args.skip_vision:
                     try:
-                        vision_type = bedrock_classify_crop(
-                            rendered,
-                            legend_path,
-                            model_id=args.model_id,
-                            region=args.region,
-                            tag=tag,
-                            cx_frac=cx_frac,
-                            cy_frac=cy_frac,
-                            crop_half=float(args.crop_half),
-                            extra_below=float(args.extra_below),
+                        vision_type = apply_wfl_drain_attachment(
+                            bedrock_classify_crop(
+                                rendered,
+                                legend_path,
+                                model_id=args.model_id,
+                                region=args.region,
+                                tag=tag,
+                                cx_frac=cx_frac,
+                                cy_frac=cy_frac,
+                                crop_half=float(args.crop_half),
+                                extra_below=float(args.extra_below),
+                                pipe_dn_near=pipe_dn_label_near_tag(tag, text_locations, structural),
+                            ),
+                            wfl_drain_hint=wfl_drain_line_hint(tag, inventory),
                         )
                         print(f"  [vision] {tag} → {vision_type!r}", flush=True)
                     except Exception as exc:  # noqa: BLE001 - report per-tag vision failures

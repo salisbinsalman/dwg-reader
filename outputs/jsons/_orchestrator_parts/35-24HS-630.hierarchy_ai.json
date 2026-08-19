@@ -1,0 +1,172 @@
+{
+  "input": "/Users/code-huddle-ensemble/Desktop/dwg-reader/inputs/Broke System.dwg",
+  "mode": "viewer_shot_ai_gt",
+  "evidence_dir": "/Users/code-huddle-ensemble/Desktop/dwg-reader/outputs/evidence",
+  "site": "Shotton Paper Mill, United Kingdom",
+  "line": "Shotton PM3",
+  "process": "Broke System",
+  "sub_process": "BR1",
+  "model_id": "eu.anthropic.claude-sonnet-4-6",
+  "region": "eu-west-2",
+  "prompt_file": "pid_hierarchy_gt_v7_floc.md",
+  "legend": "/Users/code-huddle-ensemble/Desktop/dwg-reader/inputs/legend.png",
+  "results": [
+    {
+      "tag": "35-24HS-630",
+      "shot": "/Users/code-huddle-ensemble/Desktop/dwg-reader/outputs/evidence/Broke System.viewer_35-24HS-630.png",
+      "parent": {
+        "category": "instruments",
+        "block_name": "",
+        "handle": "",
+        "layer": "P-INSTRPOS_TEXTS",
+        "x": 5048.343001076076,
+        "y": 448.541825,
+        "resolved_tag": "35-24HS-630",
+        "nearby_tags": "HS; 630; 35-24",
+        "nearby_descriptions": "HS 630 (35-24)",
+        "confidence": "high"
+      },
+      "candidates": [
+        "35-24",
+        "35-24HS-630",
+        "35-24HV-628",
+        "35-24-159",
+        "35-24HV-626",
+        "35-24P515",
+        "35-24-152",
+        "35-24-029",
+        "35-24P513",
+        "35-24-1093",
+        "35-24HV-623",
+        "35-24-151",
+        "35-24-030",
+        "35-24-154",
+        "35-24HV-633",
+        "35-24T605",
+        "35-24-1110",
+        "35-24-201",
+        "35-24-027",
+        "35-24-156",
+        "35-24-032",
+        "35-24-024",
+        "35-24L002",
+        "35-24-026",
+        "35-24-158",
+        "35-24-1137",
+        "35-24L405",
+        "35-24-1091",
+        "35-24-025",
+        "35-24LV-622",
+        "35-24-019",
+        "35-24-021",
+        "35-24-155",
+        "35-24HV-636",
+        "35-24-033",
+        "35-24-149",
+        "35-24-150"
+      ],
+      "dossier": "Parent tag: 35-24HS-630\nParent category/block: instruments / \nParent XY: (5048.343001076076, 448.541825)\nNearby descriptions: HS 630 (35-24)\n\nSame-tag CAD family:\n- (none)\n\nNearby line numbers (short ids preferred in output):\n- 35-24-149  full=35-24-149-WAA-300-E10H2A  d=200  layer=P-LINEPOS\n- 35-24-152  full=35-24-152-PP-300-E10H2A  d=89  layer=P-LINEPOS\n- 35-24-151  full=35-24-151-PP-600-E10H2A  d=118  layer=P-LINEPOS\n- 35-24-158  full=35-24-158-PP-400-E10H2A  d=149  layer=P-LINEPOS\n- 35-24-154  full=35-24-154-PP-700-E10H2A  d=120  layer=P-LINEPOS\n- 35-24-159  full=35-24-159-PP-300-E10H2A  d=56  layer=P-LINEPOS\n- 35-24-155  full=35-24-155-PP-150-E10H2A  d=190  layer=P-LINEPOS\n- 35-24-156  full=35-24-156-PP-400-E10H2A  d=134  layer=P-LINEPOS\n\nNearby devices (valves/instruments/pumps/\u2026):\n- line_markers: PPI_1100A  d=136  block=PPI_1100A\n- valves: PPI_0900A  d=178  block=PPI_0900A\n- control_valves: PPI_1000A  d=171  block=PPI_1000A\n- instruments: PPI_1204A  d=169  block=PPI_1204A\n- pumps: P7A0200  d=171  block=P7A0200\n\nNearby peer primary equipment (do NOT nest under parent):\n- 35-24T605 (tanks, d=155)\n- 35-24L405 (agitators, d=191)\n- 35-24P513 (pumps, d=171)\n- 35-24P515 (pumps, d=135)\n\nNearby drawing text tokens:\n- 35-24L405  d=192  layer=P-AGITATOR_POS\n- DN600  d=128  layer=P-PTERMINAL_POS\n- DN300  d=172  layer=P-PTERMINAL_POS\n- DN\u00d860  d=127  layer=P-PTERMINAL_POS\n- 630  d=4  layer=P-INSTRPOS_TEXTS\n- 35-24  d=11  layer=P-INSTRPOS_TEXTS\n- 629  d=11  layer=P-INSTRPOS_TEXTS\n- 623  d=134  layer=P-INSTRPOS_TEXTS\n- 626  d=84  layer=P-INSTRPOS_TEXTS\n- 633  d=117  layer=P-INSTRPOS_TEXTS\n- 631  d=96  layer=P-INSTRPOS_TEXTS\n- 636  d=187  layer=P-INSTRPOS_TEXTS\n- 628  d=62  layer=P-INSTRPOS_TEXTS\n- 625  d=83  layer=P-INSTRPOS_TEXTS\n- 622  d=143  layer=P-INSTRPOS_TEXTS\n- 624  d=173  layer=P-INSTRPOS_TEXTS\n- 663  d=19  layer=P-INSTRPOS_TEXTS\n- 35-24T605  d=155  layer=P-TANK_POS\n- 70 m\u00b3  d=172  layer=P-TANK_POS\n- 4 %  d=176  layer=P-TANK_POS\n- 35-24P513  d=196  layer=P-PUMP_POS\n- 35-24P515  d=177  layer=P-PUMP_POS\n- 115  d=181  layer=P-PUMP_POS\n- 38  d=183  layer=P-PUMP_POS\n- 75  d=186  layer=P-PUMP_POS\n- 1500  d=188  layer=P-PUMP_POS\n- 35-24-033  d=199  layer=P-VALVEPOS\n- 003-15  d=196  layer=P-VALVEPOS\n- 35-24-032  d=136  layer=P-VALVEPOS\n- 35-24-1110  d=129  layer=P-VALVEPOS\n- 003-25  d=128  layer=P-VALVEPOS\n- 35-24-030  d=118  layer=P-VALVEPOS\n- 001-65  d=114  layer=P-VALVEPOS\n- 35-24-029  d=99  layer=P-VALVEPOS\n- 35-24-027  d=133  layer=P-VALVEPOS\n- 350-400  d=138  layer=P-VALVEPOS\n- 35-24-026  d=148  layer=P-VALVEPOS\n- 35-24-025  d=176  layer=P-VALVEPOS\n- 101-150  d=181  layer=P-VALVEPOS\n- 35-24-024  d=141  layer=P-VALVEPOS",
+      "ai": {
+        "raw_text": "Looking at the P&ID image, I can see that **35-24HS-630** is an instrument (Hand Switch / selector switch) located inside a **CONTROL BOX**. The control box contains:\n- 35-24HS-629 (LOCAL/REMOTE)\n- 35-24HS-630 (JOGGING)\n- 35-24ES-663 (BROKE THICKENER E-STOP)\n\nThis is a pure instrument tag (HS = Hand Switch). It has no piping lines, valves, or sub-equipment directly attached to it \u2014 it is a pushbutton/selector inside a control panel. Per the rules: *\"If 35-24HS-630 is an instrument and no labelled accessories sit on it, emit the FUNCTION header + description only \u2014 empty `rows` is correct.\"*\n\nThe nearby peer equipment (35-24T605, 35-24L405, 35-24P513, 35-24P515) are clearly separate major equipment items and go to peers. The other instruments in the control box (HS-629, ES-663) are siblings, not children.\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24HS-630\",\n  \"description\": \"35-24HS-630 BROKE THICKENER JOG SW\",\n  \"rows\": [],\n  \"peers\": [\n    {\n      \"tag\": \"35-24HS-629\",\n      \"evidence\": \"Sibling instrument in same control box \u2014 LOCAL/REMOTE selector, own tag, not a child of HS-630\"\n    },\n    {\n      \"tag\": \"35-24ES-663\",\n      \"evidence\": \"Sibling instrument in same control box \u2014 BROKE THICKENER E-STOP, own tag, not a child of HS-630\"\n    },\n    {\n      \"tag\": \"35-24T605\",\n      \"evidence\": \"Peer major equipment \u2014 THICKENED BROKE TANK 70m\u00b3, separate FUNCTION\"\n    },\n    {\n      \"tag\": \"35-24L405\",\n      \"evidence\": \"Peer major equipment \u2014 agitator on 35-24T605, separate FUNCTION\"\n    },\n    {\n      \"tag\": \"35-24P513\",\n      \"evidence\": \"Peer major equipment \u2014 pump, separate FUNCTION\"\n    },\n    {\n      \"tag\": \"35-24P515\",\n      \"evidence\": \"Peer major equipment \u2014 pump, separate FUNCTION\"\n    },\n    {\n      \"tag\": \"35-24HV-628\",\n      \"evidence\": \"Automatic valve on nearby piping circuit, not subordinate to HS-630 instrument\"\n    },\n    {\n      \"tag\": \"35-24HV-626\",\n      \"evidence\": \"Automatic valve on nearby piping circuit, not subordinate to HS-630 instrument\"\n    },\n    {\n      \"tag\": \"35-24LV-622\",\n      \"evidence\": \"Level control valve on separate piping circuit, not subordinate to HS-630\"\n    },\n    {\n      \"tag\": \"35-24HV-623\",\n      \"evidence\": \"Hand valve on separate piping circuit, not subordinate to HS-630\"\n    }\n  ],\n  \"notes\": [\n    \"35-24HS-630 is a JOGGING hand switch located inside a CONTROL BOX on the P&ID, alongside HS-629 (LOCAL/REMOTE) and ES-663 (E-STOP). As a pure instrument with no piping or sub-accessories, rows are empty per rules.\",\n    \"Description capped at 40 chars: '35-24HS-630 BROKE THICKENER JOG SW' = 35 chars.\"\n  ],\n  \"confidence\": \"high\"\n}\n```",
+        "parsed": {
+          "sub_process": "BR1",
+          "function": "35-24HS-630",
+          "description": "35-24HS-630 BROKE THICKENER JOG SW",
+          "rows": [],
+          "peers": [
+            {
+              "tag": "35-24HS-629",
+              "evidence": "Sibling instrument in same control box \u2014 LOCAL/REMOTE selector, own tag, not a child of HS-630"
+            },
+            {
+              "tag": "35-24ES-663",
+              "evidence": "Sibling instrument in same control box \u2014 BROKE THICKENER E-STOP, own tag, not a child of HS-630"
+            },
+            {
+              "tag": "35-24T605",
+              "evidence": "Peer major equipment \u2014 THICKENED BROKE TANK 70m\u00b3, separate FUNCTION"
+            },
+            {
+              "tag": "35-24L405",
+              "evidence": "Peer major equipment \u2014 agitator on 35-24T605, separate FUNCTION"
+            },
+            {
+              "tag": "35-24P513",
+              "evidence": "Peer major equipment \u2014 pump, separate FUNCTION"
+            },
+            {
+              "tag": "35-24P515",
+              "evidence": "Peer major equipment \u2014 pump, separate FUNCTION"
+            },
+            {
+              "tag": "35-24HV-628",
+              "evidence": "Automatic valve on nearby piping circuit, not subordinate to HS-630 instrument"
+            },
+            {
+              "tag": "35-24HV-626",
+              "evidence": "Automatic valve on nearby piping circuit, not subordinate to HS-630 instrument"
+            },
+            {
+              "tag": "35-24LV-622",
+              "evidence": "Level control valve on separate piping circuit, not subordinate to HS-630"
+            },
+            {
+              "tag": "35-24HV-623",
+              "evidence": "Hand valve on separate piping circuit, not subordinate to HS-630"
+            }
+          ],
+          "notes": [
+            "35-24HS-630 is a JOGGING hand switch located inside a CONTROL BOX on the P&ID, alongside HS-629 (LOCAL/REMOTE) and ES-663 (E-STOP). As a pure instrument with no piping or sub-accessories, rows are empty per rules.",
+            "Description capped at 40 chars: '35-24HS-630 BROKE THICKENER JOG SW' = 35 chars."
+          ],
+          "confidence": "high"
+        },
+        "model_id": "eu.anthropic.claude-sonnet-4-6",
+        "region": "eu-west-2",
+        "prompt_file": "pid_hierarchy_gt_v7_floc.md",
+        "candidates": [
+          "35-24",
+          "35-24HS-630",
+          "35-24HV-628",
+          "35-24-159",
+          "35-24HV-626",
+          "35-24P515",
+          "35-24-152",
+          "35-24-029",
+          "35-24P513",
+          "35-24-1093",
+          "35-24HV-623",
+          "35-24-151",
+          "35-24-030",
+          "35-24-154",
+          "35-24HV-633",
+          "35-24T605",
+          "35-24-1110",
+          "35-24-201",
+          "35-24-027",
+          "35-24-156",
+          "35-24-032",
+          "35-24-024",
+          "35-24L002",
+          "35-24-026",
+          "35-24-158",
+          "35-24-1137",
+          "35-24L405",
+          "35-24-1091",
+          "35-24-025",
+          "35-24LV-622",
+          "35-24-019",
+          "35-24-021",
+          "35-24-155",
+          "35-24HV-636",
+          "35-24-033",
+          "35-24-149",
+          "35-24-150"
+        ],
+        "prompt_chars": 10303,
+        "vision": true
+      },
+      "refined_rows": []
+    }
+  ]
+}

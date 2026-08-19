@@ -378,6 +378,30 @@
           "description": "35-24L005.2"
         },
         {
+          "equipment": "35-24L005.3",
+          "subequipment": "",
+          "mask": "",
+          "description": "35-24L005.3"
+        },
+        {
+          "equipment": "35-24-005.3",
+          "subequipment": "",
+          "mask": "",
+          "description": "35-24-005.3"
+        },
+        {
+          "equipment": "35-24L005.4",
+          "subequipment": "",
+          "mask": "",
+          "description": "35-24L005.4"
+        },
+        {
+          "equipment": "35-24-005.4",
+          "subequipment": "",
+          "mask": "",
+          "description": "35-24-005.4"
+        },
+        {
           "equipment": "35-24-005.2",
           "subequipment": "",
           "mask": "",

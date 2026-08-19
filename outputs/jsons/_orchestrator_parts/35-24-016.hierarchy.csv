@@ -1,0 +1,12 @@
+ORDER,SITE,LINE,PROCESS,SUB-PROCESS,FUNCTION,EQUIPMENT,SUB-EQUIPMENT,MASK,DESCRIPTION
+1,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,,,5001-PM03-BR,BROKE SYSTEM
+2,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,BR1,,,,5001-PM03-BR-BR1,BROKE SYSTEM
+3,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,BR1,35-24-016,,,5001-PM03-BR-BR1-35-24-016,35-24-016 WAF 250 HEADER LN
+4,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,35-24NV-504,,,35-24NV-504 ISOL VLV NC
+5,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,35-24HV-516,,,35-24HV-516 ISOL VLV HV
+6,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,35-24KV-517,,,35-24KV-517 ISOL VLV HV
+7,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,,35-24KS-517,,35-24KS-517 KEY SW
+8,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,35-24HV-503,,,35-24HV-503 ISOL VLV HV
+9,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,35-24HV-501,,,35-24HV-501 ISOL VLV HV
+10,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,35-24-016,,,35-24-016
+11,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,35-24-011,,,35-24-011

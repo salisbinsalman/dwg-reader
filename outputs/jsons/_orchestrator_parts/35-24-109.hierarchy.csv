@@ -1,0 +1,8 @@
+ORDER,SITE,LINE,PROCESS,SUB-PROCESS,FUNCTION,EQUIPMENT,SUB-EQUIPMENT,MASK,DESCRIPTION
+1,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,,,5001-PM03-BR,BROKE SYSTEM
+2,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,BR1,,,,5001-PM03-BR-BR1,BROKE SYSTEM
+3,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,BR1,35-24-109,,,5001-PM03-BR-BR1-35-24-109,35-24-109 WAF 500 LN
+4,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,35-24HV-654,,,35-24HV-654 ISOL VLV HV
+5,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,35-24HV-580,,,35-24HV-580 ISOL VLV HV
+6,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,35-24HV-583,,,35-24HV-583 ISOL VLV HV
+7,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,35-24-109,,,35-24-109

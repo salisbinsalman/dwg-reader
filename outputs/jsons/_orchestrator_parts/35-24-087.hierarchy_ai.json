@@ -1,0 +1,205 @@
+{
+  "input": "/Users/code-huddle-ensemble/Desktop/dwg-reader/inputs/Broke System.dwg",
+  "mode": "viewer_shot_ai_gt",
+  "evidence_dir": "/Users/code-huddle-ensemble/Desktop/dwg-reader/outputs/evidence",
+  "site": "Shotton Paper Mill, United Kingdom",
+  "line": "Shotton PM3",
+  "process": "Broke System",
+  "sub_process": "BR1",
+  "model_id": "eu.anthropic.claude-sonnet-4-6",
+  "region": "eu-west-2",
+  "prompt_file": "pid_hierarchy_gt_v7_floc.md",
+  "legend": "/Users/code-huddle-ensemble/Desktop/dwg-reader/inputs/legend.png",
+  "results": [
+    {
+      "tag": "35-24-087",
+      "shot": "/Users/code-huddle-ensemble/Desktop/dwg-reader/outputs/evidence/Broke System.viewer_35-24-087.png",
+      "parent": {
+        "category": "lines",
+        "block_name": "",
+        "handle": "80DCB",
+        "layer": "P-LINEPOS",
+        "x": 2909.85985985986,
+        "y": 88.75,
+        "resolved_tag": "35-24-087",
+        "nearby_tags": "35-24-087",
+        "nearby_descriptions": "35-24-087-WAF-500-E10H2A",
+        "confidence": "medium"
+      },
+      "candidates": [
+        "35-24-087",
+        "35-24-1119",
+        "35-24-103",
+        "35-24HV-651",
+        "35-24KV-573",
+        "35-24",
+        "35-24HV-572",
+        "35-24HV-575",
+        "35-24-088",
+        "35-24-086",
+        "35-24-089",
+        "35-24-084",
+        "35-24-104",
+        "35-24FV-570",
+        "35-24-083",
+        "35-24-080",
+        "35-24-1102",
+        "35-24-106",
+        "35-24L004",
+        "35-24-209",
+        "35-24-079",
+        "35-24-091",
+        "35-24-090",
+        "35-24-081",
+        "35-24-105",
+        "35-24-1090",
+        "35-24-001.4",
+        "35-24-001.3",
+        "35-24-082",
+        "35-24-099",
+        "35-24L003",
+        "35-24-098",
+        "35-24-003.1",
+        "35-24TV-9290",
+        "35-24P505"
+      ],
+      "dossier": "Parent tag: 35-24-087\nParent category/block: lines / \nParent XY: (2909.85985985986, 88.75)\nNearby descriptions: 35-24-087-WAF-500-E10H2A\n\nSame-tag CAD family:\n- (none)\n\nNearby line numbers (short ids preferred in output):\n- 35-24-209  full=35-24-209-PP-100-E10H2A  d=169  layer=P-LINEPOS\n- 35-24-090  full=35-24-090-WFC-15-E10H2A  d=176  layer=P-LINEPOS\n- 35-24-083  full=35-24-083-WAF-300-E10H2A  d=119  layer=P-LINEPOS\n- 35-24-084  full=35-24-084-WAF-100-E10H2A  d=110  layer=P-LINEPOS\n- 35-24-086  full=35-24-086-WAF-100-E10H2A  d=105  layer=P-LINEPOS\n- 35-24-088  full=35-24-088-WAF-300-E10H2A  d=104  layer=P-LINEPOS\n- 35-24-089  full=35-24-089-WAF-300-E10H2A  d=108  layer=P-LINEPOS\n- 35-24-079  full=35-24-079-WFL-15-E10H2A  d=170  layer=P-LINEPOS\n- 35-24-080  full=35-24-080-WFL-15-E10H2A  d=120  layer=P-LINEPOS\n- 35-24-091  full=35-24-091-WAB-20-E10H2A  d=175  layer=P-LINEPOS\n- 35-24-082  full=35-24-082-PP-800-E10H2A  d=192  layer=P-LINEPOS\n- 35-24-081  full=35-24-081-PP-250-E10H2A  d=177  layer=P-LINEPOS\n- 35-24-087  full=35-24-087-WAF-500-E10H2A  d=0  layer=P-LINEPOS\n\nNearby devices (valves/instruments/pumps/\u2026):\n- line_markers: PPI_1100A  d=1  block=PPI_1100A\n- valves: PPI_0900A  d=30  block=PPI_0900A\n- control_valves: PPI_1000A  d=67  block=PPI_1000A\n- instruments: PPI_0100X  d=167  block=PPI_0100X\n- motors: PPI_1504A-25_0  d=188  block=PPI_1504A-25_0\n- fittings: P7A1214  d=95  block=P7A1214\n\nNearby peer primary equipment (do NOT nest under parent):\n- (none)\n\nNearby drawing text tokens:\n- GEARBOX 2  d=193  layer=P-OTHER\n- 35-24  d=101  layer=P-INSTRPOS_TEXTS\n- 651  d=83  layer=P-INSTRPOS_TEXTS\n- 9290  d=193  layer=P-INSTRPOS_TEXTS\n- 9286  d=189  layer=P-INSTRPOS_TEXTS\n- 9288  d=139  layer=P-INSTRPOS_TEXTS\n- 570  d=110  layer=P-INSTRPOS_TEXTS\n- 568  d=157  layer=P-INSTRPOS_TEXTS\n- 573  d=87  layer=P-INSTRPOS_TEXTS\n- 569  d=107  layer=P-INSTRPOS_TEXTS\n- 9289  d=129  layer=P-INSTRPOS_TEXTS\n- 9287  d=179  layer=P-INSTRPOS_TEXTS\n- 575  d=86  layer=P-INSTRPOS_TEXTS\n- 572  d=95  layer=P-INSTRPOS_TEXTS\n- 35-24-001.4  d=186  layer=P-MOTOR_POS\n- 1,5  d=185  layer=P-MOTOR_POS\n- 1500  d=196  layer=P-MOTOR_POS\n- 35-24-001.3  d=191  layer=P-MOTOR_POS\n- 35-24-106  d=162  layer=P-VALVEPOS\n- 003-15  d=160  layer=P-VALVEPOS\n- 35-24-105  d=179  layer=P-VALVEPOS\n- 350-250  d=174  layer=P-VALVEPOS\n- 35-24-104  d=112  layer=P-VALVEPOS\n- 35-24-103  d=61  layer=P-VALVEPOS\n- 003-50  d=56  layer=P-VALVEPOS\n- 35-24-1119  d=23  layer=P-VALVEPOS\n- 101-500  d=27  layer=P-VALVEPOS\n- 35-24-099  d=197  layer=P-VALVEPOS\n- 003-20  d=194  layer=P-VALVEPOS\n- 35-24-209  d=169  layer=P-LINEPOS\n- 35-24-090  d=176  layer=P-LINEPOS\n- 35-24-083  d=119  layer=P-LINEPOS\n- 35-24-084  d=110  layer=P-LINEPOS\n- 35-24-086  d=105  layer=P-LINEPOS\n- 35-24-088  d=104  layer=P-LINEPOS\n- 35-24-089  d=108  layer=P-LINEPOS\n- 35-24-079  d=170  layer=P-LINEPOS\n- 35-24-080  d=120  layer=P-LINEPOS\n- 35-24-091  d=175  layer=P-LINEPOS\n- 35-24-082  d=192  layer=P-LINEPOS",
+      "ai": {
+        "raw_text": "I'll analyze the P&ID crop carefully.\n\n**Observations from the image:**\n- The red box clearly shows PARENT 35-24-087, labeled `35-24-087-WAF-500-E10H2A` \u2014 this is a piping line (WAF = White Water After Flotation, DN500)\n- Inside the red box, I can see line `35-24-1119` with size `101-500` \u2014 this is a branch/spool off the main header\n- The valve on `35-24-1119` appears to be a hand valve (outline/transparent bowtie, no actuator circle) \u2014 `HV`\n- The `10` marker (line marker PPI_1100A) is at the entry point of 35-24-087\n- Outside the box but on this circuit: the line continues upward connecting to lines 35-24-088, 35-24-086, etc., but those are peer lines\n- 35-24-1119 is clearly inside the red boundary and labeled as a branch off 35-24-087\n\n**Valve assessment for 35-24-1119:**\nLooking at the symbol at the end of 35-24-1119 \u2014 it appears to be an outline bowtie (transparent, no fill, no actuator) = `HV` (hand valve, normally open by default \u2014 no NC fill visible)\n\n**Peers:** Lines 35-24-088, 35-24-086, 35-24-083, 35-24-084, 35-24-089 are neighbouring WAF lines (peer piping), not children of 35-24-087.\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24-087\",\n  \"description\": \"35-24-087 WAF 500 LINE\",\n  \"rows\": [\n    {\n      \"equipment\": \"35-24-1119\",\n      \"subequipment\": \"\",\n      \"mask\": \"\",\n      \"description\": \"35-24-1119 BRANCH SPOOL 500\"\n    },\n    {\n      \"equipment\": \"\",\n      \"subequipment\": \"35-24-1119\",\n      \"mask\": \"\",\n      \"description\": \"35-24-1119 VLV HV\"\n    }\n  ],\n  \"peers\": [\n    {\"tag\": \"35-24-088\", \"evidence\": \"Neighbouring WAF-300 line, separate line number, not a branch of 087\"},\n    {\"tag\": \"35-24-086\", \"evidence\": \"Neighbouring WAF-100 line, separate line number\"},\n    {\"tag\": \"35-24-084\", \"evidence\": \"Neighbouring WAF-100 line, separate line number\"},\n    {\"tag\": \"35-24-083\", \"evidence\": \"Neighbouring WAF-300 line, separate line number\"},\n    {\"tag\": \"35-24-089\", \"evidence\": \"Neighbouring WAF-300 line, separate line number\"},\n    {\"tag\": \"35-24-103\", \"evidence\": \"Valve on line 35-24-103 circuit, outside 087 boundary\"},\n    {\"tag\": \"35-24HV-651\", \"evidence\": \"Hand valve on adjacent WAF-300 line 35-24-088 circuit\"},\n    {\"tag\": \"35-24HV-575\", \"evidence\": \"Hand valve on adjacent line 35-24-089 circuit\"},\n    {\"tag\": \"35-24HV-572\", \"evidence\": \"Hand valve on adjacent line 35-24-084 circuit\"},\n    {\"tag\": \"35-24KV-573\", \"evidence\": \"Valve on adjacent line 35-24-086 circuit\"},\n    {\"tag\": \"35-24FV-570\", \"evidence\": \"Control valve on production line, outside 087 boundary\"}\n  ],\n  \"notes\": [\n    \"35-24-087 is a WAF-500 (white water) piping header; 35-24-1119 (101-500) is the only branch clearly inside the red crop boundary\",\n    \"Valve on 35-24-1119 appears as outline bowtie with no actuator \u2014 classified HV\",\n    \"Line marker PPI_1100A (marker 10) sits at the header entry point of 35-24-087\"\n  ],\n  \"confidence\": \"high\"\n}\n```",
+        "parsed": {
+          "sub_process": "BR1",
+          "function": "35-24-087",
+          "description": "35-24-087 WAF 500 LINE",
+          "rows": [
+            {
+              "equipment": "35-24-1119",
+              "subequipment": "",
+              "mask": "",
+              "description": "35-24-1119 BRANCH SPOOL 500"
+            },
+            {
+              "equipment": "",
+              "subequipment": "35-24-1119",
+              "mask": "",
+              "description": "35-24-1119 VLV HV"
+            }
+          ],
+          "peers": [
+            {
+              "tag": "35-24-088",
+              "evidence": "Neighbouring WAF-300 line, separate line number, not a branch of 087"
+            },
+            {
+              "tag": "35-24-086",
+              "evidence": "Neighbouring WAF-100 line, separate line number"
+            },
+            {
+              "tag": "35-24-084",
+              "evidence": "Neighbouring WAF-100 line, separate line number"
+            },
+            {
+              "tag": "35-24-083",
+              "evidence": "Neighbouring WAF-300 line, separate line number"
+            },
+            {
+              "tag": "35-24-089",
+              "evidence": "Neighbouring WAF-300 line, separate line number"
+            },
+            {
+              "tag": "35-24-103",
+              "evidence": "Valve on line 35-24-103 circuit, outside 087 boundary"
+            },
+            {
+              "tag": "35-24HV-651",
+              "evidence": "Hand valve on adjacent WAF-300 line 35-24-088 circuit"
+            },
+            {
+              "tag": "35-24HV-575",
+              "evidence": "Hand valve on adjacent line 35-24-089 circuit"
+            },
+            {
+              "tag": "35-24HV-572",
+              "evidence": "Hand valve on adjacent line 35-24-084 circuit"
+            },
+            {
+              "tag": "35-24KV-573",
+              "evidence": "Valve on adjacent line 35-24-086 circuit"
+            },
+            {
+              "tag": "35-24FV-570",
+              "evidence": "Control valve on production line, outside 087 boundary"
+            }
+          ],
+          "notes": [
+            "35-24-087 is a WAF-500 (white water) piping header; 35-24-1119 (101-500) is the only branch clearly inside the red crop boundary",
+            "Valve on 35-24-1119 appears as outline bowtie with no actuator \u2014 classified HV",
+            "Line marker PPI_1100A (marker 10) sits at the header entry point of 35-24-087"
+          ],
+          "confidence": "high"
+        },
+        "model_id": "eu.anthropic.claude-sonnet-4-6",
+        "region": "eu-west-2",
+        "prompt_file": "pid_hierarchy_gt_v7_floc.md",
+        "candidates": [
+          "35-24-087",
+          "35-24-1119",
+          "35-24-103",
+          "35-24HV-651",
+          "35-24KV-573",
+          "35-24",
+          "35-24HV-572",
+          "35-24HV-575",
+          "35-24-088",
+          "35-24-086",
+          "35-24-089",
+          "35-24-084",
+          "35-24-104",
+          "35-24FV-570",
+          "35-24-083",
+          "35-24-080",
+          "35-24-1102",
+          "35-24-106",
+          "35-24L004",
+          "35-24-209",
+          "35-24-079",
+          "35-24-091",
+          "35-24-090",
+          "35-24-081",
+          "35-24-105",
+          "35-24-1090",
+          "35-24-001.4",
+          "35-24-001.3",
+          "35-24-082",
+          "35-24-099",
+          "35-24L003",
+          "35-24-098",
+          "35-24-003.1",
+          "35-24TV-9290",
+          "35-24P505"
+        ],
+        "prompt_chars": 10561,
+        "vision": true
+      },
+      "refined_rows": [
+        {
+          "equipment": "35-24-1119",
+          "subequipment": "",
+          "mask": "",
+          "description": "35-24-1119 BRANCH SPOOL 500"
+        },
+        {
+          "equipment": "",
+          "subequipment": "35-24-1119",
+          "mask": "",
+          "description": "35-24-1119 VLV HV"
+        },
+        {
+          "equipment": "35-24-087",
+          "subequipment": "",
+          "mask": "",
+          "description": "35-24-087"
+        }
+      ]
+    }
+  ]
+}

@@ -57,7 +57,7 @@
       ],
       "dossier": "Parent tag: 35-24L001\nParent category/block: process_equipment / PPI_1302A-25_0\nParent XY: (3268.685662839269, 299.2645903243601)\nNearby descriptions: PRESS PULPER; HP-50G2; 2621 ADTPD\n\nSame-tag CAD family:\n- process_equipment @ (3268.685662839269,299.2645903243601) block=PPI_1302A-25_0 nearby=35-24L001; 35-24; 35-24; 35-24; 35-24L011\n- valves @ (3273.162084313363,235.0) block=PPI_0900A nearby=35-24L001; 35-24P503\n- instruments @ (3250.037084313363,337.5) block=PPI_1204A nearby=35-24; 35-24; 35-24; 35-24L001\n- instruments @ (3250.037084313363,352.5) block=PPI_1204A nearby=35-24; 35-24; 35-24; 35-24L001\n- instruments @ (3300.0,352.5) block=PPI_1204A nearby=35-24; 35-24; 35-24L001; 35-24; 35-24\n\nNearby line numbers (short ids preferred in output):\n- 35-24-184  full=35-24-184-WAF-200-E10H2A  d=193  layer=P-LINEPOS\n- 35-24-094  full=35-24-094-WAF-300-E10H2A  d=191  layer=P-LINEPOS\n- 35-24-098  full=35-24-098-WAF-300-E10H2A  d=189  layer=P-LINEPOS\n- 35-24-105  full=35-24-105-WAF-300-E10H2A  d=190  layer=P-LINEPOS\n- 35-24-107  full=35-24-107-WAF-100-E10H2A  d=189  layer=P-LINEPOS\n- 35-24-108  full=35-24-108-PP-100-E10H2A  d=167  layer=P-LINEPOS\n- 35-24-101  full=35-24-101-PP-150-E10H2A  d=131  layer=P-LINEPOS\n- 35-24-095  full=35-24-095-PP-200-E10H2A  d=51  layer=P-LINEPOS\n- 35-24-096  full=35-24-096-PP-900-E10H2A  d=81  layer=P-LINEPOS\n- 35-24-093  full=35-24-093-PP-700-E10H2A  d=173  layer=P-LINEPOS\n- 35-24-100  full=35-24-100-PP-250-E10H2A  d=124  layer=P-LINEPOS\n\nNearby devices (valves/instruments/pumps/\u2026):\n- line_markers: PPI_1100A  d=126  block=PPI_1100A\n- valves: PPI_0900A  d=118  block=PPI_0900A\n- control_valves: PPI_1000A  d=140  block=PPI_1000A\n- instruments: PPI_0100X  d=95  block=PPI_0100X\n- pumps: P7A0200  d=86  block=P7A0200\n- motors: PPI_1504A-25_0  d=99  block=PPI_1504A-25_0\n\nNearby peer primary equipment (do NOT nest under parent):\n- 35-24L011 (process_equipment, d=84)\n- 35-24P503 (pumps, d=86)\n- 35-24P504 (pumps, d=152)\n\nNearby drawing text tokens:\n- S1  d=46  layer=P-TEXT\n- S2  d=43  layer=P-TEXT\n- A1  d=76  layer=P-TEXT\n- 2 bar  d=42  layer=P-TEXT\n- 2621 ADTPD  d=22  layer=P-TEXT\n- 35-24  d=190  layer=P-INSTRPOS_TEXTS\n- SHOWER S2  d=187  layer=P-TEXT\n- S3  d=56  layer=P-TEXT\n- 35-24L001  d=7  layer=P-EQUIPMENT_POS\n- HP-50G2  d=16  layer=P-EQUIPMENT_POS\n- 35-24L011  d=90  layer=P-EQUIPMENT_POS\n- BROKE CONVEYOR 1  d=87  layer=P-EQUIPMENT_POS\n- 585  d=140  layer=P-INSTRPOS_TEXTS\n- 587  d=190  layer=P-INSTRPOS_TEXTS\n- 588  d=58  layer=P-INSTRPOS_TEXTS\n- 580  d=186  layer=P-INSTRPOS_TEXTS\n- 577  d=151  layer=P-INSTRPOS_TEXTS\n- 591  d=158  layer=P-INSTRPOS_TEXTS\n- 589  d=54  layer=P-INSTRPOS_TEXTS\n- 590  d=41  layer=P-INSTRPOS_TEXTS\n- 576  d=134  layer=P-INSTRPOS_TEXTS\n- 583  d=172  layer=P-INSTRPOS_TEXTS\n- 670  d=194  layer=P-INSTRPOS_TEXTS\n- 35-24P503  d=121  layer=P-PUMP_POS\n- 860  d=126  layer=P-PUMP_POS\n- 17  d=120  layer=P-PUMP_POS\n- 200  d=130  layer=P-PUMP_POS\n- 1000  d=125  layer=P-PUMP_POS\n- 35-24P504  d=158  layer=P-PUMP_POS\n- 20  d=160  layer=P-PUMP_POS\n- 10  d=171  layer=P-PUMP_POS\n- 4  d=163  layer=P-PUMP_POS\n- 1500  d=172  layer=P-PUMP_POS\n- 35-24-001.1  d=118  layer=P-MOTOR_POS\n- 35-24-001.2  d=103  layer=P-MOTOR_POS\n- 35-24-234  d=163  layer=P-VALVEPOS\n- 350-500  d=164  layer=P-VALVEPOS\n- 35-24-207  d=120  layer=P-VALVEPOS\n- 003-50  d=121  layer=P-VALVEPOS\n- 35-24-217  d=125  layer=P-VALVEPOS",
       "ai": {
-        "raw_text": "I'll analyze the P&ID image systematically, identifying all elements connected to 35-24L001 (Press Pulper).\n\n**Parent equipment:** 35-24L001 \u2014 PRESS PULPER HP-50G2, 2621 ADTPD\n\n**Identifying children (directly attached to 35-24L001):**\n\n1. **Lines connected to pulper:**\n   - 35-24-095 (PP-200, d=51 \u2014 closest PP line, visible as main pulper line)\n   - 35-24-096 (PP-900, d=81 \u2014 visible with control valve on it)\n   - 35-24-093 (PP-700, d=173 \u2014 visible with valve)\n   - 35-24-100 (PP-250, d=124 \u2014 visible below)\n   - 35-24-101 (PP-150, d=131 \u2014 visible)\n   - 35-24-108 (PP-100, d=167)\n\n2. **Motors (matching base 001):**\n   - 35-24-001.1 (visible in image, motor/rotor 1)\n   - 35-24-001.2 (visible in image, motor/rotor 2)\n\n3. **Instruments directly on pulper:**\n   - 35-24LC-576 (level controller, visible on left)\n   - 35-24LV2-576 (level valve, visible)\n   - 35-24KJ-589 (Press Pulper Start)\n   - 35-24KJ-590 (Press Pulper Stop)\n   - 35-24XS-588 (MCS Signal)\n   - 35-24NC-577 (visible)\n\n4. **Valves on lines:**\n   - 35-24-207 (003-50, on line 35-24-096 area \u2014 hand valve)\n   - 35-24-217 (001-80, visible \u2014 NC valve)\n   - 35-24-234 (350-500, visible \u2014 check valve with arrow)\n   - 35-24HV-591 (on 35-24L011 side \u2014 peer)\n   - 35-24-1105 (003-50, on line 35-24-096)\n   - 35-24-089 (350-250, visible below)\n\n**Valve type analysis from image:**\n- 35-24-207: outline bowtie, no actuator \u2192 HV\n- 35-24-217: filled/solid triangles \u2192 NC\n- 35-24-234: directional arrow (red arrow pointing left) \u2192 CHK\n- 35-24-1105: appears to be control valve with actuator circle \u2192 AV\n- 35-24-089: outline bowtie \u2192 HV\n- 35-24LV2-576: automatic valve with actuator \u2192 AV\n\n**Peers:** 35-24L011, 35-24P503, 35-24P504, 35-24HV-591\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24L001\",\n  \"description\": \"35-24L001 PRESS PLPR HP-50G2\",\n  \"rows\": [\n    {\"equipment\": \"35-24-001.1\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-001.1 PRESS PLPR ROTOR 1 MTR\"},\n    {\"equipment\": \"35-24-001.2\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-001.2 PRESS PLPR ROTOR 2 MTR\"},\n    {\"equipment\": \"35-24LC-576\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24LC-576 PLPR LVL CTRL\"},\n    {\"equipment\": \"35-24LV2-576\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24LV2-576 LVL VLV AV\"},\n    {\"equipment\": \"35-24KJ-589\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24KJ-589 PRESS PLPR START\"},\n    {\"equipment\": \"35-24KJ-590\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24KJ-590 PRESS PLPR STOP\"},\n    {\"equipment\": \"35-24XS-588\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24XS-588 MCS SIGNAL\"},\n    {\"equipment\": \"35-24-095\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-095 PP-200 PLPR LINE\"},\n    {\"equipment\": \"35-24-096\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-096 PP-900 PLPR LINE\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-207\", \"mask\": \"\", \"description\": \"35-24-207 VLV HV\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-1105\", \"mask\": \"\", \"description\": \"35-24-1105 VLV AV\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-217\", \"mask\": \"\", \"description\": \"35-24-217 VLV NC\"},\n    {\"equipment\": \"35-24-093\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-093 PP-700 PLPR LINE\"},\n    {\"equipment\": \"35-24-100\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-100 PP-250 PLPR LINE\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-089\", \"mask\": \"\", \"description\": \"35-24-089 VLV HV\"},\n    {\"equipment\": \"35-24-101\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-101 PP-150 PLPR LINE\"},\n    {\"equipment\": \"35-24-108\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-108 PP-100 PLPR LINE\"},\n    {\"equipment\": \"35-24-234\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-234 VLV CHK\"}\n  ],\n  \"peers\": [\n    {\"tag\": \"35-24L011\", \"evidence\": \"Separate equipment \u2014 BROKE CONVEYOR 1, peer vessel at d=84\"},\n    {\"tag\": \"35-24P503\", \"evidence\": \"Peer pump 860/17 200/1000, own tag block at d=86\"},\n    {\"tag\": \"35-24P504\", \"evidence\": \"Peer pump 20/10 4/1500, own tag block at d=152\"},\n    {\"tag\": \"35-24HV-591\", \"evidence\": \"Valve tagged to 35-24L011 circuit, d=125 from L011 side\"},\n    {\"tag\": \"35-24-093\", \"evidence\": \"PP-700 line \u2014 if scope boundary excludes it; retained as child per proximity\"}\n  ],\n  \"notes\": [\n    \"35-24-001.1 and 35-24-001.2 are Press Pulper Rotor 1 and Rotor 2 gearbox oil pump motors per legend text\",\n    \"35-24LC-576 and 35-24LV2-576 are level control instruments directly on pulper vessel\",\n    \"35-24-234 has red directional arrow indicating check valve CHK\",\n    \"35-24-217 shows solid filled triangles indicating NC\",\n    \"35-24-207 shows outline bowtie with no actuator indicating HV\",\n    \"35-24-1105 appears as control valve with actuator circle on line 35-24-096\"\n  ],\n  \"confidence\": \"medium\"\n}\n```",
+        "raw_text": "I'll analyze the P&ID image systematically, identifying all elements connected to 35-24L001 (Press Pulper).\n\n**Parent equipment:** 35-24L001 \u2014 PRESS PULPER HP-50G2, 2621 ADTPD\n\n**Identifying children (directly attached to 35-24L001):**\n\n1. **Lines connected to pulper:**\n   - 35-24-095 (PP-200, d=51 \u2014 closest line, pulp outlet)\n   - 35-24-096 (PP-900, d=81 \u2014 visible on drawing with control valve)\n   - 35-24-100 (PP-250, d=124 \u2014 visible as 35-24-100-PP-250)\n   - 35-24-101 (PP-150, d=131 \u2014 visible as 35-24-101-PP-150)\n   - 35-24-108 (PP-100, d=167)\n\n2. **Motors (matching base 001):**\n   - 35-24-001.1 (visible in image, motor/rotor 1)\n   - 35-24-001.2 (visible in image, motor/rotor 2)\n\n3. **Instruments directly on pulper:**\n   - 35-24LC-576 (level controller, visible on left)\n   - 35-24KJ-589 (Press Pulper Start)\n   - 35-24KJ-590 (Press Pulper Stop)\n   - 35-24XS-588 (MCS Signal)\n   - 35-24NC-577\n\n4. **Valves on lines:**\n   - 35-24-207 (003-50, on line 35-24-096 area \u2014 hand valve, outline bowtie, no actuator \u2192 HV)\n   - 35-24-217 (001-80, visible near 35-24-096 \u2014 filled bowtie \u2192 NC)\n   - 35-24-234 (350-500, visible on left side \u2014 check valve shape \u2192 CHK)\n   - 35-24LV2-576 (control valve on suction line, automatic \u2192 AV)\n   - 35-24-1105 (003-50, on line near 35-24-096)\n   - 35-24-093 (001-80, visible near pulper outlet)\n   - 35-24HV-591 (peer side, belongs to 35-24L011 circuit)\n\n5. **Peer equipment (not children):**\n   - 35-24L011 (Broke Conveyor 1 \u2014 peer vessel)\n   - 35-24P503 (pump \u2014 peer)\n   - 35-24P504 (pump \u2014 peer)\n\n**Valve symbol analysis from image:**\n- 35-24-207: outline bowtie, no actuator \u2192 HV\n- 35-24-217: filled/solid bowtie \u2192 NC\n- 35-24-234: arrow/directional shape \u2192 CHK\n- 35-24LV2-576: circle actuator on top \u2192 AV\n- 35-24-093: filled bowtie \u2192 NC\n- 35-24-1105: appears as control valve with circle \u2192 AV\n- 35-24HV-591: belongs to L011 circuit \u2192 peer\n\n**Nesting valves under their lines:**\n- 35-24-207, 35-24-217 sit on/near 35-24-096\n- 35-24-093 sits on 35-24-096 outlet area\n- 35-24-234, 35-24LV2-576 sit on 35-24-095\n- 35-24-1105 sits on 35-24-096\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24L001\",\n  \"description\": \"35-24L001 PRESS PLPR HP-50G2\",\n  \"rows\": [\n    {\"equipment\": \"35-24-001.1\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-001.1 PRESS PLPR ROTOR 1 MTR\"},\n    {\"equipment\": \"35-24-001.2\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-001.2 PRESS PLPR ROTOR 2 MTR\"},\n    {\"equipment\": \"35-24LC-576\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24LC-576 PLPR LVL CTRL\"},\n    {\"equipment\": \"35-24KJ-589\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24KJ-589 PRESS PLPR START\"},\n    {\"equipment\": \"35-24KJ-590\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24KJ-590 PRESS PLPR STOP\"},\n    {\"equipment\": \"35-24XS-588\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24XS-588 MCS SIGNAL\"},\n    {\"equipment\": \"35-24NC-577\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24NC-577 PLPR CTRL\"},\n    {\"equipment\": \"35-24-095\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-095 PP-200 PLPR OUTLET LINE\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24LV2-576\", \"mask\": \"\", \"description\": \"35-24LV2-576 LVL CTRL VLV AV\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-234\", \"mask\": \"\", \"description\": \"35-24-234 VLV CHK\"},\n    {\"equipment\": \"35-24-096\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-096 PP-900 PLPR LINE\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-207\", \"mask\": \"\", \"description\": \"35-24-207 VLV HV\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-217\", \"mask\": \"\", \"description\": \"35-24-217 VLV NC\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-093\", \"mask\": \"\", \"description\": \"35-24-093 VLV NC\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-1105\", \"mask\": \"\", \"description\": \"35-24-1105 VLV AV\"},\n    {\"equipment\": \"35-24-100\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-100 PP-250 PLPR LINE\"},\n    {\"equipment\": \"35-24-101\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-101 PP-150 PLPR LINE\"},\n    {\"equipment\": \"35-24-108\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-108 PP-100 PLPR LINE\"}\n  ],\n  \"peers\": [\n    {\"tag\": \"35-24L011\", \"evidence\": \"Broke Conveyor 1 \u2014 separate peer vessel visible at d=84, own label box\"},\n    {\"tag\": \"35-24P503\", \"evidence\": \"Pump peer at d=86, own pump data box 860/17/200/1000, not child of pulper\"},\n    {\"tag\": \"35-24P504\", \"evidence\": \"Pump peer at d=152, own pump data box 20/10/4/1500, not child of pulper\"},\n    {\"tag\": \"35-24HV-591\", \"evidence\": \"Valve tagged 35-24HV-591 at d=80 associated with 35-24L011 circuit, not L001\"},\n    {\"tag\": \"35-24-089\", \"evidence\": \"Line 35-24-089 350-250 visible near P504 discharge, belongs to peer pump circuit\"}\n  ],\n  \"notes\": [\n    \"35-24-001.1 and 35-24-001.2 confirmed as Press Pulper Rotor 1 and Rotor 2 gear box oil pump motors per legend text at bottom of drawing\",\n    \"35-24LV2-576 is the level control valve on the PP-200 outlet line 35-24-095; circle actuator visible = AV\",\n    \"35-24-234 (350-500) shows directional/check valve symbol on suction side of 35-24-095\",\n    \"35-24-207 (003-50) shows outline bowtie with no actuator = HV on line 35-24-096\",\n    \"35-24-217 (001-80) shows solid filled bowtie = NC on line 35-24-096\",\n    \"35-24-093 (001-80) shows solid filled bowtie near pulper outlet = NC\",\n    \"35-24-1105 (003-50) shows circle actuator = AV on line 35-24-096\",\n    \"Lines 35-24-100 (PP-250) and 35-24-101 (PP-150) visible at bottom of crop connected to pulper discharge area\",\n    \"35-24-108 (PP-100) included at d=167 as connected line per dossier\"\n  ],\n  \"confidence\": \"medium\"\n}\n```",
         "parsed": {
           "sub_process": "BR1",
           "function": "35-24L001",
@@ -82,12 +82,6 @@
               "description": "35-24LC-576 PLPR LVL CTRL"
             },
             {
-              "equipment": "35-24LV2-576",
-              "subequipment": "",
-              "mask": "",
-              "description": "35-24LV2-576 LVL VLV AV"
-            },
-            {
               "equipment": "35-24KJ-589",
               "subequipment": "",
               "mask": "",
@@ -106,10 +100,28 @@
               "description": "35-24XS-588 MCS SIGNAL"
             },
             {
+              "equipment": "35-24NC-577",
+              "subequipment": "",
+              "mask": "",
+              "description": "35-24NC-577 PLPR CTRL"
+            },
+            {
               "equipment": "35-24-095",
               "subequipment": "",
               "mask": "",
-              "description": "35-24-095 PP-200 PLPR LINE"
+              "description": "35-24-095 PP-200 PLPR OUTLET LINE"
+            },
+            {
+              "equipment": "",
+              "subequipment": "35-24LV2-576",
+              "mask": "",
+              "description": "35-24LV2-576 LVL CTRL VLV AV"
+            },
+            {
+              "equipment": "",
+              "subequipment": "35-24-234",
+              "mask": "",
+              "description": "35-24-234 VLV CHK"
             },
             {
               "equipment": "35-24-096",
@@ -125,33 +137,27 @@
             },
             {
               "equipment": "",
-              "subequipment": "35-24-1105",
-              "mask": "",
-              "description": "35-24-1105 VLV AV"
-            },
-            {
-              "equipment": "",
               "subequipment": "35-24-217",
               "mask": "",
               "description": "35-24-217 VLV NC"
             },
             {
-              "equipment": "35-24-093",
-              "subequipment": "",
+              "equipment": "",
+              "subequipment": "35-24-093",
               "mask": "",
-              "description": "35-24-093 PP-700 PLPR LINE"
+              "description": "35-24-093 VLV NC"
+            },
+            {
+              "equipment": "",
+              "subequipment": "35-24-1105",
+              "mask": "",
+              "description": "35-24-1105 VLV AV"
             },
             {
               "equipment": "35-24-100",
               "subequipment": "",
               "mask": "",
               "description": "35-24-100 PP-250 PLPR LINE"
-            },
-            {
-              "equipment": "",
-              "subequipment": "35-24-089",
-              "mask": "",
-              "description": "35-24-089 VLV HV"
             },
             {
               "equipment": "35-24-101",
@@ -164,43 +170,40 @@
               "subequipment": "",
               "mask": "",
               "description": "35-24-108 PP-100 PLPR LINE"
-            },
-            {
-              "equipment": "35-24-234",
-              "subequipment": "",
-              "mask": "",
-              "description": "35-24-234 VLV CHK"
             }
           ],
           "peers": [
             {
               "tag": "35-24L011",
-              "evidence": "Separate equipment \u2014 BROKE CONVEYOR 1, peer vessel at d=84"
+              "evidence": "Broke Conveyor 1 \u2014 separate peer vessel visible at d=84, own label box"
             },
             {
               "tag": "35-24P503",
-              "evidence": "Peer pump 860/17 200/1000, own tag block at d=86"
+              "evidence": "Pump peer at d=86, own pump data box 860/17/200/1000, not child of pulper"
             },
             {
               "tag": "35-24P504",
-              "evidence": "Peer pump 20/10 4/1500, own tag block at d=152"
+              "evidence": "Pump peer at d=152, own pump data box 20/10/4/1500, not child of pulper"
             },
             {
               "tag": "35-24HV-591",
-              "evidence": "Valve tagged to 35-24L011 circuit, d=125 from L011 side"
+              "evidence": "Valve tagged 35-24HV-591 at d=80 associated with 35-24L011 circuit, not L001"
             },
             {
-              "tag": "35-24-093",
-              "evidence": "PP-700 line \u2014 if scope boundary excludes it; retained as child per proximity"
+              "tag": "35-24-089",
+              "evidence": "Line 35-24-089 350-250 visible near P504 discharge, belongs to peer pump circuit"
             }
           ],
           "notes": [
-            "35-24-001.1 and 35-24-001.2 are Press Pulper Rotor 1 and Rotor 2 gearbox oil pump motors per legend text",
-            "35-24LC-576 and 35-24LV2-576 are level control instruments directly on pulper vessel",
-            "35-24-234 has red directional arrow indicating check valve CHK",
-            "35-24-217 shows solid filled triangles indicating NC",
-            "35-24-207 shows outline bowtie with no actuator indicating HV",
-            "35-24-1105 appears as control valve with actuator circle on line 35-24-096"
+            "35-24-001.1 and 35-24-001.2 confirmed as Press Pulper Rotor 1 and Rotor 2 gear box oil pump motors per legend text at bottom of drawing",
+            "35-24LV2-576 is the level control valve on the PP-200 outlet line 35-24-095; circle actuator visible = AV",
+            "35-24-234 (350-500) shows directional/check valve symbol on suction side of 35-24-095",
+            "35-24-207 (003-50) shows outline bowtie with no actuator = HV on line 35-24-096",
+            "35-24-217 (001-80) shows solid filled bowtie = NC on line 35-24-096",
+            "35-24-093 (001-80) shows solid filled bowtie near pulper outlet = NC",
+            "35-24-1105 (003-50) shows circle actuator = AV on line 35-24-096",
+            "Lines 35-24-100 (PP-250) and 35-24-101 (PP-150) visible at bottom of crop connected to pulper discharge area",
+            "35-24-108 (PP-100) included at d=167 as connected line per dossier"
           ],
           "confidence": "medium"
         },
@@ -259,22 +262,34 @@
           "description": "35-24LC-576 PLPR LVL CTRL"
         },
         {
-          "equipment": "35-24LV2-576",
-          "subequipment": "",
-          "mask": "",
-          "description": "35-24LV2-576 LVL VLV AV"
-        },
-        {
           "equipment": "35-24XS-588",
           "subequipment": "",
           "mask": "",
           "description": "35-24XS-588 MCS SIGNAL"
         },
         {
+          "equipment": "35-24NC-577",
+          "subequipment": "",
+          "mask": "",
+          "description": "35-24NC-577 PLPR CTRL"
+        },
+        {
           "equipment": "35-24-095",
           "subequipment": "",
           "mask": "",
-          "description": "35-24-095 PP-200 PLPR LN"
+          "description": "35-24-095 PP-200 PLPR OUT LN"
+        },
+        {
+          "equipment": "",
+          "subequipment": "35-24LV2-576",
+          "mask": "",
+          "description": "35-24LV2-576 LVL CTRL VLV AV"
+        },
+        {
+          "equipment": "",
+          "subequipment": "35-24-234",
+          "mask": "",
+          "description": "35-24-234 VLV CHK"
         },
         {
           "equipment": "35-24-096",
@@ -290,27 +305,27 @@
         },
         {
           "equipment": "",
-          "subequipment": "35-24-1105",
-          "mask": "",
-          "description": "35-24-1105 VLV AV"
-        },
-        {
-          "equipment": "",
           "subequipment": "35-24-217",
           "mask": "",
           "description": "35-24-217 VLV NC"
+        },
+        {
+          "equipment": "",
+          "subequipment": "35-24-093",
+          "mask": "",
+          "description": "35-24-093 VLV NC"
+        },
+        {
+          "equipment": "",
+          "subequipment": "35-24-1105",
+          "mask": "",
+          "description": "35-24-1105 VLV AV"
         },
         {
           "equipment": "35-24-100",
           "subequipment": "",
           "mask": "",
           "description": "35-24-100 PP-250 PLPR LN"
-        },
-        {
-          "equipment": "",
-          "subequipment": "35-24-089",
-          "mask": "",
-          "description": "35-24-089 VLV HV"
         },
         {
           "equipment": "35-24-101",
@@ -325,12 +340,6 @@
           "description": "35-24-108 PP-100 PLPR LN"
         },
         {
-          "equipment": "35-24-234",
-          "subequipment": "",
-          "mask": "",
-          "description": "35-24-234 VLV CHK"
-        },
-        {
           "equipment": "35-24L001.1",
           "subequipment": "",
           "mask": "",
@@ -341,6 +350,30 @@
           "subequipment": "",
           "mask": "",
           "description": "35-24L001.2"
+        },
+        {
+          "equipment": "35-24L001.3",
+          "subequipment": "",
+          "mask": "",
+          "description": "35-24L001.3"
+        },
+        {
+          "equipment": "35-24-001.3",
+          "subequipment": "",
+          "mask": "",
+          "description": "35-24-001.3"
+        },
+        {
+          "equipment": "35-24L001.4",
+          "subequipment": "",
+          "mask": "",
+          "description": "35-24L001.4"
+        },
+        {
+          "equipment": "35-24-001.4",
+          "subequipment": "",
+          "mask": "",
+          "description": "35-24-001.4"
         }
       ]
     }

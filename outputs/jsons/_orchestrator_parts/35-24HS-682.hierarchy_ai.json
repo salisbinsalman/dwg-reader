@@ -1,0 +1,127 @@
+{
+  "input": "/Users/code-huddle-ensemble/Desktop/dwg-reader/inputs/Broke System.dwg",
+  "mode": "viewer_shot_ai_gt",
+  "evidence_dir": "/Users/code-huddle-ensemble/Desktop/dwg-reader/outputs/evidence",
+  "site": "Shotton Paper Mill, United Kingdom",
+  "line": "Shotton PM3",
+  "process": "Broke System",
+  "sub_process": "BR1",
+  "model_id": "eu.anthropic.claude-sonnet-4-6",
+  "region": "eu-west-2",
+  "prompt_file": "pid_hierarchy_gt_v7_floc.md",
+  "legend": "/Users/code-huddle-ensemble/Desktop/dwg-reader/inputs/legend.png",
+  "results": [
+    {
+      "tag": "35-24HS-682",
+      "shot": "/Users/code-huddle-ensemble/Desktop/dwg-reader/outputs/evidence/Broke System.viewer_35-24HS-682.png",
+      "parent": {
+        "category": "instruments",
+        "block_name": "",
+        "handle": "",
+        "layer": "P-INSTRPOS_TEXTS",
+        "x": 208.2702327327327,
+        "y": 438.5875,
+        "resolved_tag": "35-24HS-682",
+        "nearby_tags": "HS; 682; 35-24",
+        "nearby_descriptions": "HS 682 (35-24)",
+        "confidence": "high"
+      },
+      "candidates": [
+        "35-24",
+        "35-24HS-682",
+        "35-24-186",
+        "35-24L009",
+        "35-24-220",
+        "35-24-187",
+        "35-24-193",
+        "35-24P519",
+        "35-24-188",
+        "35-24-196",
+        "35-24-192",
+        "35-24-189",
+        "35-24-199",
+        "35-24-191",
+        "35-24-221",
+        "35-24LV2-674",
+        "35-24-197",
+        "35-24-198",
+        "35-24-009.1",
+        "35-24-194"
+      ],
+      "dossier": "Parent tag: 35-24HS-682\nParent category/block: instruments / \nParent XY: (208.2702327327327, 438.5875)\nNearby descriptions: HS 682 (35-24)\n\nSame-tag CAD family:\n- (none)\n\nNearby line numbers (short ids preferred in output):\n- 35-24-186  full=35-24-186-WAF-100-E10H2A  d=100  layer=P-LINEPOS\n- 35-24-187  full=35-24-187-WAF-100-E10H2A  d=146  layer=P-LINEPOS\n- 35-24-188  full=35-24-188-WAF-80-E10H2A  d=176  layer=P-LINEPOS\n- 35-24-193  full=35-24-193-PP-100-E10H2A  d=167  layer=P-LINEPOS\n- 35-24-192  full=35-24-192-PP-200-E10H2A  d=181  layer=P-LINEPOS\n- 35-24-191  full=35-24-191-PP-250-E10H2A  d=189  layer=P-LINEPOS\n- 35-24-189  full=35-24-189-PP-300-E10H2A  d=183  layer=P-LINEPOS\n\nNearby devices (valves/instruments/pumps/\u2026):\n- line_markers: PPI_1100A  d=184  block=PPI_1100A\n- valves: PPI_0900A  d=179  block=PPI_0900A\n- control_valves: PPI_1000A  d=196  block=PPI_1000A\n- instruments: PPI_1204A  d=198  block=PPI_1204A\n- pumps: P7A0200  d=191  block=P7A0200\n- fittings: P7A1271  d=198  block=P7A1271\n\nNearby peer primary equipment (do NOT nest under parent):\n- 35-24L009 (process_equipment, d=132)\n- 35-24P519 (pumps, d=191)\n\nNearby drawing text tokens:\n- 141 BDTPD  d=145  layer=P-TEXT\n- 35-24L009  d=125  layer=P-EQUIPMENT_POS\n- SHOWER S1  d=67  layer=P-TEXT\n- 682  d=4  layer=P-INSTRPOS_TEXTS\n- 35-24  d=11  layer=P-INSTRPOS_TEXTS\n- 683  d=71  layer=P-INSTRPOS_TEXTS\n- 684  d=72  layer=P-INSTRPOS_TEXTS\n- 685  d=77  layer=P-INSTRPOS_TEXTS\n- 692  d=72  layer=P-INSTRPOS_TEXTS\n- 35-24-199  d=184  layer=P-VALVEPOS\n- 003-15  d=188  layer=P-VALVEPOS\n- 35-24-221  d=196  layer=P-VALVEPOS\n- 35-24-196  d=177  layer=P-VALVEPOS\n- 355-250  d=183  layer=P-VALVEPOS\n- 35-24-220  d=145  layer=P-VALVEPOS\n- 001-100  d=151  layer=P-VALVEPOS\n- 35-24-186  d=100  layer=P-LINEPOS\n- 35-24-187  d=146  layer=P-LINEPOS\n- 35-24-188  d=176  layer=P-LINEPOS\n- 35-24-193  d=167  layer=P-LINEPOS\n- 35-24-192  d=181  layer=P-LINEPOS\n- 35-24-191  d=189  layer=P-LINEPOS\n- 35-24-189  d=183  layer=P-LINEPOS\n- 35-24LV2-674  d=198  layer=P-CVPOS\n- 80  d=200  layer=P-CVPOS",
+      "ai": {
+        "raw_text": "Looking at the P&ID image, I can see that 35-24HS-682 is a hand switch (HS) instrument \u2014 specifically it appears in the LOCAL PANEL section labeled \"BROKE ROLL PULPER START/STOP\". The instrument bubble shows HS 682 (35-24) and is a locally mounted/local panel instrument (square with horizontal line through circle = local control panel instrument per legend).\n\nFrom the image, the parent box contains several instruments in the MCS SIGNAL panel:\n- 35-24XS-692 (MCS SIGNAL)\n- 35-24ES-683 (BROK ROLL PULPER EMERGENCY STOP)\n- 35-24KJ-684 (BROKE ROLL PULPER START)\n- 35-24KJ-685 (BROKE ROLL PULPER STOP)\n\nAnd in the LOCAL PANEL:\n- 35-24HS-682 (BROKE ROLL PULPER START/STOP) \u2014 this IS the parent\n- 35-24HI-676 (BROKE ROLL PULPER SHOWER S1)\n\nSince 35-24HS-682 is an instrument (hand switch), per Rule 8/12 and the worked examples: \"If 35-24HS-682 is an instrument and no labelled accessories sit on it, emit the FUNCTION header + description only \u2014 empty rows is correct.\"\n\nThe peer instruments (683, 684, 685, 692, 676) are separate instrument tags on the same panel, not children of HS-682.\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24HS-682\",\n  \"description\": \"35-24HS-682 BROK ROLL PLPR START/STOP\",\n  \"rows\": [],\n  \"peers\": [\n    {\"tag\": \"35-24XS-692\", \"evidence\": \"MCS SIGNAL instrument visible in same panel block, separate tag\"},\n    {\"tag\": \"35-24ES-683\", \"evidence\": \"BROK ROLL PULPER EMERGENCY STOP instrument, peer in same panel\"},\n    {\"tag\": \"35-24KJ-684\", \"evidence\": \"BROKE ROLL PULPER START instrument, peer in same panel\"},\n    {\"tag\": \"35-24KJ-685\", \"evidence\": \"BROKE ROLL PULPER STOP instrument, peer in same panel\"},\n    {\"tag\": \"35-24HI-676\", \"evidence\": \"BROKE ROLL PULPER SHOWER S1 indicator, peer local panel instrument\"},\n    {\"tag\": \"35-24L009\", \"evidence\": \"BROKE ROLL PULPER vessel, nearby peer process equipment, not child of instrument\"},\n    {\"tag\": \"35-24P519\", \"evidence\": \"Nearby pump, peer major equipment\"}\n  ],\n  \"notes\": [\n    \"35-24HS-682 is a local panel hand switch (START/STOP) for the Broke Roll Pulper; no piping or valve accessories attach directly to this instrument tag\",\n    \"Instrument symbol matches LOCAL CONTROL PANEL INSTRUMENT per legend (square with horizontal-line circle)\",\n    \"Companion instruments 683/684/685/692/676 are co-located panel instruments but are independent tags \u2014 not children of HS-682\"\n  ],\n  \"confidence\": \"high\"\n}\n```",
+        "parsed": {
+          "sub_process": "BR1",
+          "function": "35-24HS-682",
+          "description": "35-24HS-682 BROK ROLL PLPR START/STOP",
+          "rows": [],
+          "peers": [
+            {
+              "tag": "35-24XS-692",
+              "evidence": "MCS SIGNAL instrument visible in same panel block, separate tag"
+            },
+            {
+              "tag": "35-24ES-683",
+              "evidence": "BROK ROLL PULPER EMERGENCY STOP instrument, peer in same panel"
+            },
+            {
+              "tag": "35-24KJ-684",
+              "evidence": "BROKE ROLL PULPER START instrument, peer in same panel"
+            },
+            {
+              "tag": "35-24KJ-685",
+              "evidence": "BROKE ROLL PULPER STOP instrument, peer in same panel"
+            },
+            {
+              "tag": "35-24HI-676",
+              "evidence": "BROKE ROLL PULPER SHOWER S1 indicator, peer local panel instrument"
+            },
+            {
+              "tag": "35-24L009",
+              "evidence": "BROKE ROLL PULPER vessel, nearby peer process equipment, not child of instrument"
+            },
+            {
+              "tag": "35-24P519",
+              "evidence": "Nearby pump, peer major equipment"
+            }
+          ],
+          "notes": [
+            "35-24HS-682 is a local panel hand switch (START/STOP) for the Broke Roll Pulper; no piping or valve accessories attach directly to this instrument tag",
+            "Instrument symbol matches LOCAL CONTROL PANEL INSTRUMENT per legend (square with horizontal-line circle)",
+            "Companion instruments 683/684/685/692/676 are co-located panel instruments but are independent tags \u2014 not children of HS-682"
+          ],
+          "confidence": "high"
+        },
+        "model_id": "eu.anthropic.claude-sonnet-4-6",
+        "region": "eu-west-2",
+        "prompt_file": "pid_hierarchy_gt_v7_floc.md",
+        "candidates": [
+          "35-24",
+          "35-24HS-682",
+          "35-24-186",
+          "35-24L009",
+          "35-24-220",
+          "35-24-187",
+          "35-24-193",
+          "35-24P519",
+          "35-24-188",
+          "35-24-196",
+          "35-24-192",
+          "35-24-189",
+          "35-24-199",
+          "35-24-191",
+          "35-24-221",
+          "35-24LV2-674",
+          "35-24-197",
+          "35-24-198",
+          "35-24-009.1",
+          "35-24-194"
+        ],
+        "prompt_chars": 9496,
+        "vision": true
+      },
+      "refined_rows": []
+    }
+  ]
+}

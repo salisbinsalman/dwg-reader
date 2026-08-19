@@ -1,0 +1,315 @@
+{
+  "input": "/Users/code-huddle-ensemble/Desktop/dwg-reader/inputs/Broke System.dwg",
+  "mode": "viewer_shot_ai_gt",
+  "evidence_dir": "/Users/code-huddle-ensemble/Desktop/dwg-reader/outputs/evidence",
+  "site": "Shotton Paper Mill, United Kingdom",
+  "line": "Shotton PM3",
+  "process": "Broke System",
+  "sub_process": "BR1",
+  "model_id": "eu.anthropic.claude-sonnet-4-6",
+  "region": "eu-west-2",
+  "prompt_file": "pid_hierarchy_gt_v7_floc.md",
+  "legend": "/Users/code-huddle-ensemble/Desktop/dwg-reader/inputs/legend.png",
+  "results": [
+    {
+      "tag": "35-24-056",
+      "shot": "/Users/code-huddle-ensemble/Desktop/dwg-reader/outputs/evidence/Broke System.viewer_35-24-056.png",
+      "parent": {
+        "category": "lines",
+        "block_name": "",
+        "handle": "80C81",
+        "layer": "P-LINEPOS",
+        "x": 2033.75,
+        "y": 187.5,
+        "resolved_tag": "35-24-056",
+        "nearby_tags": "35-24-056",
+        "nearby_descriptions": "35-24-056-WAF-350-E10H2A",
+        "confidence": "medium"
+      },
+      "candidates": [
+        "35-24-056",
+        "35-24",
+        "35-24-055",
+        "35-24-057",
+        "35-24HV-653",
+        "35-24-053",
+        "35-24-036",
+        "35-24HV-555",
+        "35-24HV-534",
+        "35-24KV-553",
+        "35-24HV-652",
+        "35-24-035",
+        "35-24-052",
+        "35-24HV-552",
+        "35-24-054",
+        "35-24-138",
+        "35-24-207",
+        "35-24P507",
+        "35-24-058",
+        "35-24FV-550",
+        "35-24-134",
+        "35-24-133",
+        "35-24-132",
+        "35-24-049",
+        "35-24-051",
+        "35-24XV-668",
+        "35-24L006",
+        "35-24P510",
+        "35-24-060",
+        "35-24-135",
+        "35-24HV-548",
+        "35-24LV2-559",
+        "35-24-205",
+        "35-24-050"
+      ],
+      "dossier": "Parent tag: 35-24-056\nParent category/block: lines / \nParent XY: (2033.75, 187.5)\nNearby descriptions: 35-24-056-WAF-350-E10H2A\n\nSame-tag CAD family:\n- (none)\n\nNearby line numbers (short ids preferred in output):\n- 35-25-034/2-WAF-500-E10H2A  full=35-25-034/2-WAF-500-E10H2A  d=155  layer=P-LINEPOS\n- 35-24-207  full=35-24-207-PP-100-E10H2A  d=110  layer=P-LINEPOS\n- 35-24-035  full=35-24-035-WAF-350-E10H2A  d=68  layer=P-LINEPOS\n- 35-24-057  full=35-24-057-WAF-350-E10H2A  d=22  layer=P-LINEPOS\n- 35-24-036  full=35-24-036-WAF-350-E10H2A  d=45  layer=P-LINEPOS\n- 35-24-052  full=35-24-052-WAF-300-E10H2A  d=75  layer=P-LINEPOS\n- 35-24-053  full=35-24-053-WAF-100-E10H2A  d=45  layer=P-LINEPOS\n- 35-24-055  full=35-24-055-WAF-100-E10H2A  d=22  layer=P-LINEPOS\n- 35-24-056  full=35-24-056-WAF-350-E10H2A  d=0  layer=P-LINEPOS\n- 35-24-054  full=35-24-054-WAF-500-E10H2A  d=104  layer=P-LINEPOS\n- 35-24-058  full=35-24-058-WAB-15-E10H2A  d=114  layer=P-LINEPOS\n- 35-24-060  full=35-24-060-PP-800-E10H2A  d=182  layer=P-LINEPOS\n- 35-24-051  full=35-24-051-PP-100-E10H2A  d=155  layer=P-LINEPOS\n- 35-24-049  full=35-24-049-PP-800-E10H2A  d=152  layer=P-LINEPOS\n\nNearby devices (valves/instruments/pumps/\u2026):\n- line_markers: PPI_1100A  d=151  block=PPI_1100A\n- valves: PPI_0900A  d=189  block=PPI_0900A\n- control_valves: PPI_1000A  d=54  block=PPI_1000A\n- instruments: PPI_0100X  d=90  block=PPI_0100X\n- pumps: PPI_0521A-25_0  d=164  block=PPI_0521A-25_0\n- fittings: P7A1214  d=91  block=P7A1214\n\nNearby peer primary equipment (do NOT nest under parent):\n- 35-24P507 (pumps, d=164)\n\nNearby drawing text tokens:\n- 35-24  d=22  layer=P-INSTRPOS_TEXTS\n- 653  d=24  layer=P-INSTRPOS_TEXTS\n- 547  d=121  layer=P-INSTRPOS_TEXTS\n- 548  d=172  layer=P-INSTRPOS_TEXTS\n- 549  d=185  layer=P-INSTRPOS_TEXTS\n- 550  d=91  layer=P-INSTRPOS_TEXTS\n- 552  d=59  layer=P-INSTRPOS_TEXTS\n- 555  d=23  layer=P-INSTRPOS_TEXTS\n- 553  d=39  layer=P-INSTRPOS_TEXTS\n- 668  d=181  layer=P-INSTRPOS_TEXTS\n- 652  d=60  layer=P-INSTRPOS_TEXTS\n- 534  d=40  layer=P-INSTRPOS_TEXTS\n- 35-24P507  d=157  layer=P-PUMP_POS\n- 20  d=157  layer=P-PUMP_POS\n- 10  d=145  layer=P-PUMP_POS\n- 4  d=156  layer=P-PUMP_POS\n- 1500  d=146  layer=P-PUMP_POS\n- 35-24-135  d=194  layer=P-VALVEPOS\n- 003-15  d=195  layer=P-VALVEPOS\n- 35-24-138  d=105  layer=P-VALVEPOS\n- 003-50  d=106  layer=P-VALVEPOS\n- 35-24-134  d=126  layer=P-VALVEPOS\n- 101-500  d=131  layer=P-VALVEPOS\n- 35-24-132  d=146  layer=P-VALVEPOS\n- 003-20  d=144  layer=P-VALVEPOS\n- 35-24-133  d=140  layer=P-VALVEPOS\n- 35-25-034/2-WAF-500-E10H2A  d=155  layer=P-LINEPOS\n- 35-24-207  d=110  layer=P-LINEPOS\n- 35-24-035  d=68  layer=P-LINEPOS\n- 35-24-057  d=22  layer=P-LINEPOS\n- 35-24-036  d=45  layer=P-LINEPOS\n- 35-24-052  d=75  layer=P-LINEPOS\n- 35-24-053  d=45  layer=P-LINEPOS\n- 35-24-055  d=22  layer=P-LINEPOS\n- 35-24-056  d=0  layer=P-LINEPOS\n- 35-24-054  d=104  layer=P-LINEPOS\n- 35-24-058  d=114  layer=P-LINEPOS\n- 35-24-060  d=182  layer=P-LINEPOS\n- 35-24-051  d=155  layer=P-LINEPOS\n- 35-24-049  d=152  layer=P-LINEPOS",
+      "ai": {
+        "raw_text": "I'll analyze the P&ID image carefully for FUNCTION 35-24-056.\n\n**Observations from Image 1:**\n- 35-24-056 is a WAF-350 process line (piping header)\n- The red box shows the circuit boundary for 35-24-056\n- On the line, I can see multiple valves with HS/HI instrument pairs above them\n- Visible on-line valves: 35-24HV-552 (80), 35-24KV-553 (100), 35-24HV-555 (250), 35-24HV-653 (250), 35-24HV-534 (250), 35-24HV-652 (250)\n- Also visible: 35-24FV-550 (flow control valve, with FC-550 instrument)\n- Instruments: 35-24HI-552, 35-24HI-555, 35-24HI-653, 35-24HI-534, 35-24HI-652 (local HI instruments)\n- HS instruments above each HV valve\n- 35-24KS-553 (KS instrument near KV-553)\n- Connected branch line: 35-24-138 (003-50) visible below\n\n**Valve symbol analysis:**\n- HV-552, HV-555, HV-653, HV-534, HV-652: outline/transparent bowtie with actuator circle on top \u2192 `AV`\n- KV-553: outline bowtie with actuator circle \u2192 `AV`\n- FV-550: control valve with FC instrument \u2192 `AV`\n- All appear to have open (transparent) bowtie bodies with actuator circles = `AV`\n\n**Nearby lines within circuit:** 35-24-055, 35-24-057, 35-24-053, 35-24-036, 35-24-035 are parallel lines feeding into the header area but are separate line numbers. 35-24-138 is a branch visible on the circuit.\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24-056\",\n  \"description\": \"35-24-056 WAF-350 BROKE HDR LINE\",\n  \"rows\": [\n    {\"equipment\": \"35-24FV-550\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24FV-550 FLOW CTRL VLV AV\"},\n    {\"equipment\": \"35-24HV-552\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24HV-552 ISOL VLV AV\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24HI-552\", \"mask\": \"\", \"description\": \"35-24HI-552 HI INSTRUMENT\"},\n    {\"equipment\": \"35-24KV-553\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24KV-553 ISOL VLV AV\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24KS-553\", \"mask\": \"\", \"description\": \"35-24KS-553 KS INSTRUMENT\"},\n    {\"equipment\": \"35-24HV-555\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24HV-555 ISOL VLV AV\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24HI-555\", \"mask\": \"\", \"description\": \"35-24HI-555 HI INSTRUMENT\"},\n    {\"equipment\": \"35-24HV-653\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24HV-653 ISOL VLV AV\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24HI-653\", \"mask\": \"\", \"description\": \"35-24HI-653 HI INSTRUMENT\"},\n    {\"equipment\": \"35-24HV-534\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24HV-534 ISOL VLV AV\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24HI-534\", \"mask\": \"\", \"description\": \"35-24HI-534 HI INSTRUMENT\"},\n    {\"equipment\": \"35-24HV-652\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24HV-652 ISOL VLV AV\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24HI-652\", \"mask\": \"\", \"description\": \"35-24HI-652 HI INSTRUMENT\"},\n    {\"equipment\": \"35-24-138\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-138 BRANCH LINE 003-50\"}\n  ],\n  \"peers\": [\n    {\"tag\": \"35-24P507\", \"evidence\": \"pump visible nearby, separate primary equipment\"},\n    {\"tag\": \"35-24-055\", \"evidence\": \"parallel WAF-100 line, separate line number\"},\n    {\"tag\": \"35-24-057\", \"evidence\": \"parallel WAF-350 line, separate line number\"},\n    {\"tag\": \"35-24-053\", \"evidence\": \"parallel WAF-100 line, separate line number\"},\n    {\"tag\": \"35-24-036\", \"evidence\": \"parallel WAF-350 line, separate line number\"},\n    {\"tag\": \"35-24-035\", \"evidence\": \"parallel WAF-350 line, separate line number\"},\n    {\"tag\": \"35-24-052\", \"evidence\": \"parallel WAF-300 line, separate line number\"},\n    {\"tag\": \"35-24L006\", \"evidence\": \"vessel/tank tag, not child of line function\"},\n    {\"tag\": \"35-24-134\", \"evidence\": \"valve 101-500 on separate downstream circuit\"},\n    {\"tag\": \"35-24LV2-559\", \"evidence\": \"level valve on different circuit\"}\n  ],\n  \"notes\": [\n    \"35-24-056 is a WAF-350 broke header line with multiple automatic isolation valves feeding parallel branch lines\",\n    \"Each HV valve has an HS (hand switch) above and HI (hand indicator) instrument \u2014 HS tags nested under respective HV as sub-instruments\",\n    \"35-24FV-550 is the flow control valve at inlet with FC-550 DCS instrument\",\n    \"35-24KV-553 is 80mm; all other HV valves are DN250 per drawing annotation\",\n    \"35-24-138 (003-50) is a branch/drain line visible below the header within the red boundary\"\n  ],\n  \"confidence\": \"high\"\n}\n```",
+        "parsed": {
+          "sub_process": "BR1",
+          "function": "35-24-056",
+          "description": "35-24-056 WAF-350 BROKE HDR LINE",
+          "rows": [
+            {
+              "equipment": "35-24FV-550",
+              "subequipment": "",
+              "mask": "",
+              "description": "35-24FV-550 FLOW CTRL VLV AV"
+            },
+            {
+              "equipment": "35-24HV-552",
+              "subequipment": "",
+              "mask": "",
+              "description": "35-24HV-552 ISOL VLV AV"
+            },
+            {
+              "equipment": "",
+              "subequipment": "35-24HI-552",
+              "mask": "",
+              "description": "35-24HI-552 HI INSTRUMENT"
+            },
+            {
+              "equipment": "35-24KV-553",
+              "subequipment": "",
+              "mask": "",
+              "description": "35-24KV-553 ISOL VLV AV"
+            },
+            {
+              "equipment": "",
+              "subequipment": "35-24KS-553",
+              "mask": "",
+              "description": "35-24KS-553 KS INSTRUMENT"
+            },
+            {
+              "equipment": "35-24HV-555",
+              "subequipment": "",
+              "mask": "",
+              "description": "35-24HV-555 ISOL VLV AV"
+            },
+            {
+              "equipment": "",
+              "subequipment": "35-24HI-555",
+              "mask": "",
+              "description": "35-24HI-555 HI INSTRUMENT"
+            },
+            {
+              "equipment": "35-24HV-653",
+              "subequipment": "",
+              "mask": "",
+              "description": "35-24HV-653 ISOL VLV AV"
+            },
+            {
+              "equipment": "",
+              "subequipment": "35-24HI-653",
+              "mask": "",
+              "description": "35-24HI-653 HI INSTRUMENT"
+            },
+            {
+              "equipment": "35-24HV-534",
+              "subequipment": "",
+              "mask": "",
+              "description": "35-24HV-534 ISOL VLV AV"
+            },
+            {
+              "equipment": "",
+              "subequipment": "35-24HI-534",
+              "mask": "",
+              "description": "35-24HI-534 HI INSTRUMENT"
+            },
+            {
+              "equipment": "35-24HV-652",
+              "subequipment": "",
+              "mask": "",
+              "description": "35-24HV-652 ISOL VLV AV"
+            },
+            {
+              "equipment": "",
+              "subequipment": "35-24HI-652",
+              "mask": "",
+              "description": "35-24HI-652 HI INSTRUMENT"
+            },
+            {
+              "equipment": "35-24-138",
+              "subequipment": "",
+              "mask": "",
+              "description": "35-24-138 BRANCH LINE 003-50"
+            }
+          ],
+          "peers": [
+            {
+              "tag": "35-24P507",
+              "evidence": "pump visible nearby, separate primary equipment"
+            },
+            {
+              "tag": "35-24-055",
+              "evidence": "parallel WAF-100 line, separate line number"
+            },
+            {
+              "tag": "35-24-057",
+              "evidence": "parallel WAF-350 line, separate line number"
+            },
+            {
+              "tag": "35-24-053",
+              "evidence": "parallel WAF-100 line, separate line number"
+            },
+            {
+              "tag": "35-24-036",
+              "evidence": "parallel WAF-350 line, separate line number"
+            },
+            {
+              "tag": "35-24-035",
+              "evidence": "parallel WAF-350 line, separate line number"
+            },
+            {
+              "tag": "35-24-052",
+              "evidence": "parallel WAF-300 line, separate line number"
+            },
+            {
+              "tag": "35-24L006",
+              "evidence": "vessel/tank tag, not child of line function"
+            },
+            {
+              "tag": "35-24-134",
+              "evidence": "valve 101-500 on separate downstream circuit"
+            },
+            {
+              "tag": "35-24LV2-559",
+              "evidence": "level valve on different circuit"
+            }
+          ],
+          "notes": [
+            "35-24-056 is a WAF-350 broke header line with multiple automatic isolation valves feeding parallel branch lines",
+            "Each HV valve has an HS (hand switch) above and HI (hand indicator) instrument \u2014 HS tags nested under respective HV as sub-instruments",
+            "35-24FV-550 is the flow control valve at inlet with FC-550 DCS instrument",
+            "35-24KV-553 is 80mm; all other HV valves are DN250 per drawing annotation",
+            "35-24-138 (003-50) is a branch/drain line visible below the header within the red boundary"
+          ],
+          "confidence": "high"
+        },
+        "model_id": "eu.anthropic.claude-sonnet-4-6",
+        "region": "eu-west-2",
+        "prompt_file": "pid_hierarchy_gt_v7_floc.md",
+        "candidates": [
+          "35-24-056",
+          "35-24",
+          "35-24-055",
+          "35-24-057",
+          "35-24HV-653",
+          "35-24-053",
+          "35-24-036",
+          "35-24HV-555",
+          "35-24HV-534",
+          "35-24KV-553",
+          "35-24HV-652",
+          "35-24-035",
+          "35-24-052",
+          "35-24HV-552",
+          "35-24-054",
+          "35-24-138",
+          "35-24-207",
+          "35-24P507",
+          "35-24-058",
+          "35-24FV-550",
+          "35-24-134",
+          "35-24-133",
+          "35-24-132",
+          "35-24-049",
+          "35-24-051",
+          "35-24XV-668",
+          "35-24L006",
+          "35-24P510",
+          "35-24-060",
+          "35-24-135",
+          "35-24HV-548",
+          "35-24LV2-559",
+          "35-24-205",
+          "35-24-050"
+        ],
+        "prompt_chars": 10622,
+        "vision": true
+      },
+      "refined_rows": [
+        {
+          "equipment": "35-24FV-550",
+          "subequipment": "",
+          "mask": "",
+          "description": "35-24FV-550 FL CTRL VLV AV"
+        },
+        {
+          "equipment": "35-24HV-552",
+          "subequipment": "",
+          "mask": "",
+          "description": "35-24HV-552 ISOL VLV AV"
+        },
+        {
+          "equipment": "35-24KV-553",
+          "subequipment": "",
+          "mask": "",
+          "description": "35-24KV-553 ISOL VLV AV"
+        },
+        {
+          "equipment": "",
+          "subequipment": "35-24KS-553",
+          "mask": "",
+          "description": "35-24KS-553 KS INST"
+        },
+        {
+          "equipment": "35-24HV-555",
+          "subequipment": "",
+          "mask": "",
+          "description": "35-24HV-555 ISOL VLV AV"
+        },
+        {
+          "equipment": "35-24HV-653",
+          "subequipment": "",
+          "mask": "",
+          "description": "35-24HV-653 ISOL VLV AV"
+        },
+        {
+          "equipment": "35-24HV-534",
+          "subequipment": "",
+          "mask": "",
+          "description": "35-24HV-534 ISOL VLV AV"
+        },
+        {
+          "equipment": "35-24HV-652",
+          "subequipment": "",
+          "mask": "",
+          "description": "35-24HV-652 ISOL VLV AV"
+        },
+        {
+          "equipment": "35-24-138",
+          "subequipment": "",
+          "mask": "",
+          "description": "35-24-138 BRANCH LN 003-50"
+        },
+        {
+          "equipment": "35-24-056",
+          "subequipment": "",
+          "mask": "",
+          "description": "35-24-056"
+        }
+      ]
+    }
+  ]
+}

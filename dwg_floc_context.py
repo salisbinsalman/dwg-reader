@@ -435,10 +435,10 @@ def apply_sop_valve_type(raw: str) -> str:
     for tok in cleaned.split():
         if tok in ALLOWED_VALVE_TOKENS and tok not in tokens:
             tokens.append(tok)
-    exclusive = [t for t in _ATTACHMENT_TOKENS if t in tokens]
+    exclusive = [t for t in ("DRN", "FLS", "SMP") if t in tokens]
     if len(exclusive) > 1:
         keep = exclusive[0]
-        tokens = [t for t in tokens if t not in _ATTACHMENT_TOKENS or t == keep]
+        tokens = [t for t in tokens if t not in ("DRN", "FLS", "SMP") or t == keep]
     controlled = "AV-M" in tokens or "AV" in tokens
     if controlled:
         tokens = [t for t in tokens if t not in {"NC", "NO", "HV"}]

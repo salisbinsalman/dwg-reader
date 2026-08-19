@@ -297,6 +297,30 @@
           "subequipment": "",
           "mask": "",
           "description": "35-24-606.2"
+        },
+        {
+          "equipment": "35-24T606.3",
+          "subequipment": "",
+          "mask": "",
+          "description": "35-24T606.3"
+        },
+        {
+          "equipment": "35-24-606.3",
+          "subequipment": "",
+          "mask": "",
+          "description": "35-24-606.3"
+        },
+        {
+          "equipment": "35-24T606.4",
+          "subequipment": "",
+          "mask": "",
+          "description": "35-24T606.4"
+        },
+        {
+          "equipment": "35-24-606.4",
+          "subequipment": "",
+          "mask": "",
+          "description": "35-24-606.4"
         }
       ]
     }

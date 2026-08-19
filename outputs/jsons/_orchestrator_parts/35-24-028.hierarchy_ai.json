@@ -1,0 +1,226 @@
+{
+  "input": "/Users/code-huddle-ensemble/Desktop/dwg-reader/inputs/Broke System.dwg",
+  "mode": "viewer_shot_ai_gt",
+  "evidence_dir": "/Users/code-huddle-ensemble/Desktop/dwg-reader/outputs/evidence",
+  "site": "Shotton Paper Mill, United Kingdom",
+  "line": "Shotton PM3",
+  "process": "Broke System",
+  "sub_process": "BR1",
+  "model_id": "eu.anthropic.claude-sonnet-4-6",
+  "region": "eu-west-2",
+  "prompt_file": "pid_hierarchy_gt_v7_floc.md",
+  "legend": "/Users/code-huddle-ensemble/Desktop/dwg-reader/inputs/legend.png",
+  "results": [
+    {
+      "tag": "35-24-028",
+      "shot": "/Users/code-huddle-ensemble/Desktop/dwg-reader/outputs/evidence/Broke System.viewer_35-24-028.png",
+      "parent": {
+        "category": "lines",
+        "block_name": "",
+        "handle": "80D05",
+        "layer": "P-LINEPOS",
+        "x": 1296.063563563564,
+        "y": 68.75,
+        "resolved_tag": "35-24-028",
+        "nearby_tags": "35-24-028",
+        "nearby_descriptions": "35-24-028-WFL-15-E10H2A",
+        "confidence": "high"
+      },
+      "candidates": [
+        "35-24-028",
+        "35-24-157",
+        "35-24",
+        "35-24-159",
+        "35-24-026",
+        "35-24-156",
+        "35-24-163",
+        "35-24HV-693",
+        "35-24-024",
+        "35-24HV-694",
+        "35-24NV-519",
+        "35-24-032",
+        "35-24KV-530",
+        "35-24-030",
+        "35-24-027",
+        "35-24-155",
+        "35-24P508",
+        "35-24-217",
+        "35-24HV-532",
+        "35-24-1096",
+        "35-24-007.1",
+        "35-24-165",
+        "35-24-022",
+        "35-24-218",
+        "35-24TV-9261",
+        "35-24-007.2",
+        "35-24HV-529",
+        "35-24-033",
+        "35-24-029",
+        "35-24-161",
+        "35-24L007",
+        "35-24-034",
+        "35-24-1106",
+        "35-24-007.4",
+        "35-24-025",
+        "35-24-007.3",
+        "35-24-031"
+      ],
+      "dossier": "Parent tag: 35-24-028\nParent category/block: lines / \nParent XY: (1296.063563563564, 68.75)\nNearby descriptions: 35-24-028-WFL-15-E10H2A\n\nSame-tag CAD family:\n- (none)\n\nNearby line numbers (short ids preferred in output):\n- 35-24-218  full=35-24-218-WAF-150-E10H2A  d=165  layer=P-LINEPOS\n- 35-24-217  full=35-24-217-WAF-150-E10H2A  d=153  layer=P-LINEPOS\n- 35-24-030  full=35-24-030-WAF-250-E10H2A  d=143  layer=P-LINEPOS\n- 35-24-033  full=35-24-033-WAF-100-E10H2A  d=180  layer=P-LINEPOS\n- 35-24-034  full=35-24-034-WAF-150-E10H2A  d=197  layer=P-LINEPOS\n- 35-24-024  full=35-24-024-WFL-15-E10H2A  d=108  layer=P-LINEPOS\n- 35-24-026  full=35-24-026-WFL-15-E10H2A  d=50  layer=P-LINEPOS\n- 35-24-022  full=35-24-022-WFC-15-E10H2A  d=165  layer=P-LINEPOS\n- 35-24-028  full=35-24-028-WFL-15-E10H2A  d=0  layer=P-LINEPOS\n- 35-24-029  full=35-24-029-PP-600-E10H2A  d=185  layer=P-LINEPOS\n- 35-24-027  full=35-24-027-PP-250-E10H2A  d=149  layer=P-LINEPOS\n- 35-24-032  full=35-24-032-WAF-300-E10H2A  d=134  layer=P-LINEPOS\n\nNearby devices (valves/instruments/pumps/\u2026):\n- line_markers: P7A1304  d=175  block=P7A1304\n- valves: PPI_0900A  d=16  block=PPI_0900A\n- control_valves: PPI_1000A  d=120  block=PPI_1000A\n- instruments: PPI_1200A  d=72  block=PPI_1200A\n- pumps: GEARBOXOILPUMP  d=190  block=None\n- motors: PPI_1504A-25_0  d=178  block=PPI_1504A-25_0\n- fittings: P7A1214  d=108  block=P7A1214\n\nNearby peer primary equipment (do NOT nest under parent):\n- (none)\n\nNearby drawing text tokens:\n- GEARBOX 1  d=194  layer=P-OTHER\n- 35-24  d=197  layer=P-INSTRPOS_TEXTS\n- 9261  d=188  layer=P-INSTRPOS_TEXTS\n- 521  d=97  layer=P-INSTRPOS_TEXTS\n- 9263  d=119  layer=P-INSTRPOS_TEXTS\n- 9262  d=129  layer=P-INSTRPOS_TEXTS\n- 529  d=194  layer=P-INSTRPOS_TEXTS\n- 530  d=158  layer=P-INSTRPOS_TEXTS\n- 519  d=107  layer=P-INSTRPOS_TEXTS\n- 527  d=22  layer=P-INSTRPOS_TEXTS\n- 525  d=42  layer=P-INSTRPOS_TEXTS\n- 9265  d=64  layer=P-INSTRPOS_TEXTS\n- 9267  d=21  layer=P-INSTRPOS_TEXTS\n- 9266  d=27  layer=P-INSTRPOS_TEXTS\n- 9264  d=73  layer=P-INSTRPOS_TEXTS\n- SLABBING PULPER ROTOR 1  d=192  layer=P-TEXT\n- 693  d=130  layer=P-INSTRPOS_TEXTS\n- 694  d=142  layer=P-INSTRPOS_TEXTS\n- 532  d=175  layer=P-INSTRPOS_TEXTS\n- 1500  d=196  layer=P-MOTOR_POS\n- 35-24-007.1  d=157  layer=P-MOTOR_POS\n- 200  d=153  layer=P-MOTOR_POS\n- 35-24-007.2  d=173  layer=P-MOTOR_POS\n- 35-24-165  d=162  layer=P-VALVEPOS\n- 001-15  d=160  layer=P-VALVEPOS\n- 003-50  d=199  layer=P-VALVEPOS\n- 35-24-161  d=192  layer=P-VALVEPOS\n- 001-80  d=187  layer=P-VALVEPOS\n- 35-24-163  d=101  layer=P-VALVEPOS\n- 003-15  d=98  layer=P-VALVEPOS\n- 35-24-159  d=44  layer=P-VALVEPOS\n- 35-24-1096  d=156  layer=P-VALVEPOS\n- 350-250  d=151  layer=P-VALVEPOS\n- 35-24-157  d=12  layer=P-VALVEPOS\n- 35-24-156  d=89  layer=P-VALVEPOS\n- 35-24-155  d=150  layer=P-VALVEPOS\n- 101-300  d=151  layer=P-VALVEPOS\n- 35-24-218  d=165  layer=P-LINEPOS\n- 35-24-217  d=153  layer=P-LINEPOS\n- 35-24-030  d=143  layer=P-LINEPOS",
+      "ai": {
+        "raw_text": "I'll analyze the P&ID crop carefully.\n\n**Observations from Image 1:**\n\nThe red box labeled \"PARENT 35-24-028\" contains the rightmost of three similar circuits. The full line label visible is `35-24-028-WFL-15-E10H2A`.\n\nInside the 35-24-028 box I can see:\n- The line `35-24-028` (WFL-15)\n- Instruments: `PI 9266`, `FI 9267` (these appear to be on the 35-24-026 circuit to the left), and `FS 527` (flow switch, clearly inside the box)\n- Valve `35-24-157` with size `003-15` \u2014 a hand valve below the line with a downward branch. Looking at the symbol: it appears to be a bowtie with solid/filled triangles (NC) and has a downward drain branch \u2192 `NC DRN` style. Actually examining more carefully, the symbol shows filled triangles = NC, with a downward stub = DRN.\n- The `V/C` delivery limit marker is at 35-24-157's position\n\nThe instruments `PI 9266` and `FI 9267` are labeled with text tokens `9266` and `9267` at distances 27 and 21 from parent \u2014 these are closest instruments, so they belong to 35-24-028's circuit. `FS 527` (d=22) is also clearly within the box.\n\n**Valve 35-24-157**: Symbol shows filled (solid white) triangles = NC, with downward branch ending in drain symbol = DRN NC.\n\n**Instruments on 35-24-028**: PI-9266, FI-9267, FS-527 are the on-line instruments for this spool.\n\n**Peers**: 35-24-026 and 35-24-024 are sibling lines (same pattern, outside the red box). 35-24-156 is above/outside. 35-24-163 and 35-24-159 belong to adjacent circuits.\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24-028\",\n  \"description\": \"35-24-028 WFL LINE 15MM\",\n  \"rows\": [\n    {\"equipment\": \"35-24-157\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-157 VLV NC DRN 003-15\"},\n    {\"equipment\": \"35-24PI-9266\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24PI-9266 PRESSURE INDICATOR\"},\n    {\"equipment\": \"35-24FI-9267\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24FI-9267 FLOW INDICATOR\"},\n    {\"equipment\": \"35-24FS-527\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24FS-527 FLOW SWITCH\"}\n  ],\n  \"peers\": [\n    {\"tag\": \"35-24-026\", \"evidence\": \"sibling WFL-15 line, own red-box circuit to the left\"},\n    {\"tag\": \"35-24-024\", \"evidence\": \"sibling WFL-15 line, further left circuit\"},\n    {\"tag\": \"35-24-159\", \"evidence\": \"drain valve on 35-24-026 circuit, not 028\"},\n    {\"tag\": \"35-24-163\", \"evidence\": \"drain valve on 35-24-024 circuit, not 028\"},\n    {\"tag\": \"35-24-156\", \"evidence\": \"separate line above, outside parent box\"},\n    {\"tag\": \"35-24HV-693\", \"evidence\": \"above parent box, different circuit\"},\n    {\"tag\": \"35-24HV-694\", \"evidence\": \"above parent box, different circuit\"},\n    {\"tag\": \"35-24KV-530\", \"evidence\": \"above parent box, different circuit\"},\n    {\"tag\": \"35-24NV-519\", \"evidence\": \"above parent box, NC instrument outside scope\"}\n  ],\n  \"notes\": [\n    \"35-24-028 is a WFL-15 (white water flush line, DN15) spool\",\n    \"FS-527, PI-9266, FI-9267 are the three on-line instruments visible inside the red box\",\n    \"35-24-157 (003-15) is the isolation/drain valve on this spool; symbol shows filled triangles (NC) with downward drain branch (DRN)\",\n    \"V/C delivery limit marker sits at 35-24-157 position\"\n  ],\n  \"confidence\": \"high\"\n}\n```",
+        "parsed": {
+          "sub_process": "BR1",
+          "function": "35-24-028",
+          "description": "35-24-028 WFL LINE 15MM",
+          "rows": [
+            {
+              "equipment": "35-24-157",
+              "subequipment": "",
+              "mask": "",
+              "description": "35-24-157 VLV NC DRN 003-15"
+            },
+            {
+              "equipment": "35-24PI-9266",
+              "subequipment": "",
+              "mask": "",
+              "description": "35-24PI-9266 PRESSURE INDICATOR"
+            },
+            {
+              "equipment": "35-24FI-9267",
+              "subequipment": "",
+              "mask": "",
+              "description": "35-24FI-9267 FLOW INDICATOR"
+            },
+            {
+              "equipment": "35-24FS-527",
+              "subequipment": "",
+              "mask": "",
+              "description": "35-24FS-527 FLOW SWITCH"
+            }
+          ],
+          "peers": [
+            {
+              "tag": "35-24-026",
+              "evidence": "sibling WFL-15 line, own red-box circuit to the left"
+            },
+            {
+              "tag": "35-24-024",
+              "evidence": "sibling WFL-15 line, further left circuit"
+            },
+            {
+              "tag": "35-24-159",
+              "evidence": "drain valve on 35-24-026 circuit, not 028"
+            },
+            {
+              "tag": "35-24-163",
+              "evidence": "drain valve on 35-24-024 circuit, not 028"
+            },
+            {
+              "tag": "35-24-156",
+              "evidence": "separate line above, outside parent box"
+            },
+            {
+              "tag": "35-24HV-693",
+              "evidence": "above parent box, different circuit"
+            },
+            {
+              "tag": "35-24HV-694",
+              "evidence": "above parent box, different circuit"
+            },
+            {
+              "tag": "35-24KV-530",
+              "evidence": "above parent box, different circuit"
+            },
+            {
+              "tag": "35-24NV-519",
+              "evidence": "above parent box, NC instrument outside scope"
+            }
+          ],
+          "notes": [
+            "35-24-028 is a WFL-15 (white water flush line, DN15) spool",
+            "FS-527, PI-9266, FI-9267 are the three on-line instruments visible inside the red box",
+            "35-24-157 (003-15) is the isolation/drain valve on this spool; symbol shows filled triangles (NC) with downward drain branch (DRN)",
+            "V/C delivery limit marker sits at 35-24-157 position"
+          ],
+          "confidence": "high"
+        },
+        "model_id": "eu.anthropic.claude-sonnet-4-6",
+        "region": "eu-west-2",
+        "prompt_file": "pid_hierarchy_gt_v7_floc.md",
+        "candidates": [
+          "35-24-028",
+          "35-24-157",
+          "35-24",
+          "35-24-159",
+          "35-24-026",
+          "35-24-156",
+          "35-24-163",
+          "35-24HV-693",
+          "35-24-024",
+          "35-24HV-694",
+          "35-24NV-519",
+          "35-24-032",
+          "35-24KV-530",
+          "35-24-030",
+          "35-24-027",
+          "35-24-155",
+          "35-24P508",
+          "35-24-217",
+          "35-24HV-532",
+          "35-24-1096",
+          "35-24-007.1",
+          "35-24-165",
+          "35-24-022",
+          "35-24-218",
+          "35-24TV-9261",
+          "35-24-007.2",
+          "35-24HV-529",
+          "35-24-033",
+          "35-24-029",
+          "35-24-161",
+          "35-24L007",
+          "35-24-034",
+          "35-24-1106",
+          "35-24-007.4",
+          "35-24-025",
+          "35-24-007.3",
+          "35-24-031"
+        ],
+        "prompt_chars": 10575,
+        "vision": true
+      },
+      "refined_rows": [
+        {
+          "equipment": "35-24-157",
+          "subequipment": "",
+          "mask": "",
+          "description": "35-24-157 VLV NC DRN 003-15"
+        },
+        {
+          "equipment": "35-24PI-9266",
+          "subequipment": "",
+          "mask": "",
+          "description": "35-24PI-9266 PI"
+        },
+        {
+          "equipment": "35-24FI-9267",
+          "subequipment": "",
+          "mask": "",
+          "description": "35-24FI-9267 FI"
+        },
+        {
+          "equipment": "35-24FS-527",
+          "subequipment": "",
+          "mask": "",
+          "description": "35-24FS-527 FS"
+        },
+        {
+          "equipment": "35-24-028",
+          "subequipment": "",
+          "mask": "",
+          "description": "35-24-028"
+        }
+      ]
+    }
+  ]
+}

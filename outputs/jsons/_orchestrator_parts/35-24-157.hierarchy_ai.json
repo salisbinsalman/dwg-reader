@@ -1,0 +1,156 @@
+{
+  "input": "/Users/code-huddle-ensemble/Desktop/dwg-reader/inputs/Broke System.dwg",
+  "mode": "viewer_shot_ai_gt",
+  "evidence_dir": "/Users/code-huddle-ensemble/Desktop/dwg-reader/outputs/evidence",
+  "site": "Shotton Paper Mill, United Kingdom",
+  "line": "Shotton PM3",
+  "process": "Broke System",
+  "sub_process": "BR1",
+  "model_id": "eu.anthropic.claude-sonnet-4-6",
+  "region": "eu-west-2",
+  "prompt_file": "pid_hierarchy_gt_v7_floc.md",
+  "legend": "/Users/code-huddle-ensemble/Desktop/dwg-reader/inputs/legend.png",
+  "results": [
+    {
+      "tag": "35-24-157",
+      "shot": "/Users/code-huddle-ensemble/Desktop/dwg-reader/outputs/evidence/Broke System.viewer_35-24-157.png",
+      "parent": {
+        "category": "lines",
+        "block_name": "",
+        "handle": "80CCB",
+        "layer": "P-LINEPOS",
+        "x": 5070.0,
+        "y": 58.75,
+        "resolved_tag": "35-24-157",
+        "nearby_tags": "35-24-157",
+        "nearby_descriptions": "35-24-157-WFL-15-E10H2A",
+        "confidence": "high"
+      },
+      "candidates": [
+        "35-24-157",
+        "35-24-022",
+        "35-24",
+        "35-24-160",
+        "35-24-020",
+        "35-24-1134",
+        "35-24-153",
+        "35-24P513",
+        "35-24NV-634",
+        "35-24P515",
+        "35-24-155",
+        "35-24-021"
+      ],
+      "dossier": "Parent tag: 35-24-157\nParent category/block: lines / \nParent XY: (5070.0, 58.75)\nNearby descriptions: 35-24-157-WFL-15-E10H2A\n\nSame-tag CAD family:\n- (none)\n\nNearby line numbers (short ids preferred in output):\n- 35-24-160  full=35-24-160-WFL-15-E10H2A  d=72  layer=P-LINEPOS\n- 35-24-157  full=35-24-157-WFL-15-E10H2A  d=0  layer=P-LINEPOS\n- 35-24-153  full=35-24-153-WFL-15-E10H2A  d=100  layer=P-LINEPOS\n\nNearby devices (valves/instruments/pumps/\u2026):\n- line_markers: P7A1304  d=103  block=P7A1304\n- valves: PPI_0900A  d=22  block=PPI_0900A\n- control_valves: PPI_1000A  d=183  block=PPI_1000A\n- instruments: PPI_1204A  d=196  block=PPI_1204A\n\nNearby peer primary equipment (do NOT nest under parent):\n- (none)\n\nNearby drawing text tokens:\n- 627  d=94  layer=P-INSTRPOS_TEXTS\n- 35-24  d=105  layer=P-INSTRPOS_TEXTS\n- 9318  d=125  layer=P-INSTRPOS_TEXTS\n- 635  d=88  layer=P-INSTRPOS_TEXTS\n- 9322  d=58  layer=P-INSTRPOS_TEXTS\n- 632  d=30  layer=P-INSTRPOS_TEXTS\n- 9320  d=36  layer=P-INSTRPOS_TEXTS\n- 634  d=192  layer=P-INSTRPOS_TEXTS\n- 9319  d=115  layer=P-INSTRPOS_TEXTS\n- 9321  d=31  layer=P-INSTRPOS_TEXTS\n- 9323  d=67  layer=P-INSTRPOS_TEXTS\n- 35-24-1134  d=99  layer=P-VALVEPOS\n- 003-15  d=95  layer=P-VALVEPOS\n- 35-24-022  d=21  layer=P-VALVEPOS\n- 35-24-020  d=80  layer=P-VALVEPOS\n- 35-24-160  d=72  layer=P-LINEPOS\n- 35-24-157  d=0  layer=P-LINEPOS\n- 35-24-153  d=100  layer=P-LINEPOS\n- 35-24NV-634  d=182  layer=P-CVPOS\n- 65  d=179  layer=P-CVPOS",
+      "ai": {
+        "raw_text": "Looking at the P&ID crop, I can see:\n\n- **35-24-157** is a process line (piping header, format `35-24-NNN`)\n- Within the red boundary box for PARENT 35-24-157, I can see:\n  - The line label: `35-24-157-WFL-15-E10H2A` at the bottom\n  - Valve **35-24-022** (with label `003-15` below it) \u2014 a hand valve symbol (outline/transparent bowtie, no actuator circle)\n  - Instruments **PI 9320** and **FI 9321** \u2014 locally mounted instruments (plain circles) on the line\n  - **FS 632** \u2014 a flow switch instrument (square symbol) on the line\n\nThe valve 35-24-022 sits on the line with PI/FI instruments. The FS 632 is also on this circuit. Looking at the valve symbol for 35-24-022: it appears as an outline/transparent bowtie with no actuator circle \u2192 **HV** (hand valve).\n\nThe instruments PI-9320, FI-9321, FS-632 are nested under the line 35-24-157 as sub-equipment.\n\nPeers: 35-24-153 and 35-24-160 are neighbouring lines (outside the red box). 35-24-020 and 35-24-1134 are valves on those neighbouring lines.\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24-157\",\n  \"description\": \"35-24-157 PROC LINE WFL\",\n  \"rows\": [\n    {\"equipment\": \"35-24-022\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-022 VLV HV\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24PI-9320\", \"mask\": \"\", \"description\": \"35-24PI-9320 PRESS IND\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24FI-9321\", \"mask\": \"\", \"description\": \"35-24FI-9321 FLOW IND\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24FS-632\", \"mask\": \"\", \"description\": \"35-24FS-632 FLOW SW\"}\n  ],\n  \"peers\": [\n    {\"tag\": \"35-24-153\", \"evidence\": \"neighbouring line to the left, outside red boundary box\"},\n    {\"tag\": \"35-24-160\", \"evidence\": \"neighbouring line to the right, outside red boundary box\"},\n    {\"tag\": \"35-24-020\", \"evidence\": \"valve on 35-24-160 circuit, outside red boundary\"},\n    {\"tag\": \"35-24-1134\", \"evidence\": \"valve on 35-24-153 circuit, outside red boundary\"}\n  ],\n  \"notes\": [\n    \"PI-9320 and FI-9321 are locally mounted instruments (plain circle symbol) nested under line 35-24-157\",\n    \"FS-632 is a square-symbol instrument (DCS control room type) on the same circuit\",\n    \"35-24-022 valve symbol shows outline/transparent bowtie with no actuator \u2014 classified HV\",\n    \"003-15 is the DN/valve-type label for 35-24-022, not a separate tag\"\n  ],\n  \"confidence\": \"high\"\n}\n```",
+        "parsed": {
+          "sub_process": "BR1",
+          "function": "35-24-157",
+          "description": "35-24-157 PROC LINE WFL",
+          "rows": [
+            {
+              "equipment": "35-24-022",
+              "subequipment": "",
+              "mask": "",
+              "description": "35-24-022 VLV HV"
+            },
+            {
+              "equipment": "",
+              "subequipment": "35-24PI-9320",
+              "mask": "",
+              "description": "35-24PI-9320 PRESS IND"
+            },
+            {
+              "equipment": "",
+              "subequipment": "35-24FI-9321",
+              "mask": "",
+              "description": "35-24FI-9321 FLOW IND"
+            },
+            {
+              "equipment": "",
+              "subequipment": "35-24FS-632",
+              "mask": "",
+              "description": "35-24FS-632 FLOW SW"
+            }
+          ],
+          "peers": [
+            {
+              "tag": "35-24-153",
+              "evidence": "neighbouring line to the left, outside red boundary box"
+            },
+            {
+              "tag": "35-24-160",
+              "evidence": "neighbouring line to the right, outside red boundary box"
+            },
+            {
+              "tag": "35-24-020",
+              "evidence": "valve on 35-24-160 circuit, outside red boundary"
+            },
+            {
+              "tag": "35-24-1134",
+              "evidence": "valve on 35-24-153 circuit, outside red boundary"
+            }
+          ],
+          "notes": [
+            "PI-9320 and FI-9321 are locally mounted instruments (plain circle symbol) nested under line 35-24-157",
+            "FS-632 is a square-symbol instrument (DCS control room type) on the same circuit",
+            "35-24-022 valve symbol shows outline/transparent bowtie with no actuator \u2014 classified HV",
+            "003-15 is the DN/valve-type label for 35-24-022, not a separate tag"
+          ],
+          "confidence": "high"
+        },
+        "model_id": "eu.anthropic.claude-sonnet-4-6",
+        "region": "eu-west-2",
+        "prompt_file": "pid_hierarchy_gt_v7_floc.md",
+        "candidates": [
+          "35-24-157",
+          "35-24-022",
+          "35-24",
+          "35-24-160",
+          "35-24-020",
+          "35-24-1134",
+          "35-24-153",
+          "35-24P513",
+          "35-24NV-634",
+          "35-24P515",
+          "35-24-155",
+          "35-24-021"
+        ],
+        "prompt_chars": 8783,
+        "vision": true
+      },
+      "refined_rows": [
+        {
+          "equipment": "35-24-022",
+          "subequipment": "",
+          "mask": "",
+          "description": "35-24-022 VLV HV"
+        },
+        {
+          "equipment": "",
+          "subequipment": "35-24PI-9320",
+          "mask": "",
+          "description": "35-24PI-9320 PRESS IND"
+        },
+        {
+          "equipment": "",
+          "subequipment": "35-24FI-9321",
+          "mask": "",
+          "description": "35-24FI-9321 FL IND"
+        },
+        {
+          "equipment": "",
+          "subequipment": "35-24FS-632",
+          "mask": "",
+          "description": "35-24FS-632 FL SW"
+        },
+        {
+          "equipment": "35-24-157",
+          "subequipment": "",
+          "mask": "",
+          "description": "35-24-157"
+        }
+      ]
+    }
+  ]
+}

@@ -62,70 +62,86 @@
       ],
       "dossier": "Parent tag: 35-24ES-601\nParent category/block: instruments / \nParent XY: (3883.408826128629, 346.04166625)\nNearby descriptions: ES 601 (35-24)\n\nSame-tag CAD family:\n- (none)\n\nNearby line numbers (short ids preferred in output):\n- 35-24-126  full=35-24-126-PP-200-E10H2A  d=118  layer=P-LINEPOS\n- 35-24-117  full=35-24-117-PP-250-E10H2A  d=156  layer=P-LINEPOS\n- 35-24-113  full=35-24-113-PP-800-E10H2A  d=193  layer=P-LINEPOS\n- 35-24-119  full=35-24-119-PP-300-E10H2A  d=95  layer=P-LINEPOS\n- 35-24-120  full=35-24-120-PP-900-E10H2A  d=108  layer=P-LINEPOS\n- 35-24-118  full=35-24-118-PP-200-E10H2A  d=82  layer=P-LINEPOS\n\nNearby devices (valves/instruments/pumps/\u2026):\n- line_markers: PPI_1100A  d=83  block=PPI_1100A\n- valves: PPI_0900A  d=91  block=PPI_0900A\n- control_valves: PPI_1000A  d=134  block=PPI_1000A\n- instruments: PPI_1204A  d=137  block=PPI_1204A\n- pumps: P7A0200  d=81  block=P7A0200\n\nNearby peer primary equipment (do NOT nest under parent):\n- 35-24T601 (tanks, d=140)\n- 35-24L401 (agitators, d=173)\n- 35-24L403 (agitators, d=168)\n- 35-24P502 (pumps, d=81)\n- 35-24P501 (pumps, d=96)\n\nNearby drawing text tokens:\n- S1  d=120  layer=P-TEXT\n- A1  d=126  layer=P-TEXT\n- A2  d=115  layer=P-TEXT\n- 2 bar  d=126  layer=P-TEXT\n- 2621 ADTPD  d=150  layer=P-TEXT\n- SFVPT-110-2  d=153  layer=P-TEXT\n- 35-24L403  d=166  layer=P-AGITATOR_POS\n- 35-24L401  d=172  layer=P-AGITATOR_POS\n- 600  d=11  layer=P-INSTRPOS_TEXTS\n- 35-24  d=20  layer=P-INSTRPOS_TEXTS\n- 601  d=4  layer=P-INSTRPOS_TEXTS\n- 603  d=34  layer=P-INSTRPOS_TEXTS\n- 602  d=19  layer=P-INSTRPOS_TEXTS\n- 609  d=109  layer=P-INSTRPOS_TEXTS\n- 607  d=137  layer=P-INSTRPOS_TEXTS\n- 597  d=58  layer=P-INSTRPOS_TEXTS\n- SHOWER S1  d=59  layer=P-TEXT\n- 664  d=71  layer=P-INSTRPOS_TEXTS\n- 671  d=185  layer=P-INSTRPOS_TEXTS\n- 35-24T601  d=137  layer=P-TANK_POS\n- 176 m\u00b3  d=149  layer=P-TANK_POS\n- 2,8 %  d=152  layer=P-TANK_POS\n- 35-24P501  d=138  layer=P-PUMP_POS\n- 1300  d=143  layer=P-PUMP_POS\n- 50  d=144  layer=P-PUMP_POS\n- 780  d=148  layer=P-PUMP_POS\n- 1000  d=149  layer=P-PUMP_POS\n- 35-24P502  d=140  layer=P-PUMP_POS\n- 60  d=145  layer=P-PUMP_POS\n- 55  d=143  layer=P-PUMP_POS\n- 1500  d=148  layer=P-PUMP_POS\n- 35-24-1125  d=119  layer=P-VALVEPOS\n- 001-80  d=121  layer=P-VALVEPOS\n- 35-24-079  d=95  layer=P-VALVEPOS\n- 350-200  d=97  layer=P-VALVEPOS\n- 35-24-078  d=142  layer=P-VALVEPOS\n- 350-250  d=146  layer=P-VALVEPOS\n- 35-24-1101  d=106  layer=P-VALVEPOS\n- 003-50  d=107  layer=P-VALVEPOS\n- 35-24-075  d=132  layer=P-VALVEPOS",
       "ai": {
-        "raw_text": "Looking at the P&ID image, I can see that 35-24ES-601 is clearly labeled as \"UTM EMERGENCY STOP\" - it's an instrument (ES = Emergency Stop) shown in the local panel area with the description \"UTM EMERGENCY STOP\" next to it.\n\nThe instrument is shown as a square box with \"ES 601\" inside it, with \"35-24\" prefix, and the label \"UTM EMERGENCY STOP\" to its right. It sits within a panel boundary (the red box labeled \"PARENT 35-24ES-601\").\n\nLooking at the panel contents, I can see several instruments grouped within this emergency stop panel:\n- 35-24XS-600 (MCS SIGNALS)\n- 35-24ES-601 (UTM EMERGENCY STOP) - the parent itself\n- 35-24KJ-602 (COUCH PIT START)\n- 35-24KJ-603 (COUCH PIT STOP)\n\nThe HS-664 and HI-597 instruments appear to be in the LOCAL PANEL box above, which is a separate boundary.\n\nSince 35-24ES-601 is an instrument (Emergency Stop device), and the other instruments (XS-600, KJ-602, KJ-603) share the same panel boundary and numeric base (600-series), they are likely children of this ES panel function. However, per the rules, if it's a standalone instrument with no labelled accessories, emit FUNCTION + description only.\n\nLooking more carefully, the red box encompasses XS-600, ES-601, KJ-602, and KJ-603 as a grouped panel \u2014 these are peer instruments within the same panel, not children of ES-601 specifically.\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24ES-601\",\n  \"description\": \"35-24ES-601 UTM EMERGENCY STOP\",\n  \"rows\": [],\n  \"peers\": [\n    {\"tag\": \"35-24XS-600\", \"evidence\": \"MCS SIGNALS instrument in same panel boundary, peer instrument not child of ES-601\"},\n    {\"tag\": \"35-24KJ-602\", \"evidence\": \"COUCH PIT START pushbutton in same panel boundary, peer instrument\"},\n    {\"tag\": \"35-24KJ-603\", \"evidence\": \"COUCH PIT STOP pushbutton in same panel boundary, peer instrument\"},\n    {\"tag\": \"35-24HS-664\", \"evidence\": \"COUCH PIT START/STOP in LOCAL PANEL above, separate panel boundary\"},\n    {\"tag\": \"35-24HI-597\", \"evidence\": \"COUCH PIT SHOWER S1 indicator in LOCAL PANEL above, separate panel boundary\"},\n    {\"tag\": \"35-24T601\", \"evidence\": \"COUCH PIT tank, nearby major equipment, not child of instrument\"},\n    {\"tag\": \"35-24P501\", \"evidence\": \"Nearby pump, peer major equipment\"},\n    {\"tag\": \"35-24P502\", \"evidence\": \"Nearby pump, peer major equipment\"},\n    {\"tag\": \"35-24L401\", \"evidence\": \"Nearby agitator, peer major equipment\"},\n    {\"tag\": \"35-24L403\", \"evidence\": \"Nearby agitator, peer major equipment\"},\n    {\"tag\": \"35-24LV1-609\", \"evidence\": \"Level control valve on separate circuit, peer\"},\n    {\"tag\": \"35-24LV2-609\", \"evidence\": \"Level control valve on separate circuit, peer\"},\n    {\"tag\": \"35-24LV3-609\", \"evidence\": \"Level control valve on separate circuit, peer\"}\n  ],\n  \"notes\": [\n    \"35-24ES-601 is a standalone Emergency Stop instrument (UTM EMERGENCY STOP) shown in panel boundary on P&ID\",\n    \"No child instruments or lines are directly subordinate to ES-601 itself; XS-600, KJ-602, KJ-603 are peer panel instruments\",\n    \"Empty rows is correct per rules for a standalone instrument with no labelled accessories\"\n  ],\n  \"confidence\": \"high\"\n}\n```",
+        "raw_text": "Looking at the P&ID image, I can see that 35-24ES-601 is clearly labeled as \"UTM EMERGENCY STOP\" - it's an instrument (ES = Emergency Stop) shown in the local panel area with the description \"UTM EMERGENCY STOP\".\n\nThe red box labeled \"PARENT 35-24ES-601\" encompasses the local panel area containing:\n- 35-24XS-600 (MCS SIGNALS)\n- 35-24ES-601 (UTM EMERGENCY STOP) - the parent itself\n- 35-24KJ-602 (COUCH PIT START)\n- 35-24KJ-603 (COUCH PIT STOP)\n\nAnd in the local panel box above:\n- 35-24HS-664 (COUCH PIT START/STOP)\n- 35-24HI-597 (COUCH PIT SHOWER S1)\n\nThe ES-601 is an instrument/electrical instrument (Emergency Stop). Per the rules, if it's an instrument with no labelled accessories sitting on it as children, emit the FUNCTION header + description only. However, the red boundary box clearly groups the control instruments 600, 601, 602, 603 together as part of this ES panel function.\n\nThe nearby instruments 600, 602, 603 share the same numeric base area and are within the red boundary. These are panel instruments belonging to this ES-601 function grouping.\n\nPeers are the major process equipment visible nearby (tanks, pumps, agitators).\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24ES-601\",\n  \"description\": \"35-24ES-601 UTM EMERGENCY STOP\",\n  \"rows\": [\n    {\"equipment\": \"35-24XS-600\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24XS-600 MCS SIGNALS\"},\n    {\"equipment\": \"35-24KJ-602\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24KJ-602 COUCH PIT START\"},\n    {\"equipment\": \"35-24KJ-603\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24KJ-603 COUCH PIT STOP\"},\n    {\"equipment\": \"35-24HS-664\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24HS-664 COUCH PIT START STOP\"},\n    {\"equipment\": \"35-24HI-597\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24HI-597 COUCH PIT SHOWER S1\"}\n  ],\n  \"peers\": [\n    {\"tag\": \"35-24T601\", \"evidence\": \"COUCH PIT tank 176m3 \u2014 major vessel, peer primary equipment\"},\n    {\"tag\": \"35-24P501\", \"evidence\": \"pump peer primary equipment per dossier\"},\n    {\"tag\": \"35-24P502\", \"evidence\": \"pump peer primary equipment per dossier\"},\n    {\"tag\": \"35-24L401\", \"evidence\": \"agitator peer primary equipment per dossier\"},\n    {\"tag\": \"35-24L403\", \"evidence\": \"agitator peer primary equipment per dossier\"},\n    {\"tag\": \"35-24LV1-609\", \"evidence\": \"level control valve on separate circuit, not child of ES panel\"},\n    {\"tag\": \"35-24LV2-609\", \"evidence\": \"level control valve on separate circuit, not child of ES panel\"},\n    {\"tag\": \"35-24LV3-609\", \"evidence\": \"level control valve on separate circuit, not child of ES panel\"},\n    {\"tag\": \"35-24LC-609\", \"evidence\": \"level controller on tank circuit, not child of ES panel\"}\n  ],\n  \"notes\": [\n    \"35-24ES-601 is an Emergency Stop instrument within a local panel grouping covering the Couch Pit area\",\n    \"The red boundary on the P&ID groups XS-600, ES-601, KJ-602, KJ-603 as the ES/control panel function\",\n    \"HS-664 and HI-597 appear in the LOCAL PANEL box immediately above and are associated with the same Couch Pit control group\",\n    \"No piping lines or valves are direct children of this instrument function\"\n  ],\n  \"confidence\": \"high\"\n}\n```",
         "parsed": {
           "sub_process": "BR1",
           "function": "35-24ES-601",
           "description": "35-24ES-601 UTM EMERGENCY STOP",
-          "rows": [],
+          "rows": [
+            {
+              "equipment": "35-24XS-600",
+              "subequipment": "",
+              "mask": "",
+              "description": "35-24XS-600 MCS SIGNALS"
+            },
+            {
+              "equipment": "35-24KJ-602",
+              "subequipment": "",
+              "mask": "",
+              "description": "35-24KJ-602 COUCH PIT START"
+            },
+            {
+              "equipment": "35-24KJ-603",
+              "subequipment": "",
+              "mask": "",
+              "description": "35-24KJ-603 COUCH PIT STOP"
+            },
+            {
+              "equipment": "35-24HS-664",
+              "subequipment": "",
+              "mask": "",
+              "description": "35-24HS-664 COUCH PIT START STOP"
+            },
+            {
+              "equipment": "35-24HI-597",
+              "subequipment": "",
+              "mask": "",
+              "description": "35-24HI-597 COUCH PIT SHOWER S1"
+            }
+          ],
           "peers": [
             {
-              "tag": "35-24XS-600",
-              "evidence": "MCS SIGNALS instrument in same panel boundary, peer instrument not child of ES-601"
-            },
-            {
-              "tag": "35-24KJ-602",
-              "evidence": "COUCH PIT START pushbutton in same panel boundary, peer instrument"
-            },
-            {
-              "tag": "35-24KJ-603",
-              "evidence": "COUCH PIT STOP pushbutton in same panel boundary, peer instrument"
-            },
-            {
-              "tag": "35-24HS-664",
-              "evidence": "COUCH PIT START/STOP in LOCAL PANEL above, separate panel boundary"
-            },
-            {
-              "tag": "35-24HI-597",
-              "evidence": "COUCH PIT SHOWER S1 indicator in LOCAL PANEL above, separate panel boundary"
-            },
-            {
               "tag": "35-24T601",
-              "evidence": "COUCH PIT tank, nearby major equipment, not child of instrument"
+              "evidence": "COUCH PIT tank 176m3 \u2014 major vessel, peer primary equipment"
             },
             {
               "tag": "35-24P501",
-              "evidence": "Nearby pump, peer major equipment"
+              "evidence": "pump peer primary equipment per dossier"
             },
             {
               "tag": "35-24P502",
-              "evidence": "Nearby pump, peer major equipment"
+              "evidence": "pump peer primary equipment per dossier"
             },
             {
               "tag": "35-24L401",
-              "evidence": "Nearby agitator, peer major equipment"
+              "evidence": "agitator peer primary equipment per dossier"
             },
             {
               "tag": "35-24L403",
-              "evidence": "Nearby agitator, peer major equipment"
+              "evidence": "agitator peer primary equipment per dossier"
             },
             {
               "tag": "35-24LV1-609",
-              "evidence": "Level control valve on separate circuit, peer"
+              "evidence": "level control valve on separate circuit, not child of ES panel"
             },
             {
               "tag": "35-24LV2-609",
-              "evidence": "Level control valve on separate circuit, peer"
+              "evidence": "level control valve on separate circuit, not child of ES panel"
             },
             {
               "tag": "35-24LV3-609",
-              "evidence": "Level control valve on separate circuit, peer"
+              "evidence": "level control valve on separate circuit, not child of ES panel"
+            },
+            {
+              "tag": "35-24LC-609",
+              "evidence": "level controller on tank circuit, not child of ES panel"
             }
           ],
           "notes": [
-            "35-24ES-601 is a standalone Emergency Stop instrument (UTM EMERGENCY STOP) shown in panel boundary on P&ID",
-            "No child instruments or lines are directly subordinate to ES-601 itself; XS-600, KJ-602, KJ-603 are peer panel instruments",
-            "Empty rows is correct per rules for a standalone instrument with no labelled accessories"
+            "35-24ES-601 is an Emergency Stop instrument within a local panel grouping covering the Couch Pit area",
+            "The red boundary on the P&ID groups XS-600, ES-601, KJ-602, KJ-603 as the ES/control panel function",
+            "HS-664 and HI-597 appear in the LOCAL PANEL box immediately above and are associated with the same Couch Pit control group",
+            "No piping lines or valves are direct children of this instrument function"
           ],
           "confidence": "high"
         },
@@ -169,7 +185,14 @@
         "prompt_chars": 10084,
         "vision": true
       },
-      "refined_rows": []
+      "refined_rows": [
+        {
+          "equipment": "35-24XS-600",
+          "subequipment": "",
+          "mask": "",
+          "description": "35-24XS-600 MCS SIGNALS"
+        }
+      ]
     }
   ]
 }

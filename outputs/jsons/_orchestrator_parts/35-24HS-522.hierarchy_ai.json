@@ -1,0 +1,113 @@
+{
+  "input": "/Users/code-huddle-ensemble/Desktop/dwg-reader/inputs/Broke System.dwg",
+  "mode": "viewer_shot_ai_gt",
+  "evidence_dir": "/Users/code-huddle-ensemble/Desktop/dwg-reader/outputs/evidence",
+  "site": "Shotton Paper Mill, United Kingdom",
+  "line": "Shotton PM3",
+  "process": "Broke System",
+  "sub_process": "BR1",
+  "model_id": "eu.anthropic.claude-sonnet-4-6",
+  "region": "eu-west-2",
+  "prompt_file": "pid_hierarchy_gt_v7_floc.md",
+  "legend": "/Users/code-huddle-ensemble/Desktop/dwg-reader/inputs/legend.png",
+  "results": [
+    {
+      "tag": "35-24HS-522",
+      "shot": "/Users/code-huddle-ensemble/Desktop/dwg-reader/outputs/evidence/Broke System.viewer_35-24HS-522.png",
+      "parent": {
+        "category": "instruments",
+        "block_name": "",
+        "handle": "",
+        "layer": "P-INSTRPOS_TEXTS",
+        "x": 1298.343201076076,
+        "y": 433.541625,
+        "resolved_tag": "35-24HS-522",
+        "nearby_tags": "HS; 522; 35-24",
+        "nearby_descriptions": "HS 522 (35-24)",
+        "confidence": "high"
+      },
+      "candidates": [
+        "35-24",
+        "35-24HS-522",
+        "35-24L007",
+        "35-24-160",
+        "35-24-029",
+        "35-24P508",
+        "35-24-227",
+        "35-24-023",
+        "35-24-1096",
+        "35-24-025",
+        "35-24-1106"
+      ],
+      "dossier": "Parent tag: 35-24HS-522\nParent category/block: instruments / \nParent XY: (1298.343201076076, 433.541625)\nNearby descriptions: HS 522 (35-24)\n\nSame-tag CAD family:\n- (none)\n\nNearby line numbers (short ids preferred in output):\n- 35-24-029  full=35-24-029-PP-600-E10H2A  d=180  layer=P-LINEPOS\n\nNearby devices (valves/instruments/pumps/\u2026):\n- line_markers: P7A1304  d=197  block=P7A1304\n- valves: PPI_0900A  d=165  block=PPI_0900A\n- instruments: PPI_1205A  d=2  block=PPI_1205A\n- fittings: P7A1220  d=149  block=P7A1220\n\nNearby peer primary equipment (do NOT nest under parent):\n- 35-24L007 (process_equipment, d=176)\n\nNearby drawing text tokens:\n- 2 bar  d=160  layer=P-TEXT\n- 1 bar  d=148  layer=P-TEXT\n- S1  d=149  layer=P-TEXT\n- S2  d=111  layer=P-TEXT\n- 800 BDTPD  d=195  layer=P-TEXT\n- 35-24  d=45  layer=P-INSTRPOS_TEXTS\n- SHOWER S1  d=67  layer=P-TEXT\n- 35-24L007  d=175  layer=P-EQUIPMENT_POS\n- HP-33G2  d=189  layer=P-EQUIPMENT_POS\n- 529  d=52  layer=P-INSTRPOS_TEXTS\n- 524  d=65  layer=P-INSTRPOS_TEXTS\n- 523  d=63  layer=P-INSTRPOS_TEXTS\n- 522  d=4  layer=P-INSTRPOS_TEXTS\n- 690  d=64  layer=P-INSTRPOS_TEXTS\n- S4  d=98  layer=P-TEXT\n- S3  d=98  layer=P-TEXT\n- 532  d=57  layer=P-INSTRPOS_TEXTS\n- 35-24-160  d=168  layer=P-VALVEPOS\n- 350-200  d=171  layer=P-VALVEPOS\n- 35-24-029  d=180  layer=P-LINEPOS",
+      "ai": {
+        "raw_text": "Looking at the P&ID image, I can see that 35-24HS-522 is an instrument (Hand Switch / selector switch) located within a LOCAL PANEL box. The panel contains:\n\n- **35-24HS-522** (the parent) \u2014 labelled \"SLABBING PULPER START/STOP\" \u2014 this is a local panel instrument (square with horizontal line through circle = local control panel instrument per legend)\n- **35-24KJ-523** \u2014 PULPER START (also in the panel)\n- **35-24KJ-524** \u2014 PULPER STOP (also in the panel)\n- **35-24XS-690** \u2014 MCS SIGNAL (also in the panel)\n- **35-24HS-529** (top right, outside panel boundary but nearby) \u2014 SLABBING PULPER SHOWER S1, with 35-24HI-529\n- **35-24HS-532** (bottom right) \u2014 SLABBING PULPER SHOWER S2, with 35-24HI-532\n\nThe HS-522 is a standalone instrument (hand switch). Per the rules: \"If 35-24HS-522 is an instrument and no labelled accessories sit on it, emit the FUNCTION header + description only \u2014 empty rows is correct.\"\n\nThe other instruments in the panel (KJ-523, KJ-524, XS-690) are peer instruments \u2014 they are siblings in the same panel, not children of HS-522. The shower instruments (HS-529, HI-529, HS-532, HI-532) are separate functional items.\n\n35-24L007 is a peer vessel visible nearby.\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24HS-522\",\n  \"description\": \"35-24HS-522 SLBG PLPR START STOP HS\",\n  \"rows\": [],\n  \"peers\": [\n    {\"tag\": \"35-24KJ-523\", \"evidence\": \"Sibling instrument in same local panel \u2014 PULPER START, not a child of HS-522\"},\n    {\"tag\": \"35-24KJ-524\", \"evidence\": \"Sibling instrument in same local panel \u2014 PULPER STOP, not a child of HS-522\"},\n    {\"tag\": \"35-24XS-690\", \"evidence\": \"Sibling instrument in same local panel \u2014 MCS SIGNAL, not a child of HS-522\"},\n    {\"tag\": \"35-24HS-529\", \"evidence\": \"Separate HS instrument for SHOWER S1, different numeric base\"},\n    {\"tag\": \"35-24HI-529\", \"evidence\": \"HI instrument paired with HS-529 SHOWER S1, different numeric base\"},\n    {\"tag\": \"35-24HS-532\", \"evidence\": \"Separate HS instrument for SHOWER S2, different numeric base\"},\n    {\"tag\": \"35-24HI-532\", \"evidence\": \"HI instrument paired with HS-532 SHOWER S2, different numeric base\"},\n    {\"tag\": \"35-24L007\", \"evidence\": \"Peer process equipment vessel visible nearby, different equipment class\"}\n  ],\n  \"notes\": [\n    \"35-24HS-522 is a local panel hand switch for SLABBING PULPER START/STOP; no piping accessories or sub-instruments are directly tagged under it on the P&ID\",\n    \"All other instruments visible in the local panel box are siblings/peers, not children of HS-522\",\n    \"Nearby line 35-24-029 is not directly connected to HS-522 as a child circuit\"\n  ],\n  \"confidence\": \"high\"\n}\n```",
+        "parsed": {
+          "sub_process": "BR1",
+          "function": "35-24HS-522",
+          "description": "35-24HS-522 SLBG PLPR START STOP HS",
+          "rows": [],
+          "peers": [
+            {
+              "tag": "35-24KJ-523",
+              "evidence": "Sibling instrument in same local panel \u2014 PULPER START, not a child of HS-522"
+            },
+            {
+              "tag": "35-24KJ-524",
+              "evidence": "Sibling instrument in same local panel \u2014 PULPER STOP, not a child of HS-522"
+            },
+            {
+              "tag": "35-24XS-690",
+              "evidence": "Sibling instrument in same local panel \u2014 MCS SIGNAL, not a child of HS-522"
+            },
+            {
+              "tag": "35-24HS-529",
+              "evidence": "Separate HS instrument for SHOWER S1, different numeric base"
+            },
+            {
+              "tag": "35-24HI-529",
+              "evidence": "HI instrument paired with HS-529 SHOWER S1, different numeric base"
+            },
+            {
+              "tag": "35-24HS-532",
+              "evidence": "Separate HS instrument for SHOWER S2, different numeric base"
+            },
+            {
+              "tag": "35-24HI-532",
+              "evidence": "HI instrument paired with HS-532 SHOWER S2, different numeric base"
+            },
+            {
+              "tag": "35-24L007",
+              "evidence": "Peer process equipment vessel visible nearby, different equipment class"
+            }
+          ],
+          "notes": [
+            "35-24HS-522 is a local panel hand switch for SLABBING PULPER START/STOP; no piping accessories or sub-instruments are directly tagged under it on the P&ID",
+            "All other instruments visible in the local panel box are siblings/peers, not children of HS-522",
+            "Nearby line 35-24-029 is not directly connected to HS-522 as a child circuit"
+          ],
+          "confidence": "high"
+        },
+        "model_id": "eu.anthropic.claude-sonnet-4-6",
+        "region": "eu-west-2",
+        "prompt_file": "pid_hierarchy_gt_v7_floc.md",
+        "candidates": [
+          "35-24",
+          "35-24HS-522",
+          "35-24L007",
+          "35-24-160",
+          "35-24-029",
+          "35-24P508",
+          "35-24-227",
+          "35-24-023",
+          "35-24-1096",
+          "35-24-025",
+          "35-24-1106"
+        ],
+        "prompt_chars": 8650,
+        "vision": true
+      },
+      "refined_rows": []
+    }
+  ]
+}

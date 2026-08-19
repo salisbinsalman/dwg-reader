@@ -1,0 +1,138 @@
+{
+  "input": "/Users/code-huddle-ensemble/Desktop/dwg-reader/inputs/Broke System.dwg",
+  "mode": "viewer_shot_ai_gt",
+  "evidence_dir": "/Users/code-huddle-ensemble/Desktop/dwg-reader/outputs/evidence",
+  "site": "Shotton Paper Mill, United Kingdom",
+  "line": "Shotton PM3",
+  "process": "Broke System",
+  "sub_process": "BR1",
+  "model_id": "eu.anthropic.claude-sonnet-4-6",
+  "region": "eu-west-2",
+  "prompt_file": "pid_hierarchy_gt_v7_floc.md",
+  "legend": "/Users/code-huddle-ensemble/Desktop/dwg-reader/inputs/legend.png",
+  "results": [
+    {
+      "tag": "35-24KJ-590",
+      "shot": "/Users/code-huddle-ensemble/Desktop/dwg-reader/outputs/evidence/Broke System.viewer_35-24KJ-590.png",
+      "parent": {
+        "category": "instruments",
+        "block_name": "",
+        "handle": "",
+        "layer": "P-INSTRPOS_TEXTS",
+        "x": 3248.644080309359,
+        "y": 338.5593503503504,
+        "resolved_tag": "35-24KJ-590",
+        "nearby_tags": "KJ; 590; 35-24",
+        "nearby_descriptions": "KJ 590 (35-24)",
+        "confidence": "high"
+      },
+      "candidates": [
+        "35-24",
+        "35-24KJ-590",
+        "35-24L001",
+        "35-24L011",
+        "35-24-095",
+        "35-24-1105",
+        "35-24P503",
+        "35-24-096",
+        "35-24-093",
+        "35-24-207",
+        "35-24-217",
+        "35-24-001.2",
+        "35-24P504",
+        "35-24LV2-576",
+        "35-24-089",
+        "35-24-001.1",
+        "35-24HV-591",
+        "35-24-100",
+        "35-24-234",
+        "35-24-101",
+        "35-24LV1-576",
+        "35-24-108",
+        "35-24-184",
+        "35-24-094",
+        "35-24-098",
+        "35-24-107",
+        "35-24XV-670",
+        "35-24-105"
+      ],
+      "dossier": "Parent tag: 35-24KJ-590\nParent category/block: instruments / \nParent XY: (3248.644080309359, 338.5593503503504)\nNearby descriptions: KJ 590 (35-24)\n\nSame-tag CAD family:\n- (none)\n\nNearby line numbers (short ids preferred in output):\n- 35-24-108  full=35-24-108-PP-100-E10H2A  d=200  layer=P-LINEPOS\n- 35-24-101  full=35-24-101-PP-150-E10H2A  d=175  layer=P-LINEPOS\n- 35-24-095  full=35-24-095-PP-200-E10H2A  d=69  layer=P-LINEPOS\n- 35-24-096  full=35-24-096-PP-900-E10H2A  d=113  layer=P-LINEPOS\n- 35-24-093  full=35-24-093-PP-700-E10H2A  d=142  layer=P-LINEPOS\n- 35-24-100  full=35-24-100-PP-250-E10H2A  d=169  layer=P-LINEPOS\n\nNearby devices (valves/instruments/pumps/\u2026):\n- line_markers: PPI_1100A  d=170  block=PPI_1100A\n- valves: PPI_0900A  d=162  block=PPI_0900A\n- control_valves: PPI_1000A  d=147  block=PPI_1000A\n- instruments: PPI_0100X  d=139  block=PPI_0100X\n- pumps: P7A0200  d=116  block=P7A0200\n- motors: PPI_1504A-25_0  d=140  block=PPI_1504A-25_0\n\nNearby peer primary equipment (do NOT nest under parent):\n- 35-24L001 (process_equipment, d=44)\n- 35-24L011 (process_equipment, d=117)\n- 35-24P503 (pumps, d=116)\n- 35-24P504 (pumps, d=190)\n\nNearby drawing text tokens:\n- S1  d=70  layer=P-TEXT\n- S2  d=81  layer=P-TEXT\n- A1  d=120  layer=P-TEXT\n- 2 bar  d=82  layer=P-TEXT\n- 2621 ADTPD  d=65  layer=P-TEXT\n- 35-24  d=180  layer=P-INSTRPOS_TEXTS\n- SHOWER S2  d=187  layer=P-TEXT\n- S3  d=80  layer=P-TEXT\n- 35-24L001  d=50  layer=P-EQUIPMENT_POS\n- HP-50G2  d=59  layer=P-EQUIPMENT_POS\n- 35-24L011  d=124  layer=P-EQUIPMENT_POS\n- BROKE CONVEYOR 1  d=123  layer=P-EQUIPMENT_POS\n- 585  d=129  layer=P-INSTRPOS_TEXTS\n- 588  d=51  layer=P-INSTRPOS_TEXTS\n- 580  d=181  layer=P-INSTRPOS_TEXTS\n- 577  d=171  layer=P-INSTRPOS_TEXTS\n- 591  d=189  layer=P-INSTRPOS_TEXTS\n- 589  d=11  layer=P-INSTRPOS_TEXTS\n- 590  d=4  layer=P-INSTRPOS_TEXTS\n- 576  d=134  layer=P-INSTRPOS_TEXTS\n- 583  d=172  layer=P-INSTRPOS_TEXTS\n- 670  d=192  layer=P-INSTRPOS_TEXTS\n- 35-24P503  d=149  layer=P-PUMP_POS\n- 860  d=154  layer=P-PUMP_POS\n- 17  d=151  layer=P-PUMP_POS\n- 200  d=159  layer=P-PUMP_POS\n- 1000  d=156  layer=P-PUMP_POS\n- 35-24P504  d=196  layer=P-PUMP_POS\n- 20  d=199  layer=P-PUMP_POS\n- 35-24-001.1  d=160  layer=P-MOTOR_POS\n- 1500  d=167  layer=P-MOTOR_POS\n- 35-24-001.2  d=144  layer=P-MOTOR_POS\n- 35-24-234  d=171  layer=P-VALVEPOS\n- 350-500  d=173  layer=P-VALVEPOS\n- 35-24-207  d=132  layer=P-VALVEPOS\n- 003-50  d=134  layer=P-VALVEPOS\n- 35-24-217  d=143  layer=P-VALVEPOS\n- 001-80  d=146  layer=P-VALVEPOS\n- 35-24-096  d=116  layer=P-VALVEPOS\n- 003-15  d=120  layer=P-VALVEPOS",
+      "ai": {
+        "raw_text": "Looking at the P&ID image, I can see:\n\n- **35-24KJ-590** is labeled \"PRESS PULPER STOP\" \u2014 it's a control/command instrument (KJ type = pushbutton/command station)\n- It sits inside the parent box alongside **35-24KJ-589** (PRESS PULPER START) and **35-24XS-588** (MCS SIGNAL)\n- KJ instruments are command/control instruments \u2014 they have no child lines, valves, or sub-equipment hanging off them\n- The nearby peer equipment (35-24L001, 35-24L011, 35-24P503, 35-24P504) are clearly separate major equipment items\n- No lines, valves, or instruments are directly subordinate to this KJ instrument tag itself\n\nThe instrument 35-24KJ-590 is a standalone command instrument (STOP pushbutton for the Press Pulper). Per Rule 12 / the worked examples: *\"If 35-24KJ-590 is an instrument\u2026 and no labelled accessories sit on it, emit the FUNCTION header + description only \u2014 empty `rows` is correct.\"*\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24KJ-590\",\n  \"description\": \"35-24KJ-590 PRESS PLPR STOP CMD\",\n  \"rows\": [],\n  \"peers\": [\n    {\n      \"tag\": \"35-24KJ-589\",\n      \"evidence\": \"Sibling command instrument PRESS PULPER START \u2014 same instrument cluster, separate tag\"\n    },\n    {\n      \"tag\": \"35-24XS-588\",\n      \"evidence\": \"MCS SIGNAL instrument in same cluster, separate tag\"\n    },\n    {\n      \"tag\": \"35-24L001\",\n      \"evidence\": \"PRESS PULPER vessel \u2014 peer primary equipment, not child of instrument\"\n    },\n    {\n      \"tag\": \"35-24L011\",\n      \"evidence\": \"BROKE CONVEYOR 1 \u2014 peer primary equipment\"\n    },\n    {\n      \"tag\": \"35-24P503\",\n      \"evidence\": \"Nearby pump \u2014 peer primary equipment\"\n    },\n    {\n      \"tag\": \"35-24P504\",\n      \"evidence\": \"Nearby pump \u2014 peer primary equipment\"\n    }\n  ],\n  \"notes\": [\n    \"35-24KJ-590 is a command instrument (STOP pushbutton) for the Press Pulper; no child lines, valves or sub-instruments are subordinate to this tag\",\n    \"KJ-589 (START) and XS-588 (MCS SIGNAL) are sibling instruments in the same local panel cluster \u2014 listed as peers\"\n  ],\n  \"confidence\": \"high\"\n}\n```",
+        "parsed": {
+          "sub_process": "BR1",
+          "function": "35-24KJ-590",
+          "description": "35-24KJ-590 PRESS PLPR STOP CMD",
+          "rows": [],
+          "peers": [
+            {
+              "tag": "35-24KJ-589",
+              "evidence": "Sibling command instrument PRESS PULPER START \u2014 same instrument cluster, separate tag"
+            },
+            {
+              "tag": "35-24XS-588",
+              "evidence": "MCS SIGNAL instrument in same cluster, separate tag"
+            },
+            {
+              "tag": "35-24L001",
+              "evidence": "PRESS PULPER vessel \u2014 peer primary equipment, not child of instrument"
+            },
+            {
+              "tag": "35-24L011",
+              "evidence": "BROKE CONVEYOR 1 \u2014 peer primary equipment"
+            },
+            {
+              "tag": "35-24P503",
+              "evidence": "Nearby pump \u2014 peer primary equipment"
+            },
+            {
+              "tag": "35-24P504",
+              "evidence": "Nearby pump \u2014 peer primary equipment"
+            }
+          ],
+          "notes": [
+            "35-24KJ-590 is a command instrument (STOP pushbutton) for the Press Pulper; no child lines, valves or sub-instruments are subordinate to this tag",
+            "KJ-589 (START) and XS-588 (MCS SIGNAL) are sibling instruments in the same local panel cluster \u2014 listed as peers"
+          ],
+          "confidence": "high"
+        },
+        "model_id": "eu.anthropic.claude-sonnet-4-6",
+        "region": "eu-west-2",
+        "prompt_file": "pid_hierarchy_gt_v7_floc.md",
+        "candidates": [
+          "35-24",
+          "35-24KJ-590",
+          "35-24L001",
+          "35-24L011",
+          "35-24-095",
+          "35-24-1105",
+          "35-24P503",
+          "35-24-096",
+          "35-24-093",
+          "35-24-207",
+          "35-24-217",
+          "35-24-001.2",
+          "35-24P504",
+          "35-24LV2-576",
+          "35-24-089",
+          "35-24-001.1",
+          "35-24HV-591",
+          "35-24-100",
+          "35-24-234",
+          "35-24-101",
+          "35-24LV1-576",
+          "35-24-108",
+          "35-24-184",
+          "35-24-094",
+          "35-24-098",
+          "35-24-107",
+          "35-24XV-670",
+          "35-24-105"
+        ],
+        "prompt_chars": 10116,
+        "vision": true
+      },
+      "refined_rows": []
+    }
+  ]
+}

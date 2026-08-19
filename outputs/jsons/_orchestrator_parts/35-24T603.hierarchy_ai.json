@@ -76,7 +76,7 @@
       ],
       "dossier": "Parent tag: 35-24T603\nParent category/block: tanks / PPI_0700A-25_0\nParent XY: (2420.0, 277.4999999999999)\nNearby descriptions: BROKE COLLECTION; TANK; 40 m\u00b3\n\nSame-tag CAD family:\n- tanks @ (2420.0,277.4999999999999) block=PPI_0700A-25_0 nearby=35-24T603; 35-24; 35-24L406; 35-24P511\n- valves @ (2392.5,257.4999999999999) block=PPI_0900A nearby=35-24T603; 35-24L406; 35-24P511; 35-24\n- valves @ (2392.5,277.4999999999999) block=PPI_0900A nearby=35-24T603; 35-24P511; 35-24L406; 35-24\n- valves @ (2398.75,297.5) block=PPI_0900A nearby=35-24T603; 35-24P511; 35-24; 35-24L406\n- instruments @ (2472.5,262.4999999999999) block=PPI_1204A nearby=35-24; 35-24T603; 35-24L406; 35-24\n- instruments @ (2457.5,262.5) block=PPI_0102B nearby=35-24; 35-24T603; 35-24L406\n\nNearby line numbers (short ids preferred in output):\n- 35-24-208  full=35-24-208-PP-100-E10H2A  d=82  layer=P-LINEPOS\n- 35-24-062  full=35-24-062-PP-250-E10H2A  d=165  layer=P-LINEPOS\n- 35-24-065  full=35-24-065-PP-300-E10H2A  d=87  layer=P-LINEPOS\n- 35-24-071  full=35-24-071-PP--E10H2A  d=60  layer=P-LINEPOS\n- 35-24-074  full=35-24-074-WAB-20-E10H2A  d=79  layer=P-LINEPOS\n- 35-24-063  full=35-24-063-WAF-250-E10H2A  d=187  layer=P-LINEPOS\n- 35-24-067  full=35-24-067-PP-150-E10H2A  d=87  layer=P-LINEPOS\n- 35-24-066  full=35-24-066-PP-900-E10H2A  d=90  layer=P-LINEPOS\n- 35-24-072  full=35-24-072-PP-700-E10H2A  d=75  layer=P-LINEPOS\n\nNearby devices (valves/instruments/pumps/\u2026):\n- line_markers: PPI_1100A  d=75  block=PPI_1100A\n- valves: PPI_0900A  d=92  block=PPI_0900A\n- control_valves: PPI_1000A  d=170  block=PPI_1000A\n- instruments: PPI_1204A  d=185  block=PPI_1204A\n- pumps: P7A0200  d=111  block=P7A0200\n\nNearby peer primary equipment (do NOT nest under parent):\n- 35-24L406 (agitators, d=47)\n- 35-24P510 (pumps, d=111)\n- 35-24P511 (pumps, d=98)\n\nNearby drawing text tokens:\n- GEARBOX 2  d=186  layer=P-OTHER\n- 35-24L406  d=52  layer=P-AGITATOR_POS\n- 659  d=168  layer=P-INSTRPOS_TEXTS\n- 35-24  d=157  layer=P-INSTRPOS_TEXTS\n- 9282  d=199  layer=P-INSTRPOS_TEXTS\n- 557  d=146  layer=P-INSTRPOS_TEXTS\n- 9280  d=191  layer=P-INSTRPOS_TEXTS\n- 558  d=194  layer=P-INSTRPOS_TEXTS\n- 559  d=54  layer=P-INSTRPOS_TEXTS\n- 560  d=183  layer=P-INSTRPOS_TEXTS\n- 9281  d=191  layer=P-INSTRPOS_TEXTS\n- 669  d=144  layer=P-INSTRPOS_TEXTS\n- 35-24T603  d=7  layer=P-TANK_POS\n- 40 m\u00b3  d=21  layer=P-TANK_POS\n- 3 %  d=26  layer=P-TANK_POS\n- 695  d=196  layer=P-INSTRPOS_TEXTS\n- 35-24P511  d=83  layer=P-PUMP_POS\n- 60  d=83  layer=P-PUMP_POS\n- 45  d=70  layer=P-PUMP_POS\n- 1500  d=71  layer=P-PUMP_POS\n- 35-24P510  d=137  layer=P-PUMP_POS\n- 1100  d=142  layer=P-PUMP_POS\n- 615  d=143  layer=P-PUMP_POS\n- 1000  d=132  layer=P-PUMP_POS\n- 35-24-205  d=195  layer=P-VALVEPOS\n- 003-50  d=193  layer=P-VALVEPOS\n- 35-24-131  d=176  layer=P-VALVEPOS\n- 001-80  d=175  layer=P-VALVEPOS\n- 35-24-130  d=135  layer=P-VALVEPOS\n- 003-15  d=133  layer=P-VALVEPOS\n- 35-24-129  d=136  layer=P-VALVEPOS\n- 35-24-126  d=97  layer=P-VALVEPOS\n- 35-24-1099  d=74  layer=P-VALVEPOS\n- 35-24-1114  d=70  layer=P-VALVEPOS\n- 35-24-123  d=79  layer=P-VALVEPOS\n- 35-24-1130  d=66  layer=P-VALVEPOS\n- 350-150  d=70  layer=P-VALVEPOS\n- 35-24-1098  d=35  layer=P-VALVEPOS\n- 350-300  d=33  layer=P-VALVEPOS\n- 35-24-121  d=39  layer=P-VALVEPOS",
       "ai": {
-        "raw_text": "I'll analyze the P&ID image systematically, identifying what's directly connected to tank 35-24T603.\n\n**Tank 35-24T603 analysis:**\n- BROKE COLLECTION TANK, 40 m\u00b3, 3%\n- Level instrument LC-559 visible on the tank\n- Connected lines visible: 35-24-071 (top inlet), 35-24-072 (side inlet right), 35-24-208 (bottom right), 35-24-074 (right side), 35-24-065 (left inlet), 35-24-066 (left lower), 35-24-067 (bottom outlet), 35-24-1098 (inlet with valve), 35-24-121 (outlet with valve), 35-24-1130 (bottom outlet)\n\n**Valve analysis from image:**\n- 35-24-1098 (350-300): valve on inlet line \u2014 solid filled triangles = NC\n- 35-24-121 (350-900): valve on outlet \u2014 solid filled triangles = NC  \n- 35-24-1130 (350-150): valve on bottom \u2014 solid filled triangles = NC\n- 35-24-1114 (001-80): check valve (one filled triangle) = CHK\n- 35-24-1099 (003-50): check valve = CHK\n- 35-24-126 (003-50): hand valve = HV\n- 35-24-123 (001-80): hand valve = HV\n\n**LC-559**: locally mounted level controller on tank wall (circle instrument = locally mounted)\n\n**Peers**: 35-24L406 (agitator), 35-24P511, 35-24P510 \u2014 all separate primary equipment\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24T603\",\n  \"description\": \"35-24T603 BROKE COLLECTION TNK 40M3\",\n  \"rows\": [\n    {\"equipment\": \"35-24LC-559\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24LC-559 LVL CONTROLLER\"},\n    {\"equipment\": \"35-24-071\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-071 INLET LINE\"},\n    {\"equipment\": \"35-24-072\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-072 INLET LINE PP-700\"},\n    {\"equipment\": \"35-24-065\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-065 INLET LINE PP-300\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-1114\", \"mask\": \"\", \"description\": \"35-24-1114 VLV CHK\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-1099\", \"mask\": \"\", \"description\": \"35-24-1099 VLV CHK\"},\n    {\"equipment\": \"35-24-066\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-066 INLET LINE PP-900\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-126\", \"mask\": \"\", \"description\": \"35-24-126 VLV HV\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-123\", \"mask\": \"\", \"description\": \"35-24-123 VLV HV\"},\n    {\"equipment\": \"35-24-1098\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-1098 INLET VLV NC\"},\n    {\"equipment\": \"35-24-121\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-121 OUTLET VLV NC\"},\n    {\"equipment\": \"35-24-1130\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-1130 BOTTOM VLV NC\"},\n    {\"equipment\": \"35-24-067\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-067 OUTLET LINE PP-150\"},\n    {\"equipment\": \"35-24-074\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-074 LINE WAB-20\"},\n    {\"equipment\": \"35-24-208\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-208 LINE PP-100\"}\n  ],\n  \"peers\": [\n    {\"tag\": \"35-24L406\", \"evidence\": \"agitator \u2014 peer primary equipment on same tank, separate FUNCTION\"},\n    {\"tag\": \"35-24P511\", \"evidence\": \"pump \u2014 peer primary equipment, separate FUNCTION\"},\n    {\"tag\": \"35-24P510\", \"evidence\": \"pump \u2014 peer primary equipment, separate FUNCTION\"},\n    {\"tag\": \"35-24NV1-557\", \"evidence\": \"needle valve on separate NV circuit, not directly on T603\"},\n    {\"tag\": \"35-24NV2-557\", \"evidence\": \"needle valve on separate NV circuit, not directly on T603\"},\n    {\"tag\": \"35-24-229\", \"evidence\": \"inlet line visible top of crop, belongs to upstream circuit\"},\n    {\"tag\": \"35-24-062\", \"evidence\": \"distant line, outside T603 direct circuit boundary\"},\n    {\"tag\": \"35-24-063\", \"evidence\": \"distant WAF line, outside T603 direct circuit boundary\"}\n  ],\n  \"notes\": [\n    \"LC-559 is a locally mounted level controller on tank wall (circle symbol per legend)\",\n    \"35-24-1098, 35-24-121, 35-24-1130 are normally closed valves (solid filled bowtie triangles)\",\n    \"35-24-1114 and 35-24-1099 are check valves on inlet lines 35-24-065 and 35-24-066 respectively\",\n    \"35-24-126 and 35-24-123 are hand valves (outline bowtie, no actuator) on lower drain/outlet lines\",\n    \"Tank rated 40 m\u00b3, 3% consistency per P&ID annotation\"\n  ],\n  \"confidence\": \"high\"\n}\n```",
+        "raw_text": "I'll analyze the P&ID image systematically, identifying what's directly connected to tank 35-24T603.\n\n**Tank 35-24T603 analysis:**\n- BROKE COLLECTION TANK, 40 m\u00b3, 3%\n- Level instrument LC-559 visible on the tank side\n\n**Connected lines (directly to tank):**\n- 35-24-071 (PP, no size) \u2014 inlet from top right\n- 35-24-072 (PP-700) \u2014 inlet from right\n- 35-24-065 (PP-300) \u2014 inlet from left side\n- 35-24-066 (PP-900) \u2014 inlet from left side\n- 35-24-067 (PP-150) \u2014 outlet at bottom\n- 35-24-208 (PP-100) \u2014 bottom right area\n- 35-24-074 (WAB-20) \u2014 water addition line\n\n**Valves on lines connected to tank:**\n- 35-24-1098 (350-300) \u2014 on inlet line, appears to be AV (automatic valve with circle actuator)\n- 35-24-121 (350-900) \u2014 on line 066/067 area, appears NC (filled triangles)\n- 35-24-1130 (350-150) \u2014 on line 067, appears AV\n- 35-24-1099 (003-50) \u2014 on line 065, hand valve\n- 35-24-1114 (001-80) \u2014 on line 065, hand valve\n- 35-24-123 (001-80) \u2014 drain area, NC\n- 35-24-126 (003-50) \u2014 drain area, HV\n- 35-24-229 (350-600) \u2014 on inlet line 071, AV\n\n**Instrument:**\n- 35-24LC-559 \u2014 level controller on tank\n\n**Peers:** 35-24L406 (agitator), 35-24P511 (pump), 35-24P510 (pump)\n\nLooking carefully at valve symbols:\n- 35-24-1098: circle actuator on top = AV\n- 35-24-229: circle actuator = AV  \n- 35-24-121: filled triangles = NC\n- 35-24-1130: circle actuator = AV\n- 35-24-1099: outline triangles, no actuator = HV\n- 35-24-1114: outline triangles, no actuator = HV\n- 35-24-123: filled triangles = NC\n- 35-24-126: outline triangles = HV\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24T603\",\n  \"description\": \"35-24T603 BROKE COLLECTION TNK 40M3\",\n  \"rows\": [\n    {\"equipment\": \"35-24LC-559\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24LC-559 LVL CONTROLLER\"},\n    {\"equipment\": \"35-24-071\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-071 INLET LINE PP\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-229\", \"mask\": \"\", \"description\": \"35-24-229 VLV AV\"},\n    {\"equipment\": \"35-24-072\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-072 INLET LINE PP-700\"},\n    {\"equipment\": \"35-24-065\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-065 INLET LINE PP-300\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-1114\", \"mask\": \"\", \"description\": \"35-24-1114 VLV HV\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-1099\", \"mask\": \"\", \"description\": \"35-24-1099 VLV HV\"},\n    {\"equipment\": \"35-24-066\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-066 INLET LINE PP-900\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-1098\", \"mask\": \"\", \"description\": \"35-24-1098 VLV AV\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-121\", \"mask\": \"\", \"description\": \"35-24-121 VLV NC\"},\n    {\"equipment\": \"35-24-067\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-067 OUTLET LINE PP-150\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-1130\", \"mask\": \"\", \"description\": \"35-24-1130 VLV AV\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-123\", \"mask\": \"\", \"description\": \"35-24-123 VLV NC\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-126\", \"mask\": \"\", \"description\": \"35-24-126 VLV HV\"},\n    {\"equipment\": \"35-24-074\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-074 WATER ADDITION WAB-20\"},\n    {\"equipment\": \"35-24-208\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-208 LINE PP-100\"}\n  ],\n  \"peers\": [\n    {\"tag\": \"35-24L406\", \"evidence\": \"agitator peer primary equipment on same tank, separate FLOC\"},\n    {\"tag\": \"35-24P511\", \"evidence\": \"pump peer primary equipment, discharge from tank\"},\n    {\"tag\": \"35-24P510\", \"evidence\": \"pump peer primary equipment nearby\"},\n    {\"tag\": \"35-24NV1-557\", \"evidence\": \"needle valve on separate NV circuit, not directly tank nozzle\"},\n    {\"tag\": \"35-24NV2-557\", \"evidence\": \"needle valve on separate NV circuit, not directly tank nozzle\"}\n  ],\n  \"notes\": [\n    \"Tank 35-24T603 is BROKE COLLECTION TANK 40m3 at 3% consistency\",\n    \"LC-559 is locally mounted level instrument visible on tank right side\",\n    \"Lines 35-24-065/066 enter from left; 35-24-071/072 enter from right/top\",\n    \"35-24-067 is the main outlet to pump suction circuit\",\n    \"35-24-074 WAB-20 is white water/wash addition line\"\n  ],\n  \"confidence\": \"high\"\n}\n```",
         "parsed": {
           "sub_process": "BR1",
           "function": "35-24T603",
@@ -92,7 +92,13 @@
               "equipment": "35-24-071",
               "subequipment": "",
               "mask": "",
-              "description": "35-24-071 INLET LINE"
+              "description": "35-24-071 INLET LINE PP"
+            },
+            {
+              "equipment": "",
+              "subequipment": "35-24-229",
+              "mask": "",
+              "description": "35-24-229 VLV AV"
             },
             {
               "equipment": "35-24-072",
@@ -110,13 +116,13 @@
               "equipment": "",
               "subequipment": "35-24-1114",
               "mask": "",
-              "description": "35-24-1114 VLV CHK"
+              "description": "35-24-1114 VLV HV"
             },
             {
               "equipment": "",
               "subequipment": "35-24-1099",
               "mask": "",
-              "description": "35-24-1099 VLV CHK"
+              "description": "35-24-1099 VLV HV"
             },
             {
               "equipment": "35-24-066",
@@ -126,33 +132,15 @@
             },
             {
               "equipment": "",
-              "subequipment": "35-24-126",
+              "subequipment": "35-24-1098",
               "mask": "",
-              "description": "35-24-126 VLV HV"
+              "description": "35-24-1098 VLV AV"
             },
             {
               "equipment": "",
-              "subequipment": "35-24-123",
+              "subequipment": "35-24-121",
               "mask": "",
-              "description": "35-24-123 VLV HV"
-            },
-            {
-              "equipment": "35-24-1098",
-              "subequipment": "",
-              "mask": "",
-              "description": "35-24-1098 INLET VLV NC"
-            },
-            {
-              "equipment": "35-24-121",
-              "subequipment": "",
-              "mask": "",
-              "description": "35-24-121 OUTLET VLV NC"
-            },
-            {
-              "equipment": "35-24-1130",
-              "subequipment": "",
-              "mask": "",
-              "description": "35-24-1130 BOTTOM VLV NC"
+              "description": "35-24-121 VLV NC"
             },
             {
               "equipment": "35-24-067",
@@ -161,10 +149,28 @@
               "description": "35-24-067 OUTLET LINE PP-150"
             },
             {
+              "equipment": "",
+              "subequipment": "35-24-1130",
+              "mask": "",
+              "description": "35-24-1130 VLV AV"
+            },
+            {
+              "equipment": "",
+              "subequipment": "35-24-123",
+              "mask": "",
+              "description": "35-24-123 VLV NC"
+            },
+            {
+              "equipment": "",
+              "subequipment": "35-24-126",
+              "mask": "",
+              "description": "35-24-126 VLV HV"
+            },
+            {
               "equipment": "35-24-074",
               "subequipment": "",
               "mask": "",
-              "description": "35-24-074 LINE WAB-20"
+              "description": "35-24-074 WATER ADDITION WAB-20"
             },
             {
               "equipment": "35-24-208",
@@ -176,43 +182,31 @@
           "peers": [
             {
               "tag": "35-24L406",
-              "evidence": "agitator \u2014 peer primary equipment on same tank, separate FUNCTION"
+              "evidence": "agitator peer primary equipment on same tank, separate FLOC"
             },
             {
               "tag": "35-24P511",
-              "evidence": "pump \u2014 peer primary equipment, separate FUNCTION"
+              "evidence": "pump peer primary equipment, discharge from tank"
             },
             {
               "tag": "35-24P510",
-              "evidence": "pump \u2014 peer primary equipment, separate FUNCTION"
+              "evidence": "pump peer primary equipment nearby"
             },
             {
               "tag": "35-24NV1-557",
-              "evidence": "needle valve on separate NV circuit, not directly on T603"
+              "evidence": "needle valve on separate NV circuit, not directly tank nozzle"
             },
             {
               "tag": "35-24NV2-557",
-              "evidence": "needle valve on separate NV circuit, not directly on T603"
-            },
-            {
-              "tag": "35-24-229",
-              "evidence": "inlet line visible top of crop, belongs to upstream circuit"
-            },
-            {
-              "tag": "35-24-062",
-              "evidence": "distant line, outside T603 direct circuit boundary"
-            },
-            {
-              "tag": "35-24-063",
-              "evidence": "distant WAF line, outside T603 direct circuit boundary"
+              "evidence": "needle valve on separate NV circuit, not directly tank nozzle"
             }
           ],
           "notes": [
-            "LC-559 is a locally mounted level controller on tank wall (circle symbol per legend)",
-            "35-24-1098, 35-24-121, 35-24-1130 are normally closed valves (solid filled bowtie triangles)",
-            "35-24-1114 and 35-24-1099 are check valves on inlet lines 35-24-065 and 35-24-066 respectively",
-            "35-24-126 and 35-24-123 are hand valves (outline bowtie, no actuator) on lower drain/outlet lines",
-            "Tank rated 40 m\u00b3, 3% consistency per P&ID annotation"
+            "Tank 35-24T603 is BROKE COLLECTION TANK 40m3 at 3% consistency",
+            "LC-559 is locally mounted level instrument visible on tank right side",
+            "Lines 35-24-065/066 enter from left; 35-24-071/072 enter from right/top",
+            "35-24-067 is the main outlet to pump suction circuit",
+            "35-24-074 WAB-20 is white water/wash addition line"
           ],
           "confidence": "high"
         },
@@ -281,7 +275,13 @@
           "equipment": "35-24-071",
           "subequipment": "",
           "mask": "",
-          "description": "35-24-071 IN LN"
+          "description": "35-24-071 IN LN PP"
+        },
+        {
+          "equipment": "",
+          "subequipment": "35-24-229",
+          "mask": "",
+          "description": "35-24-229 VLV AV"
         },
         {
           "equipment": "35-24-072",
@@ -299,13 +299,13 @@
           "equipment": "",
           "subequipment": "35-24-1114",
           "mask": "",
-          "description": "35-24-1114 VLV CHK"
+          "description": "35-24-1114 VLV HV"
         },
         {
           "equipment": "",
           "subequipment": "35-24-1099",
           "mask": "",
-          "description": "35-24-1099 VLV CHK"
+          "description": "35-24-1099 VLV HV"
         },
         {
           "equipment": "35-24-066",
@@ -315,33 +315,15 @@
         },
         {
           "equipment": "",
-          "subequipment": "35-24-126",
+          "subequipment": "35-24-1098",
           "mask": "",
-          "description": "35-24-126 VLV HV"
+          "description": "35-24-1098 VLV AV"
         },
         {
           "equipment": "",
-          "subequipment": "35-24-123",
+          "subequipment": "35-24-121",
           "mask": "",
-          "description": "35-24-123 VLV HV"
-        },
-        {
-          "equipment": "35-24-1098",
-          "subequipment": "",
-          "mask": "",
-          "description": "35-24-1098 IN VLV NC"
-        },
-        {
-          "equipment": "35-24-121",
-          "subequipment": "",
-          "mask": "",
-          "description": "35-24-121 OUT VLV NC"
-        },
-        {
-          "equipment": "35-24-1130",
-          "subequipment": "",
-          "mask": "",
-          "description": "35-24-1130 BTM VLV NC"
+          "description": "35-24-121 VLV NC"
         },
         {
           "equipment": "35-24-067",
@@ -350,10 +332,28 @@
           "description": "35-24-067 OUT LN PP-150"
         },
         {
+          "equipment": "",
+          "subequipment": "35-24-1130",
+          "mask": "",
+          "description": "35-24-1130 VLV AV"
+        },
+        {
+          "equipment": "",
+          "subequipment": "35-24-123",
+          "mask": "",
+          "description": "35-24-123 VLV NC"
+        },
+        {
+          "equipment": "",
+          "subequipment": "35-24-126",
+          "mask": "",
+          "description": "35-24-126 VLV HV"
+        },
+        {
           "equipment": "35-24-074",
           "subequipment": "",
           "mask": "",
-          "description": "35-24-074 LN WAB-20"
+          "description": "35-24-074 WTR ADDITION WAB-20"
         },
         {
           "equipment": "35-24-208",
@@ -384,6 +384,30 @@
           "subequipment": "",
           "mask": "",
           "description": "35-24-603.2"
+        },
+        {
+          "equipment": "35-24T603.3",
+          "subequipment": "",
+          "mask": "",
+          "description": "35-24T603.3"
+        },
+        {
+          "equipment": "35-24-603.3",
+          "subequipment": "",
+          "mask": "",
+          "description": "35-24-603.3"
+        },
+        {
+          "equipment": "35-24T603.4",
+          "subequipment": "",
+          "mask": "",
+          "description": "35-24T603.4"
+        },
+        {
+          "equipment": "35-24-603.4",
+          "subequipment": "",
+          "mask": "",
+          "description": "35-24-603.4"
         }
       ]
     }

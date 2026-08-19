@@ -1,0 +1,7 @@
+ORDER,SITE,LINE,PROCESS,SUB-PROCESS,FUNCTION,EQUIPMENT,SUB-EQUIPMENT,MASK,DESCRIPTION
+1,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,,,5001-PM03-BR,BROKE SYSTEM
+2,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,BR1,,,,5001-PM03-BR-BR1,BROKE SYSTEM
+3,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,BR1,35-24KJ-603,,,5001-PM03-BR-BR1-35-24KJ-603,35-24KJ-603 COUCH PIT STOP
+4,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,35-24-118,,,35-24-118
+5,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,35-24-119,,,35-24-119
+6,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,35-24-120,,,35-24-120

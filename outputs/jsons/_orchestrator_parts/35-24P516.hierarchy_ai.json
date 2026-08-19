@@ -59,18 +59,12 @@
       ],
       "dossier": "Parent tag: 35-24P516\nParent category/block: pumps / PPI_0521A-25_0\nParent XY: (4725.0, 227.5)\nNearby descriptions: 0,5 %; 40 m\u00b3; TANK\n\nSame-tag CAD family:\n- pumps @ (4725.0,250.0) block=P7A0200 nearby=35-24P516\n- pumps @ (4725.0,227.5) block=PPI_0521A-25_0 nearby=35-24P516\n- valves @ (4693.75,262.5) block=PPI_0900A nearby=35-24P516\n- valves @ (4691.802323494852,302.5) block=PPI_0900A nearby=35-24P516\n- valves @ (4753.359903084216,245.0) block=PPI_0900A nearby=35-24P516; 35-24T604\n- control_valves @ (4724.0,310.0) block=PPI_1000A nearby=35-24P516\n\nNearby line numbers (short ids preferred in output):\n- 35-24-211  full=35-24-211-PP-100-E10H2A  d=127  layer=P-LINEPOS\n- 35-24-148  full=35-24-148-WAA-150-E10H2A  d=65  layer=P-LINEPOS\n- 35-24-142  full=35-24-142-PP-400-E10H2A  d=196  layer=P-LINEPOS\n- 35-24-140  full=35-24-140-PP-400-E10H2A  d=186  layer=P-LINEPOS\n- 35-24-141  full=35-24-141-WAB-20-E10H2A  d=128  layer=P-LINEPOS\n- 35-24-145  full=35-24-145-WAA-300-E10H2A  d=18  layer=P-LINEPOS\n- 35-24-146  full=35-24-146-WAA-400-E10H2A  d=61  layer=P-LINEPOS\n- 35-24-144  full=35-24-144-WAA-200-E10H2A  d=85  layer=P-LINEPOS\n- 35-24-150  full=35-24-150-WAA-400-E10H2A  d=183  layer=P-LINEPOS\n- 35-24-139  full=35-24-139-WAF-125-E10H2A  d=183  layer=P-LINEPOS\n- 35-24-143  bind=medium  pipe=LWPOLYLINE  d=102\n\nNearby devices (valves/instruments/pumps/\u2026):\n- line_markers: PPI_1100A  d=184  block=PPI_1100A\n- valves: PPI_0900A  d=123  block=PPI_0900A\n- control_valves: PPI_1000A  d=75  block=PPI_1000A\n- instruments: PPI_0100X  d=195  block=PPI_0100X\n- pumps: P7A0200  d=15  block=P7A0200\n- fittings: P7A1212  d=82  block=P7A1212\n\nNearby peer primary equipment (do NOT nest under parent):\n- 35-24T604 (tanks, d=91)\n\nNearby drawing text tokens:\n- 619  d=193  layer=P-INSTRPOS_TEXTS\n- 621  d=131  layer=P-INSTRPOS_TEXTS\n- 35-24  d=123  layer=P-INSTRPOS_TEXTS\n- 672  d=165  layer=P-INSTRPOS_TEXTS\n- 35-24T604  d=94  layer=P-TANK_POS\n- 40 m\u00b3  d=84  layer=P-TANK_POS\n- 0,5 %  d=83  layer=P-TANK_POS\n- 35-24P516  d=13  layer=P-PUMP_POS\n- 130  d=17  layer=P-PUMP_POS\n- 48  d=24  layer=P-PUMP_POS\n- 90  d=22  layer=P-PUMP_POS\n- 1500  d=26  layer=P-PUMP_POS\n- 35-24-1139  d=165  layer=P-VALVEPOS\n- 600-125  d=164  layer=P-VALVEPOS\n- 35-24-1122  d=169  layer=P-VALVEPOS\n- 101-125  d=168  layer=P-VALVEPOS\n- 35-24-041  d=130  layer=P-VALVEPOS\n- 003-20  d=126  layer=P-VALVEPOS\n- 35-24-037  d=133  layer=P-VALVEPOS\n- 35-24-210  d=79  layer=P-VALVEPOS\n- 003-50  d=74  layer=P-VALVEPOS\n- 35-24-200  d=47  layer=P-VALVEPOS\n- 003-15  d=43  layer=P-VALVEPOS\n- 35-24-1117  d=24  layer=P-VALVEPOS\n- 001-80  d=25  layer=P-VALVEPOS\n- 35-24-036  d=57  layer=P-VALVEPOS\n- 101-300  d=57  layer=P-VALVEPOS\n- 35-24-035  d=69  layer=P-VALVEPOS\n- 101-150  d=70  layer=P-VALVEPOS\n- 35-24-1136  d=127  layer=P-VALVEPOS\n- 101-400  d=127  layer=P-VALVEPOS\n- 35-24-211  d=127  layer=P-LINEPOS\n- 35-24-143  d=102  layer=P-LINEPOS\n- 35-24-148  d=65  layer=P-LINEPOS\n- 35-24-142  d=196  layer=P-LINEPOS\n- 35-24-140  d=186  layer=P-LINEPOS\n- 35-24-141  d=128  layer=P-LINEPOS\n- 35-24-145  d=18  layer=P-LINEPOS\n- 35-24-146  d=61  layer=P-LINEPOS\n- 35-24-144  d=85  layer=P-LINEPOS",
       "ai": {
-        "raw_text": "I'll analyze the P&ID image systematically for pump 35-24P516.\n\n**Identifying the pump circuit:**\n- 35-24P516 is a pump (centrifugal symbol visible) with data box: 130 l/s, 48 m, 90 kW, 1500 rpm\n- Suction line: 35-24-145 (WAA-300) \u2014 closest suction line\n- Discharge line: 35-24-146 (WAA-400) \u2014 discharge side\n\n**Valves on suction line 35-24-145:**\n- 35-24-1117 (001-80): bowtie with solid white triangles = NC, no actuator circle visible \u2192 NC\n- Looking at image: 35-24-1117 appears to have filled triangles \u2192 NC HV\n\n**Valves on discharge line 35-24-146:**\n- 35-24-036 (101-300): visible on discharge, outline triangles \u2192 HV\n- 35-24-035 (101-150): visible, outline triangles \u2192 HV\n\n**Control valve:**\n- 35-24-200 (003-15): control valve block PPI_1000A, has actuator circle \u2192 AV\n\n**Valve 35-24-210 (003-50):** on line 35-24-144, has actuator circle \u2192 AV\n\n**35-24LV-621:** level control valve on line 35-24-144/210 area, instrument tag\n\n**Peers:** 35-24T604 (tank, separate primary equipment), 35-24LV-621 (belongs to tank level circuit)\n\n**Lines clearly in pump circuit:**\n- Suction: 35-24-145\n- Discharge: 35-24-146\n- 35-24-148 (WAA-150) \u2014 appears on discharge/outlet side\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24P516\",\n  \"description\": \"35-24P516 BROKE FILTRATE PMP\",\n  \"rows\": [\n    {\"equipment\": \"35-24P516\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24P516 PMP 130L/S 48M 90KW 1500RPM\"},\n    {\"equipment\": \"35-24-145\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-145 SUCT LINE WAA-300\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-1117\", \"mask\": \"\", \"description\": \"35-24-1117 VLV NC\"},\n    {\"equipment\": \"35-24-146\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-146 DIS LINE WAA-400\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-036\", \"mask\": \"\", \"description\": \"35-24-036 VLV HV\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-035\", \"mask\": \"\", \"description\": \"35-24-035 VLV HV\"},\n    {\"equipment\": \"35-24-148\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-148 LINE WAA-150\"},\n    {\"equipment\": \"35-24-200\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-200 VLV AV\"}\n  ],\n  \"peers\": [\n    {\"tag\": \"35-24T604\", \"evidence\": \"Broke Filtrate Tank \u2014 peer primary equipment, separate FUNCTION\"},\n    {\"tag\": \"35-24LV-621\", \"evidence\": \"Level control valve associated with 35-24T604 tank level circuit\"},\n    {\"tag\": \"35-24XV-672\", \"evidence\": \"XS/XV instrument on upstream circuit, not part of P516 pump loop\"},\n    {\"tag\": \"35-24-210\", \"evidence\": \"Valve on line 35-24-144 feeding tank, not pump suction/discharge\"},\n    {\"tag\": \"35-24-144\", \"evidence\": \"WAA-200 line serving tank fill circuit, not pump circuit\"},\n    {\"tag\": \"35-24-1136\", \"evidence\": \"Valve 101-400 on tank outlet/overflow line, not pump circuit\"}\n  ],\n  \"notes\": [\n    \"Pump data box: 130 l/s, 48 m head, 90 kW, 1500 rpm\",\n    \"35-24-145 WAA-300 is suction line; 35-24-1117 (001-80) is isolation valve NC on suction\",\n    \"35-24-146 WAA-400 is discharge line with isolation valves 35-24-036 and 35-24-035\",\n    \"35-24-200 (003-15) is control valve AV on pump circuit\",\n    \"35-24T604 BROKE FILTRATE TANK 40m3 0.5% is peer primary equipment\"\n  ],\n  \"confidence\": \"high\"\n}\n```",
+        "raw_text": "I'll analyze the P&ID image systematically for pump 35-24P516.\n\n**Identifying the pump circuit:**\n- 35-24P516 is a pump (centrifugal symbol visible) with data box: 130 l/s, 48 m, 90 kW, 1500 rpm\n- Suction line: 35-24-145 (WAA-300) \u2014 closest suction line\n- Discharge line: 35-24-146 (WAA-400) \u2014 discharge side\n\n**Valves on suction line 35-24-145:**\n- 35-24-1117 (001-80): visible on suction, bowtie with solid white triangles = NC\n\n**Valves on discharge line 35-24-146:**\n- 35-24-036 (101-300): hand valve (outline bowtie, no actuator) = HV\n- 35-24-035 (101-150): hand valve = HV\n\n**Control valve 35-24-200 (003-15):** visible with actuator circle = AV\n\n**35-24LV-621:** level control valve on line 35-24-210/144, with actuator circle = AV\n\n**Peers:**\n- 35-24T604: neighbouring tank (peer primary equipment)\n- 35-24-210: valve on tank inlet circuit, not pump circuit\n- Lines 35-24-148, 35-24-144: tank connections\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24P516\",\n  \"description\": \"35-24P516 BROKE FILTRATE PMP\",\n  \"rows\": [\n    {\n      \"equipment\": \"35-24-145\",\n      \"subequipment\": \"\",\n      \"mask\": \"\",\n      \"description\": \"35-24-145 SUCT LINE WAA-300\"\n    },\n    {\n      \"equipment\": \"\",\n      \"subequipment\": \"35-24-1117\",\n      \"mask\": \"\",\n      \"description\": \"35-24-1117 ISOL VLV NC\"\n    },\n    {\n      \"equipment\": \"35-24-146\",\n      \"subequipment\": \"\",\n      \"mask\": \"\",\n      \"description\": \"35-24-146 DIS LINE WAA-400\"\n    },\n    {\n      \"equipment\": \"\",\n      \"subequipment\": \"35-24-036\",\n      \"mask\": \"\",\n      \"description\": \"35-24-036 ISOL VLV HV\"\n    },\n    {\n      \"equipment\": \"\",\n      \"subequipment\": \"35-24-035\",\n      \"mask\": \"\",\n      \"description\": \"35-24-035 ISOL VLV HV\"\n    },\n    {\n      \"equipment\": \"35-24-200\",\n      \"subequipment\": \"\",\n      \"mask\": \"\",\n      \"description\": \"35-24-200 CTRL VLV AV\"\n    }\n  ],\n  \"peers\": [\n    {\n      \"tag\": \"35-24T604\",\n      \"evidence\": \"Neighbouring broke filtrate tank, peer primary equipment, not child of pump\"\n    },\n    {\n      \"tag\": \"35-24LV-621\",\n      \"evidence\": \"Level control valve on tank inlet line 35-24-210/144, belongs to tank circuit not pump\"\n    },\n    {\n      \"tag\": \"35-24-210\",\n      \"evidence\": \"Valve on tank inlet circuit, not on pump suction/discharge\"\n    },\n    {\n      \"tag\": \"35-24-1136\",\n      \"evidence\": \"Valve on discharge header 35-24-146 remote end, boundary of crop\"\n    },\n    {\n      \"tag\": \"35-24XV-672\",\n      \"evidence\": \"XS/XV instrument visible left of crop, belongs to different circuit (35-24-037/041 area)\"\n    }\n  ],\n  \"notes\": [\n    \"Pump data box: 130 l/s, 48 m head, 90 kW, 1500 rpm\",\n    \"35-24-1117 (001-80) on suction identified as NC from solid-filled bowtie triangles\",\n    \"35-24-036 (101-300) and 35-24-035 (101-150) on discharge identified as HV (outline bowtie, no actuator)\",\n    \"35-24-200 (003-15) is control valve with actuator circle = AV\",\n    \"35-24T604 is peer tank at d=91, not nested under pump\"\n  ],\n  \"confidence\": \"high\"\n}\n```",
         "parsed": {
           "sub_process": "BR1",
           "function": "35-24P516",
           "description": "35-24P516 BROKE FILTRATE PMP",
           "rows": [
-            {
-              "equipment": "35-24P516",
-              "subequipment": "",
-              "mask": "",
-              "description": "35-24P516 PMP 130L/S 48M 90KW 1500RPM"
-            },
             {
               "equipment": "35-24-145",
               "subequipment": "",
@@ -81,7 +75,7 @@
               "equipment": "",
               "subequipment": "35-24-1117",
               "mask": "",
-              "description": "35-24-1117 VLV NC"
+              "description": "35-24-1117 ISOL VLV NC"
             },
             {
               "equipment": "35-24-146",
@@ -93,59 +87,49 @@
               "equipment": "",
               "subequipment": "35-24-036",
               "mask": "",
-              "description": "35-24-036 VLV HV"
+              "description": "35-24-036 ISOL VLV HV"
             },
             {
               "equipment": "",
               "subequipment": "35-24-035",
               "mask": "",
-              "description": "35-24-035 VLV HV"
-            },
-            {
-              "equipment": "35-24-148",
-              "subequipment": "",
-              "mask": "",
-              "description": "35-24-148 LINE WAA-150"
+              "description": "35-24-035 ISOL VLV HV"
             },
             {
               "equipment": "35-24-200",
               "subequipment": "",
               "mask": "",
-              "description": "35-24-200 VLV AV"
+              "description": "35-24-200 CTRL VLV AV"
             }
           ],
           "peers": [
             {
               "tag": "35-24T604",
-              "evidence": "Broke Filtrate Tank \u2014 peer primary equipment, separate FUNCTION"
+              "evidence": "Neighbouring broke filtrate tank, peer primary equipment, not child of pump"
             },
             {
               "tag": "35-24LV-621",
-              "evidence": "Level control valve associated with 35-24T604 tank level circuit"
-            },
-            {
-              "tag": "35-24XV-672",
-              "evidence": "XS/XV instrument on upstream circuit, not part of P516 pump loop"
+              "evidence": "Level control valve on tank inlet line 35-24-210/144, belongs to tank circuit not pump"
             },
             {
               "tag": "35-24-210",
-              "evidence": "Valve on line 35-24-144 feeding tank, not pump suction/discharge"
-            },
-            {
-              "tag": "35-24-144",
-              "evidence": "WAA-200 line serving tank fill circuit, not pump circuit"
+              "evidence": "Valve on tank inlet circuit, not on pump suction/discharge"
             },
             {
               "tag": "35-24-1136",
-              "evidence": "Valve 101-400 on tank outlet/overflow line, not pump circuit"
+              "evidence": "Valve on discharge header 35-24-146 remote end, boundary of crop"
+            },
+            {
+              "tag": "35-24XV-672",
+              "evidence": "XS/XV instrument visible left of crop, belongs to different circuit (35-24-037/041 area)"
             }
           ],
           "notes": [
             "Pump data box: 130 l/s, 48 m head, 90 kW, 1500 rpm",
-            "35-24-145 WAA-300 is suction line; 35-24-1117 (001-80) is isolation valve NC on suction",
-            "35-24-146 WAA-400 is discharge line with isolation valves 35-24-036 and 35-24-035",
-            "35-24-200 (003-15) is control valve AV on pump circuit",
-            "35-24T604 BROKE FILTRATE TANK 40m3 0.5% is peer primary equipment"
+            "35-24-1117 (001-80) on suction identified as NC from solid-filled bowtie triangles",
+            "35-24-036 (101-300) and 35-24-035 (101-150) on discharge identified as HV (outline bowtie, no actuator)",
+            "35-24-200 (003-15) is control valve with actuator circle = AV",
+            "35-24T604 is peer tank at d=91, not nested under pump"
           ],
           "confidence": "high"
         },
@@ -188,12 +172,6 @@
       },
       "refined_rows": [
         {
-          "equipment": "35-24P516",
-          "subequipment": "",
-          "mask": "",
-          "description": "35-24P516 PMP 130L/S 48M 90KW 1500RPM"
-        },
-        {
           "equipment": "35-24-145",
           "subequipment": "",
           "mask": "",
@@ -203,7 +181,7 @@
           "equipment": "",
           "subequipment": "35-24-1117",
           "mask": "",
-          "description": "35-24-1117 VLV NC"
+          "description": "35-24-1117 ISOL VLV NC"
         },
         {
           "equipment": "35-24-146",
@@ -215,25 +193,19 @@
           "equipment": "",
           "subequipment": "35-24-036",
           "mask": "",
-          "description": "35-24-036 VLV HV"
+          "description": "35-24-036 ISOL VLV HV"
         },
         {
           "equipment": "",
           "subequipment": "35-24-035",
           "mask": "",
-          "description": "35-24-035 VLV HV"
-        },
-        {
-          "equipment": "35-24-148",
-          "subequipment": "",
-          "mask": "",
-          "description": "35-24-148 LN WAA-150"
+          "description": "35-24-035 ISOL VLV HV"
         },
         {
           "equipment": "35-24-200",
           "subequipment": "",
           "mask": "",
-          "description": "35-24-200 VLV AV"
+          "description": "35-24-200 CTRL VLV AV"
         },
         {
           "equipment": "35-24P516.1",
@@ -258,6 +230,42 @@
           "subequipment": "",
           "mask": "",
           "description": "35-24-516.2"
+        },
+        {
+          "equipment": "35-24P516.3",
+          "subequipment": "",
+          "mask": "",
+          "description": "35-24P516.3"
+        },
+        {
+          "equipment": "35-24-516.3",
+          "subequipment": "",
+          "mask": "",
+          "description": "35-24-516.3"
+        },
+        {
+          "equipment": "35-24P516.4",
+          "subequipment": "",
+          "mask": "",
+          "description": "35-24P516.4"
+        },
+        {
+          "equipment": "35-24-516.4",
+          "subequipment": "",
+          "mask": "",
+          "description": "35-24-516.4"
+        },
+        {
+          "equipment": "35-24-148",
+          "subequipment": "",
+          "mask": "",
+          "description": "35-24-148"
+        },
+        {
+          "equipment": "35-24-144",
+          "subequipment": "",
+          "mask": "",
+          "description": "35-24-144"
         }
       ]
     }

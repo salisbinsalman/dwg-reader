@@ -1,0 +1,169 @@
+{
+  "input": "/Users/code-huddle-ensemble/Desktop/dwg-reader/inputs/Broke System.dwg",
+  "mode": "viewer_shot_ai_gt",
+  "evidence_dir": "/Users/code-huddle-ensemble/Desktop/dwg-reader/outputs/evidence",
+  "site": "Shotton Paper Mill, United Kingdom",
+  "line": "Shotton PM3",
+  "process": "Broke System",
+  "sub_process": "BR1",
+  "model_id": "eu.anthropic.claude-sonnet-4-6",
+  "region": "eu-west-2",
+  "prompt_file": "pid_hierarchy_gt_v7_floc.md",
+  "legend": "/Users/code-huddle-ensemble/Desktop/dwg-reader/inputs/legend.png",
+  "results": [
+    {
+      "tag": "35-24KJ-602",
+      "shot": "/Users/code-huddle-ensemble/Desktop/dwg-reader/outputs/evidence/Broke System.viewer_35-24KJ-602.png",
+      "parent": {
+        "category": "instruments",
+        "block_name": "",
+        "handle": "",
+        "layer": "P-INSTRPOS_TEXTS",
+        "x": 3883.644080309359,
+        "y": 331.0593503503504,
+        "resolved_tag": "35-24KJ-602",
+        "nearby_tags": "KJ; 602; 35-24",
+        "nearby_descriptions": "KJ 602 (35-24)",
+        "confidence": "high"
+      },
+      "candidates": [
+        "35-24",
+        "35-24KJ-602",
+        "35-24P502",
+        "35-24P501",
+        "35-24-072",
+        "35-24-118",
+        "35-24T601",
+        "35-24-1138",
+        "35-24-119",
+        "35-24LV3-609",
+        "35-24-079",
+        "35-24-120",
+        "35-24-1101",
+        "35-24LV2-609",
+        "35-24-235",
+        "35-24-074",
+        "35-24-1125",
+        "35-24L401",
+        "35-24L403",
+        "35-24LV1-609",
+        "35-24-126",
+        "35-24-075",
+        "35-24-078",
+        "35-24-065",
+        "35-24-117",
+        "35-24-063",
+        "35-24-1120",
+        "35-24-062",
+        "35-24-113",
+        "35-24-401.2",
+        "35-24-127",
+        "35-24-403.2",
+        "35-24XV-671",
+        "35-24-115",
+        "35-24-1129"
+      ],
+      "dossier": "Parent tag: 35-24KJ-602\nParent category/block: instruments / \nParent XY: (3883.644080309359, 331.0593503503504)\nNearby descriptions: KJ 602 (35-24)\n\nSame-tag CAD family:\n- (none)\n\nNearby line numbers (short ids preferred in output):\n- 35-24-126  full=35-24-126-PP-200-E10H2A  d=116  layer=P-LINEPOS\n- 35-24-117  full=35-24-117-PP-250-E10H2A  d=144  layer=P-LINEPOS\n- 35-24-113  full=35-24-113-PP-800-E10H2A  d=189  layer=P-LINEPOS\n- 35-24-119  full=35-24-119-PP-300-E10H2A  d=83  layer=P-LINEPOS\n- 35-24-120  full=35-24-120-PP-900-E10H2A  d=95  layer=P-LINEPOS\n- 35-24-118  full=35-24-118-PP-200-E10H2A  d=71  layer=P-LINEPOS\n\nNearby devices (valves/instruments/pumps/\u2026):\n- line_markers: PPI_1100A  d=72  block=PPI_1100A\n- valves: PPI_0900A  d=82  block=PPI_0900A\n- control_valves: PPI_1000A  d=123  block=PPI_1000A\n- instruments: PPI_1204A  d=131  block=PPI_1204A\n- pumps: P7A0200  d=67  block=P7A0200\n\nNearby peer primary equipment (do NOT nest under parent):\n- 35-24T601 (tanks, d=133)\n- 35-24L401 (agitators, d=162)\n- 35-24L403 (agitators, d=158)\n- 35-24P502 (pumps, d=67)\n- 35-24P501 (pumps, d=81)\n\nNearby drawing text tokens:\n- S1  d=118  layer=P-TEXT\n- A1  d=115  layer=P-TEXT\n- A2  d=105  layer=P-TEXT\n- 2 bar  d=123  layer=P-TEXT\n- 2621 ADTPD  d=140  layer=P-TEXT\n- SFVPT-110-2  d=144  layer=P-TEXT\n- 35-24L403  d=156  layer=P-AGITATOR_POS\n- 35-24L401  d=161  layer=P-AGITATOR_POS\n- 600  d=26  layer=P-INSTRPOS_TEXTS\n- 35-24  d=34  layer=P-INSTRPOS_TEXTS\n- 601  d=11  layer=P-INSTRPOS_TEXTS\n- 603  d=19  layer=P-INSTRPOS_TEXTS\n- 602  d=4  layer=P-INSTRPOS_TEXTS\n- 609  d=101  layer=P-INSTRPOS_TEXTS\n- 607  d=130  layer=P-INSTRPOS_TEXTS\n- 597  d=73  layer=P-INSTRPOS_TEXTS\n- SHOWER S1  d=73  layer=P-TEXT\n- 664  d=84  layer=P-INSTRPOS_TEXTS\n- COUCH PIT AGITATOR 1  d=190  layer=P-TEXT\n- 671  d=180  layer=P-INSTRPOS_TEXTS\n- 35-24T601  d=130  layer=P-TANK_POS\n- 176 m\u00b3  d=141  layer=P-TANK_POS\n- 2,8 %  d=144  layer=P-TANK_POS\n- 35-24P501  d=123  layer=P-PUMP_POS\n- 1300  d=128  layer=P-PUMP_POS\n- 50  d=129  layer=P-PUMP_POS\n- 780  d=133  layer=P-PUMP_POS\n- 1000  d=134  layer=P-PUMP_POS\n- 35-24P502  d=125  layer=P-PUMP_POS\n- 60  d=131  layer=P-PUMP_POS\n- 55  d=128  layer=P-PUMP_POS\n- 1500  d=134  layer=P-PUMP_POS\n- 35-24-1125  d=109  layer=P-VALVEPOS\n- 001-80  d=110  layer=P-VALVEPOS\n- 35-24-079  d=87  layer=P-VALVEPOS\n- 350-200  d=89  layer=P-VALVEPOS\n- 35-24-078  d=130  layer=P-VALVEPOS\n- 350-250  d=133  layer=P-VALVEPOS\n- 35-24-1101  d=96  layer=P-VALVEPOS\n- 003-50  d=97  layer=P-VALVEPOS",
+      "ai": {
+        "raw_text": "Looking at the P&ID image, I can see that 35-24KJ-602 is an instrument tagged \"KJ 602 (35-24)\" labeled \"COUCH PIT START\" \u2014 it's a control/start pushbutton or relay instrument located in a LOCAL PANEL box. The panel contains:\n\n- 35-24HS-664: COUCH PIT START/STOP (hand switch)\n- 35-24HI-597: COUCH PIT SHOWER S1 (hand indicator)\n- 35-24XS-600: MCS SIGNALS\n- 35-24ES-601: UTM EMERGENCY STOP\n- **35-24KJ-602**: COUCH PIT START \u2190 our parent\n- 35-24KJ-603: COUCH PIT STOP\n\nKJ is a control relay/starter instrument. It has no piping lines, valves, or sub-instruments directly attached to it \u2014 it's a discrete instrument node. The nearby instruments (600, 601, 603, 597, 664) are siblings in the same panel, not children of KJ-602.\n\nPer the rules: \"If 35-24KJ-602 is an instrument and no labelled accessories sit on it, emit the FUNCTION header + description only \u2014 empty `rows` is correct.\"\n\nThe peer instruments in the same panel are siblings, not children. The pumps, tanks, agitators, and lines are clearly peer equipment.\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24KJ-602\",\n  \"description\": \"35-24KJ-602 COUCH PIT START\",\n  \"rows\": [],\n  \"peers\": [\n    {\"tag\": \"35-24KJ-603\", \"evidence\": \"Sibling instrument in same local panel \u2014 COUCH PIT STOP\"},\n    {\"tag\": \"35-24XS-600\", \"evidence\": \"Sibling instrument in same local panel \u2014 MCS SIGNALS\"},\n    {\"tag\": \"35-24ES-601\", \"evidence\": \"Sibling instrument in same local panel \u2014 UTM EMERGENCY STOP\"},\n    {\"tag\": \"35-24HS-664\", \"evidence\": \"Sibling instrument in same local panel \u2014 COUCH PIT START/STOP\"},\n    {\"tag\": \"35-24HI-597\", \"evidence\": \"Sibling instrument in same local panel \u2014 COUCH PIT SHOWER S1\"},\n    {\"tag\": \"35-24T601\",   \"evidence\": \"Peer vessel \u2014 COUCH PIT tank, different equipment class\"},\n    {\"tag\": \"35-24P501\",   \"evidence\": \"Peer pump \u2014 nearby pump, different equipment class\"},\n    {\"tag\": \"35-24P502\",   \"evidence\": \"Peer pump \u2014 nearby pump, different equipment class\"},\n    {\"tag\": \"35-24L401\",   \"evidence\": \"Peer agitator \u2014 COUCH PIT AGITATOR 1\"},\n    {\"tag\": \"35-24L403\",   \"evidence\": \"Peer agitator \u2014 nearby agitator\"}\n  ],\n  \"notes\": [\n    \"35-24KJ-602 is a discrete control relay/starter instrument (COUCH PIT START) located in a LOCAL PANEL\",\n    \"No piping lines, valves, or sub-instruments are directly attached to this instrument tag\",\n    \"All other instruments in the local panel are siblings, not children\"\n  ],\n  \"confidence\": \"high\"\n}\n```",
+        "parsed": {
+          "sub_process": "BR1",
+          "function": "35-24KJ-602",
+          "description": "35-24KJ-602 COUCH PIT START",
+          "rows": [],
+          "peers": [
+            {
+              "tag": "35-24KJ-603",
+              "evidence": "Sibling instrument in same local panel \u2014 COUCH PIT STOP"
+            },
+            {
+              "tag": "35-24XS-600",
+              "evidence": "Sibling instrument in same local panel \u2014 MCS SIGNALS"
+            },
+            {
+              "tag": "35-24ES-601",
+              "evidence": "Sibling instrument in same local panel \u2014 UTM EMERGENCY STOP"
+            },
+            {
+              "tag": "35-24HS-664",
+              "evidence": "Sibling instrument in same local panel \u2014 COUCH PIT START/STOP"
+            },
+            {
+              "tag": "35-24HI-597",
+              "evidence": "Sibling instrument in same local panel \u2014 COUCH PIT SHOWER S1"
+            },
+            {
+              "tag": "35-24T601",
+              "evidence": "Peer vessel \u2014 COUCH PIT tank, different equipment class"
+            },
+            {
+              "tag": "35-24P501",
+              "evidence": "Peer pump \u2014 nearby pump, different equipment class"
+            },
+            {
+              "tag": "35-24P502",
+              "evidence": "Peer pump \u2014 nearby pump, different equipment class"
+            },
+            {
+              "tag": "35-24L401",
+              "evidence": "Peer agitator \u2014 COUCH PIT AGITATOR 1"
+            },
+            {
+              "tag": "35-24L403",
+              "evidence": "Peer agitator \u2014 nearby agitator"
+            }
+          ],
+          "notes": [
+            "35-24KJ-602 is a discrete control relay/starter instrument (COUCH PIT START) located in a LOCAL PANEL",
+            "No piping lines, valves, or sub-instruments are directly attached to this instrument tag",
+            "All other instruments in the local panel are siblings, not children"
+          ],
+          "confidence": "high"
+        },
+        "model_id": "eu.anthropic.claude-sonnet-4-6",
+        "region": "eu-west-2",
+        "prompt_file": "pid_hierarchy_gt_v7_floc.md",
+        "candidates": [
+          "35-24",
+          "35-24KJ-602",
+          "35-24P502",
+          "35-24P501",
+          "35-24-072",
+          "35-24-118",
+          "35-24T601",
+          "35-24-1138",
+          "35-24-119",
+          "35-24LV3-609",
+          "35-24-079",
+          "35-24-120",
+          "35-24-1101",
+          "35-24LV2-609",
+          "35-24-235",
+          "35-24-074",
+          "35-24-1125",
+          "35-24L401",
+          "35-24L403",
+          "35-24LV1-609",
+          "35-24-126",
+          "35-24-075",
+          "35-24-078",
+          "35-24-065",
+          "35-24-117",
+          "35-24-063",
+          "35-24-1120",
+          "35-24-062",
+          "35-24-113",
+          "35-24-401.2",
+          "35-24-127",
+          "35-24-403.2",
+          "35-24XV-671",
+          "35-24-115",
+          "35-24-1129"
+        ],
+        "prompt_chars": 10129,
+        "vision": true
+      },
+      "refined_rows": []
+    }
+  ]
+}

@@ -1,0 +1,99 @@
+{
+  "input": "/Users/code-huddle-ensemble/Desktop/dwg-reader/inputs/Broke System.dwg",
+  "mode": "viewer_shot_ai_gt",
+  "evidence_dir": "/Users/code-huddle-ensemble/Desktop/dwg-reader/outputs/evidence",
+  "site": "Shotton Paper Mill, United Kingdom",
+  "line": "Shotton PM3",
+  "process": "Broke System",
+  "sub_process": "BR1",
+  "model_id": "eu.anthropic.claude-sonnet-4-6",
+  "region": "eu-west-2",
+  "prompt_file": "pid_hierarchy_gt_v7_floc.md",
+  "legend": "/Users/code-huddle-ensemble/Desktop/dwg-reader/inputs/legend.png",
+  "results": [
+    {
+      "tag": "35-24KJ-686",
+      "shot": "/Users/code-huddle-ensemble/Desktop/dwg-reader/outputs/evidence/Broke System.viewer_35-24KJ-686.png",
+      "parent": {
+        "category": "instruments",
+        "block_name": "",
+        "handle": "",
+        "layer": "P-INSTRPOS_TEXTS",
+        "x": 4543.545645645646,
+        "y": 518.6060060060059,
+        "resolved_tag": "35-24KJ-686",
+        "nearby_tags": "KJ; 686; 35-24",
+        "nearby_descriptions": "KJ 686 (35-24)",
+        "confidence": "high"
+      },
+      "candidates": [
+        "35-24",
+        "35-24KJ-686",
+        "35-25P502",
+        "35-25P504",
+        "35-25P513",
+        "35-25T602",
+        "55-32T601",
+        "35-24-1097",
+        "350-400",
+        "35-24-038",
+        "35-24-142",
+        "35-24-140"
+      ],
+      "dossier": "Parent tag: 35-24KJ-686\nParent category/block: instruments / \nParent XY: (4543.545645645646, 518.6060060060059)\nNearby descriptions: KJ 686 (35-24)\n\nSame-tag CAD family:\n- (none)\n\nNearby line numbers (short ids preferred in output):\n- 35-24-142  full=35-24-142-PP-400-E10H2A  d=148  layer=P-LINEPOS\n\nNearby devices (valves/instruments/pumps/\u2026):\n- line_markers: PPI_1100A  d=149  block=PPI_1100A\n- valves: PPI_0900A  d=109  block=PPI_0900A\n- instruments: PPI_1204A  d=2  block=PPI_1204A\n\nNearby peer primary equipment (do NOT nest under parent):\n- (none)\n\nNearby drawing text tokens:\n- 686  d=4  layer=P-INSTRPOS_TEXTS\n- 35-24  d=11  layer=P-INSTRPOS_TEXTS\n- 687  d=19  layer=P-INSTRPOS_TEXTS\n- 35-24-1097  d=108  layer=P-VALVEPOS\n- 350-400  d=113  layer=P-VALVEPOS\n- 35-24-038  d=134  layer=P-VALVEPOS\n- 35-24-142  d=148  layer=P-LINEPOS",
+      "ai": {
+        "raw_text": "Looking at the P&ID image, I can see:\n\n1. **35-24KJ-686** is clearly labeled as \"BROKE THICKENER START SEQUENCE\" \u2014 a KJ instrument (sequence/control function)\n2. The symbol shows a square box with a diagonal cut (PLC/sequence controller instrument symbol)\n3. **35-24KJ-687** is the adjacent peer: \"BROKE THICKENER STOP SEQUENCE\" \u2014 same instrument type, same area, but a separate tag\n4. The nearby line **35-24-142** (full: 35-24-142-PP-400-E10H2A) is visible in the lower portion of the crop, along with valves **35-24-1097** and **35-24-038**, but these are clearly on a separate piping circuit \u2014 not accessories of the KJ instrument itself\n5. KJ-686 is a pure instrument (sequence controller) with no labelled accessories directly attached to it\n\nPer Rule 8 and the instrument-only guidance: if 35-24KJ-686 is an instrument with no labelled accessories sitting on it, emit the FUNCTION header + description only \u2014 empty `rows` is correct.\n\n35-24KJ-687 is a peer (same instrument type, adjacent, separate tag/function).\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24KJ-686\",\n  \"description\": \"35-24KJ-686 BROKE THKR START SEQ\",\n  \"rows\": [],\n  \"peers\": [\n    {\n      \"tag\": \"35-24KJ-687\",\n      \"evidence\": \"Adjacent KJ instrument on same P&ID panel \u2014 BROKE THICKENER STOP SEQUENCE; separate tag, separate function, not a child of 686\"\n    },\n    {\n      \"tag\": \"35-24-1097\",\n      \"evidence\": \"Hand valve on line 35-24-142 circuit in lower crop area; not part of KJ-686 instrument circuit\"\n    },\n    {\n      \"tag\": \"35-24-038\",\n      \"evidence\": \"Check valve on line 35-24-142 circuit; belongs to piping header, not KJ-686\"\n    },\n    {\n      \"tag\": \"35-24-142\",\n      \"evidence\": \"Piping line PP-400 visible in lower crop; separate piping circuit unrelated to KJ-686 sequence instrument\"\n    }\n  ],\n  \"notes\": [\n    \"35-24KJ-686 is a sequence controller instrument (BROKE THICKENER START SEQUENCE); no physical accessories or sub-instruments are labelled directly on this tag in the P&ID crop\",\n    \"35-24KJ-687 (STOP SEQUENCE) is a sibling instrument at the same hierarchy level \u2014 peer, not child\",\n    \"Nearby piping (35-24-142, valves 35-24-1097 and 35-24-038) belongs to a separate piping circuit and is excluded from this function's hierarchy\"\n  ],\n  \"confidence\": \"high\"\n}\n```",
+        "parsed": {
+          "sub_process": "BR1",
+          "function": "35-24KJ-686",
+          "description": "35-24KJ-686 BROKE THKR START SEQ",
+          "rows": [],
+          "peers": [
+            {
+              "tag": "35-24KJ-687",
+              "evidence": "Adjacent KJ instrument on same P&ID panel \u2014 BROKE THICKENER STOP SEQUENCE; separate tag, separate function, not a child of 686"
+            },
+            {
+              "tag": "35-24-1097",
+              "evidence": "Hand valve on line 35-24-142 circuit in lower crop area; not part of KJ-686 instrument circuit"
+            },
+            {
+              "tag": "35-24-038",
+              "evidence": "Check valve on line 35-24-142 circuit; belongs to piping header, not KJ-686"
+            },
+            {
+              "tag": "35-24-142",
+              "evidence": "Piping line PP-400 visible in lower crop; separate piping circuit unrelated to KJ-686 sequence instrument"
+            }
+          ],
+          "notes": [
+            "35-24KJ-686 is a sequence controller instrument (BROKE THICKENER START SEQUENCE); no physical accessories or sub-instruments are labelled directly on this tag in the P&ID crop",
+            "35-24KJ-687 (STOP SEQUENCE) is a sibling instrument at the same hierarchy level \u2014 peer, not child",
+            "Nearby piping (35-24-142, valves 35-24-1097 and 35-24-038) belongs to a separate piping circuit and is excluded from this function's hierarchy"
+          ],
+          "confidence": "high"
+        },
+        "model_id": "eu.anthropic.claude-sonnet-4-6",
+        "region": "eu-west-2",
+        "prompt_file": "pid_hierarchy_gt_v7_floc.md",
+        "candidates": [
+          "35-24",
+          "35-24KJ-686",
+          "35-25P502",
+          "35-25P504",
+          "35-25P513",
+          "35-25T602",
+          "55-32T601",
+          "35-24-1097",
+          "350-400",
+          "35-24-038",
+          "35-24-142",
+          "35-24-140"
+        ],
+        "prompt_chars": 8184,
+        "vision": true
+      },
+      "refined_rows": []
+    }
+  ]
+}

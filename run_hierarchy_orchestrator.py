@@ -192,7 +192,7 @@ def main() -> int:
     )
     parser.add_argument("--model-id", default="eu.anthropic.claude-sonnet-4-6")
     parser.add_argument("--region", default="eu-west-2")
-    parser.add_argument("--prompt-file", default="pid_hierarchy_gt_v7_floc.md")
+    parser.add_argument("--prompt-file", default="pid_hierarchy_gt_v8.md")
     parser.add_argument(
         "--jobs",
         type=int,

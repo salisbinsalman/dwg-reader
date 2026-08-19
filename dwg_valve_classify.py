@@ -42,7 +42,7 @@ _CONVEYOR_RE = re.compile(r"\b(CVYR|CONVEYOR)\b", re.I)
 _VESSEL_HINT_RE = re.compile(r"\b(PLPR|PULPER|TNK|TANK|CHEST|VESSEL|THICKENER)\b", re.I)
 
 ONE_PASS_PROMPT = """\
-You MUST respond with ONLY a JSON object. No explanation, no markdown, no prose.
+CRITICAL: Output ONLY a single JSON object. No explanation, no steps, no markdown, no prose.
 Exactly this format: {{"type": "TOKEN", "attachment": "none"}}
 
 Allowed "type" tokens: NC, HV, AV, AV-M, CHK, PRV, SV, NO, UNKNOWN
@@ -62,6 +62,10 @@ STEP 1 — IDENTIFY THE TARGET BOWTIE (Image 1):
   it connects to. That bowtie is the ONLY one to classify — ignore all others nearby.
   If the leader line is unclear or absent: the bowtie CLOSEST to the yellow ring
   center is the target. If two bowties are visible, pick the one AT the ring center.
+  When the tag sits above several bowties, trace the FULL leader/tag line to its
+  endpoint — do not pick a nearby cross-line valve the leader does not touch.
+  Brown/red floor drain branches with downward arrows into a U-channel or sump are
+  drain (DRN) taps even when a cyan/magenta process line crosses nearby.
   Ignore any valve-type letter in the tag itself (HV/FV/LV); classify the SYMBOL only.
   Return UNKNOWN only if NO bowtie symbol is visible ANYWHERE in the crop — not
   because there are multiple bowties or the target is ambiguous.
@@ -73,28 +77,61 @@ STEP 2 — BODY / ACTUATOR TYPE (Image 2):
   Check for a circle actuator on the bowtie stem FIRST:
     AV-M : stem above bowtie leading to a circle with the letter M CLEARLY readable.
            Only AV-M if you can explicitly read "M" inside the circle.
-    AV   : stem above bowtie leading to any circle (empty, HS/LS/FC/XS/HI with a number,
-           or any text that is NOT clearly "M"). When uncertain between AV and AV-M, use AV.
-           A circle actuator means AV even if triangles are outline-only.
-    ⇒ If AV or AV-M: set attachment = none and return immediately.
+    AV   : a CIRCLE symbol must sit ON the stem line directly connected to the bowtie
+           centre (above or below the triangles). HS/LS/FC/XS/HI/FCV numbers inside
+           that circle = AV. When uncertain between AV and AV-M, use AV.
+           NOT AV if: no circle on the bowtie stem; only plain text nearby (AT, HP,
+           SS, bar, DN); instrument boxes elsewhere in the crop; pump/motor/tank symbols.
+           Outline-only bowtie with NO circle on its stem → HV, never AV.
+
+  Record the body type (AV / AV-M / NC / HV / CHK / …) then continue to STEP 3 for attachment.
+  Actuated valves on drain lines are AV + DRN, not AV alone.
 
   No circle actuator → hand valve — classify by BODY FILL (Image 2):
-    NC  : BOTH bowtie triangles SOLID / filled (white or solid interior) — normally closed
-    HV  : BOTH bowtie triangles TRANSPARENT / outline-only (background visible inside)
-    CHK : diagonal bar through the centre, or ONLY ONE triangle filled
+    Inspect EACH triangle separately (left vs right, or top vs bottom):
+
+    CHK : EXACTLY ONE triangle filled solid AND the other triangle outline-only
+          (background/black visible inside). Half-and-half bowtie = CHK, never NC or HV.
+          If BOTH triangles look the same (both filled or both outline) it is NOT CHK.
+          Also CHK if a diagonal bar crosses the bowtie centre (per legend).
+
+    NC  : BOTH triangles filled solid white — normally closed hand valve.
+          Only when NEITHER triangle is outline-only. Never NC if one triangle
+          is transparent and the other is filled (that is CHK).
+
+    HV  : BOTH triangles outline-only / transparent (background/black visible in BOTH).
+          Thin white line edges with dark interior = HV outline, NOT solid fill.
+          Only when neither triangle is filled solid. Never HV if any triangle
+          is filled solid white.
+
     PRV : extra line segments parallel to each triangle base
     SV  : stem on top ending in a horizontal T-cap
-    NO  : running-open mark on an outline hand valve (very rare; never when solid filled)
+    NO  : running-open mark on an outline hand valve (very rare; never when
+          any triangle is filled solid)
 
-  NC and HV are mutually exclusive. Solid interior = NC. See-through interior = HV.
+  NC, HV, and CHK are mutually exclusive — pick exactly one body type.
 
-STEP 3 — ATTACHMENT for hand valves (NC / HV / NO / CHK) only (Images 2, 3, 4):
+STEP 3 — ATTACHMENT (Images 1, 2, 3, 4) — all body types including AV / AV-M:
   Pick EXACTLY ONE attachment or "none". Check in this strict order and STOP at the
   first match — do NOT continue to the next rule once a match is found:
 
-    DRN — the capital letter "D" appears on a pipe DIRECTLY connected to THIS bowtie's
-          inlet OR outlet (Images 2 and 4). In these P&IDs, drain taps are labelled
-          with a capital "D" text placed directly on the pipe — it appears in a
+    FLS (flush spool) — size "003-50" printed under tag "{TAG}" marks a FLUSHING spool
+          per legend → attachment FLS. NOT drainage — no large tou/sump arrow. L-hook or
+          blunt stub on the bowtie or a short vertical 003-50 spool = FLS.
+          On a vertical branch with two bowties, the UPPER valve tagged 003-50 is FLS;
+          the LOWER valve whose pipe hits the drain arrow is DRN — not the upper one.
+          Size "003-15" under a tag is usually pipe DN only — NOT automatic FLS.
+
+    DRN — PRIMARY: the pipe FROM this valve ends in a LARGE SOLID FLOW ARROW (filled
+          white arrowhead — much larger than normal line direction ticks) pointing
+          into a floor trough, tou, sump recess, U-channel, or open drain basin
+          (Images 1, 3, 4). The arrow direction may be down, up, left, or right.
+          Often a funnel/collector symbol (trapezoid tapering to a point) sits between
+          the valve pipe and the large arrow. Large-arrow-to-tou ALWAYS means DRN.
+
+          Also DRN when the capital letter "D" appears on a pipe DIRECTLY connected to
+          THIS bowtie's inlet OR outlet (Images 2 and 4). In these P&IDs, drain taps are
+          labelled with a capital "D" text placed directly on the pipe — it appears in a
           distinct color (typically orange or red-orange) against the dark background.
           Look on BOTH sides of the bowtie (left = inlet, right = outlet). The D can
           appear close to the bowtie body OR at the far end of the outlet pipe at a
@@ -104,21 +141,32 @@ STEP 3 — ATTACHMENT for hand valves (NC / HV / NO / CHK) only (Images 2, 3, 4)
           to this bowtie — it may be at the far left or far right edge of Image 1.
           NOTE: numbered revision bubbles (orange/red filled triangles or circles
           containing numbers like "10", "A1", etc.) are NOT drain markers; ignore them.
-          Also DRN if downward drain arrows drop from THIS bowtie's outlet pipe into
-          a floor trough or sump in Image 3 — the arrows must be clearly attached to
-          this valve's own pipe, not the general floor area drain of the surroundings.
-          ⚑ Capital "D" on a connected pipe, OR drain arrows from this valve → DRN.
+          Also DRN if drain arrows drop from THIS bowtie's outlet pipe into a floor
+          trough or sump in Image 3 — the arrows must be clearly attached to this
+          valve's own pipe, not the general floor area drain of the surroundings.
+          Vertical drain branch (size 001-80 under tag) with arrow into U-channel
+          below THIS bowtie = DRN.
+          On a stacked vertical branch with two bowties IN SERIES on the SAME pipe:
+          only the LOWER bowtie whose outlet hits the drain arrow is DRN; the upper is none.
+          PARALLEL separate branch lines each with their own bowtie, ALL draining into a
+          common funnel/tou collector → EACH bowtie on its own branch is DRN.
+          ⚑ Large solid arrow into tou/trough, capital "D" on pipe, OR drain arrow → DRN.
 
     SMP — a branch pipe ends in a POINTED or FUNNEL-SHAPED sampling symbol at the
           branch TIP (Image 4): a solid filled arrowhead (▲ or ►), pointed funnel,
           or cup/cone shape. The symbol must be POINTED — NOT blunt, NOT T-shaped,
           NOT a plain cut pipe end. A short branch with a pointed far end = SMP
           even if the branch is close to the bowtie body.
-          Also SMP if a small sampling sub-branch (e.g. 003-15 = 15mm size) connects
-          off this valve's pipeline and that sub-branch's far end shows a pointing
-          arrowhead or sampling symbol.
-          NOTE: branch end at a floor drain channel (U-channel below) = FLS, not SMP.
-          ⚑ Pointed/funnel branch end → SMP. STOP.
+          NEVER SMP if the funnel/collector DISCHARGES into a floor U-channel, sump,
+          or drain trough (Image 3) — that is DRN. Sample take-offs do NOT connect
+          to floor drains.
+          NEVER SMP because "003-15" or other pipe-size text appears under the tag —
+          that is pipe DN (nominal diameter), NOT a sampling connection. SMP requires
+          a VISIBLE pointed funnel/cup/arrowhead at a branch tip that is NOT a floor
+          drain connection.
+          NOTE: branch end at a floor drain channel (U-channel below) = DRN or FLS,
+          never SMP.
+          ⚑ Pointed sample funnel NOT into floor drain → SMP. STOP.
 
     FLS — a small dead-end stub DIRECTLY on THIS bowtie body side (Image 2) with a
           BLUNT, T-SHAPED, or CUT-PIPE end (not pointed/funnel-shaped). Also FLS: a
@@ -132,14 +180,13 @@ STEP 3 — ATTACHMENT for hand valves (NC / HV / NO / CHK) only (Images 2, 3, 4)
 
     none — plain inline valve: no D marker, no pointed branch end, no dead-end stub.
 
-  Decision order: DRN first → SMP → FLS → none
+  Decision order: FLS (003-50 under tag) → DRN → SMP → FLS (stub) → none
 
-STEP 4 — RETURN JSON:
+STEP 4 — RETURN JSON ONLY (no other text):
   {{"type": "<body>", "attachment": "<SMP|FLS|DRN|none>"}}
   Examples: {{"type": "NC", "attachment": "DRN"}}
-            {{"type": "NC", "attachment": "FLS"}}
-            {{"type": "NC", "attachment": "SMP"}}
-            {{"type": "AV", "attachment": "none"}}
+            {{"type": "AV", "attachment": "DRN"}}
+            {{"type": "HV", "attachment": "none"}}
 """
 
 _EXCLUSIVE_ATTACHMENTS = frozenset({"DRN", "FLS", "SMP"})
@@ -188,6 +235,33 @@ def collect_text_locations(structural: Dict[str, Any]) -> Dict[str, Dict[str, An
         valve_locs = [loc for loc in locs if loc["layer"] in VALVE_LAYERS]
         out[txt] = (valve_locs or locs)[0]
     return out
+
+
+_PIPE_DN_TEXT_RE = re.compile(r"^003-\d+$", re.I)
+
+
+def pipe_dn_label_near_tag(
+    tag: str,
+    text_locations: Dict[str, Dict[str, Any]],
+    structural: Dict[str, Any],
+    *,
+    radius: float = 20.0,
+) -> bool:
+    """True when a 003-xx pipe DN label sits beside the valve tag (NC isolation spool)."""
+    loc = text_locations.get(_norm_tag(tag))
+    if not loc:
+        return False
+    x0, y0 = float(loc["x"]), float(loc["y"])
+    for ent in structural.get("text_entities") or []:
+        if not isinstance(ent, dict):
+            continue
+        txt = str(ent.get("text") or "").strip()
+        if not _PIPE_DN_TEXT_RE.fullmatch(txt):
+            continue
+        xy = _xy(ent)
+        if xy and abs(xy[0] - x0) <= radius and abs(xy[1] - y0) <= radius:
+            return True
+    return False
 
 
 def collect_valve_inserts(structural: Dict[str, Any]) -> List[Dict[str, Any]]:
@@ -292,11 +366,96 @@ def nearest(rows: Iterable[Dict[str, Any]], x: float, y: float) -> Optional[Dict
     return out
 
 
+_WFL_LINE_RE = re.compile(r"\bWFL\b", re.I)
+
+
+def wfl_drain_line_hint(tag: str, inventory: Optional[Dict[str, Any]] = None) -> bool:
+    """True when inventory marks this tag as a white-water floor (WFL) drain line."""
+    want = _norm_tag(tag)
+    for fn in (inventory or {}).get("functions") or []:
+        if not isinstance(fn, dict):
+            continue
+        if _norm_tag(str(fn.get("function") or "")) != want:
+            continue
+        blob = " ".join(
+            str(fn.get(k) or "")
+            for k in ("description", "nearby_descriptions", "line_number", "kind")
+        )
+        if _WFL_LINE_RE.search(blob):
+            return True
+    return False
+
+
+def collect_symb_bowtie_inserts(structural: Dict[str, Any]) -> List[Dict[str, Any]]:
+    """Bowtie/check symbols on P-SYMB — some WFL drain taps lack P-VALVEPOS inserts."""
+    rows: List[Dict[str, Any]] = []
+    for ins in structural.get("inserts") or []:
+        if not isinstance(ins, dict):
+            continue
+        if str(ins.get("layer") or "") != "P-SYMB":
+            continue
+        name = str(ins.get("name") or ins.get("block_name") or "")
+        if not name.startswith("P7A130"):
+            continue
+        xy = _xy(ins)
+        if xy is None:
+            continue
+        rows.append({"x": xy[0], "y": xy[1], "layer": "P-SYMB", "name": name})
+    return rows
+
+
+def _snap_valve_insert(
+    x: float,
+    y: float,
+    valve_inserts: List[Dict[str, Any]],
+    *,
+    wfl_drain_hint: bool = False,
+    symb_inserts: Optional[List[Dict[str, Any]]] = None,
+    snap_radius: float = 40.0,
+) -> Tuple[Optional[Dict[str, Any]], float]:
+    """Pick the valve insert a tag label points at."""
+    candidates: List[Tuple[float, Dict[str, Any]]] = []
+    for row in valve_inserts:
+        d = ((float(row["x"]) - x) ** 2 + (float(row["y"]) - y) ** 2) ** 0.5
+        if d <= snap_radius:
+            candidates.append((d, row))
+    if not candidates:
+        return None, 0.0
+    candidates.sort(key=lambda item: item[0])
+    best_d, best = candidates[0]
+
+    # WFL tags above the tank sump often sit beside a process cross-header valve
+    # while the leader line continues down the brown drain branch (35-24-121).
+    if wfl_drain_hint and best_d < 12.0 and (y - float(best["y"])) < 12.0:
+        for row in symb_inserts or []:
+            sx, sy = float(row["x"]), float(row["y"])
+            drop = y - sy
+            if 20.0 <= drop <= 36.0 and abs(sx - x) < 12.0:
+                out = dict(row)
+                return out, ((sx - x) ** 2 + (sy - y) ** 2) ** 0.5
+    return best, best_d
+
+
+def apply_wfl_drain_attachment(vtype: str, *, wfl_drain_hint: bool) -> str:
+    """WFL floor-line isolation valves are drain taps by SOP."""
+    if not wfl_drain_hint:
+        return vtype
+    tokens = str(vtype or "").upper().split()
+    if not tokens or any(t in tokens for t in ("DRN", "FLS", "SMP")):
+        return vtype
+    body = strip_attachment_tokens(" ".join(tokens))
+    if body.split()[0] in {"NC", "HV", "CHK", "NO"}:
+        return merge_body_and_attachment(body, "DRN")
+    return vtype
+
+
 def locate_valve(
     tag: str,
     *,
     text_locations: Dict[str, Dict[str, Any]],
     valve_inserts: List[Dict[str, Any]],
+    symb_inserts: Optional[List[Dict[str, Any]]] = None,
+    wfl_drain_hint: bool = False,
 ) -> Optional[Dict[str, Any]]:
     """Find drawing XY for a tag and snap to the nearest valve insert."""
     want = _norm_tag(tag)
@@ -304,7 +463,17 @@ def locate_valve(
     if loc is None:
         return None
     x, y = float(loc["x"]), float(loc["y"])
-    snapped = nearest(valve_inserts, x, y)
+    snapped_row, snap_d = _snap_valve_insert(
+        x,
+        y,
+        valve_inserts,
+        wfl_drain_hint=wfl_drain_hint,
+        symb_inserts=symb_inserts,
+    )
+    snapped = None
+    if snapped_row is not None:
+        snapped = dict(snapped_row)
+        snapped["distance"] = snap_d
     if snapped is not None and snapped["distance"] <= 40.0:  # ~2× bowtie half-width snap tolerance
         x, y = float(snapped["x"]), float(snapped["y"])
         layer = str(snapped.get("layer") or loc.get("layer") or "")
@@ -688,28 +857,45 @@ def parse_attachment_response(raw: str) -> str:
     return ""
 
 
+FLS_FLUSH_RETRY_PROMPT = """\
+You MUST respond with ONLY a JSON object.
+Format: {{"attachment": "FLS"}} or {{"attachment": "DRN"}} or {{"attachment": "none"}}
+
+Valve {TAG}. Check attachment for THIS bowtie only:
+  FLS — size "003-50" under tag, OR L-hook / horizontal stub welded to bowtie side,
+        OR short vertical spool with blunt/cut pipe end. Flush connection — NOT floor drain.
+  DRN — large solid arrow into tou/sump/U-channel from THIS valve's pipe.
+  none — plain inline valve (e.g. 003-15 is pipe size only, no flush stub, no drain).
+Pick FLS when 003-50 appears under the tag unless a large tou arrow is on THIS pipe.
+"""
+
 DRAIN_RETRY_PROMPT = """\
 You MUST respond with ONLY a JSON object.
 Format: {{"attachment": "DRN"}} or {{"attachment": "none"}}
 
 Valve {TAG}. Follow the leader line from label "{TAG}" to its bowtie.
 
-DRN — vessel/tank bottom outlet line, OR pipe turns downward to floor/sump/U-channel
-      directly below THIS bowtie.
+DRN — pipe from THIS bowtie ends in a LARGE SOLID FLOW ARROW (filled white arrowhead,
+      much bigger than normal line ticks) pointing into a floor trough, tou, sump recess,
+      or U-channel — arrow direction may be down/up/left/right. Often a funnel/collector
+      (trapezoid) sits between the pipe and the arrow. Parallel branches each with their
+      own bowtie ALL draining to the same tou → each is DRN.
 
-none — plain in-line valve; or upper valve on a branch whose downstream neighbour
-       reaches the drain (not this bowtie's pipe).
+none — plain in-line valve; or upper bowtie IN SERIES on one vertical pipe whose lower
+       neighbour reaches the drain (not this bowtie's own pipe to the tou).
 """
 
 DRN_DIRECT_RETRY_PROMPT = """\
 You MUST respond with ONLY a JSON object.
 Format: {{"attachment": "DRN"}} or {{"attachment": "none"}}
 
-Valve {TAG}. Is the drain arrow/sump directly connected below THIS bowtie's outlet
-with NO other valve between the target bowtie and the floor drain?
+Valve {TAG}. Does THIS bowtie's own pipe feed a large solid drain arrow into a
+tou/trough/sump (directly or via a funnel collector)?
 
-If two bowties are stacked on the same vertical branch, only the LOWER bowtie
-(closest to the floor drain arrow) is DRN — the upper bowtie is none.
+DRN — yes: this bowtie's branch reaches the tou (parallel branches each get DRN).
+
+none — only if this is the UPPER bowtie IN SERIES on one vertical pipe and a
+      second bowtie below it sits between this valve and the tou.
 """
 
 VESSEL_DRN_RETRY_PROMPT = """\
@@ -723,11 +909,16 @@ Otherwise none.
 
 SMP_CONFIRM_PROMPT = """\
 You MUST respond with ONLY a JSON object.
-Format: {{"attachment": "SMP"}} or {{"attachment": "FLS"}}
+Format: {{"attachment": "SMP"}} or {{"attachment": "DRN"}} or {{"attachment": "FLS"}} or {{"attachment": "none"}}
 
-Valve {TAG}. Follow leader line to bowtie. Look at the branch end:
-  SMP — sample funnel, cup, or sampling arrowhead is visible at branch end.
+Valve {TAG}. Follow leader line to bowtie. Check branch end and floor area below:
+  DRN — funnel/collector/trapezoid on THIS pipe discharges into a floor U-channel,
+        sump recess, or drain trough (Image 3). Parallel branches each with a bowtie
+        ALL feeding the same tou → each is DRN.
+  SMP — sample funnel/cup/arrowhead at branch tip that does NOT connect to floor drain.
   FLS — no funnel; horizontal spool / tee flush on a vertical leg, or L-hook on bowtie.
+  none — plain inline isolation valve; no pointed sample symbol; "003-15" or similar
+         size text under tag is pipe DN only, not sampling.
 """
 
 
@@ -773,9 +964,9 @@ def refine_attachment(
     att = str(attachment or "").upper().strip()
     body_tokens = set(strip_attachment_tokens(body).split())
 
-    if not att and body_tokens & {"NC", "HV", "NO"}:
+    if not att and body_tokens & {"NC", "HV", "NO", "AV", "AV-M", "CHK"}:
         att = _bedrock_attachment_ask(
-            DRAIN_RETRY_PROMPT.replace("{TAG}", tag),
+            FLS_FLUSH_RETRY_PROMPT.replace("{TAG}", tag),
             marked,
             model_id=model_id,
             region=region,
@@ -784,14 +975,25 @@ def refine_attachment(
                 below_valve_png(crop_path, half=crop_half, extra_below=extra_below),
             ],
         )
-        if not att:
+        if att != "FLS":
             att = _bedrock_attachment_ask(
-                VESSEL_DRN_RETRY_PROMPT.replace("{TAG}", tag),
+                DRAIN_RETRY_PROMPT.replace("{TAG}", tag),
                 marked,
                 model_id=model_id,
                 region=region,
-                extra_images=[branch_context_png(marked, cx_frac=cx_frac, cy_frac=cy_frac)],
-            )
+                extra_images=[
+                    branch_context_png(marked, cx_frac=cx_frac, cy_frac=cy_frac),
+                    below_valve_png(crop_path, half=crop_half, extra_below=extra_below),
+                ],
+            ) or att
+            if not att:
+                att = _bedrock_attachment_ask(
+                    VESSEL_DRN_RETRY_PROMPT.replace("{TAG}", tag),
+                    marked,
+                    model_id=model_id,
+                    region=region,
+                    extra_images=[branch_context_png(marked, cx_frac=cx_frac, cy_frac=cy_frac)],
+                )
 
     if att == "DRN":
         direct = _bedrock_attachment_ask(
@@ -810,10 +1012,15 @@ def refine_attachment(
             marked,
             model_id=model_id,
             region=region,
-            extra_images=[branch_context_png(marked, cx_frac=cx_frac, cy_frac=cy_frac)],
+            extra_images=[
+                branch_context_png(marked, cx_frac=cx_frac, cy_frac=cy_frac),
+                below_valve_png(crop_path, half=crop_half, extra_below=extra_below),
+            ],
         )
-        if confirm in ("FLS", "SMP"):
+        if confirm in ("FLS", "SMP", "DRN"):
             att = confirm
+        else:
+            att = ""
 
     return att
 
@@ -899,25 +1106,209 @@ def _bedrock_client(region: str):
         return client
 
 
+def _normalize_body_type(body: str) -> str:
+    """Resolve mutually exclusive body tokens after vision parse."""
+    tokens = [t for t in str(body or "").upper().split() if t in ALLOWED_VALVE_TOKENS]
+    if "CHK" in tokens:
+        tokens = [t for t in tokens if t not in {"NC", "HV", "NO"}]
+    elif "NC" in tokens:
+        tokens = [t for t in tokens if t not in {"HV", "NO"}]
+    elif "HV" in tokens:
+        tokens = [t for t in tokens if t != "NO"]
+    return apply_sop_valve_type(" ".join(tokens))
+
+
+_JSON_RETRY_PROMPT = """\
+Respond with ONLY a JSON object — no other text.
+Format: {{"type": "NC", "attachment": "FLS"}}
+Classify valve {TAG} from the images. type = NC|HV|AV|AV-M|CHK|PRV|SV|NO. attachment = DRN|FLS|SMP|none.
+"""
+
+_HV_CONFIRM_PROMPT = """\
+Respond with ONLY a JSON object: {{"type": "HV", "attachment": "none"}} or {{"type": "AV", "attachment": "none"}}
+Valve {TAG}. Is there a CIRCLE on the stem directly attached to the bowtie centre?
+Plain text (AT, HP) or distant instruments do NOT count. No circle on stem → HV.
+"""
+
+
+def _bedrock_short_ask(
+    prompt: str,
+    marked: Path,
+    *,
+    model_id: str,
+    region: str,
+    max_tokens: int = 80,
+    extra_images: Optional[List[bytes]] = None,
+) -> str:
+    client = _bedrock_client(region)
+    content: List[Dict[str, Any]] = [
+        {"text": prompt},
+        {"image": {"format": "png", "source": {"bytes": marked.read_bytes()}}},
+    ]
+    for img in extra_images or []:
+        content.append({"image": {"format": "png", "source": {"bytes": img}}})
+    response = client.converse(
+        modelId=model_id,
+        messages=[{"role": "user", "content": content}],
+        inferenceConfig={"maxTokens": max_tokens, "temperature": 0},
+    )
+    parts = [
+        b["text"]
+        for b in response.get("output", {}).get("message", {}).get("content", [])
+        if "text" in b
+    ]
+    return "\n".join(parts).strip()
+
+
+_PLAIN_NUMERIC_TAG_RE = re.compile(r"^\d{2}-\d{2}-\d+$", re.I)
+
+
+_FILL_CONFIRM_PROMPT = """\
+Respond with ONLY a JSON object: {{"type": "NC", "attachment": "none"}} or {{"type": "HV", "attachment": "none"}}
+Valve {TAG}: follow the leader/tag line from label "{TAG}" to the bowtie it connects to.
+Classify ONLY that bowtie — ignore other nearby bowties.
+BOTH triangles solid white fill → NC. BOTH triangles outline-only (dark interior) → HV.
+"""
+
+
+_BODY_FILL_CONFIRM = """\
+Respond with ONLY a JSON object: {{"type": "NC", "attachment": "none"}} or {{"type": "HV", "attachment": "none"}} or {{"type": "CHK", "attachment": "none"}}
+Valve {TAG} bowtie only: BOTH triangles solid white → NC. BOTH outline (dark interior) → HV.
+EXACTLY one filled + one outline → CHK.
+"""
+
+
+def _refine_drain_body_fill(
+    result: str,
+    *,
+    tag: str,
+    marked: Path,
+    crop_path: Path,
+    model_id: str,
+    region: str,
+    cx_frac: float,
+    cy_frac: float,
+) -> str:
+    """Re-check bowtie fill on drain valves often misread as CHK or HV."""
+    tokens = str(result or "").upper().split()
+    if "DRN" not in tokens:
+        return result
+    body_tokens = [t for t in tokens if t in {"NC", "HV", "CHK", "NO"}]
+    if not body_tokens or body_tokens[0] == "NC":
+        return result
+    raw = _bedrock_short_ask(
+        _BODY_FILL_CONFIRM.replace("{TAG}", tag),
+        marked,
+        model_id=model_id,
+        region=region,
+        extra_images=[body_zoom_png(crop_path, cx_frac=cx_frac, cy_frac=cy_frac)],
+    )
+    fixed = _parse_one_pass(raw)
+    if not fixed:
+        return result
+    new_body = strip_attachment_tokens(fixed).split()[0]
+    attach = [t for t in tokens if t in _EXCLUSIVE_ATTACHMENTS]
+    return merge_body_and_attachment(new_body, attach[0] if attach else "")
+
+
+def _normalize_drain_hand_body(result: str) -> str:
+    """Hand drain valves on this P&ID are normally closed (NC), not CHK/HV."""
+    tokens = str(result or "").upper().split()
+    if "DRN" not in tokens or "AV" in tokens or "AV-M" in tokens or "NC" in tokens:
+        return result
+    if "CHK" in tokens or "HV" in tokens:
+        attach = [t for t in tokens if t in _EXCLUSIVE_ATTACHMENTS] or ["DRN"]
+        return merge_body_and_attachment("NC", attach[0])
+    return result
+
+
+def _confirm_hv_not_false_av(
+    result: str,
+    *,
+    tag: str,
+    marked: Path,
+    model_id: str,
+    region: str,
+) -> str:
+    """Plain numeric tags (35-24-230) are usually HV unless a circle sits on the stem."""
+    tokens = str(result or "").upper().split()
+    if "AV" not in tokens or "AV-M" in tokens:
+        return result
+    if not _PLAIN_NUMERIC_TAG_RE.match(_norm_tag(tag)):
+        return result
+    raw = _bedrock_short_ask(
+        _HV_CONFIRM_PROMPT.replace("{TAG}", tag),
+        marked,
+        model_id=model_id,
+        region=region,
+    )
+    fixed = _parse_one_pass(raw)
+    return fixed if fixed else result
+
+
+def _confirm_nc_vs_hv(
+    result: str,
+    *,
+    tag: str,
+    marked: Path,
+    crop_path: Path,
+    model_id: str,
+    region: str,
+    cx_frac: float,
+    cy_frac: float,
+    pipe_dn_near: bool = False,
+) -> str:
+    """Re-check fill when plain numeric tag gets NC vs HV wrong."""
+    tokens = str(result or "").upper().split()
+    if not _PLAIN_NUMERIC_TAG_RE.match(_norm_tag(tag)):
+        return result
+    if not tokens or tokens[0] != "NC":
+        return result
+    if any(t in tokens for t in ("AV", "AV-M", "DRN", "FLS", "SMP")):
+        return result
+    if pipe_dn_near:
+        return result
+    hv_votes = 0
+    for _ in range(2):
+        raw = _bedrock_short_ask(
+            _FILL_CONFIRM_PROMPT.replace("{TAG}", tag),
+            marked,
+            model_id=model_id,
+            region=region,
+            extra_images=[
+                zoom_center_png(crop_path, frac=0.20, cx_frac=cx_frac, cy_frac=cy_frac),
+            ],
+        )
+        fixed = _parse_one_pass(raw)
+        if fixed and strip_attachment_tokens(fixed).split()[0] == "HV":
+            hv_votes += 1
+    if hv_votes < 2:
+        return result
+    attach = [t for t in tokens if t in _EXCLUSIVE_ATTACHMENTS]
+    return merge_body_and_attachment("HV", attach[0] if attach else "")
+
+
 def _parse_one_pass(raw: str) -> str:
     """Parse {"type": "NC", "attachment": "DRN"} → "NC DRN"."""
     text = re.sub(r"^```(?:json)?\s*|\s*```$", "", raw.strip())
+    obj = None
     try:
         obj = json.loads(text)
-        if isinstance(obj, dict):
-            body = strip_attachment_tokens(parse_type_tokens(str(obj.get("type") or "")))
-            att_raw = str(obj.get("attachment") or "none").upper().strip()
-            attachment = att_raw if att_raw in _EXCLUSIVE_ATTACHMENTS else ""
-            if "AV" in body.split() or "AV-M" in body.split():
-                return body
-            return merge_body_and_attachment(body, attachment)
     except Exception:
-        pass
+        m = re.search(r"\{[^{}]*\"type\"[^{}]*\"attachment\"[^{}]*\}", text, re.I | re.S)
+        if m:
+            try:
+                obj = json.loads(m.group(0))
+            except Exception:
+                pass
+    if isinstance(obj, dict):
+        body = _normalize_body_type(strip_attachment_tokens(parse_type_tokens(str(obj.get("type") or ""))))
+        att_raw = str(obj.get("attachment") or "none").upper().strip()
+        attachment = att_raw if att_raw in _EXCLUSIVE_ATTACHMENTS else ""
+        return merge_body_and_attachment(body, attachment)
     # Fallback: extract tokens from raw text
-    body = strip_attachment_tokens(parse_type_tokens(raw))
+    body = _normalize_body_type(strip_attachment_tokens(parse_type_tokens(raw)))
     attachment = parse_attachment_response(raw)
-    if body and ("AV" in body.split() or "AV-M" in body.split()):
-        return body
     return merge_body_and_attachment(body, attachment) if body else ""
 
 
@@ -932,6 +1323,7 @@ def bedrock_classify_crop(
     cy_frac: float = 0.5,
     crop_half: float = 42.0,
     extra_below: float = 60.0,
+    pipe_dn_near: bool = False,
 ) -> str:
     """Single Bedrock call: body + attachment classified together from 5 images."""
     global _legend_bytes
@@ -964,10 +1356,97 @@ def bedrock_classify_crop(
     response = client.converse(
         modelId=model_id,
         messages=[{"role": "user", "content": content}],
-        inferenceConfig={"maxTokens": 200, "temperature": 0},
+        inferenceConfig={"maxTokens": 256, "temperature": 0},
     )
     parts = [b["text"] for b in response.get("output", {}).get("message", {}).get("content", []) if "text" in b]
-    return _parse_one_pass("\n".join(parts).strip())
+    raw = "\n".join(parts).strip()
+    result = _parse_one_pass(raw)
+    if not result:
+        retry_raw = _bedrock_short_ask(
+            _JSON_RETRY_PROMPT.replace("{TAG}", tag or crop_path.stem),
+            marked,
+            model_id=model_id,
+            region=region,
+            max_tokens=100,
+        )
+        result = _parse_one_pass(retry_raw)
+    if result:
+        result_tokens = set(result.split())
+        body_only = strip_attachment_tokens(result)
+        if "SMP" in result_tokens:
+            att = refine_attachment(
+                "SMP",
+                tag=tag or crop_path.stem,
+                marked=marked,
+                crop_path=crop_path,
+                model_id=model_id,
+                region=region,
+                cx_frac=cx_frac,
+                cy_frac=cy_frac,
+                crop_half=crop_half,
+                extra_below=extra_below,
+                body=body_only,
+            )
+            result = merge_body_and_attachment(body_only, att)
+        elif "FLS" in result_tokens and "DRN" not in result_tokens:
+            att = _bedrock_attachment_ask(
+                FLS_FLUSH_RETRY_PROMPT.replace("{TAG}", tag or crop_path.stem),
+                marked,
+                model_id=model_id,
+                region=region,
+                extra_images=[
+                    branch_context_png(marked, cx_frac=cx_frac, cy_frac=cy_frac),
+                    below_valve_png(crop_path, half=crop_half, extra_below=extra_below),
+                ],
+            )
+            if att == "DRN":
+                result = merge_body_and_attachment(body_only, "DRN")
+            elif att != "FLS":
+                result = merge_body_and_attachment(body_only, att)
+        elif "DRN" not in result_tokens and "FLS" not in result_tokens:
+            att = refine_attachment(
+                "",
+                tag=tag or crop_path.stem,
+                marked=marked,
+                crop_path=crop_path,
+                model_id=model_id,
+                region=region,
+                cx_frac=cx_frac,
+                cy_frac=cy_frac,
+                crop_half=crop_half,
+                extra_below=extra_below,
+                body=body_only,
+            )
+            if att:
+                result = merge_body_and_attachment(body_only, att)
+    return _normalize_drain_hand_body(
+        _confirm_nc_vs_hv(
+            _refine_drain_body_fill(
+                _confirm_hv_not_false_av(
+                    result,
+                    tag=tag or crop_path.stem,
+                    marked=marked,
+                    model_id=model_id,
+                    region=region,
+                ),
+                tag=tag or crop_path.stem,
+                marked=marked,
+                crop_path=crop_path,
+                model_id=model_id,
+                region=region,
+                cx_frac=cx_frac,
+                cy_frac=cy_frac,
+            ),
+            tag=tag or crop_path.stem,
+            marked=marked,
+            crop_path=crop_path,
+            model_id=model_id,
+            region=region,
+            cx_frac=cx_frac,
+            cy_frac=cy_frac,
+            pipe_dn_near=pipe_dn_near,
+        )
+    )
 
 
 def hierarchy_valve_rows(hierarchy_rows: List[Dict[str, str]]) -> List[Dict[str, str]]:
@@ -1083,14 +1562,32 @@ def main() -> int:
 
     text_locations = collect_text_locations(structural)
     valve_inserts = collect_valve_inserts(structural)
+    symb_inserts = collect_symb_bowtie_inserts(structural)
     drain_markers = collect_drain_markers(structural)
     functions = collect_functions(inventory)
     cache = load_valve_cache(cache_path) if args.skip_existing else {}
 
     candidates = hierarchy_valve_rows(hierarchy_rows)
     located: List[Dict[str, Any]] = []
+    wfl_tags = {
+        _norm_tag(str(fn.get("function") or ""))
+        for fn in (inventory.get("functions") or [])
+        if isinstance(fn, dict) and _WFL_LINE_RE.search(
+            " ".join(
+                str(fn.get(k) or "")
+                for k in ("description", "nearby_descriptions", "line_number", "kind")
+            )
+        )
+    }
     for rec in candidates:
-        loc = locate_valve(rec["tag"], text_locations=text_locations, valve_inserts=valve_inserts)
+        tag = rec["tag"]
+        loc = locate_valve(
+            tag,
+            text_locations=text_locations,
+            valve_inserts=valve_inserts,
+            symb_inserts=symb_inserts,
+            wfl_drain_hint=_norm_tag(tag) in wfl_tags,
+        )
         if loc is None:
             continue
         desc = rec.get("description") or ""
@@ -1172,7 +1669,7 @@ def main() -> int:
                 return loc["tag"], ""
             _log(f"  [vision] start {loc['tag']}")
             try:
-                return loc["tag"], bedrock_classify_crop(
+                vtype = bedrock_classify_crop(
                     crop,
                     legend_path,
                     model_id=args.model_id,
@@ -1182,6 +1679,11 @@ def main() -> int:
                     cy_frac=cy_frac,
                     crop_half=float(args.crop_half),
                     extra_below=extra_below,
+                    pipe_dn_near=pipe_dn_label_near_tag(loc["tag"], text_locations, structural),
+                )
+                return loc["tag"], apply_wfl_drain_attachment(
+                    vtype,
+                    wfl_drain_hint=_norm_tag(loc["tag"]) in wfl_tags,
                 )
             except Exception as exc:
                 _log(f"  [warn] Bedrock failed for {loc['tag']}: {exc}")

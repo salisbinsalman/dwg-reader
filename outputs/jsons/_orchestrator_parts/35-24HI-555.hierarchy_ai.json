@@ -1,0 +1,128 @@
+{
+  "input": "/Users/code-huddle-ensemble/Desktop/dwg-reader/inputs/Broke System.dwg",
+  "mode": "viewer_shot_ai_gt",
+  "evidence_dir": "/Users/code-huddle-ensemble/Desktop/dwg-reader/outputs/evidence",
+  "site": "Shotton Paper Mill, United Kingdom",
+  "line": "Shotton PM3",
+  "process": "Broke System",
+  "sub_process": "BR1",
+  "model_id": "eu.anthropic.claude-sonnet-4-6",
+  "region": "eu-west-2",
+  "prompt_file": "pid_hierarchy_gt_v7_floc.md",
+  "legend": "/Users/code-huddle-ensemble/Desktop/dwg-reader/inputs/legend.png",
+  "results": [
+    {
+      "tag": "35-24HI-555",
+      "shot": "/Users/code-huddle-ensemble/Desktop/dwg-reader/outputs/evidence/Broke System.viewer_35-24HI-555.png",
+      "parent": {
+        "category": "instruments",
+        "block_name": "",
+        "handle": "",
+        "layer": "P-INSTRPOS_TEXTS",
+        "x": 1846.307140473807,
+        "y": 401.0416666666666,
+        "resolved_tag": "35-24HI-555",
+        "nearby_tags": "HI; 555; 35-24",
+        "nearby_descriptions": "HI 555 (35-24)",
+        "confidence": "high"
+      },
+      "candidates": [
+        "35-24",
+        "35-24HI-555",
+        "35-24L006",
+        "35-24P507",
+        "35-24HV-548",
+        "35-24L005",
+        "35-24-051",
+        "35-24-232",
+        "35-24-049",
+        "35-24-233",
+        "35-24-140",
+        "35-24-228",
+        "35-24FV-696",
+        "35-24-137",
+        "35-24P520",
+        "35-24-141",
+        "35-24-222",
+        "35-24-046",
+        "35-24-223",
+        "35-24-1131",
+        "35-24-044",
+        "35-24P506"
+      ],
+      "dossier": "Parent tag: 35-24HI-555\nParent category/block: instruments / \nParent XY: (1846.307140473807, 401.0416666666666)\nNearby descriptions: HI 555 (35-24)\n\nSame-tag CAD family:\n- (none)\n\nNearby line numbers (short ids preferred in output):\n- 35-24-051  full=35-24-051-PP-100-E10H2A  d=149  layer=P-LINEPOS\n- 35-24-049  full=35-24-049-PP-800-E10H2A  d=156  layer=P-LINEPOS\n\nNearby devices (valves/instruments/pumps/\u2026):\n- line_markers: PPI_1100A  d=157  block=PPI_1100A\n- valves: PPI_0900A  d=169  block=PPI_0900A\n- control_valves: PPI_1000A  d=135  block=PPI_1000A\n- instruments: PPI_0100X  d=176  block=PPI_0100X\n- pumps: PPI_0521A-25_0  d=176  block=PPI_0521A-25_0\n- fittings: P7A1220  d=148  block=P7A1220\n\nNearby peer primary equipment (do NOT nest under parent):\n- 35-24L005 (process_equipment, d=184)\n- 35-24L006 (process_equipment, d=117)\n- 35-24P507 (pumps, d=176)\n\nNearby drawing text tokens:\n- S3  d=141  layer=P-TEXT\n- S2  d=128  layer=P-TEXT\n- A1  d=198  layer=P-TEXT\n- S4  d=143  layer=P-TEXT\n- 2 bar  d=132  layer=P-TEXT\n- S1/ST1  d=107  layer=P-TEXT\n- 35-24  d=17  layer=P-INSTRPOS_TEXTS\n- SHOWER S1  d=12  layer=P-TEXT\n- 35-24L006  d=120  layer=P-EQUIPMENT_POS\n- BROKE CONVEYOR 3  d=128  layer=P-EQUIPMENT_POS\n- 35-24L005  d=182  layer=P-EQUIPMENT_POS\n- HP-63G2  d=195  layer=P-EQUIPMENT_POS\n- 541  d=121  layer=P-INSTRPOS_TEXTS\n- 548  d=137  layer=P-INSTRPOS_TEXTS\n- 544  d=118  layer=P-INSTRPOS_TEXTS\n- 543  d=119  layer=P-INSTRPOS_TEXTS\n- 542  d=43  layer=P-INSTRPOS_TEXTS\n- 552  d=18  layer=P-INSTRPOS_TEXTS\n- 555  d=4  layer=P-INSTRPOS_TEXTS\n- 653  d=53  layer=P-INSTRPOS_TEXTS\n- 652  d=49  layer=P-INSTRPOS_TEXTS\n- 534  d=94  layer=P-INSTRPOS_TEXTS\n- 696  d=168  layer=P-INSTRPOS_TEXTS\n- 35-24P507  d=181  layer=P-PUMP_POS\n- 20  d=185  layer=P-PUMP_POS\n- 10  d=188  layer=P-PUMP_POS\n- 4  d=190  layer=P-PUMP_POS\n- 1500  d=192  layer=P-PUMP_POS\n- 35-24-232  d=151  layer=P-VALVEPOS\n- 001-80  d=153  layer=P-VALVEPOS\n- 35-24-233  d=158  layer=P-VALVEPOS\n- 35-24-228  d=182  layer=P-VALVEPOS\n- 350-500  d=185  layer=P-VALVEPOS\n- 35-24-140  d=172  layer=P-VALVEPOS\n- 350-300  d=175  layer=P-VALVEPOS\n- 35-24-137  d=197  layer=P-VALVEPOS\n- 35-24-051  d=149  layer=P-LINEPOS\n- 35-24-049  d=156  layer=P-LINEPOS\n- 35-24FV-696  d=182  layer=P-CVPOS\n- 80  d=180  layer=P-CVPOS",
+      "ai": {
+        "raw_text": "Looking at the P&ID image, I can see that **35-24HI-555** is a Hand Indicator (HI) instrument located on a LOCAL PANEL, labeled \"REEL PULPER SHOWER S1\". It appears as a square instrument bubble (local control panel instrument per the legend) with number 555, paired with an HS (Hand Switch) above it.\n\nThe instrument is part of a local panel cluster showing multiple shower controls (S1, S2, S3, S4, ST1). The HI-555 is specifically labeled \"REEL PULPER SHOWER S1\" and sits alongside 35-24HS (the HS above it shares the same 35-24 prefix area).\n\nPer the rules: **35-24HI-555 is an instrument tag** (HI = Hand Indicator). It has no labelled accessories or sub-instruments sitting on it \u2014 it is a standalone indicator on the local panel. The correct output is the FUNCTION header + description only, with empty rows.\n\nThe nearby HS instrument visible above HI-555 would be 35-24HS-555 (same numeric base), but it is not listed in the candidate tags, so I cannot confirm it. The dossier shows no same-tag CAD family entries.\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24HI-555\",\n  \"description\": \"35-24HI-555 REEL PLPR SHW S1 IND\",\n  \"rows\": [],\n  \"peers\": [\n    {\"tag\": \"35-24L005\", \"evidence\": \"peer process equipment visible in crop, different numeric base\"},\n    {\"tag\": \"35-24L006\", \"evidence\": \"peer process equipment BROKE CONVEYOR 3, different numeric base\"},\n    {\"tag\": \"35-24P507\", \"evidence\": \"peer pump, different numeric base\"},\n    {\"tag\": \"35-24FV-696\", \"evidence\": \"control valve on separate circuit, different numeric base\"},\n    {\"tag\": \"35-24-051\", \"evidence\": \"nearby pipe line, not directly attached to HI instrument\"},\n    {\"tag\": \"35-24-049\", \"evidence\": \"nearby pipe line, not directly attached to HI instrument\"}\n  ],\n  \"notes\": [\n    \"35-24HI-555 is a local panel hand indicator for Reel Pulper Shower S1\",\n    \"Instrument sits in a local panel cluster with HS/HI pairs for showers S1/S2/S3/S4/ST1\",\n    \"No sub-instruments or accessories labelled on this tag; rows left empty per rule\",\n    \"Companion HS above HI-555 not in candidate tag list; cannot confirm tag number\"\n  ],\n  \"confidence\": \"high\"\n}\n```",
+        "parsed": {
+          "sub_process": "BR1",
+          "function": "35-24HI-555",
+          "description": "35-24HI-555 REEL PLPR SHW S1 IND",
+          "rows": [],
+          "peers": [
+            {
+              "tag": "35-24L005",
+              "evidence": "peer process equipment visible in crop, different numeric base"
+            },
+            {
+              "tag": "35-24L006",
+              "evidence": "peer process equipment BROKE CONVEYOR 3, different numeric base"
+            },
+            {
+              "tag": "35-24P507",
+              "evidence": "peer pump, different numeric base"
+            },
+            {
+              "tag": "35-24FV-696",
+              "evidence": "control valve on separate circuit, different numeric base"
+            },
+            {
+              "tag": "35-24-051",
+              "evidence": "nearby pipe line, not directly attached to HI instrument"
+            },
+            {
+              "tag": "35-24-049",
+              "evidence": "nearby pipe line, not directly attached to HI instrument"
+            }
+          ],
+          "notes": [
+            "35-24HI-555 is a local panel hand indicator for Reel Pulper Shower S1",
+            "Instrument sits in a local panel cluster with HS/HI pairs for showers S1/S2/S3/S4/ST1",
+            "No sub-instruments or accessories labelled on this tag; rows left empty per rule",
+            "Companion HS above HI-555 not in candidate tag list; cannot confirm tag number"
+          ],
+          "confidence": "high"
+        },
+        "model_id": "eu.anthropic.claude-sonnet-4-6",
+        "region": "eu-west-2",
+        "prompt_file": "pid_hierarchy_gt_v7_floc.md",
+        "candidates": [
+          "35-24",
+          "35-24HI-555",
+          "35-24L006",
+          "35-24P507",
+          "35-24HV-548",
+          "35-24L005",
+          "35-24-051",
+          "35-24-232",
+          "35-24-049",
+          "35-24-233",
+          "35-24-140",
+          "35-24-228",
+          "35-24FV-696",
+          "35-24-137",
+          "35-24P520",
+          "35-24-141",
+          "35-24-222",
+          "35-24-046",
+          "35-24-223",
+          "35-24-1131",
+          "35-24-044",
+          "35-24P506"
+        ],
+        "prompt_chars": 9744,
+        "vision": true
+      },
+      "refined_rows": []
+    }
+  ]
+}

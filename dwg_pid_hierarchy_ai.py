@@ -44,7 +44,7 @@ from dwg_pure_dump import (
     write_json,
 )
 
-HIERARCHY_PROMPT_FILE = "pid_hierarchy_gt_v7_floc.md"
+HIERARCHY_PROMPT_FILE = "pid_hierarchy_gt_v8.md"
 DEFAULT_MODEL_ID = "eu.anthropic.claude-sonnet-4-6"
 LEGEND_PATH = Path("inputs/legend.png")
 
@@ -1068,12 +1068,13 @@ def nearby_line_seeds(
             if isinstance(pos, (list, tuple)) and len(pos) >= 2:
                 add(ent.get("text"), pos[0], pos[1], weight=1.1)
 
-    # Branch / local point conventions for this parent equipment
+    # Branch / local point conventions for this parent equipment.
+    # .1/.2 = gearbox unit / main motor; .3/.4 = oil-pump sub-motors under the gearbox.
     want = normalize_tag(parent_tag)
     m = re.match(r"^(\d{2}-\d{2})([A-Z]+)(\d+)$", want)
     if m:
         area, letters, num = m.group(1), m.group(2), m.group(3)
-        for suffix in (".1", ".2"):
+        for suffix in (".1", ".2", ".3", ".4"):
             for cand in (f"{want}{suffix}", f"{area}-{num}{suffix}"):
                 seeds.setdefault(canonicalize_vision_tag(cand), 5.0)
 
@@ -1089,11 +1090,15 @@ def refine_ai_hierarchy(
     structural: Optional[Dict[str, Any]],
     peer_tags: Optional[List[str]] = None,
     raw_text: str = "",
+    candidates: Optional[List[str]] = None,
 ) -> Dict[str, Any]:
     """Filter noise, drop peers, merge high-value CAD line seeds."""
     want = normalize_tag(tag)
     peers = {normalize_tag(p) for p in (peer_tags or []) if p}
     peers.discard(want)
+    # Tags confirmed by CAD data can bypass the prefix filter (covers cross-plant refs
+    # like 53-24LC-621 that are legitimately owned by a 35-24 function in the GT).
+    cad_confirmed = {normalize_tag(c) for c in (candidates or []) if c}
     refined_rows: List[Dict[str, str]] = []
     seen = set()
     raw_compact = re.sub(r"\s+", "", (raw_text or "")).upper()
@@ -1102,7 +1107,11 @@ def refine_ai_hierarchy(
         eq = canonicalize_vision_tag(equipment) if equipment else ""
         sub = canonicalize_vision_tag(subequipment) if subequipment else ""
         for tok in (eq, sub):
-            if tok and (tok in peers or not is_plausible_hierarchy_tag(tok, want)):
+            if not tok:
+                continue
+            if tok in peers:
+                return
+            if tok not in cad_confirmed and not is_plausible_hierarchy_tag(tok, want):
                 return
         key = (eq, sub)
         if key in seen or (not eq and not sub):
@@ -1524,6 +1533,7 @@ def main() -> int:
             structural=structural,
             peer_tags=peer_tags,
             raw_text=str(ai.get("raw_text") or ""),
+            candidates=candidates,
         )
         function_payloads.append(
             {

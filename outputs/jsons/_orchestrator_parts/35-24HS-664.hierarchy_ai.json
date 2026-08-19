@@ -1,0 +1,160 @@
+{
+  "input": "/Users/code-huddle-ensemble/Desktop/dwg-reader/inputs/Broke System.dwg",
+  "mode": "viewer_shot_ai_gt",
+  "evidence_dir": "/Users/code-huddle-ensemble/Desktop/dwg-reader/outputs/evidence",
+  "site": "Shotton Paper Mill, United Kingdom",
+  "line": "Shotton PM3",
+  "process": "Broke System",
+  "sub_process": "BR1",
+  "model_id": "eu.anthropic.claude-sonnet-4-6",
+  "region": "eu-west-2",
+  "prompt_file": "pid_hierarchy_gt_v7_floc.md",
+  "legend": "/Users/code-huddle-ensemble/Desktop/dwg-reader/inputs/legend.png",
+  "results": [
+    {
+      "tag": "35-24HS-664",
+      "shot": "/Users/code-huddle-ensemble/Desktop/dwg-reader/outputs/evidence/Broke System.viewer_35-24HS-664.png",
+      "parent": {
+        "category": "instruments",
+        "block_name": "",
+        "handle": "",
+        "layer": "P-INSTRPOS_TEXTS",
+        "x": 3843.270232732733,
+        "y": 408.5875,
+        "resolved_tag": "35-24HS-664",
+        "nearby_tags": "HS; 664; 35-24",
+        "nearby_descriptions": "HS 664 (35-24)",
+        "confidence": "high"
+      },
+      "candidates": [
+        "35-24",
+        "35-24HS-664",
+        "35-24T601",
+        "35-24-079",
+        "35-24-118",
+        "35-24P502",
+        "35-24-1101",
+        "35-24-119",
+        "35-24P501",
+        "35-24-072",
+        "35-24-1125",
+        "35-24-120",
+        "35-24-1138",
+        "35-24LV3-609",
+        "35-24L401",
+        "35-24L403",
+        "35-24-126",
+        "35-24-074",
+        "35-24LV2-609",
+        "35-24-078",
+        "35-24-075",
+        "35-24-235",
+        "35-24-113",
+        "35-24-117",
+        "35-24LV1-609",
+        "35-24-065"
+      ],
+      "dossier": "Parent tag: 35-24HS-664\nParent category/block: instruments / \nParent XY: (3843.270232732733, 408.5875)\nNearby descriptions: HS 664 (35-24)\n\nSame-tag CAD family:\n- (none)\n\nNearby line numbers (short ids preferred in output):\n- 35-24-126  full=35-24-126-PP-200-E10H2A  d=176  layer=P-LINEPOS\n- 35-24-117  full=35-24-117-PP-250-E10H2A  d=200  layer=P-LINEPOS\n- 35-24-113  full=35-24-113-PP-800-E10H2A  d=192  layer=P-LINEPOS\n- 35-24-119  full=35-24-119-PP-300-E10H2A  d=143  layer=P-LINEPOS\n- 35-24-120  full=35-24-120-PP-900-E10H2A  d=158  layer=P-LINEPOS\n- 35-24-118  full=35-24-118-PP-200-E10H2A  d=128  layer=P-LINEPOS\n\nNearby devices (valves/instruments/pumps/\u2026):\n- line_markers: PPI_1100A  d=129  block=PPI_1100A\n- valves: PPI_0900A  d=125  block=PPI_0900A\n- control_valves: PPI_1000A  d=189  block=PPI_1000A\n- instruments: PPI_1204A  d=179  block=PPI_1204A\n- pumps: P7A0200  d=147  block=P7A0200\n\nNearby peer primary equipment (do NOT nest under parent):\n- 35-24T601 (tanks, d=156)\n- 35-24L403 (agitators, d=196)\n- 35-24P502 (pumps, d=147)\n- 35-24P501 (pumps, d=165)\n\nNearby drawing text tokens:\n- S1  d=118  layer=P-TEXT\n- A1  d=163  layer=P-TEXT\n- A2  d=148  layer=P-TEXT\n- 2 bar  d=126  layer=P-TEXT\n- 2621 ADTPD  d=177  layer=P-TEXT\n- SFVPT-110-2  d=181  layer=P-TEXT\n- 35-24L403  d=197  layer=P-AGITATOR_POS\n- 600  d=65  layer=P-INSTRPOS_TEXTS\n- 35-24  d=54  layer=P-INSTRPOS_TEXTS\n- 601  d=78  layer=P-INSTRPOS_TEXTS\n- 603  d=105  layer=P-INSTRPOS_TEXTS\n- 602  d=91  layer=P-INSTRPOS_TEXTS\n- 609  d=180  layer=P-INSTRPOS_TEXTS\n- 597  d=40  layer=P-INSTRPOS_TEXTS\n- SHOWER S1  d=50  layer=P-TEXT\n- 664  d=4  layer=P-INSTRPOS_TEXTS\n- 35-24T601  d=157  layer=P-TANK_POS\n- 176 m\u00b3  d=170  layer=P-TANK_POS\n- 2,8 %  d=175  layer=P-TANK_POS\n- 35-24-1125  d=155  layer=P-VALVEPOS\n- 001-80  d=159  layer=P-VALVEPOS\n- 35-24-079  d=125  layer=P-VALVEPOS\n- 350-200  d=130  layer=P-VALVEPOS\n- 35-24-078  d=186  layer=P-VALVEPOS\n- 350-250  d=191  layer=P-VALVEPOS\n- 35-24-1101  d=142  layer=P-VALVEPOS\n- 003-50  d=146  layer=P-VALVEPOS\n- 35-24-075  d=187  layer=P-VALVEPOS\n- 35-24-074  d=177  layer=P-VALVEPOS\n- 35-24-072  d=153  layer=P-VALVEPOS\n- 003-15  d=159  layer=P-VALVEPOS\n- 35-24-1138  d=165  layer=P-VALVEPOS\n- 35-24-235  d=188  layer=P-VALVEPOS\n- 350-500  d=193  layer=P-VALVEPOS\n- 35-24-126  d=176  layer=P-LINEPOS\n- 35-24-117  d=200  layer=P-LINEPOS\n- 35-24-113  d=192  layer=P-LINEPOS\n- 35-24-119  d=143  layer=P-LINEPOS\n- 35-24-120  d=158  layer=P-LINEPOS\n- 35-24-118  d=128  layer=P-LINEPOS",
+      "ai": {
+        "raw_text": "Looking at the P&ID image, I can see that **35-24HS-664** is a hand switch (HS) instrument located on a **LOCAL PANEL**, labeled \"COUCH PIT START/STOP\". It appears alongside **35-24HI-597** (COUCH PIT SHOWER S1) on the same local panel.\n\nThe instrument symbol shows a square (local control panel instrument per legend) with \"HS 664\" and \"35-24\" labels. This is a standalone instrument \u2014 a hand switch for start/stop control of the couch pit shower S1.\n\nLooking at the image:\n- The local panel contains: 35-24HS-664 (COUCH PIT START/STOP) and 35-24HI-597 (COUCH PIT SHOWER S1)\n- There's also a separate HS symbol above labeled \"35-24\" with \"HS\" \u2014 this appears to be the same instrument or a related one\n- No pipe lines, valves, or sub-instruments are directly attached to HS-664 itself\n- The nearby instruments (XS-600, ES-601, KJ-602, KJ-603) are peer instruments on the same panel area\n\nPer Rule 12 and the instrument-only FUNCTION guidance: since 35-24HS-664 is a pure instrument with no labelled accessories sitting on it, the correct output is the FUNCTION header + description only \u2014 empty `rows` is correct.\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24HS-664\",\n  \"description\": \"35-24HS-664 COUCH PIT START STOP\",\n  \"rows\": [],\n  \"peers\": [\n    {\"tag\": \"35-24HI-597\", \"evidence\": \"Peer instrument on same local panel - COUCH PIT SHOWER S1 indicator\"},\n    {\"tag\": \"35-24XS-600\", \"evidence\": \"Peer MCS signals instrument on same panel area\"},\n    {\"tag\": \"35-24ES-601\", \"evidence\": \"Peer UTM emergency stop instrument on same panel area\"},\n    {\"tag\": \"35-24KJ-602\", \"evidence\": \"Peer COUCH PIT START instrument on same panel area\"},\n    {\"tag\": \"35-24KJ-603\", \"evidence\": \"Peer COUCH PIT STOP instrument on same panel area\"},\n    {\"tag\": \"35-24T601\", \"evidence\": \"Peer major equipment - COUCH PIT tank, different equipment class\"},\n    {\"tag\": \"35-24P501\", \"evidence\": \"Peer pump visible in crop, different equipment class\"},\n    {\"tag\": \"35-24P502\", \"evidence\": \"Peer pump visible in crop, different equipment class\"},\n    {\"tag\": \"35-24L403\", \"evidence\": \"Peer agitator visible in crop, different equipment class\"},\n    {\"tag\": \"35-24LV3-609\", \"evidence\": \"Peer control valve on line 35-24-126, not child of HS instrument\"},\n    {\"tag\": \"35-24LV2-609\", \"evidence\": \"Peer control valve on downstream line, not child of HS instrument\"},\n    {\"tag\": \"35-24LV1-609\", \"evidence\": \"Peer control valve, not child of HS instrument\"}\n  ],\n  \"notes\": [\n    \"35-24HS-664 is a local panel hand switch for COUCH PIT START/STOP (shower S1 circuit)\",\n    \"Instrument only \u2014 no pipe lines, valves or sub-instruments nest under an HS tag\",\n    \"35-24HI-597 is co-located on same local panel but is a peer instrument, not a child\",\n    \"Empty rows is correct per rules for standalone instrument FUNCTION\"\n  ],\n  \"confidence\": \"high\"\n}\n```",
+        "parsed": {
+          "sub_process": "BR1",
+          "function": "35-24HS-664",
+          "description": "35-24HS-664 COUCH PIT START STOP",
+          "rows": [],
+          "peers": [
+            {
+              "tag": "35-24HI-597",
+              "evidence": "Peer instrument on same local panel - COUCH PIT SHOWER S1 indicator"
+            },
+            {
+              "tag": "35-24XS-600",
+              "evidence": "Peer MCS signals instrument on same panel area"
+            },
+            {
+              "tag": "35-24ES-601",
+              "evidence": "Peer UTM emergency stop instrument on same panel area"
+            },
+            {
+              "tag": "35-24KJ-602",
+              "evidence": "Peer COUCH PIT START instrument on same panel area"
+            },
+            {
+              "tag": "35-24KJ-603",
+              "evidence": "Peer COUCH PIT STOP instrument on same panel area"
+            },
+            {
+              "tag": "35-24T601",
+              "evidence": "Peer major equipment - COUCH PIT tank, different equipment class"
+            },
+            {
+              "tag": "35-24P501",
+              "evidence": "Peer pump visible in crop, different equipment class"
+            },
+            {
+              "tag": "35-24P502",
+              "evidence": "Peer pump visible in crop, different equipment class"
+            },
+            {
+              "tag": "35-24L403",
+              "evidence": "Peer agitator visible in crop, different equipment class"
+            },
+            {
+              "tag": "35-24LV3-609",
+              "evidence": "Peer control valve on line 35-24-126, not child of HS instrument"
+            },
+            {
+              "tag": "35-24LV2-609",
+              "evidence": "Peer control valve on downstream line, not child of HS instrument"
+            },
+            {
+              "tag": "35-24LV1-609",
+              "evidence": "Peer control valve, not child of HS instrument"
+            }
+          ],
+          "notes": [
+            "35-24HS-664 is a local panel hand switch for COUCH PIT START/STOP (shower S1 circuit)",
+            "Instrument only \u2014 no pipe lines, valves or sub-instruments nest under an HS tag",
+            "35-24HI-597 is co-located on same local panel but is a peer instrument, not a child",
+            "Empty rows is correct per rules for standalone instrument FUNCTION"
+          ],
+          "confidence": "high"
+        },
+        "model_id": "eu.anthropic.claude-sonnet-4-6",
+        "region": "eu-west-2",
+        "prompt_file": "pid_hierarchy_gt_v7_floc.md",
+        "candidates": [
+          "35-24",
+          "35-24HS-664",
+          "35-24T601",
+          "35-24-079",
+          "35-24-118",
+          "35-24P502",
+          "35-24-1101",
+          "35-24-119",
+          "35-24P501",
+          "35-24-072",
+          "35-24-1125",
+          "35-24-120",
+          "35-24-1138",
+          "35-24LV3-609",
+          "35-24L401",
+          "35-24L403",
+          "35-24-126",
+          "35-24-074",
+          "35-24LV2-609",
+          "35-24-078",
+          "35-24-075",
+          "35-24-235",
+          "35-24-113",
+          "35-24-117",
+          "35-24LV1-609",
+          "35-24-065"
+        ],
+        "prompt_chars": 10016,
+        "vision": true
+      },
+      "refined_rows": []
+    }
+  ]
+}

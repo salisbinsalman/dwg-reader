@@ -1,0 +1,19 @@
+ORDER,SITE,LINE,PROCESS,SUB-PROCESS,FUNCTION,EQUIPMENT,SUB-EQUIPMENT,MASK,DESCRIPTION
+1,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,,,5001-PM03-BR,BROKE SYSTEM
+2,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,BR1,,,,5001-PM03-BR-BR1,BROKE SYSTEM
+3,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,BR1,35-24-030,,,5001-PM03-BR-BR1-35-24-030,35-24-030 WAF 250 HEADER LN
+4,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,35-24-027,,,35-24-027 PP-250 BRANCH LN
+5,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,,35-24-1096,,35-24-1096 REDUCER 350-250
+6,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,35-24-029,,,35-24-029 PP-600 BRANCH LN
+7,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,35-24NV-519,,,35-24NV-519 ISOL VLV NC
+8,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,,35-24-156,,35-24-156 DRN BRANCH 003-50
+9,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,35-24-217,,,35-24-217 WAF-150 BRANCH
+10,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,,35-24HV-693,,35-24HV-693 ISOL VLV HV
+11,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,35-24-218,,,35-24-218 WAF-150 BRANCH
+12,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,,35-24HV-694,,35-24HV-694 ISOL VLV HV
+13,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,35-24-033,,,35-24-033 WAF-100 BRANCH
+14,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,,35-24KV-530,,35-24KV-530 ISOL VLV HV
+15,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,,35-24KS-530,,35-24KS-530 KEY SW
+16,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,35-24-034,,,35-24-034 WAF-150 BRANCH
+17,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,,35-24HV-532,,35-24HV-532 ISOL VLV HV
+18,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,35-24-030,,,35-24-030

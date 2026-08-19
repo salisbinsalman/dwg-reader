@@ -1,0 +1,140 @@
+{
+  "input": "/Users/code-huddle-ensemble/Desktop/dwg-reader/inputs/Broke System.dwg",
+  "mode": "viewer_shot_ai_gt",
+  "evidence_dir": "/Users/code-huddle-ensemble/Desktop/dwg-reader/outputs/evidence",
+  "site": "Shotton Paper Mill, United Kingdom",
+  "line": "Shotton PM3",
+  "process": "Broke System",
+  "sub_process": "BR1",
+  "model_id": "eu.anthropic.claude-sonnet-4-6",
+  "region": "eu-west-2",
+  "prompt_file": "pid_hierarchy_gt_v7_floc.md",
+  "legend": "/Users/code-huddle-ensemble/Desktop/dwg-reader/inputs/legend.png",
+  "results": [
+    {
+      "tag": "35-24-203",
+      "shot": "/Users/code-huddle-ensemble/Desktop/dwg-reader/outputs/evidence/Broke System.viewer_35-24-203.png",
+      "parent": {
+        "category": "lines",
+        "block_name": "",
+        "handle": "80C34",
+        "layer": "P-LINEPOS",
+        "x": 5909.53666998263,
+        "y": 58.8743776752417,
+        "resolved_tag": "35-24-203",
+        "nearby_tags": "35-24-203",
+        "nearby_descriptions": "35-24-203-WFL-15-E10H2A",
+        "confidence": "high"
+      },
+      "candidates": [
+        "35-24-203",
+        "35-24",
+        "35-24-224",
+        "35-24-143",
+        "35-24-182",
+        "35-24-180",
+        "35-24P517",
+        "35-24-176",
+        "35-24L407"
+      ],
+      "dossier": "Parent tag: 35-24-203\nParent category/block: lines / \nParent XY: (5909.53666998263, 58.8743776752417)\nNearby descriptions: 35-24-203-WFL-15-E10H2A\n\nSame-tag CAD family:\n- (none)\n\nNearby line numbers (short ids preferred in output):\n- 35-24-203  full=35-24-203-WFL-15-E10H2A  d=0  layer=P-LINEPOS\n- 35-24-224  full=35-24-224-WFL-15-E10H2A  d=78  layer=P-LINEPOS\n- 35-24-143  full=35-24-143-WAF-150-E10H2A  d=103  layer=P-LINEPOS\n- 35-24-182  full=35-24-182-WAF-100-E10H2A  d=132  layer=P-LINEPOS\n- 35-24-180  full=35-24-180-PSR-200-E10H2A  d=171  layer=P-LINEPOS\n- 35-25-072  full=35-25-072-WAF-350-E10H2A  d=100  layer=P-LINEPOS\n\nNearby devices (valves/instruments/pumps/\u2026):\n- line_markers: PPI_1100A  d=99  block=PPI_1100A\n- valves: PPI_0900A  d=72  block=PPI_0900A\n- instruments: PPI_1200A  d=102  block=PPI_1200A\n- fittings: P7A1210  d=97  block=P7A1210\n\nNearby peer primary equipment (do NOT nest under parent):\n- (none)\n\nNearby drawing text tokens:\n- 657  d=30  layer=P-INSTRPOS_TEXTS\n- 35-24  d=35  layer=P-INSTRPOS_TEXTS\n- 9332  d=36  layer=P-INSTRPOS_TEXTS\n- 656  d=73  layer=P-INSTRPOS_TEXTS\n- 9330  d=104  layer=P-INSTRPOS_TEXTS\n- 9331  d=94  layer=P-INSTRPOS_TEXTS\n- 9333  d=30  layer=P-INSTRPOS_TEXTS\n- HYDRAZINE, N2H4  d=197  layer=P-OTHER\n- SULPHURIC ACID, H2SO4  d=187  layer=P-OTHER\n- 35-24-224  d=79  layer=P-VALVEPOS\n- 003-15  d=75  layer=P-VALVEPOS\n- 35-24-203  d=20  layer=P-VALVEPOS\n- 35-24-143  d=103  layer=P-LINEPOS\n- 35-24-182  d=132  layer=P-LINEPOS\n- 35-24-180  d=171  layer=P-LINEPOS\n- 35-25-072  d=100  layer=P-LINEPOS",
+      "ai": {
+        "raw_text": "I'll analyze the P&ID image carefully for FUNCTION 35-24-203.\n\n**Observations from the image:**\n\n1. **35-24-203** is a line (WFL-15 = white water flush line, DN15), confirmed by the full tag `35-24-203-WFL-15-E10H2A` shown in the crop.\n\n2. **Within the red boundary box for PARENT 35-24-203**, I can see:\n   - A hand valve labeled **35-24-203** with size **003-15** (DN15 hand valve)\n   - Instruments: **PI 9332**, **FI 9333**, **FS 657** \u2014 all on the 35-24-203 circuit\n   - The line label **35-24-203-WFL-15-E10H2A** at the bottom\n\n3. **Valve symbol analysis for 35-24-203 valve**: The bowtie symbol shows outline/transparent triangles with no actuator circle on top \u2192 **HV** (hand valve). The valve tag format matches the hand valve legend (35-24-203 / 003-15).\n\n4. **Instruments on the 35-24-203 line**:\n   - PI 9332 \u2192 tag: **35-24PI-9332**\n   - FI 9333 \u2192 tag: **35-24FI-9333**\n   - FS 657 \u2192 tag: **35-24FS-657**\n\n5. **35-24-224** is the mirror/peer line (left side, outside the red box boundary), with its own PI 9330, FI 9331, FS 656 \u2014 peer, not child.\n\n6. **Structure**: Line 35-24-203 is the FUNCTION (piping header). The valve and instruments sit on this line as sub-equipment.\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24-203\",\n  \"description\": \"35-24-203 WFL LINE DN15\",\n  \"rows\": [\n    {\"equipment\": \"35-24-203\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-203 VLV HV DN15\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24PI-9332\", \"mask\": \"\", \"description\": \"35-24PI-9332 PRESS IND\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24FI-9333\", \"mask\": \"\", \"description\": \"35-24FI-9333 FLOW IND\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24FS-657\", \"mask\": \"\", \"description\": \"35-24FS-657 FLOW SWITCH\"}\n  ],\n  \"peers\": [\n    {\"tag\": \"35-24-224\", \"evidence\": \"Mirror WFL-15 line visible left of red box boundary with own instruments PI9330 FI9331 FS656; separate FUNCTION\"},\n    {\"tag\": \"35-24-143\", \"evidence\": \"WAF-150 line at top of drawing, different circuit\"},\n    {\"tag\": \"35-25-072\", \"evidence\": \"WAF-350 line from white water, different sub-process 35-25\"}\n  ],\n  \"notes\": [\n    \"35-24-203 valve tag follows hand valve legend format (plant-subproc-consec / type-DN); outline bowtie no actuator = HV\",\n    \"PI 9332 and FI 9333 are locally mounted instruments on the 35-24-203 WFL circuit\",\n    \"FS 657 is a flow switch (square symbol with DCS control) on the 35-24-203 circuit\",\n    \"35-24-224 is a peer parallel line with identical instrument arrangement\"\n  ],\n  \"confidence\": \"high\"\n}\n```",
+        "parsed": {
+          "sub_process": "BR1",
+          "function": "35-24-203",
+          "description": "35-24-203 WFL LINE DN15",
+          "rows": [
+            {
+              "equipment": "35-24-203",
+              "subequipment": "",
+              "mask": "",
+              "description": "35-24-203 VLV HV DN15"
+            },
+            {
+              "equipment": "",
+              "subequipment": "35-24PI-9332",
+              "mask": "",
+              "description": "35-24PI-9332 PRESS IND"
+            },
+            {
+              "equipment": "",
+              "subequipment": "35-24FI-9333",
+              "mask": "",
+              "description": "35-24FI-9333 FLOW IND"
+            },
+            {
+              "equipment": "",
+              "subequipment": "35-24FS-657",
+              "mask": "",
+              "description": "35-24FS-657 FLOW SWITCH"
+            }
+          ],
+          "peers": [
+            {
+              "tag": "35-24-224",
+              "evidence": "Mirror WFL-15 line visible left of red box boundary with own instruments PI9330 FI9331 FS656; separate FUNCTION"
+            },
+            {
+              "tag": "35-24-143",
+              "evidence": "WAF-150 line at top of drawing, different circuit"
+            },
+            {
+              "tag": "35-25-072",
+              "evidence": "WAF-350 line from white water, different sub-process 35-25"
+            }
+          ],
+          "notes": [
+            "35-24-203 valve tag follows hand valve legend format (plant-subproc-consec / type-DN); outline bowtie no actuator = HV",
+            "PI 9332 and FI 9333 are locally mounted instruments on the 35-24-203 WFL circuit",
+            "FS 657 is a flow switch (square symbol with DCS control) on the 35-24-203 circuit",
+            "35-24-224 is a peer parallel line with identical instrument arrangement"
+          ],
+          "confidence": "high"
+        },
+        "model_id": "eu.anthropic.claude-sonnet-4-6",
+        "region": "eu-west-2",
+        "prompt_file": "pid_hierarchy_gt_v7_floc.md",
+        "candidates": [
+          "35-24-203",
+          "35-24",
+          "35-24-224",
+          "35-24-143",
+          "35-24-182",
+          "35-24-180",
+          "35-24P517",
+          "35-24-176",
+          "35-24L407"
+        ],
+        "prompt_chars": 8838,
+        "vision": true
+      },
+      "refined_rows": [
+        {
+          "equipment": "35-24-203",
+          "subequipment": "",
+          "mask": "",
+          "description": "35-24-203 VLV HV DN15"
+        },
+        {
+          "equipment": "",
+          "subequipment": "35-24PI-9332",
+          "mask": "",
+          "description": "35-24PI-9332 PRESS IND"
+        },
+        {
+          "equipment": "",
+          "subequipment": "35-24FI-9333",
+          "mask": "",
+          "description": "35-24FI-9333 FL IND"
+        },
+        {
+          "equipment": "",
+          "subequipment": "35-24FS-657",
+          "mask": "",
+          "description": "35-24FS-657 FS"
+        }
+      ]
+    }
+  ]
+}

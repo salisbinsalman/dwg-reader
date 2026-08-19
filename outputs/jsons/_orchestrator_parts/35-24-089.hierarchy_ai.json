@@ -1,0 +1,219 @@
+{
+  "input": "/Users/code-huddle-ensemble/Desktop/dwg-reader/inputs/Broke System.dwg",
+  "mode": "viewer_shot_ai_gt",
+  "evidence_dir": "/Users/code-huddle-ensemble/Desktop/dwg-reader/outputs/evidence",
+  "site": "Shotton Paper Mill, United Kingdom",
+  "line": "Shotton PM3",
+  "process": "Broke System",
+  "sub_process": "BR1",
+  "model_id": "eu.anthropic.claude-sonnet-4-6",
+  "region": "eu-west-2",
+  "prompt_file": "pid_hierarchy_gt_v7_floc.md",
+  "legend": "/Users/code-huddle-ensemble/Desktop/dwg-reader/inputs/legend.png",
+  "results": [
+    {
+      "tag": "35-24-089",
+      "shot": "/Users/code-huddle-ensemble/Desktop/dwg-reader/outputs/evidence/Broke System.viewer_35-24-089.png",
+      "parent": {
+        "category": "lines",
+        "block_name": "",
+        "handle": "80C8B",
+        "layer": "P-LINEPOS",
+        "x": 2941.25,
+        "y": 192.5,
+        "resolved_tag": "35-24-089",
+        "nearby_tags": "35-24-089",
+        "nearby_descriptions": "35-24-089-WAF-300-E10H2A",
+        "confidence": "medium"
+      },
+      "candidates": [
+        "35-24-089",
+        "35-24",
+        "35-24-088",
+        "35-24HV-575",
+        "35-24HV-651",
+        "35-24-086",
+        "35-24-084",
+        "35-24-209",
+        "35-24KV-573",
+        "35-24-103",
+        "35-24-091",
+        "35-24-083",
+        "35-24HV-572",
+        "35-24-099",
+        "35-24-087",
+        "35-24-098",
+        "35-24-1119",
+        "35-24XV-670",
+        "35-24L004",
+        "35-24FV-570",
+        "35-24-082",
+        "35-24LV1-576",
+        "35-24-105",
+        "35-24-001.3",
+        "35-24-1102",
+        "35-24-001.4",
+        "35-24-081",
+        "35-24P503",
+        "35-24-1090",
+        "35-24-104",
+        "35-24-234",
+        "35-24-090",
+        "35-24-080",
+        "35-24L003",
+        "35-24TV-9290",
+        "35-24LV2-576",
+        "35-24-003.1",
+        "35-24-1135",
+        "35-24-003.2",
+        "35-24-107",
+        "35-24-230",
+        "35-24P505"
+      ],
+      "dossier": "Parent tag: 35-24-089\nParent category/block: lines / \nParent XY: (2941.25, 192.5)\nNearby descriptions: 35-24-089-WAF-300-E10H2A\n\nSame-tag CAD family:\n- (none)\n\nNearby line numbers (short ids preferred in output):\n- 35-24-209  full=35-24-209-PP-100-E10H2A  d=79  layer=P-LINEPOS\n- 35-24-090  full=35-24-090-WFC-15-E10H2A  d=190  layer=P-LINEPOS\n- 35-24-083  full=35-24-083-WAF-300-E10H2A  d=90  layer=P-LINEPOS\n- 35-24-084  full=35-24-084-WAF-100-E10H2A  d=68  layer=P-LINEPOS\n- 35-24-086  full=35-24-086-WAF-100-E10H2A  d=45  layer=P-LINEPOS\n- 35-24-088  full=35-24-088-WAF-300-E10H2A  d=22  layer=P-LINEPOS\n- 35-24-089  full=35-24-089-WAF-300-E10H2A  d=0  layer=P-LINEPOS\n- 35-24-080  full=35-24-080-WFL-15-E10H2A  d=195  layer=P-LINEPOS\n- 35-24-091  full=35-24-091-WAB-20-E10H2A  d=82  layer=P-LINEPOS\n- 35-24-082  full=35-24-082-PP-800-E10H2A  d=146  layer=P-LINEPOS\n- 35-24-081  full=35-24-081-PP-250-E10H2A  d=158  layer=P-LINEPOS\n- 35-24-087  full=35-24-087-WAF-500-E10H2A  d=108  layer=P-LINEPOS\n\nNearby devices (valves/instruments/pumps/\u2026):\n- line_markers: PPI_1100A  d=110  block=PPI_1100A\n- valves: PPI_0900A  d=118  block=PPI_0900A\n- control_valves: PPI_1000A  d=73  block=PPI_1000A\n- instruments: PPI_0100X  d=163  block=PPI_0100X\n- pumps: GEARBOXOILPUMP  d=176  block=None\n- motors: PPI_1504A-25_0  d=144  block=PPI_1504A-25_0\n- fittings: P7A1214  d=102  block=P7A1214\n\nNearby peer primary equipment (do NOT nest under parent):\n- 35-24L004 (process_equipment, d=164)\n\nNearby drawing text tokens:\n- S1  d=198  layer=P-TEXT\n- 1 bar  d=194  layer=P-TEXT\n- GEARBOX 2  d=173  layer=P-OTHER\n- 35-24  d=19  layer=P-INSTRPOS_TEXTS\n- 35-24L004  d=157  layer=P-EQUIPMENT_POS\n- BROKE CONVEYOR 2  d=156  layer=P-EQUIPMENT_POS\n- 651  d=39  layer=P-INSTRPOS_TEXTS\n- 9290  d=182  layer=P-INSTRPOS_TEXTS\n- 570  d=105  layer=P-INSTRPOS_TEXTS\n- 573  d=59  layer=P-INSTRPOS_TEXTS\n- 569  d=174  layer=P-INSTRPOS_TEXTS\n- 9289  d=192  layer=P-INSTRPOS_TEXTS\n- PRESS PULPER ROTOR 1  d=174  layer=P-TEXT\n- 670  d=150  layer=P-INSTRPOS_TEXTS\n- 575  d=22  layer=P-INSTRPOS_TEXTS\n- 572  d=81  layer=P-INSTRPOS_TEXTS\n- 35-24-001.4  d=154  layer=P-MOTOR_POS\n- 1,5  d=156  layer=P-MOTOR_POS\n- 1500  d=167  layer=P-MOTOR_POS\n- 35-24-001.3  d=150  layer=P-MOTOR_POS\n- 35-24-105  d=149  layer=P-VALVEPOS\n- 350-250  d=147  layer=P-VALVEPOS\n- 35-24-104  d=183  layer=P-VALVEPOS\n- 003-15  d=184  layer=P-VALVEPOS\n- 35-24-103  d=81  layer=P-VALVEPOS\n- 003-50  d=83  layer=P-VALVEPOS\n- 35-24-1119  d=117  layer=P-VALVEPOS\n- 101-500  d=122  layer=P-VALVEPOS\n- 35-24-099  d=105  layer=P-VALVEPOS\n- 003-20  d=105  layer=P-VALVEPOS\n- 35-24-098  d=111  layer=P-VALVEPOS\n- 35-24-234  d=188  layer=P-VALVEPOS\n- 350-500  d=188  layer=P-VALVEPOS\n- 35-24-209  d=79  layer=P-LINEPOS\n- 35-24-090  d=190  layer=P-LINEPOS\n- 35-24-083  d=90  layer=P-LINEPOS\n- 35-24-084  d=68  layer=P-LINEPOS\n- 35-24-086  d=45  layer=P-LINEPOS\n- 35-24-088  d=22  layer=P-LINEPOS\n- 35-24-089  d=0  layer=P-LINEPOS",
+      "ai": {
+        "raw_text": "I'll analyze the P&ID image carefully for FUNCTION 35-24-089.\n\n**Observations from the image:**\n- 35-24-089 is a WAF-300 line (water/white water line, DN300)\n- The red boundary box encloses the parent 35-24-089 circuit\n- Inside the box I can see line 35-24-089-WAF-300-E10H2A running vertically\n- On this line: instrument cluster with HS (position switch) and HI-575 (hand indicator), and valve 35-24HV-575 (DN250)\n- 35-24HV-575: outline bowtie (transparent triangles), no actuator circle \u2192 HV (hand valve)\n- Also visible: 35-24HV-651 (DN250) with HS/HI-651 instruments on line 35-24-088\n- 35-24KV-573 on line 35-24-086 with KS-573\n- 35-24HV-572 on line 35-24-084 with H/HS-572\n- 35-24-103 (drain/branch, 003-50) under 35-24KV-573 area\n- 35-24FV-570 is on the left edge (different line 35-24-086 area)\n\n**Scoping to 35-24-089 only:**\n- The line 35-24-089-WAF-300 is the FUNCTION\n- 35-24HV-575 sits directly on line 35-24-089 with instruments 35-24 HI-575 and HS (position switch)\n- The HS instrument near HV-575 is part of the 35-24 instrument cluster at position 575\n\n**Valve type for 35-24HV-575:** Outline/transparent bowtie, no actuator \u2192 HV\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24-089\",\n  \"description\": \"35-24-089 WAF-300 LINE\",\n  \"rows\": [\n    {\"equipment\": \"35-24HV-575\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24HV-575 ISOL VLV HV\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24HI-575\", \"mask\": \"\", \"description\": \"35-24HI-575 HAND INDICATOR\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24HS-575\", \"mask\": \"\", \"description\": \"35-24HS-575 HAND SWITCH\"}\n  ],\n  \"peers\": [\n    {\"tag\": \"35-24-088\", \"evidence\": \"WAF-300 line adjacent, carries 35-24HV-651 on its own circuit\"},\n    {\"tag\": \"35-24HV-651\", \"evidence\": \"valve on line 35-24-088, not 35-24-089\"},\n    {\"tag\": \"35-24-086\", \"evidence\": \"WAF-100 line, separate circuit carrying 35-24KV-573\"},\n    {\"tag\": \"35-24KV-573\", \"evidence\": \"valve on line 35-24-086\"},\n    {\"tag\": \"35-24-084\", \"evidence\": \"WAF-100 line, separate circuit carrying 35-24HV-572\"},\n    {\"tag\": \"35-24HV-572\", \"evidence\": \"valve on line 35-24-084\"},\n    {\"tag\": \"35-24-103\", \"evidence\": \"drain branch 003-50, associated with 35-24KV-573 on line 35-24-086\"},\n    {\"tag\": \"35-24FV-570\", \"evidence\": \"flow control valve on separate upstream line, outside 35-24-089 boundary\"},\n    {\"tag\": \"35-24L004\", \"evidence\": \"peer major equipment - BROKE CONVEYOR 2, different function\"},\n    {\"tag\": \"35-24-083\", \"evidence\": \"WAF-300 line, separate circuit\"},\n    {\"tag\": \"35-24-087\", \"evidence\": \"WAF-500 line, separate circuit below boundary\"}\n  ],\n  \"notes\": [\n    \"35-24-089 is a WAF-300 (white water) piping header; 35-24HV-575 with HS/HI-575 instruments sits directly on this line within the red boundary\",\n    \"HV-575 symbol shows outline/transparent bowtie with no actuator circle \u2014 classified as hand valve (HV)\",\n    \"Adjacent lines 35-24-088, 35-24-086, 35-24-084 are peer lines with their own valves/instruments, not children of 35-24-089\"\n  ],\n  \"confidence\": \"medium\"\n}\n```",
+        "parsed": {
+          "sub_process": "BR1",
+          "function": "35-24-089",
+          "description": "35-24-089 WAF-300 LINE",
+          "rows": [
+            {
+              "equipment": "35-24HV-575",
+              "subequipment": "",
+              "mask": "",
+              "description": "35-24HV-575 ISOL VLV HV"
+            },
+            {
+              "equipment": "",
+              "subequipment": "35-24HI-575",
+              "mask": "",
+              "description": "35-24HI-575 HAND INDICATOR"
+            },
+            {
+              "equipment": "",
+              "subequipment": "35-24HS-575",
+              "mask": "",
+              "description": "35-24HS-575 HAND SWITCH"
+            }
+          ],
+          "peers": [
+            {
+              "tag": "35-24-088",
+              "evidence": "WAF-300 line adjacent, carries 35-24HV-651 on its own circuit"
+            },
+            {
+              "tag": "35-24HV-651",
+              "evidence": "valve on line 35-24-088, not 35-24-089"
+            },
+            {
+              "tag": "35-24-086",
+              "evidence": "WAF-100 line, separate circuit carrying 35-24KV-573"
+            },
+            {
+              "tag": "35-24KV-573",
+              "evidence": "valve on line 35-24-086"
+            },
+            {
+              "tag": "35-24-084",
+              "evidence": "WAF-100 line, separate circuit carrying 35-24HV-572"
+            },
+            {
+              "tag": "35-24HV-572",
+              "evidence": "valve on line 35-24-084"
+            },
+            {
+              "tag": "35-24-103",
+              "evidence": "drain branch 003-50, associated with 35-24KV-573 on line 35-24-086"
+            },
+            {
+              "tag": "35-24FV-570",
+              "evidence": "flow control valve on separate upstream line, outside 35-24-089 boundary"
+            },
+            {
+              "tag": "35-24L004",
+              "evidence": "peer major equipment - BROKE CONVEYOR 2, different function"
+            },
+            {
+              "tag": "35-24-083",
+              "evidence": "WAF-300 line, separate circuit"
+            },
+            {
+              "tag": "35-24-087",
+              "evidence": "WAF-500 line, separate circuit below boundary"
+            }
+          ],
+          "notes": [
+            "35-24-089 is a WAF-300 (white water) piping header; 35-24HV-575 with HS/HI-575 instruments sits directly on this line within the red boundary",
+            "HV-575 symbol shows outline/transparent bowtie with no actuator circle \u2014 classified as hand valve (HV)",
+            "Adjacent lines 35-24-088, 35-24-086, 35-24-084 are peer lines with their own valves/instruments, not children of 35-24-089"
+          ],
+          "confidence": "medium"
+        },
+        "model_id": "eu.anthropic.claude-sonnet-4-6",
+        "region": "eu-west-2",
+        "prompt_file": "pid_hierarchy_gt_v7_floc.md",
+        "candidates": [
+          "35-24-089",
+          "35-24",
+          "35-24-088",
+          "35-24HV-575",
+          "35-24HV-651",
+          "35-24-086",
+          "35-24-084",
+          "35-24-209",
+          "35-24KV-573",
+          "35-24-103",
+          "35-24-091",
+          "35-24-083",
+          "35-24HV-572",
+          "35-24-099",
+          "35-24-087",
+          "35-24-098",
+          "35-24-1119",
+          "35-24XV-670",
+          "35-24L004",
+          "35-24FV-570",
+          "35-24-082",
+          "35-24LV1-576",
+          "35-24-105",
+          "35-24-001.3",
+          "35-24-1102",
+          "35-24-001.4",
+          "35-24-081",
+          "35-24P503",
+          "35-24-1090",
+          "35-24-104",
+          "35-24-234",
+          "35-24-090",
+          "35-24-080",
+          "35-24L003",
+          "35-24TV-9290",
+          "35-24LV2-576",
+          "35-24-003.1",
+          "35-24-1135",
+          "35-24-003.2",
+          "35-24-107",
+          "35-24-230",
+          "35-24P505"
+        ],
+        "prompt_chars": 10643,
+        "vision": true
+      },
+      "refined_rows": [
+        {
+          "equipment": "35-24HV-575",
+          "subequipment": "",
+          "mask": "",
+          "description": "35-24HV-575 ISOL VLV HV"
+        },
+        {
+          "equipment": "35-24-089",
+          "subequipment": "",
+          "mask": "",
+          "description": "35-24-089"
+        }
+      ]
+    }
+  ]
+}
