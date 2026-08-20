@@ -187,9 +187,9 @@
     "mask_hit": 159,
     "mask_miss": 0,
     "mask_accuracy": 1.0,
-    "description_exact": 28,
+    "description_exact": 29,
     "description_total": 159,
-    "description_accuracy": 0.1761006289308176,
+    "description_accuracy": 0.18238993710691823,
     "details": [
       {
         "function": "35-24L009",
@@ -250,7 +250,7 @@
         "tplnr_pred": "5001-PM03-BR-BR1-35-24HS-682",
         "tplnr_gt": "5001-PM03-BR-BR1-35-24HS-682",
         "mask_match": true,
-        "pltxt_pred": "35-24HS-682 BROK ROLL PLPR START/STOP",
+        "pltxt_pred": "35-24HS-682 BROK ROLL PLPR START STOP",
         "pltxt_gt": "35-24HS-682 BROKE ROLL PLPR START/STOP",
         "pltxt_exact": false
       },
@@ -277,7 +277,7 @@
         "tplnr_pred": "5001-PM03-BR-BR1-35-24XS-691",
         "tplnr_gt": "5001-PM03-BR-BR1-35-24XS-691",
         "mask_match": true,
-        "pltxt_pred": "35-24XS-691 WNDR AREA MCS SIG",
+        "pltxt_pred": "35-24XS-691 WNDR PLPR MCS SIGNAL",
         "pltxt_gt": "35-24XS-691 WINDER PLPR MCS SIGNAL",
         "pltxt_exact": false
       },
@@ -295,16 +295,16 @@
         "tplnr_pred": "5001-PM03-BR-BR1-35-24KJ-510",
         "tplnr_gt": "5001-PM03-BR-BR1-35-24KJ-510",
         "mask_match": true,
-        "pltxt_pred": "35-24KJ-510 WINDER PLPR START PB",
+        "pltxt_pred": "35-24KJ-510 WINDER PLPR START",
         "pltxt_gt": "35-24KJ-510 WINDER PLPR START",
-        "pltxt_exact": false
+        "pltxt_exact": true
       },
       {
         "function": "35-24KJ-511",
         "tplnr_pred": "5001-PM03-BR-BR1-35-24KJ-511",
         "tplnr_gt": "5001-PM03-BR-BR1-35-24KJ-511",
         "mask_match": true,
-        "pltxt_pred": "35-24KJ-511 WNDR PLPR STOP PUSHBTN",
+        "pltxt_pred": "35-24KJ-511 WNDR PLPR STOP",
         "pltxt_gt": "35-24KJ-511 WINDER PLPR STOP",
         "pltxt_exact": false
       },
@@ -340,7 +340,7 @@
         "tplnr_pred": "5001-PM03-BR-BR1-35-24HS-501",
         "tplnr_gt": "5001-PM03-BR-BR1-35-24HS-501",
         "mask_match": true,
-        "pltxt_pred": "35-24HS-501 HS BROKE DIL VLV CTRL",
+        "pltxt_pred": "35-24HS-501 HND SW",
         "pltxt_gt": "35-24HS-501 WINDER PLPR SHW S3",
         "pltxt_exact": false
       },
@@ -349,7 +349,7 @@
         "tplnr_pred": "5001-PM03-BR-BR1-35-24HI-501",
         "tplnr_gt": "5001-PM03-BR-BR1-35-24HI-501",
         "mask_match": true,
-        "pltxt_pred": "35-24HI-501 HI HND IND",
+        "pltxt_pred": "35-24HI-501 HI VLV POSITION IND",
         "pltxt_gt": "35-24HI-501 WINDER PLPR SHW S3",
         "pltxt_exact": false
       },
@@ -367,7 +367,7 @@
         "tplnr_pred": "5001-PM03-BR-BR1-35-24HI-503",
         "tplnr_gt": "5001-PM03-BR-BR1-35-24HI-503",
         "mask_match": true,
-        "pltxt_pred": "35-24HI-503 WNDR PLPR SHW S5 S6 IND",
+        "pltxt_pred": "35-24HI-503 WNDR PLPR SHW S5&S6 IND",
         "pltxt_gt": "35-24HI-501 WINDER PLPR SHW S5 S6",
         "pltxt_exact": false
       },
@@ -430,7 +430,7 @@
         "tplnr_pred": "5001-PM03-BR-BR1-35-24HS-529",
         "tplnr_gt": "5001-PM03-BR-BR1-35-24HS-529",
         "mask_match": true,
-        "pltxt_pred": "35-24HS-529 SLABBING PLPR SHW S1 HS",
+        "pltxt_pred": "35-24HS-529 SLBNG PLPR SHW S1 HS",
         "pltxt_gt": "35-24HS-529 SLABBING PLPR SHW S1",
         "pltxt_exact": false
       },
@@ -439,16 +439,16 @@
         "tplnr_pred": "5001-PM03-BR-BR1-35-24HI-529",
         "tplnr_gt": "5001-PM03-BR-BR1-35-24HI-529",
         "mask_match": true,
-        "pltxt_pred": "35-24HI-529 SLABBING PLPR SHW S1",
+        "pltxt_pred": "35-24HI-529 SLABBING PLPR SHW S1 IND",
         "pltxt_gt": "35-24HI-529 SLABBING PLPR SHW S1",
-        "pltxt_exact": true
+        "pltxt_exact": false
       },
       {
         "function": "35-24HS-532",
         "tplnr_pred": "5001-PM03-BR-BR1-35-24HS-532",
         "tplnr_gt": "5001-PM03-BR-BR1-35-24HS-532",
         "mask_match": true,
-        "pltxt_pred": "35-24HS-532 HS SELECTOR SW",
+        "pltxt_pred": "35-24HS-532 HND SW",
         "pltxt_gt": "35-24HS-532 SLABBING PLPR SHW S2",
         "pltxt_exact": false
       },
@@ -457,7 +457,7 @@
         "tplnr_pred": "5001-PM03-BR-BR1-35-24HI-532",
         "tplnr_gt": "5001-PM03-BR-BR1-35-24HI-532",
         "mask_match": true,
-        "pltxt_pred": "35-24HI-532 HIGH IND INSTR",
+        "pltxt_pred": "35-24HI-532 HIGH IND",
         "pltxt_gt": "35-24HI-532 SLABBING PLPR SHW S2",
         "pltxt_exact": false
       },
@@ -529,9 +529,9 @@
         "tplnr_pred": "5001-PM03-BR-BR1-35-24KJ-544",
         "tplnr_gt": "5001-PM03-BR-BR1-35-24KJ-544",
         "mask_match": true,
-        "pltxt_pred": "35-24KJ-544 REEL PULPR STOP",
+        "pltxt_pred": "35-24KJ-544 REEL PLPR STOP",
         "pltxt_gt": "35-24KJ-544 REEL PLPR STOP",
-        "pltxt_exact": false
+        "pltxt_exact": true
       },
       {
         "function": "35-24HS-542",
@@ -565,7 +565,7 @@
         "tplnr_pred": "5001-PM03-BR-BR1-35-24HS-555",
         "tplnr_gt": "5001-PM03-BR-BR1-35-24HS-555",
         "mask_match": true,
-        "pltxt_pred": "35-24HS-555 HND SW BROKE SEL",
+        "pltxt_pred": "35-24HS-555 HND SW",
         "pltxt_gt": "35-24HS-555 REEL PLPR SHW S1",
         "pltxt_exact": false
       },
@@ -574,7 +574,7 @@
         "tplnr_pred": "5001-PM03-BR-BR1-35-24HI-555",
         "tplnr_gt": "5001-PM03-BR-BR1-35-24HI-555",
         "mask_match": true,
-        "pltxt_pred": "35-24HI-555 REEL PLPR SHW S1 IND",
+        "pltxt_pred": "35-24HI-555 REEL PLPR SHW S1 HI",
         "pltxt_gt": "35-24HI-555 REEL PLPR SHW S1",
         "pltxt_exact": false
       },
@@ -601,7 +601,7 @@
         "tplnr_pred": "5001-PM03-BR-BR1-35-24HS-652",
         "tplnr_gt": "5001-PM03-BR-BR1-35-24HS-652",
         "mask_match": true,
-        "pltxt_pred": "35-24HS-652 HND SW STN",
+        "pltxt_pred": "35-24HS-652 HND SW",
         "pltxt_gt": "35-24HS-652 REEL PLPR SHW S4",
         "pltxt_exact": false
       },
@@ -610,7 +610,7 @@
         "tplnr_pred": "5001-PM03-BR-BR1-35-24HI-652",
         "tplnr_gt": "5001-PM03-BR-BR1-35-24HI-652",
         "mask_match": true,
-        "pltxt_pred": "35-24HI-652 HIGH IND",
+        "pltxt_pred": "35-24HI-652 HIGH IND INST",
         "pltxt_gt": "35-24HI-652 REEL PLPR SHW S4",
         "pltxt_exact": false
       },
@@ -673,7 +673,7 @@
         "tplnr_pred": "5001-PM03-BR-BR1-35-24HI-572",
         "tplnr_gt": "5001-PM03-BR-BR1-35-24HI-572",
         "mask_match": true,
-        "pltxt_pred": "35-24HI-572 HI WAF LVL IND",
+        "pltxt_pred": "35-24HI-572 LVL HI INSTR",
         "pltxt_gt": "35-24HI-572 SIZE PRESS PLPR SHOWERS S1 &",
         "pltxt_exact": false
       },
@@ -691,7 +691,7 @@
         "tplnr_pred": "5001-PM03-BR-BR1-35-24HS-575",
         "tplnr_gt": "5001-PM03-BR-BR1-35-24HS-575",
         "mask_match": true,
-        "pltxt_pred": "35-24HS-575 HND SW",
+        "pltxt_pred": "35-24HS-575 HND SW BROKE CONV 2",
         "pltxt_gt": "35-24HS-575 SIZE PRESS PLPR SHOWERS S2",
         "pltxt_exact": false
       },
@@ -700,7 +700,7 @@
         "tplnr_pred": "5001-PM03-BR-BR1-35-24HI-575",
         "tplnr_gt": "5001-PM03-BR-BR1-35-24HI-575",
         "mask_match": true,
-        "pltxt_pred": "35-24HI-575 HIGH IND",
+        "pltxt_pred": "35-24HI-575 HIGH IND INSTR",
         "pltxt_gt": "35-24HI-575 SIZE PRESS PLPR SHOWERS S2",
         "pltxt_exact": false
       },
@@ -826,7 +826,7 @@
         "tplnr_pred": "5001-PM03-BR-BR1-35-24HS-583",
         "tplnr_gt": "5001-PM03-BR-BR1-35-24HS-583",
         "mask_match": true,
-        "pltxt_pred": "35-24HS-583 HND SW",
+        "pltxt_pred": "35-24HS-583 HND SW BROKE DIST",
         "pltxt_gt": "35-24HS-583 PRESS PLPR SHW S2",
         "pltxt_exact": false
       },
@@ -925,7 +925,7 @@
         "tplnr_pred": "5001-PM03-BR-BR1-35-24HS-664",
         "tplnr_gt": "5001-PM03-BR-BR1-35-24HS-664",
         "mask_match": true,
-        "pltxt_pred": "35-24HS-664 COUCH PIT START STOP",
+        "pltxt_pred": "35-24HS-664 COUCH PIT START STOP HS",
         "pltxt_gt": "35-24HS-664 COUCH PIT START/STOP",
         "pltxt_exact": false
       },
@@ -952,7 +952,7 @@
         "tplnr_pred": "5001-PM03-BR-BR1-35-24T602",
         "tplnr_gt": "5001-PM03-BR-BR1-35-24T602",
         "mask_match": true,
-        "pltxt_pred": "35-24T602 BROKE STOR TWR TNK",
+        "pltxt_pred": "35-24T602 BROKE STOR TWR 4000M3",
         "pltxt_gt": "35-24T602 BROKE STOR TWR",
         "pltxt_exact": false
       },
@@ -961,7 +961,7 @@
         "tplnr_pred": "5001-PM03-BR-BR1-35-24P514",
         "tplnr_gt": "5001-PM03-BR-BR1-35-24P514",
         "mask_match": true,
-        "pltxt_pred": "35-24P514 BROKE STOR PMP",
+        "pltxt_pred": "35-24P514 BROKE STOR TWR PMP",
         "pltxt_gt": "35-24P514 BROKE > OCC PMP",
         "pltxt_exact": false
       },
@@ -1015,7 +1015,7 @@
         "tplnr_pred": "5001-PM03-BR-BR1-35-24HS-629",
         "tplnr_gt": "5001-PM03-BR-BR1-35-24HS-629",
         "mask_match": true,
-        "pltxt_pred": "35-24HS-629 BROKE THKR LOC/REMOTE SW",
+        "pltxt_pred": "35-24HS-629 LOC/REMOTE SEL SW",
         "pltxt_gt": "35-24HS-629 BROKE THICKENER LOC/REMOTE",
         "pltxt_exact": false
       },
@@ -1069,7 +1069,7 @@
         "tplnr_pred": "5001-PM03-BR-BR1-35-24P513",
         "tplnr_gt": "5001-PM03-BR-BR1-35-24P513",
         "mask_match": true,
-        "pltxt_pred": "35-24P513 BR1 BROKE PMP",
+        "pltxt_pred": "35-24P513 BR1 BROKE PMP 140L/S",
         "pltxt_gt": "35-24P513 BROKE SCNG FD PMP",
         "pltxt_exact": false
       },
@@ -1096,7 +1096,7 @@
         "tplnr_pred": "5001-PM03-BR-BR1-35-24KJ-688",
         "tplnr_gt": "5001-PM03-BR-BR1-35-24KJ-688",
         "mask_match": true,
-        "pltxt_pred": "35-24KJ-688 BROKE SCRN START SEQ",
+        "pltxt_pred": "35-24KJ-688 BROKE SCRNG START SEQ",
         "pltxt_gt": "35-24KJ-688 BROKE SCNG START SEQ",
         "pltxt_exact": false
       },
@@ -1105,7 +1105,7 @@
         "tplnr_pred": "5001-PM03-BR-BR1-35-24KJ-689",
         "tplnr_gt": "5001-PM03-BR-BR1-35-24KJ-689",
         "mask_match": true,
-        "pltxt_pred": "35-24KJ-689 BROKE SCRNG STOP SEQ",
+        "pltxt_pred": "35-24KJ-689 BROKE SCRN STOP SEQ",
         "pltxt_gt": "35-24KJ-688 BROKE SCNG STOP SEQ",
         "pltxt_exact": false
       },
@@ -1159,7 +1159,7 @@
         "tplnr_pred": "5001-PM03-BR-BR1-35-24-195",
         "tplnr_gt": "5001-PM03-BR-BR1-35-24-195",
         "mask_match": true,
-        "pltxt_pred": "35-24-195 WFL LN",
+        "pltxt_pred": "35-24-195 WFL LN DN15",
         "pltxt_gt": "LN 35-24-195 SLNG WTR > HOSE",
         "pltxt_exact": false
       },
@@ -1168,7 +1168,7 @@
         "tplnr_pred": "5001-PM03-BR-BR1-35-24-008",
         "tplnr_gt": "5001-PM03-BR-BR1-35-24-008",
         "mask_match": true,
-        "pltxt_pred": "35-24-008 WINDER PLPR WFL LN",
+        "pltxt_pred": "35-24-008 WFL LN WINDER PLPR",
         "pltxt_gt": "LN 35-24-008 SLNG WTR > HOSE",
         "pltxt_exact": false
       },
@@ -1186,7 +1186,7 @@
         "tplnr_pred": "5001-PM03-BR-BR1-35-24-012",
         "tplnr_gt": "5001-PM03-BR-BR1-35-24-012",
         "mask_match": true,
-        "pltxt_pred": "35-24-012 WFL 15 PROC LN",
+        "pltxt_pred": "35-24-012 WFL-15 PROC LN",
         "pltxt_gt": "LN 35-24-012 SLNG WTR > HOSE",
         "pltxt_exact": false
       },
@@ -1204,7 +1204,7 @@
         "tplnr_pred": "5001-PM03-BR-BR1-35-24-026",
         "tplnr_gt": "5001-PM03-BR-BR1-35-24-026",
         "mask_match": true,
-        "pltxt_pred": "35-24-026 WFL 15 GB OL LUB LN",
+        "pltxt_pred": "35-24-026 WFL 15 GB OL FLSH LN",
         "pltxt_gt": "LN 35-24-024 SLNG WTR > HOSE",
         "pltxt_exact": false
       },
@@ -1222,7 +1222,7 @@
         "tplnr_pred": "5001-PM03-BR-BR1-35-24-042",
         "tplnr_gt": "5001-PM03-BR-BR1-35-24-042",
         "mask_match": true,
-        "pltxt_pred": "35-24-042 WFL LN DN15",
+        "pltxt_pred": "35-24-042 WFL LN",
         "pltxt_gt": "LN 35-24-042 SLNG WTR > HOSE",
         "pltxt_exact": false
       },
@@ -1258,7 +1258,7 @@
         "tplnr_pred": "5001-PM03-BR-BR1-35-24-061",
         "tplnr_gt": "5001-PM03-BR-BR1-35-24-061",
         "mask_match": true,
-        "pltxt_pred": "35-24-061 WFL 15 PROC LN",
+        "pltxt_pred": "35-24-061 WFL LN DN15",
         "pltxt_gt": "LN 35-24-061 SLNG WTR > HOSE",
         "pltxt_exact": false
       },
@@ -1267,7 +1267,7 @@
         "tplnr_pred": "5001-PM03-BR-BR1-35-24-219",
         "tplnr_gt": "5001-PM03-BR-BR1-35-24-219",
         "mask_match": true,
-        "pltxt_pred": "35-24-219 WFL LN DN15",
+        "pltxt_pred": "35-24-219 WFL LN 15",
         "pltxt_gt": "LN 35-24-219 SLNG WTR > HOSE",
         "pltxt_exact": false
       },
@@ -1276,7 +1276,7 @@
         "tplnr_pred": "5001-PM03-BR-BR1-35-24-068",
         "tplnr_gt": "5001-PM03-BR-BR1-35-24-068",
         "mask_match": true,
-        "pltxt_pred": "35-24-068 WFL LN DN15",
+        "pltxt_pred": "35-24-068 WFL LN BR1",
         "pltxt_gt": "LN 35-24-068 SLNG WTR > HOSE",
         "pltxt_exact": false
       },
@@ -1285,7 +1285,7 @@
         "tplnr_pred": "5001-PM03-BR-BR1-35-24-076",
         "tplnr_gt": "5001-PM03-BR-BR1-35-24-076",
         "mask_match": true,
-        "pltxt_pred": "35-24-076 WFL LN 15 GB OL",
+        "pltxt_pred": "35-24-076 WFL 15 GB OL FL LN",
         "pltxt_gt": "LN 35-24-076 SLNG WTR > HOSE",
         "pltxt_exact": false
       },
@@ -1294,7 +1294,7 @@
         "tplnr_pred": "5001-PM03-BR-BR1-35-24-079",
         "tplnr_gt": "5001-PM03-BR-BR1-35-24-079",
         "mask_match": true,
-        "pltxt_pred": "35-24-079 WFL 15 FL LN",
+        "pltxt_pred": "35-24-079 WFL LN DN15",
         "pltxt_gt": "LN 35-24-079 SLNG WTR > HOSE",
         "pltxt_exact": false
       },
@@ -1303,7 +1303,7 @@
         "tplnr_pred": "5001-PM03-BR-BR1-35-24-080",
         "tplnr_gt": "5001-PM03-BR-BR1-35-24-080",
         "mask_match": true,
-        "pltxt_pred": "35-24-080 WFL LN",
+        "pltxt_pred": "35-24-080 WFL LN 15",
         "pltxt_gt": "LN 35-24-080 SLNG WTR > HOSE",
         "pltxt_exact": false
       },
@@ -1357,7 +1357,7 @@
         "tplnr_pred": "5001-PM03-BR-BR1-35-24-122",
         "tplnr_gt": "5001-PM03-BR-BR1-35-24-122",
         "mask_match": true,
-        "pltxt_pred": "35-24-122 WFL LN BR1",
+        "pltxt_pred": "35-24-122 WFL SHW LN DN15",
         "pltxt_gt": "LN 35-24-122 SLNG WTR > HOSE",
         "pltxt_exact": false
       },
@@ -1366,7 +1366,7 @@
         "tplnr_pred": "5001-PM03-BR-BR1-35-24-123",
         "tplnr_gt": "5001-PM03-BR-BR1-35-24-123",
         "mask_match": true,
-        "pltxt_pred": "35-24-123 WFL PROC LN DN15",
+        "pltxt_pred": "35-24-123 WFL PROC LN",
         "pltxt_gt": "LN 35-24-123 SLNG WTR > HOSE",
         "pltxt_exact": false
       },
@@ -1411,7 +1411,7 @@
         "tplnr_pred": "5001-PM03-BR-BR1-35-24-138",
         "tplnr_gt": "5001-PM03-BR-BR1-35-24-138",
         "mask_match": true,
-        "pltxt_pred": "35-24-138 WFL LN",
+        "pltxt_pred": "35-24-138 WFL 15 FLSH LN",
         "pltxt_gt": "LN 35-24-138 SLNG WTR > HOSE",
         "pltxt_exact": false
       },
@@ -1438,7 +1438,7 @@
         "tplnr_pred": "5001-PM03-BR-BR1-35-24-160",
         "tplnr_gt": "5001-PM03-BR-BR1-35-24-160",
         "mask_match": true,
-        "pltxt_pred": "35-24-160 WFL PROC LN",
+        "pltxt_pred": "35-24-160 WFL LN BR1",
         "pltxt_gt": "LN 35-24-160 SLNG WTR > HOSE",
         "pltxt_exact": false
       },
@@ -1447,7 +1447,7 @@
         "tplnr_pred": "5001-PM03-BR-BR1-35-24-163",
         "tplnr_gt": "5001-PM03-BR-BR1-35-24-163",
         "mask_match": true,
-        "pltxt_pred": "35-24-163 WFL LN DN15",
+        "pltxt_pred": "35-24-163 WFL 15 PROC LN",
         "pltxt_gt": "LN 35-24-163 SLNG WTR > BROKE THICKENER",
         "pltxt_exact": false
       },
@@ -1456,7 +1456,7 @@
         "tplnr_pred": "5001-PM03-BR-BR1-35-24-167",
         "tplnr_gt": "5001-PM03-BR-BR1-35-24-167",
         "mask_match": true,
-        "pltxt_pred": "35-24-167 PROC LN WFL DN15",
+        "pltxt_pred": "35-24-167 BROKE PROC LN",
         "pltxt_gt": "LN 35-24-167 SLNG WTR > HOSE",
         "pltxt_exact": false
       },
@@ -1483,7 +1483,7 @@
         "tplnr_pred": "5001-PM03-BR-BR1-35-24-224",
         "tplnr_gt": "5001-PM03-BR-BR1-35-24-224",
         "mask_match": true,
-        "pltxt_pred": "35-24-224 WFL LN BR1",
+        "pltxt_pred": "35-24-224 WFL LN DN15",
         "pltxt_gt": "LN 35-24-224 SLNG WTR > HOSE",
         "pltxt_exact": false
       },
@@ -1510,7 +1510,7 @@
         "tplnr_pred": "5001-PM03-BR-BR1-35-24-216",
         "tplnr_gt": "5001-PM03-BR-BR1-35-24-216",
         "mask_match": true,
-        "pltxt_pred": "35-24-216 CLG WTR RTN LN",
+        "pltxt_pred": "35-24-216 COOL WTR RTN LN",
         "pltxt_gt": "LN 35-24-216 CLG WTR RTN",
         "pltxt_exact": false
       },
@@ -1537,7 +1537,7 @@
         "tplnr_pred": "5001-PM03-BR-BR1-35-24-109",
         "tplnr_gt": "5001-PM03-BR-BR1-35-24-109",
         "mask_match": true,
-        "pltxt_pred": "35-24-109 WAF 500 LN",
+        "pltxt_pred": "35-24-109 WAF 500 BROKE LN",
         "pltxt_gt": "LN 35-24-109 WW > COUCH PIT",
         "pltxt_exact": false
       },
@@ -1564,7 +1564,7 @@
         "tplnr_pred": "5001-PM03-BR-BR1-35-24-063",
         "tplnr_gt": "5001-PM03-BR-BR1-35-24-063",
         "mask_match": true,
-        "pltxt_pred": "35-24-063 WAF-250 BROKE LN",
+        "pltxt_pred": "35-24-063 WAF 250 BROKE LN",
         "pltxt_gt": "LN 35-24-063 WHITE WTR > 35-24-066",
         "pltxt_exact": false
       },
@@ -1591,7 +1591,7 @@
         "tplnr_pred": "5001-PM03-BR-BR1-35-24-017",
         "tplnr_gt": "5001-PM03-BR-BR1-35-24-017",
         "mask_match": true,
-        "pltxt_pred": "35-24-017 WAF 300 LN",
+        "pltxt_pred": "35-24-017 WAF LN DN300",
         "pltxt_gt": "LN 35-24-017 WHITE WTR > WINDER PLPR",
         "pltxt_exact": false
       },
@@ -1600,7 +1600,7 @@
         "tplnr_pred": "5001-PM03-BR-BR1-35-24-185",
         "tplnr_gt": "5001-PM03-BR-BR1-35-24-185",
         "mask_match": true,
-        "pltxt_pred": "35-24-185 WAF 150 LN",
+        "pltxt_pred": "35-24-185 WAF 150 BROKE LN",
         "pltxt_gt": "LN 35-24-185 WHITE WTR > BROKE ROLL PLPR",
         "pltxt_exact": false
       },
@@ -1618,7 +1618,7 @@
         "tplnr_pred": "5001-PM03-BR-BR1-35-25-072",
         "tplnr_gt": "5001-PM03-BR-BR1-35-25-072",
         "mask_match": true,
-        "pltxt_pred": "35-25-072 WAF LN DN350 FM WHT WTR TNK",
+        "pltxt_pred": "35-25-072 WAF LN DN350",
         "pltxt_gt": "LN 35-25-072 WHITE WTR TNK 35-25P513",
         "pltxt_exact": false
       }

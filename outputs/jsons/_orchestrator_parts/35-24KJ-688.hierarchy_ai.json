@@ -46,31 +46,42 @@
       ],
       "dossier": "Parent tag: 35-24KJ-688\nParent category/block: instruments / \nParent XY: (5548.545645645646, 518.6060060060059)\nNearby descriptions: KJ 688 (35-24)\n\nSame-tag CAD family:\n- (none)\n\nNearby line numbers (short ids preferred in output):\n- 35-24-173  full=35-24-173-PSR-250-E10H2A  d=182  layer=P-LINEPOS\n- 35-24-169  full=35-24-169-PSR-100-E10H2A  d=163  layer=P-LINEPOS\n- 35-24-170  full=35-24-170-PP-300-E10H2A  d=91  layer=P-LINEPOS\n- 35-24-168  full=35-24-168-PSR-100-E10H2A  d=148  layer=P-LINEPOS\n\nNearby devices (valves/instruments/pumps/\u2026):\n- line_markers: PPI_1100A  d=149  block=PPI_1100A\n- valves: PPI_0900A  d=160  block=PPI_0900A\n- control_valves: PPI_1000A  d=151  block=PPI_1000A\n- instruments: PPI_1204A  d=194  block=PPI_1204A\n\nNearby peer primary equipment (do NOT nest under parent):\n- 35-24T606 (tanks, d=196)\n- 35-24L010 (process_equipment, d=188)\n\nNearby drawing text tokens:\n- 35-24L010  d=189  layer=P-EQUIPMENT_POS\n- 645  d=178  layer=P-INSTRPOS_TEXTS\n- 35-24  d=174  layer=P-INSTRPOS_TEXTS\n- 644  d=154  layer=P-INSTRPOS_TEXTS\n- 646  d=198  layer=P-INSTRPOS_TEXTS\n- 688  d=4  layer=P-INSTRPOS_TEXTS\n- 689  d=19  layer=P-INSTRPOS_TEXTS\n- 35-24-013  d=162  layer=P-VALVEPOS\n- 003-50  d=165  layer=P-VALVEPOS\n- 35-24-173  d=182  layer=P-LINEPOS\n- 35-24-169  d=163  layer=P-LINEPOS\n- 35-24-170  d=91  layer=P-LINEPOS\n- 35-24-168  d=148  layer=P-LINEPOS\n- 35-24FV-640  d=190  layer=P-CVPOS\n- 200  d=189  layer=P-CVPOS\n- 35-24HV-642  d=197  layer=P-CVPOS\n- 100  d=198  layer=P-CVPOS\n- 35-24FV-644  d=154  layer=P-CVPOS\n- 80  d=155  layer=P-CVPOS",
       "ai": {
-        "raw_text": "Looking at the P&ID image, I can see that 35-24KJ-688 is a **KJ-type instrument** (sequence controller/interlock function) shown as a square box with \"KJ 688\" labeled, with the description \"BROKE SCREENING START SEQUENCE\". \n\nThe KJ prefix in ISA/P&ID convention typically denotes a **control station / sequence controller**. The image clearly shows:\n- 35-24KJ-688: BROKE SCREENING START SEQUENCE\n- 35-24KJ-689: BROKE SCREENING STOP SEQUENCE (nearby peer, same numeric base but different number)\n\nSince 35-24KJ-688 is a standalone instrument/controller block with no child instruments, valves, or lines directly attached to it in the crop (the lines 35-24-168/169/170/173 and valves FV-640/644/HV-642 are in the lower portion of the drawing and belong to the broader broke screening circuit, not directly nested under this KJ instrument), the correct output is the FUNCTION header with an empty rows array.\n\n35-24KJ-689 is a peer (same area, different tag number, stop sequence counterpart).\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24KJ-688\",\n  \"description\": \"35-24KJ-688 BROKE SCRN START SEQ\",\n  \"rows\": [],\n  \"peers\": [\n    {\n      \"tag\": \"35-24KJ-689\",\n      \"evidence\": \"Adjacent KJ instrument block on same P&ID crop \u2014 BROKE SCREENING STOP SEQUENCE; different tag number, peer sequence controller\"\n    },\n    {\n      \"tag\": \"35-24T606\",\n      \"evidence\": \"Nearby tank, different equipment class, not a child of KJ instrument\"\n    },\n    {\n      \"tag\": \"35-24L010\",\n      \"evidence\": \"Nearby process equipment, different equipment class, not a child of KJ instrument\"\n    }\n  ],\n  \"notes\": [\n    \"35-24KJ-688 is a sequence controller instrument (KJ = interlock/sequence function) for BROKE SCREENING START SEQUENCE\",\n    \"No directly attached child lines, valves or sub-instruments are visible on this KJ block in the crop\",\n    \"Lines 35-24-168/169/170/173 and control valves FV-640/644/HV-642 visible in lower crop belong to the broader broke screening piping circuit, not nested under this KJ instrument tag\",\n    \"35-24KJ-689 (STOP SEQUENCE) is the logical peer/companion controller\"\n  ],\n  \"confidence\": \"high\"\n}\n```",
+        "raw_text": "Looking at the P&ID image, I can see that 35-24KJ-688 is a **KJ-type instrument** (sequence controller/logic block) labeled \"BROKE SCREENING START SEQUENCE\" in a blue square symbol. It's a standalone instrument block with no physical pipe connections or child instruments directly attached to it.\n\nThe nearby 35-24KJ-689 (\"BROKE SCREENING STOP SEQUENCE\") is a peer instrument at the same level, not a child.\n\nThe lines (35-24-168, 35-24-169, 35-24-170, 35-24-173), valves (35-24FV-640, 35-24FV-644, 35-24HV-642), and other equipment visible in the lower portion of the crop belong to the piping/valve circuit below \u2014 they are not children of this KJ instrument block.\n\nPer the rules: *\"If 35-24KJ-688 is an instrument... and no labelled accessories sit on it, emit the FUNCTION header + description only \u2014 empty `rows` is correct.\"*\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24KJ-688\",\n  \"description\": \"35-24KJ-688 BROKE SCRNG START SEQ\",\n  \"rows\": [],\n  \"peers\": [\n    {\n      \"tag\": \"35-24KJ-689\",\n      \"evidence\": \"Peer KJ instrument visible immediately below 35-24KJ-688; labelled BROKE SCREENING STOP SEQUENCE \u2014 same level, different numeric base\"\n    },\n    {\n      \"tag\": \"35-24FV-640\",\n      \"evidence\": \"Control valve on line 35-24-170 circuit below; not a child of KJ instrument block\"\n    },\n    {\n      \"tag\": \"35-24FV-644\",\n      \"evidence\": \"Control valve on line 35-24-168 circuit below; not a child of KJ instrument block\"\n    },\n    {\n      \"tag\": \"35-24HV-642\",\n      \"evidence\": \"Hand valve visible in lower crop; belongs to piping circuit, not KJ block\"\n    },\n    {\n      \"tag\": \"35-24T606\",\n      \"evidence\": \"Nearby tank \u2014 peer major equipment, not nested under instrument\"\n    },\n    {\n      \"tag\": \"35-24L010\",\n      \"evidence\": \"Nearby process equipment \u2014 peer, not nested under instrument\"\n    }\n  ],\n  \"notes\": [\n    \"35-24KJ-688 is a sequence controller instrument (BROKE SCREENING START SEQUENCE) with no pipe connections or child accessories directly attached; rows intentionally empty per instrument-only rule\",\n    \"35-24KJ-689 (STOP SEQUENCE) is a sibling instrument at same hierarchy level, not a child\",\n    \"Lines 35-24-168/169/170/173 and associated valves belong to the piping circuit below and are not children of this KJ block\"\n  ],\n  \"confidence\": \"high\"\n}\n```",
         "parsed": {
           "sub_process": "BR1",
           "function": "35-24KJ-688",
-          "description": "35-24KJ-688 BROKE SCRN START SEQ",
+          "description": "35-24KJ-688 BROKE SCRNG START SEQ",
           "rows": [],
           "peers": [
             {
               "tag": "35-24KJ-689",
-              "evidence": "Adjacent KJ instrument block on same P&ID crop \u2014 BROKE SCREENING STOP SEQUENCE; different tag number, peer sequence controller"
+              "evidence": "Peer KJ instrument visible immediately below 35-24KJ-688; labelled BROKE SCREENING STOP SEQUENCE \u2014 same level, different numeric base"
+            },
+            {
+              "tag": "35-24FV-640",
+              "evidence": "Control valve on line 35-24-170 circuit below; not a child of KJ instrument block"
+            },
+            {
+              "tag": "35-24FV-644",
+              "evidence": "Control valve on line 35-24-168 circuit below; not a child of KJ instrument block"
+            },
+            {
+              "tag": "35-24HV-642",
+              "evidence": "Hand valve visible in lower crop; belongs to piping circuit, not KJ block"
             },
             {
               "tag": "35-24T606",
-              "evidence": "Nearby tank, different equipment class, not a child of KJ instrument"
+              "evidence": "Nearby tank \u2014 peer major equipment, not nested under instrument"
             },
             {
               "tag": "35-24L010",
-              "evidence": "Nearby process equipment, different equipment class, not a child of KJ instrument"
+              "evidence": "Nearby process equipment \u2014 peer, not nested under instrument"
             }
           ],
           "notes": [
-            "35-24KJ-688 is a sequence controller instrument (KJ = interlock/sequence function) for BROKE SCREENING START SEQUENCE",
-            "No directly attached child lines, valves or sub-instruments are visible on this KJ block in the crop",
-            "Lines 35-24-168/169/170/173 and control valves FV-640/644/HV-642 visible in lower crop belong to the broader broke screening piping circuit, not nested under this KJ instrument tag",
-            "35-24KJ-689 (STOP SEQUENCE) is the logical peer/companion controller"
+            "35-24KJ-688 is a sequence controller instrument (BROKE SCREENING START SEQUENCE) with no pipe connections or child accessories directly attached; rows intentionally empty per instrument-only rule",
+            "35-24KJ-689 (STOP SEQUENCE) is a sibling instrument at same hierarchy level, not a child",
+            "Lines 35-24-168/169/170/173 and associated valves belong to the piping circuit below and are not children of this KJ block"
           ],
           "confidence": "high"
         },
@@ -98,7 +109,14 @@
         "prompt_chars": 8962,
         "vision": true
       },
-      "refined_rows": []
+      "refined_rows": [
+        {
+          "equipment": "35-24-170",
+          "subequipment": "",
+          "mask": "",
+          "description": "35-24-170"
+        }
+      ]
     }
   ]
 }

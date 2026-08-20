@@ -52,7 +52,7 @@
       ],
       "dossier": "Parent tag: 35-24KJ-564\nParent category/block: instruments / \nParent XY: (2661.106995995996, 416.0593503503504)\nNearby descriptions: KJ 564 (35-24)\n\nSame-tag CAD family:\n- (none)\n\nNearby line numbers (short ids preferred in output):\n- 35-24-077  full=35-24-077-PP-250-E10H2A  d=118  layer=P-LINEPOS\n- 35-24-078  full=35-24-078-PP-900-E10H2A  d=166  layer=P-LINEPOS\n\nNearby devices (valves/instruments/pumps/\u2026):\n- line_markers: PPI_1100A  d=167  block=PPI_1100A\n- valves: PPI_0900A  d=189  block=PPI_0900A\n- control_valves: PPI_1000A  d=151  block=PPI_1000A\n- instruments: PPI_1204A  d=195  block=PPI_1204A\n- pumps: P7A0200  d=166  block=P7A0200\n\nNearby peer primary equipment (do NOT nest under parent):\n- 35-24L003 (process_equipment, d=143)\n- 35-24L004 (process_equipment, d=197)\n- 35-24P505 (pumps, d=191)\n\nNearby drawing text tokens:\n- S1  d=161  layer=P-TEXT\n- S2  d=146  layer=P-TEXT\n- A1  d=183  layer=P-TEXT\n- 1 bar  d=171  layer=P-TEXT\n- 2621 ADTPD  d=164  layer=P-TEXT\n- 35-24  d=188  layer=P-INSTRPOS_TEXTS\n- 35-24L003  d=149  layer=P-EQUIPMENT_POS\n- HP-63G2  d=158  layer=P-EQUIPMENT_POS\n- 562  d=11  layer=P-INSTRPOS_TEXTS\n- 564  d=4  layer=P-INSTRPOS_TEXTS\n- 565  d=19  layer=P-INSTRPOS_TEXTS\n- 560  d=146  layer=P-INSTRPOS_TEXTS\n- 561  d=198  layer=P-INSTRPOS_TEXTS\n- 669  d=183  layer=P-INSTRPOS_TEXTS\n- SHOWERS S1 & TAIL  d=134  layer=P-TEXT\n- 563  d=123  layer=P-INSTRPOS_TEXTS\n- 575  d=198  layer=P-INSTRPOS_TEXTS\n- 572  d=122  layer=P-INSTRPOS_TEXTS\n- 35-24P505  d=195  layer=P-PUMP_POS\n- 860  d=200  layer=P-PUMP_POS\n- 17  d=200  layer=P-PUMP_POS\n- 35-24-113  d=175  layer=P-VALVEPOS\n- 003-50  d=180  layer=P-VALVEPOS\n- 35-24-111  d=157  layer=P-VALVEPOS\n- 003-15  d=162  layer=P-VALVEPOS\n- 35-24-110  d=172  layer=P-VALVEPOS\n- 001-80  d=177  layer=P-VALVEPOS\n- 35-24-108  d=176  layer=P-VALVEPOS\n- 35-24-107  d=185  layer=P-VALVEPOS\n- 35-24-230  d=169  layer=P-VALVEPOS\n- 350-500  d=174  layer=P-VALVEPOS\n- 35-24-077  d=118  layer=P-LINEPOS\n- 35-24-078  d=166  layer=P-LINEPOS\n- 35-24XV-669  d=195  layer=P-CVPOS\n- 35-24LV1-560  d=175  layer=P-CVPOS\n- 500  d=176  layer=P-CVPOS\n- 35-24LV2-560  d=152  layer=P-CVPOS\n- 200  d=155  layer=P-CVPOS",
       "ai": {
-        "raw_text": "Looking at the P&ID crop, I can see that **35-24KJ-564** is an instrument tag (KJ = pushbutton/command type) labeled \"SIZE PRESS PULPER START\" in the MCS control panel area. It's a control room instrument with MCS control (diamond-in-square symbol per legend).\n\nFrom the image:\n- `35-24KJ-564` = SIZE PRESS PULPER START (pushbutton/command)\n- `35-24KJ-565` = SIZE PRESS PULPER STOP (nearby peer instrument)\n- `35-24XS-562` = MCS SIGNAL (nearby instrument, same panel group)\n\nThe KJ-564 is a standalone instrument (pushbutton command). It has no child lines, valves, or sub-instruments directly attached to it \u2014 it's a discrete instrument node. Per the rules: *\"If 35-24KJ-564 is an instrument and no labelled accessories sit on it, emit the FUNCTION header + description only \u2014 empty rows is correct.\"*\n\nPeers visible nearby:\n- `35-24KJ-565` \u2014 SIZE PRESS PULPER STOP (same panel, different tag)\n- `35-24XS-562` \u2014 MCS signal instrument (same panel group, different tag)\n- `35-24L003` \u2014 SIZE PRESS PULPER vessel (process equipment)\n- `35-24LV1-560`, `35-24LV2-560` \u2014 control valves on nearby lines\n- `35-24P505` \u2014 pump\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24KJ-564\",\n  \"description\": \"35-24KJ-564 SIZE PRESS PLPR START\",\n  \"rows\": [],\n  \"peers\": [\n    {\n      \"tag\": \"35-24KJ-565\",\n      \"evidence\": \"Adjacent KJ instrument in same panel group \u2014 SIZE PRESS PULPER STOP; separate tag, not a child of 564\"\n    },\n    {\n      \"tag\": \"35-24XS-562\",\n      \"evidence\": \"MCS SIGNAL instrument visible in same panel crop; own tag, peer not child\"\n    },\n    {\n      \"tag\": \"35-24L003\",\n      \"evidence\": \"SIZE PRESS PULPER vessel \u2014 major process equipment, peer not child of instrument\"\n    },\n    {\n      \"tag\": \"35-24P505\",\n      \"evidence\": \"Pump visible nearby \u2014 peer major equipment, not child of instrument\"\n    },\n    {\n      \"tag\": \"35-24LV1-560\",\n      \"evidence\": \"Control valve on line 35-24-077 circuit; belongs to LC-560 loop, not KJ-564\"\n    },\n    {\n      \"tag\": \"35-24LV2-560\",\n      \"evidence\": \"Control valve on line 35-24-078 circuit; belongs to LC-560 loop, not KJ-564\"\n    }\n  ],\n  \"notes\": [\n    \"35-24KJ-564 is a pushbutton/command instrument (MCS control) for SIZE PRESS PULPER START; no piping, valves or sub-instruments are directly attached to this tag\",\n    \"35-24KJ-565 (STOP) is a sibling instrument in the same local panel group but carries its own tag and is not a child\",\n    \"rows left empty per rule: standalone instrument with no labelled accessories\"\n  ],\n  \"confidence\": \"high\"\n}\n```",
+        "raw_text": "Looking at the P&ID crop, I can see that **35-24KJ-564** is an instrument tag (KJ = pushbutton/command type) labeled \"SIZE PRESS PULPER START\" in the MCS control panel area. It's a control room instrument with MCS control (diamond-in-square symbol per legend).\n\nFrom the image:\n- `35-24KJ-564` = SIZE PRESS PULPER START (pushbutton/command)\n- `35-24KJ-565` = SIZE PRESS PULPER STOP (nearby peer instrument)\n- `35-24XS-562` = MCS SIGNAL (nearby instrument, same panel group)\n\nThe KJ-564 is a standalone instrument (pushbutton command). It has no child lines, valves, or sub-instruments directly attached to it \u2014 it's a discrete instrument node. Per the rules: *\"If 35-24KJ-564 is an instrument and no labelled accessories sit on it, emit the FUNCTION header + description only \u2014 empty rows is correct.\"*\n\nPeers visible nearby:\n- `35-24KJ-565` \u2014 SIZE PRESS PULPER STOP (same panel, different tag)\n- `35-24XS-562` \u2014 MCS signal instrument (same panel group, different tag)\n- `35-24L003` \u2014 SIZE PRESS PULPER vessel (process equipment, peer)\n- `35-24L004` \u2014 process equipment peer\n- `35-24P505` \u2014 pump peer\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24KJ-564\",\n  \"description\": \"35-24KJ-564 SIZE PRESS PLPR START\",\n  \"rows\": [],\n  \"peers\": [\n    {\"tag\": \"35-24KJ-565\", \"evidence\": \"Sibling MCS pushbutton STOP command, same panel group, own tag\"},\n    {\"tag\": \"35-24XS-562\", \"evidence\": \"MCS SIGNAL instrument in same panel cluster, own tag\"},\n    {\"tag\": \"35-24L003\", \"evidence\": \"SIZE PRESS PULPER vessel, peer process equipment\"},\n    {\"tag\": \"35-24L004\", \"evidence\": \"Adjacent process equipment, peer\"},\n    {\"tag\": \"35-24P505\", \"evidence\": \"Pump peer, own tag in dossier\"}\n  ],\n  \"notes\": [\n    \"35-24KJ-564 is a discrete MCS pushbutton instrument (START command) with no child lines or accessories; rows intentionally empty per instrument-only rule.\",\n    \"35-24KJ-565 (STOP) is a sibling instrument in the same local panel group but carries its own tag and is not a child of 564.\"\n  ],\n  \"confidence\": \"high\"\n}\n```",
         "parsed": {
           "sub_process": "BR1",
           "function": "35-24KJ-564",
@@ -61,33 +61,28 @@
           "peers": [
             {
               "tag": "35-24KJ-565",
-              "evidence": "Adjacent KJ instrument in same panel group \u2014 SIZE PRESS PULPER STOP; separate tag, not a child of 564"
+              "evidence": "Sibling MCS pushbutton STOP command, same panel group, own tag"
             },
             {
               "tag": "35-24XS-562",
-              "evidence": "MCS SIGNAL instrument visible in same panel crop; own tag, peer not child"
+              "evidence": "MCS SIGNAL instrument in same panel cluster, own tag"
             },
             {
               "tag": "35-24L003",
-              "evidence": "SIZE PRESS PULPER vessel \u2014 major process equipment, peer not child of instrument"
+              "evidence": "SIZE PRESS PULPER vessel, peer process equipment"
+            },
+            {
+              "tag": "35-24L004",
+              "evidence": "Adjacent process equipment, peer"
             },
             {
               "tag": "35-24P505",
-              "evidence": "Pump visible nearby \u2014 peer major equipment, not child of instrument"
-            },
-            {
-              "tag": "35-24LV1-560",
-              "evidence": "Control valve on line 35-24-077 circuit; belongs to LC-560 loop, not KJ-564"
-            },
-            {
-              "tag": "35-24LV2-560",
-              "evidence": "Control valve on line 35-24-078 circuit; belongs to LC-560 loop, not KJ-564"
+              "evidence": "Pump peer, own tag in dossier"
             }
           ],
           "notes": [
-            "35-24KJ-564 is a pushbutton/command instrument (MCS control) for SIZE PRESS PULPER START; no piping, valves or sub-instruments are directly attached to this tag",
-            "35-24KJ-565 (STOP) is a sibling instrument in the same local panel group but carries its own tag and is not a child",
-            "rows left empty per rule: standalone instrument with no labelled accessories"
+            "35-24KJ-564 is a discrete MCS pushbutton instrument (START command) with no child lines or accessories; rows intentionally empty per instrument-only rule.",
+            "35-24KJ-565 (STOP) is a sibling instrument in the same local panel group but carries its own tag and is not a child of 564."
           ],
           "confidence": "high"
         },
@@ -121,14 +116,7 @@
         "prompt_chars": 9632,
         "vision": true
       },
-      "refined_rows": [
-        {
-          "equipment": "35-24-077",
-          "subequipment": "",
-          "mask": "",
-          "description": "35-24-077"
-        }
-      ]
+      "refined_rows": []
     }
   ]
 }

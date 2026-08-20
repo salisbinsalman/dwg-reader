@@ -72,7 +72,7 @@
       ],
       "dossier": "Parent tag: 35-24T601\nParent category/block: tanks / PPI_0700A-25_0\nParent XY: (3762.5, 275.0)\nNearby descriptions: COUCH PIT; 176 m\u00b3; 2,8 %\n\nSame-tag CAD family:\n- tanks @ (3762.5,275.0) block=PPI_0700A-25_0 nearby=35-24T601; 35-24L403; 35-24L401\n- valves @ (3813.75,287.5) block=PPI_0900A nearby=35-24T601; 35-24; 35-24; 35-24L403; 35-24L401\n- valves @ (3810.037084313363,257.5) block=PPI_0900A nearby=35-24T601; 35-24L403; 35-24L401; 35-24P502; 35-24\n- valves @ (3816.287084313363,270.0) block=PPI_0900A nearby=35-24T601; 35-24L403; 35-24L401; 35-24P502; 35-24\n- instruments @ (3799.047388647762,270.0) block=PPI_0102B nearby=35-24T601; 35-24L403; 35-24L401; 35-24P502; 35-24\n\nNearby line numbers (short ids preferred in output):\n- 35-24-110  full=35-24-110-WAF-100-E10H2A  d=121  layer=P-LINEPOS\n- 35-24-112  full=35-24-112-WAF-400-E10H2A  d=108  layer=P-LINEPOS\n- 35-24-115  full=35-24-115-WAF-250-E10H2A  d=97  layer=P-LINEPOS\n- 35-24-117  full=35-24-117-PP-250-E10H2A  d=72  layer=P-LINEPOS\n- 35-24-113  full=35-24-113-PP-800-E10H2A  d=60  layer=P-LINEPOS\n- 35-24-119  full=35-24-119-PP-300-E10H2A  d=70  layer=P-LINEPOS\n- 35-24-120  full=35-24-120-PP-900-E10H2A  d=74  layer=P-LINEPOS\n- 35-24-118  full=35-24-118-PP-200-E10H2A  d=70  layer=P-LINEPOS\n\nNearby devices (valves/instruments/pumps/\u2026):\n- line_markers: PPI_1100A  d=70  block=PPI_1100A\n- valves: PPI_0900A  d=53  block=PPI_0900A\n- control_valves: PPI_1000A  d=121  block=PPI_1000A\n- instruments: PPI_1204A  d=104  block=PPI_1204A\n- pumps: P7A0200  d=113  block=P7A0200\n- motors: PPI_1504A-25_0  d=113  block=PPI_1504A-25_0\n- fittings: P7A1214  d=123  block=P7A1214\n\nNearby peer primary equipment (do NOT nest under parent):\n- 35-24L401 (agitators, d=55)\n- 35-24L403 (agitators, d=45)\n- 35-24P502 (pumps, d=113)\n- 35-24P501 (pumps, d=130)\n\nNearby drawing text tokens:\n- S1  d=44  layer=P-TEXT\n- A1  d=45  layer=P-TEXT\n- A2  d=39  layer=P-TEXT\n- 2 bar  d=37  layer=P-TEXT\n- GEARBOX 1  d=155  layer=P-OTHER\n- 2621 ADTPD  d=29  layer=P-TEXT\n- SFVPT-110-2  d=33  layer=P-TEXT\n- 35-24L403  d=49  layer=P-AGITATOR_POS\n- 35-24L401  d=59  layer=P-AGITATOR_POS\n- 600  d=146  layer=P-INSTRPOS_TEXTS\n- 35-24  d=142  layer=P-INSTRPOS_TEXTS\n- 601  d=138  layer=P-INSTRPOS_TEXTS\n- 595  d=126  layer=P-INSTRPOS_TEXTS\n- 9300  d=173  layer=P-INSTRPOS_TEXTS\n- 9301  d=170  layer=P-INSTRPOS_TEXTS\n- 603  d=126  layer=P-INSTRPOS_TEXTS\n- 602  d=131  layer=P-INSTRPOS_TEXTS\n- 597  d=115  layer=P-INSTRPOS_TEXTS\n- 598  d=107  layer=P-INSTRPOS_TEXTS\n- 654  d=200  layer=P-INSTRPOS_TEXTS\n- SHOWER S1  d=184  layer=P-TEXT\n- 664  d=152  layer=P-INSTRPOS_TEXTS\n- COUCH PIT AGITATOR 1  d=123  layer=P-TEXT\n- 35-24T601  d=7  layer=P-TANK_POS\n- 176 m\u00b3  d=16  layer=P-TANK_POS\n- 2,8 %  d=21  layer=P-TANK_POS\n- 35-24P501  d=149  layer=P-PUMP_POS\n- 1300  d=149  layer=P-PUMP_POS\n- 50  d=161  layer=P-PUMP_POS\n- 780  d=152  layer=P-PUMP_POS\n- 1000  d=162  layer=P-PUMP_POS\n- 35-24P502  d=114  layer=P-PUMP_POS\n- 60  d=117  layer=P-PUMP_POS\n- 55  d=127  layer=P-PUMP_POS\n- 1500  d=128  layer=P-PUMP_POS\n- 35-24-403.2  d=132  layer=P-MOTOR_POS\n- 1,5  d=137  layer=P-MOTOR_POS\n- 35-24-401.2  d=118  layer=P-MOTOR_POS\n- 35-24-084  d=153  layer=P-VALVEPOS\n- 003-50  d=156  layer=P-VALVEPOS",
       "ai": {
-        "raw_text": "I'll analyze the P&ID image systematically for FUNCTION=35-24T601 (COUCH PIT tank, 176 m\u00b3, 2.8%).\n\n## Analysis\n\n**Tank identity**: 35-24T601 = COUCH PIT, 176 m\u00b3, 2.8% consistency\n\n**Lines directly connected to the tank** (visible in image):\n- 35-24-113 (PP-800) \u2014 inlet line entering tank top/side\n- 35-24-115 (WAF-250) \u2014 line on left side of tank\n- 35-24-112 (WAF-400) \u2014 line on left\n- 35-24-110 (WAF-100) \u2014 line on left\n- 35-24-117 (PP-250) \u2014 outlet/bottom line\n- 35-24-118 (PP-200) \u2014 line connecting right side\n- 35-24-119 (PP-300) \u2014 line right side\n- 35-24-120 (PP-900) \u2014 discharge line right\n\n**Valves on lines** (from image):\n- On 35-24-118: hand valve visible (outline bowtie, no actuator) \u2192 HV\n- On 35-24-119: valve with filled triangles visible \u2192 NC\n- On 35-24-120: valve with L marker \u2192 check valve CHK\n- 35-24-079 (350-200) \u2014 valve tag visible on line near 35-24-118 area, outline bowtie \u2192 HV\n- 35-24-078 (350-250) \u2014 valve tag on 35-24-117 area, outline bowtie \u2192 HV\n- 35-24-075 (001-80) \u2014 valve on 35-24-120, filled \u2192 NC\n- 35-24-074 (003-50) \u2014 valve on 35-24-119 area\n- 35-24-1101 (003-50) \u2014 valve tag visible, filled triangles \u2192 NC\n- 35-24-1125 (001-80) \u2014 valve tag visible, filled triangles \u2192 NC\n\n**Instruments on tank**:\n- 35-24KV-595 \u2014 visible bottom left with KS/595 instrument bubble\n- 35-24HV-597 \u2014 HI/597 instrument bubble visible\n- 35-24FV-598 \u2014 FC/598 instrument bubble visible\n\n**Shower**: S1 (2 bar) \u2014 shower nozzle on tank, tag SFVPT-110-2 visible\n\n**Peers** (separate primary equipment):\n- 35-24L401, 35-24L403 \u2014 agitators (peer primary)\n- 35-24P501, 35-24P502 \u2014 pumps (peer primary)\n\n**Motor tags**: 35-24-401.2 and 35-24-403.2 belong to agitators L401/L403 respectively \u2014 not to T601.\n\n**Valve type assessment from image**:\n- 35-24-079: outline bowtie near 35-24-118 \u2192 HV\n- 35-24-078: outline bowtie near 35-24-117 \u2192 HV  \n- 35-24-075: filled bowtie on 35-24-120 \u2192 NC\n- 35-24-074: filled bowtie on 35-24-119 \u2192 NC\n- 35-24-1101: filled/solid triangles \u2192 NC\n- 35-24-1125: filled/solid triangles \u2192 NC\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24T601\",\n  \"description\": \"35-24T601 COUCH PIT TNK 176M3\",\n  \"rows\": [\n    {\"equipment\": \"35-24-113\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-113 INLET LINE PP-800\"},\n    {\"equipment\": \"35-24-115\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-115 LINE WAF-250\"},\n    {\"equipment\": \"35-24-112\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-112 LINE WAF-400\"},\n    {\"equipment\": \"35-24-110\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-110 LINE WAF-100\"},\n    {\"equipment\": \"35-24-117\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-117 LINE PP-250\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-078\", \"mask\": \"\", \"description\": \"35-24-078 VLV HV\"},\n    {\"equipment\": \"35-24-118\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-118 LINE PP-200\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-079\", \"mask\": \"\", \"description\": \"35-24-079 VLV HV\"},\n    {\"equipment\": \"35-24-119\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-119 LINE PP-300\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-1101\", \"mask\": \"\", \"description\": \"35-24-1101 VLV NC\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-074\", \"mask\": \"\", \"description\": \"35-24-074 VLV NC\"},\n    {\"equipment\": \"35-24-120\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-120 LINE PP-900\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-1125\", \"mask\": \"\", \"description\": \"35-24-1125 VLV NC\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-075\", \"mask\": \"\", \"description\": \"35-24-075 VLV NC\"},\n    {\"equipment\": \"35-24KV-595\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24KV-595 TNK LVL CTRL VLV\"},\n    {\"equipment\": \"35-24HV-597\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24HV-597 TNK LVL INST\"},\n    {\"equipment\": \"35-24FV-598\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24FV-598 TNK FLOW CTRL VLV\"}\n  ],\n  \"peers\": [\n    {\"tag\": \"35-24L401\", \"evidence\": \"Agitator peer primary equipment on same tank, separate FUNCTION\"},\n    {\"tag\": \"35-24L403\", \"evidence\": \"Agitator peer primary equipment on same tank, separate FUNCTION\"},\n    {\"tag\": \"35-24-401.2\", \"evidence\": \"Motor branch of agitator 35-24L401, not T601 numeric base\"},\n    {\"tag\": \"35-24-403.2\", \"evidence\": \"Motor branch of agitator 35-24L403, not T601 numeric base\"},\n    {\"tag\": \"35-24P501\", \"evidence\": \"Pump peer primary equipment, separate FUNCTION\"},\n    {\"tag\": \"35-24P502\", \"evidence\": \"Pump peer primary equipment, separate FUNCTION\"}\n  ],\n  \"notes\": [\n    \"Tank 35-24T601 is COUCH PIT, 176 m\u00b3, 2.8% consistency\",\n    \"Shower S1 at 2 bar visible on tank but no discrete tag confirmed beyond SFVPT-110-2 label\",\n    \"35-24-079 and 35-24-078 are outline bowtie hand valves (HV) on PP-200/PP-250 lines\",\n    \"35-24-1101, 35-24-1125, 35-24-074, 35-24-075 show filled/solid bowtie triangles (NC)\",\n    \"Instruments KS-595, HI-597, FC-598 are on tank level/flow control circuit\"\n  ],\n  \"confidence\": \"medium\"\n}\n```",
+        "raw_text": "I'll analyze the P&ID image systematically for FUNCTION=35-24T601 (COUCH PIT tank, 176 m\u00b3, 2.8%).\n\n## Analysis\n\n**Tank identity**: 35-24T601 = COUCH PIT, 176 m\u00b3, 2.8% consistency\n\n**Lines directly connected to the tank** (visible in image):\n- 35-24-113 (PP-800) \u2014 inlet line entering tank top/side\n- 35-24-115 (WAF-250) \u2014 line on left side of tank\n- 35-24-112 (WAF-400) \u2014 line on left\n- 35-24-110 (WAF-100) \u2014 line on left\n- 35-24-117 (PP-250) \u2014 outlet/bottom line\n- 35-24-118 (PP-200) \u2014 line connecting right side\n- 35-24-119 (PP-300) \u2014 line right side\n- 35-24-120 (PP-900) \u2014 discharge line right/bottom\n\n**Valves on lines** (from image):\n- On 35-24-118: valve visible (hand valve, outline bowtie, no actuator) \u2192 HV\n- On 35-24-119: valve with filled triangles visible \u2192 NC\n- On 35-24-120: valve visible with L marker \u2192 check valve CHK\n- 35-24-079 (350-200) \u2014 valve tag visible on line 35-24-118 area \u2192 HV\n- 35-24-078 (350-250) \u2014 valve tag on line 35-24-117 area\n- 35-24-075 (001-80) \u2014 valve on 35-24-120\n- 35-24-074 (003-50) \u2014 valve on 35-24-119 area\n- 35-24-1101 (003-50) \u2014 valve tag visible near line 35-24-119\n- 35-24-1125 (001-80) \u2014 valve tag visible near line 35-24-120\n\n**Instruments on tank**:\n- 35-24KV-595 \u2014 visible bottom left (KS 595 instrument)\n- 35-24HI-597 \u2014 HI 597 instrument visible\n- 35-24FC-598 \u2014 FC 598 visible\n\n**Shower**: S1 (SFVPT-110-2) \u2014 shower on tank, 2 bar\n\n**Peers** (major equipment, not children):\n- 35-24L401, 35-24L403 \u2014 agitators (peer primary equipment)\n- 35-24P501, 35-24P502 \u2014 pumps\n\n**Motor tags**: 35-24-401.2 and 35-24-403.2 belong to agitators L401/L403 (not T601 base), so they go to peers.\n\n**Valve symbol analysis from image**:\n- 35-24-079: outline bowtie, no actuator \u2192 HV\n- 35-24-078: outline bowtie \u2192 HV  \n- 35-24-1101: filled/solid triangles visible \u2192 NC\n- 35-24-1125: appears to have filled triangles \u2192 NC\n- 35-24-074: small valve, outline \u2192 HV\n- 35-24-075: outline with L (check?) \u2192 CHK\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24T601\",\n  \"description\": \"35-24T601 COUCH PIT TNK 176M3\",\n  \"rows\": [\n    {\"equipment\": \"35-24-113\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-113 INLET LINE PP-800\"},\n    {\"equipment\": \"35-24-115\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-115 LINE WAF-250\"},\n    {\"equipment\": \"35-24-112\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-112 LINE WAF-400\"},\n    {\"equipment\": \"35-24-110\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-110 LINE WAF-100\"},\n    {\"equipment\": \"35-24-117\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-117 LINE PP-250\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-078\", \"mask\": \"\", \"description\": \"35-24-078 VLV HV\"},\n    {\"equipment\": \"35-24-118\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-118 LINE PP-200\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-079\", \"mask\": \"\", \"description\": \"35-24-079 VLV HV\"},\n    {\"equipment\": \"35-24-119\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-119 LINE PP-300\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-1101\", \"mask\": \"\", \"description\": \"35-24-1101 VLV NC\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-074\", \"mask\": \"\", \"description\": \"35-24-074 VLV HV\"},\n    {\"equipment\": \"35-24-120\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-120 LINE PP-900\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-1125\", \"mask\": \"\", \"description\": \"35-24-1125 VLV NC\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-075\", \"mask\": \"\", \"description\": \"35-24-075 VLV CHK\"},\n    {\"equipment\": \"35-24KV-595\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24KV-595 LVL VLV\"},\n    {\"equipment\": \"35-24HI-597\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24HI-597 LVL IND\"},\n    {\"equipment\": \"35-24FC-598\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24FC-598 FLOW CTRL\"}\n  ],\n  \"peers\": [\n    {\"tag\": \"35-24L401\", \"evidence\": \"agitator peer primary equipment, own tag base L401\"},\n    {\"tag\": \"35-24L403\", \"evidence\": \"agitator peer primary equipment, own tag base L403\"},\n    {\"tag\": \"35-24-401.2\", \"evidence\": \"motor branch of agitator 35-24L401, not T601 base\"},\n    {\"tag\": \"35-24-403.2\", \"evidence\": \"motor branch of agitator 35-24L403, not T601 base\"},\n    {\"tag\": \"35-24P501\", \"evidence\": \"pump peer primary equipment, own tag base P501\"},\n    {\"tag\": \"35-24P502\", \"evidence\": \"pump peer primary equipment, own tag base P502\"}\n  ],\n  \"notes\": [\n    \"Tank described as COUCH PIT, 176 m\u00b3, 2.8% consistency on P&ID\",\n    \"Shower S1 (SFVPT-110-2) at 2 bar visible on tank but no discrete tag confirmed for T601 circuit\",\n    \"35-24-079 and 35-24-078 are outline bowtie hand valves (HV) on PP-200/PP-250 lines\",\n    \"35-24-1101 and 35-24-1125 show solid/filled triangles indicating NC valves\",\n    \"35-24-075 shows directional indicator consistent with check valve (CHK)\",\n    \"Instruments KV-595, HI-597, FC-598 visible on tank circuit at bottom of crop\"\n  ],\n  \"confidence\": \"medium\"\n}\n```",
         "parsed": {
           "sub_process": "BR1",
           "function": "35-24T601",
@@ -142,7 +142,7 @@
               "equipment": "",
               "subequipment": "35-24-074",
               "mask": "",
-              "description": "35-24-074 VLV NC"
+              "description": "35-24-074 VLV HV"
             },
             {
               "equipment": "35-24-120",
@@ -160,59 +160,60 @@
               "equipment": "",
               "subequipment": "35-24-075",
               "mask": "",
-              "description": "35-24-075 VLV NC"
+              "description": "35-24-075 VLV CHK"
             },
             {
               "equipment": "35-24KV-595",
               "subequipment": "",
               "mask": "",
-              "description": "35-24KV-595 TNK LVL CTRL VLV"
+              "description": "35-24KV-595 LVL VLV"
             },
             {
-              "equipment": "35-24HV-597",
+              "equipment": "35-24HI-597",
               "subequipment": "",
               "mask": "",
-              "description": "35-24HV-597 TNK LVL INST"
+              "description": "35-24HI-597 LVL IND"
             },
             {
-              "equipment": "35-24FV-598",
+              "equipment": "35-24FC-598",
               "subequipment": "",
               "mask": "",
-              "description": "35-24FV-598 TNK FLOW CTRL VLV"
+              "description": "35-24FC-598 FLOW CTRL"
             }
           ],
           "peers": [
             {
               "tag": "35-24L401",
-              "evidence": "Agitator peer primary equipment on same tank, separate FUNCTION"
+              "evidence": "agitator peer primary equipment, own tag base L401"
             },
             {
               "tag": "35-24L403",
-              "evidence": "Agitator peer primary equipment on same tank, separate FUNCTION"
+              "evidence": "agitator peer primary equipment, own tag base L403"
             },
             {
               "tag": "35-24-401.2",
-              "evidence": "Motor branch of agitator 35-24L401, not T601 numeric base"
+              "evidence": "motor branch of agitator 35-24L401, not T601 base"
             },
             {
               "tag": "35-24-403.2",
-              "evidence": "Motor branch of agitator 35-24L403, not T601 numeric base"
+              "evidence": "motor branch of agitator 35-24L403, not T601 base"
             },
             {
               "tag": "35-24P501",
-              "evidence": "Pump peer primary equipment, separate FUNCTION"
+              "evidence": "pump peer primary equipment, own tag base P501"
             },
             {
               "tag": "35-24P502",
-              "evidence": "Pump peer primary equipment, separate FUNCTION"
+              "evidence": "pump peer primary equipment, own tag base P502"
             }
           ],
           "notes": [
-            "Tank 35-24T601 is COUCH PIT, 176 m\u00b3, 2.8% consistency",
-            "Shower S1 at 2 bar visible on tank but no discrete tag confirmed beyond SFVPT-110-2 label",
+            "Tank described as COUCH PIT, 176 m\u00b3, 2.8% consistency on P&ID",
+            "Shower S1 (SFVPT-110-2) at 2 bar visible on tank but no discrete tag confirmed for T601 circuit",
             "35-24-079 and 35-24-078 are outline bowtie hand valves (HV) on PP-200/PP-250 lines",
-            "35-24-1101, 35-24-1125, 35-24-074, 35-24-075 show filled/solid bowtie triangles (NC)",
-            "Instruments KS-595, HI-597, FC-598 are on tank level/flow control circuit"
+            "35-24-1101 and 35-24-1125 show solid/filled triangles indicating NC valves",
+            "35-24-075 shows directional indicator consistent with check valve (CHK)",
+            "Instruments KV-595, HI-597, FC-598 visible on tank circuit at bottom of crop"
           ],
           "confidence": "medium"
         },
@@ -331,7 +332,7 @@
           "equipment": "",
           "subequipment": "35-24-074",
           "mask": "",
-          "description": "35-24-074 VLV NC"
+          "description": "35-24-074 VLV HV"
         },
         {
           "equipment": "35-24-120",
@@ -349,25 +350,19 @@
           "equipment": "",
           "subequipment": "35-24-075",
           "mask": "",
-          "description": "35-24-075 VLV NC"
+          "description": "35-24-075 VLV CHK"
         },
         {
           "equipment": "35-24KV-595",
           "subequipment": "",
           "mask": "",
-          "description": "35-24KV-595 TNK LVL CTRL VLV"
+          "description": "35-24KV-595 LVL VLV"
         },
         {
-          "equipment": "35-24HV-597",
+          "equipment": "35-24FC-598",
           "subequipment": "",
           "mask": "",
-          "description": "35-24HV-597 TNK LVL INST"
-        },
-        {
-          "equipment": "35-24FV-598",
-          "subequipment": "",
-          "mask": "",
-          "description": "35-24FV-598 TNK FL CTRL VLV"
+          "description": "35-24FC-598 FL CTRL"
         },
         {
           "equipment": "35-24T601.1",

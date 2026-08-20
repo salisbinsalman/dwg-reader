@@ -67,7 +67,7 @@
       ],
       "dossier": "Parent tag: 35-24HS-626\nParent category/block: instruments / \nParent XY: (4965.843201076076, 438.541625)\nNearby descriptions: HS 626 (35-24)\n\nSame-tag CAD family:\n- (none)\n\nNearby line numbers (short ids preferred in output):\n- 35-24-149  full=35-24-149-WAA-300-E10H2A  d=117  layer=P-LINEPOS\n- 35-24-152  full=35-24-152-PP-300-E10H2A  d=27  layer=P-LINEPOS\n- 35-24-151  full=35-24-151-PP-600-E10H2A  d=65  layer=P-LINEPOS\n- 35-24-158  full=35-24-158-PP-400-E10H2A  d=174  layer=P-LINEPOS\n- 35-24-154  full=35-24-154-PP-700-E10H2A  d=102  layer=P-LINEPOS\n- 35-24-159  full=35-24-159-PP-300-E10H2A  d=116  layer=P-LINEPOS\n- 35-24-155  full=35-24-155-PP-150-E10H2A  d=179  layer=P-LINEPOS\n- 35-24-150  full=35-24-150-WAA-400-E10H2A  d=134  layer=P-LINEPOS\n- 35-24-156  full=35-24-156-PP-400-E10H2A  d=136  layer=P-LINEPOS\n\nNearby devices (valves/instruments/pumps/\u2026):\n- line_markers: PPI_1100A  d=137  block=PPI_1100A\n- valves: PPI_0900A  d=166  block=PPI_0900A\n- control_valves: PPI_1000A  d=92  block=PPI_1000A\n- instruments: PPI_1204A  d=117  block=PPI_1204A\n- pumps: P7A0200  d=160  block=P7A0200\n- motors: PPI_1504A-25_0  d=149  block=PPI_1504A-25_0\n\nNearby peer primary equipment (do NOT nest under parent):\n- 35-24T605 (tanks, d=114)\n- 35-24L002 (process_equipment, d=152)\n- 35-24L405 (agitators, d=159)\n- 35-24P515 (pumps, d=160)\n\nNearby drawing text tokens:\n- 35-24L405  d=162  layer=P-AGITATOR_POS\n- 35-24L002  d=145  layer=P-EQUIPMENT_POS\n- GT-2540  d=149  layer=P-EQUIPMENT_POS\n- DN500  d=118  layer=P-PTERMINAL_POS\n- DN600  d=46  layer=P-PTERMINAL_POS\n- DN300  d=89  layer=P-PTERMINAL_POS\n- DN\u00d860  d=45  layer=P-PTERMINAL_POS\n- 630  d=82  layer=P-INSTRPOS_TEXTS\n- 35-24  d=73  layer=P-INSTRPOS_TEXTS\n- 629  d=85  layer=P-INSTRPOS_TEXTS\n- 623  d=72  layer=P-INSTRPOS_TEXTS\n- 626  d=4  layer=P-INSTRPOS_TEXTS\n- 633  d=162  layer=P-INSTRPOS_TEXTS\n- 631  d=130  layer=P-INSTRPOS_TEXTS\n- 628  d=34  layer=P-INSTRPOS_TEXTS\n- 625  d=11  layer=P-INSTRPOS_TEXTS\n- 622  d=69  layer=P-INSTRPOS_TEXTS\n- 624  d=120  layer=P-INSTRPOS_TEXTS\n- 662  d=164  layer=P-INSTRPOS_TEXTS\n- 663  d=83  layer=P-INSTRPOS_TEXTS\n- 35-24T605  d=117  layer=P-TANK_POS\n- 70 m\u00b3  d=135  layer=P-TANK_POS\n- 4 %  d=140  layer=P-TANK_POS\n- 35-24P515  d=197  layer=P-PUMP_POS\n- 115  d=200  layer=P-PUMP_POS\n- 35-24-002.1  d=144  layer=P-MOTOR_POS\n- 15  d=142  layer=P-MOTOR_POS\n- 1500  d=132  layer=P-MOTOR_POS\n- 35-24-1136  d=192  layer=P-VALVEPOS\n- 101-400  d=195  layer=P-VALVEPOS\n- 35-24-033  d=119  layer=P-VALVEPOS\n- 003-15  d=116  layer=P-VALVEPOS\n- 35-24-032  d=61  layer=P-VALVEPOS\n- 35-24-1110  d=51  layer=P-VALVEPOS\n- 003-25  d=52  layer=P-VALVEPOS\n- 35-24-030  d=75  layer=P-VALVEPOS\n- 001-65  d=69  layer=P-VALVEPOS\n- 35-24-029  d=35  layer=P-VALVEPOS\n- 35-24-027  d=120  layer=P-VALVEPOS\n- 350-400  d=125  layer=P-VALVEPOS",
       "ai": {
-        "raw_text": "Looking at the P&ID image, I can see:\n\n- **35-24HS-626** is an instrument (Hand Switch / selector switch) shown as a locally mounted instrument bubble labeled \"HS 626\" in the (35-24) area, associated with the Broke Thickener GT-2540 control circuit\n- It appears in a control box area alongside HS-628, HS-629, HS-630, ES-663\n- The HS-626 is a hand switch instrument \u2014 no child lines, valves, or sub-instruments are directly attached to it\n- It is a standalone instrument tag with no accessories that can be defended as children\n\nThe nearby instruments (HS-628, HS-629, HS-630, ES-663) are peer instruments in the same control panel, not children of HS-626.\n\nThe nearby valves (35-24HV-626, 35-24HV-623, 35-24HV-628) are separate instrument tags \u2014 HV-626 is the associated hand valve but is a peer tag, not a child of the HS switch.\n\nPer Rule 12 / Example C guidance: \"If 35-24HS-626 is an instrument and no labelled accessories sit on it, emit the FUNCTION header + description only \u2014 empty rows is correct.\"\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24HS-626\",\n  \"description\": \"35-24HS-626 BROKE THKR HS\",\n  \"rows\": [],\n  \"peers\": [\n    {\"tag\": \"35-24HV-626\", \"evidence\": \"associated hand valve on line 35-24-152, separate instrument tag not a child of HS switch\"},\n    {\"tag\": \"35-24HV-623\", \"evidence\": \"hand valve on separate circuit, peer instrument\"},\n    {\"tag\": \"35-24HV-628\", \"evidence\": \"hand valve peer instrument in same control area\"},\n    {\"tag\": \"35-24L002\", \"evidence\": \"peer major equipment - Broke Thickener GT-2540 body\"},\n    {\"tag\": \"35-24L405\", \"evidence\": \"peer agitator on thickener\"},\n    {\"tag\": \"35-24P515\", \"evidence\": \"peer pump, separate function\"},\n    {\"tag\": \"35-24T605\", \"evidence\": \"peer tank - Thickened Broke Tank, separate function\"},\n    {\"tag\": \"35-24-629\", \"evidence\": \"HS-629 peer instrument in same control box\"},\n    {\"tag\": \"35-24-630\", \"evidence\": \"HS-630 peer instrument in same control box\"},\n    {\"tag\": \"35-24-663\", \"evidence\": \"ES-663 peer emergency stop in same control box\"}\n  ],\n  \"notes\": [\n    \"35-24HS-626 is a hand switch (locally mounted instrument) for the Broke Thickener GT-2540 circuit\",\n    \"No child lines, valves or sub-instruments are directly attached to this HS tag\",\n    \"Control box also contains HS-628, HS-629, HS-630, ES-663 as peer instruments\",\n    \"35-24HV-626 is the associated hand valve on line 35-24-152 but is a separate tag/function\"\n  ],\n  \"confidence\": \"high\"\n}\n```",
+        "raw_text": "Looking at the P&ID image, I can see:\n\n- **35-24HS-626** is an instrument (Hand Switch / selector switch) shown as a locally mounted instrument bubble labeled \"HS 626\" in the (35-24) area, associated with the Broke Thickener GT-2540 control circuit\n- It appears in a control box area alongside HS-628, HS-629, HS-630, ES-663\n- The HS-626 is a hand switch instrument \u2014 no child lines, valves, or sub-instruments are directly attached to it\n- It is a standalone instrument tag with no accessories that can be defended as children\n\nThe nearby instruments (HS-628, HS-629, HS-630, ES-663) are peer instruments in the same control panel, not children of HS-626.\n\nThe nearby valves (35-24HV-626, 35-24HV-623, 35-24HV-628) are separate instrument tags \u2014 HV-626 is the associated hand valve but is a peer tag, not a child of the HS switch.\n\nPer Rule 12 / Example C guidance: \"If 35-24HS-626 is an instrument and no labelled accessories sit on it, emit the FUNCTION header + description only \u2014 empty rows is correct.\"\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24HS-626\",\n  \"description\": \"35-24HS-626 BROKE THKR HS\",\n  \"rows\": [],\n  \"peers\": [\n    {\"tag\": \"35-24HV-626\", \"evidence\": \"associated hand valve on line 35-24-152, separate instrument tag not a child of HS switch\"},\n    {\"tag\": \"35-24HV-623\", \"evidence\": \"hand valve on separate circuit, peer instrument in same area\"},\n    {\"tag\": \"35-24HV-628\", \"evidence\": \"hand valve peer instrument in same control area\"},\n    {\"tag\": \"35-24HS-628\", \"evidence\": \"peer hand switch in same control box panel\"},\n    {\"tag\": \"35-24HS-629\", \"evidence\": \"peer hand switch LOCAL/REMOTE in same control box\"},\n    {\"tag\": \"35-24HS-630\", \"evidence\": \"peer hand switch JOGGING in same control box\"},\n    {\"tag\": \"35-24ES-663\", \"evidence\": \"peer emergency stop in same control box\"},\n    {\"tag\": \"35-24L002\", \"evidence\": \"peer major equipment - Broke Thickener GT-2540, different function base\"},\n    {\"tag\": \"35-24T605\", \"evidence\": \"peer major equipment - Thickened Broke Tank, different function base\"},\n    {\"tag\": \"35-24L405\", \"evidence\": \"peer agitator equipment, different function base\"},\n    {\"tag\": \"35-24P515\", \"evidence\": \"peer pump equipment, different function base\"}\n  ],\n  \"notes\": [\n    \"35-24HS-626 is a hand switch instrument (locally mounted) associated with Broke Thickener GT-2540 control circuit\",\n    \"No child lines, valves or sub-instruments are directly attached to this HS tag \u2014 rows intentionally empty\",\n    \"Control box contains HS-629 LOCAL/REMOTE, HS-630 JOGGING, ES-663 BROKE THICKENER E-STOP as peer instruments\"\n  ],\n  \"confidence\": \"high\"\n}\n```",
         "parsed": {
           "sub_process": "BR1",
           "function": "35-24HS-626",
@@ -80,46 +80,49 @@
             },
             {
               "tag": "35-24HV-623",
-              "evidence": "hand valve on separate circuit, peer instrument"
+              "evidence": "hand valve on separate circuit, peer instrument in same area"
             },
             {
               "tag": "35-24HV-628",
               "evidence": "hand valve peer instrument in same control area"
             },
             {
+              "tag": "35-24HS-628",
+              "evidence": "peer hand switch in same control box panel"
+            },
+            {
+              "tag": "35-24HS-629",
+              "evidence": "peer hand switch LOCAL/REMOTE in same control box"
+            },
+            {
+              "tag": "35-24HS-630",
+              "evidence": "peer hand switch JOGGING in same control box"
+            },
+            {
+              "tag": "35-24ES-663",
+              "evidence": "peer emergency stop in same control box"
+            },
+            {
               "tag": "35-24L002",
-              "evidence": "peer major equipment - Broke Thickener GT-2540 body"
-            },
-            {
-              "tag": "35-24L405",
-              "evidence": "peer agitator on thickener"
-            },
-            {
-              "tag": "35-24P515",
-              "evidence": "peer pump, separate function"
+              "evidence": "peer major equipment - Broke Thickener GT-2540, different function base"
             },
             {
               "tag": "35-24T605",
-              "evidence": "peer tank - Thickened Broke Tank, separate function"
+              "evidence": "peer major equipment - Thickened Broke Tank, different function base"
             },
             {
-              "tag": "35-24-629",
-              "evidence": "HS-629 peer instrument in same control box"
+              "tag": "35-24L405",
+              "evidence": "peer agitator equipment, different function base"
             },
             {
-              "tag": "35-24-630",
-              "evidence": "HS-630 peer instrument in same control box"
-            },
-            {
-              "tag": "35-24-663",
-              "evidence": "ES-663 peer emergency stop in same control box"
+              "tag": "35-24P515",
+              "evidence": "peer pump equipment, different function base"
             }
           ],
           "notes": [
-            "35-24HS-626 is a hand switch (locally mounted instrument) for the Broke Thickener GT-2540 circuit",
-            "No child lines, valves or sub-instruments are directly attached to this HS tag",
-            "Control box also contains HS-628, HS-629, HS-630, ES-663 as peer instruments",
-            "35-24HV-626 is the associated hand valve on line 35-24-152 but is a separate tag/function"
+            "35-24HS-626 is a hand switch instrument (locally mounted) associated with Broke Thickener GT-2540 control circuit",
+            "No child lines, valves or sub-instruments are directly attached to this HS tag \u2014 rows intentionally empty",
+            "Control box contains HS-629 LOCAL/REMOTE, HS-630 JOGGING, ES-663 BROKE THICKENER E-STOP as peer instruments"
           ],
           "confidence": "high"
         },

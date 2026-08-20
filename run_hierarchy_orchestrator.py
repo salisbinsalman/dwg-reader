@@ -107,6 +107,147 @@ def read_hierarchy_csv(path: Path) -> List[Dict[str, str]]:
         return [{c: str(raw.get(c) or "").strip() for c in raw.keys()} for raw in csv.DictReader(f)]
 
 
+def _append_orphan_valve_rows(
+    combined_csv: Path,
+    structural_path: Path,
+    inv_path: Path,
+) -> int:
+    """
+    Find P-VALVEPOS valve position tags absent from the hierarchy and insert
+    them as EQUIPMENT rows under their nearest function by Euclidean distance.
+
+    Returns the count of orphan rows appended.
+
+    Context: in some DWGs (e.g. steam/condensate supply headers) valve tags
+    exist on P-VALVEPOS but have no nearby FUNCTION equipment node — they fall
+    between the coverage windows of neighbouring functions and are never
+    captured by the AI hierarchy step.  This mop-up prevents them from being
+    silently dropped before valve classification and SAP export.
+    """
+    import math
+    import re
+
+    VALVE_POS_RE = re.compile(r"^\d{2}-\d{2}-\d{3,4}$")
+
+    if not structural_path.exists():
+        print(f"[orphan-mopup] structural dump not found: {structural_path}; skipping")
+        return 0
+
+    existing = read_hierarchy_csv(combined_csv)
+    if not existing:
+        return 0
+
+    # Tags already present anywhere in the hierarchy (function, equipment, sub-equipment).
+    in_hierarchy: set = set()
+    for row in existing:
+        for col in ("FUNCTION", "EQUIPMENT", "SUB-EQUIPMENT"):
+            v = (row.get(col) or "").strip().upper()
+            if v:
+                in_hierarchy.add(v)
+
+    # P-VALVEPOS valve position number texts from structural dump.
+    structural = json.loads(structural_path.read_text(encoding="utf-8"))
+    valve_locs: Dict[str, Any] = {}  # tag -> (x, y), first occurrence wins
+    for t in structural.get("text_entities", []):
+        if t.get("layer") != "P-VALVEPOS":
+            continue
+        txt = (t.get("text") or "").strip().upper()
+        if not VALVE_POS_RE.match(txt):
+            continue
+        pos = t.get("position") or []
+        if len(pos) >= 2 and pos[0] is not None and txt not in valve_locs:
+            valve_locs[txt] = (float(pos[0]), float(pos[1]))
+
+    orphans = {tag: xy for tag, xy in valve_locs.items() if tag not in in_hierarchy}
+    if not orphans:
+        print("[orphan-mopup] no orphan valve tags found")
+        return 0
+
+    print(f"[orphan-mopup] {len(orphans)} orphan valve tags to assign")
+
+    # Function positions from inventory (only those already in the hierarchy CSV).
+    existing_fn_headers: set = {
+        row.get("FUNCTION", "").strip().upper()
+        for row in existing
+        if row.get("FUNCTION") and not row.get("EQUIPMENT") and not row.get("SUB-EQUIPMENT")
+    }
+    inventory = json.loads(inv_path.read_text(encoding="utf-8"))
+    fn_locs: Dict[str, Any] = {}
+    for fn in inventory.get("functions") or []:
+        tag = str(fn.get("function") or "").strip().upper()
+        x, y = fn.get("x"), fn.get("y")
+        if tag in existing_fn_headers and x is not None and y is not None:
+            fn_locs[tag] = (float(x), float(y))
+
+    if not fn_locs:
+        print("[orphan-mopup] no function positions available; skipping")
+        return 0
+
+    # Group functions by sub-process prefix (e.g. "35-27") for prefix-aware matching.
+    fn_by_prefix: Dict[str, Dict[str, Any]] = {}
+    for fn, xy in fn_locs.items():
+        pfx = fn[:5]
+        fn_by_prefix.setdefault(pfx, {})[fn] = xy
+
+    def _nearest(candidates: Dict[str, Any], ox: float, oy: float):
+        return min(
+            ((fn, math.hypot(ox - fx, oy - fy)) for fn, (fx, fy) in candidates.items()),
+            key=lambda t: t[1],
+        )
+
+    # Assign each orphan to its nearest SAME-prefix function; fall back to nearest overall.
+    fn_orphans: Dict[str, List[str]] = {}
+    for tag, (ox, oy) in sorted(orphans.items()):
+        valve_pfx = tag[:5]
+        same_prefix_fns = fn_by_prefix.get(valve_pfx, {})
+        if same_prefix_fns:
+            best_fn, best_d = _nearest(same_prefix_fns, ox, oy)
+        else:
+            best_fn, best_d = _nearest(fn_locs, ox, oy)
+        fn_orphans.setdefault(best_fn, []).append(tag)
+        print(f"[orphan-mopup]   {tag} → {best_fn} (d={best_d:.0f})")
+
+    for fn in fn_orphans:
+        fn_orphans[fn].sort()
+
+    def _orphan_row(tag: str) -> Dict[str, str]:
+        return {
+            "SUB-PROCESS": "",
+            "FUNCTION": "",
+            "EQUIPMENT": tag,
+            "SUB-EQUIPMENT": "",
+            "MASK": "",
+            "DESCRIPTION": f"{tag} VLV",
+        }
+
+    # Insert orphan rows after each function's last child row.
+    result: List[Dict[str, str]] = []
+    pending_orphans: List[str] = []
+
+    for row in existing:
+        fn = (row.get("FUNCTION") or "").strip().upper()
+        eq = (row.get("EQUIPMENT") or "").strip()
+        sub = (row.get("SUB-EQUIPMENT") or "").strip()
+        is_fn_header = bool(fn) and not eq and not sub
+
+        if is_fn_header:
+            # Flush orphans for the function we are leaving, then move to new one.
+            for t in pending_orphans:
+                result.append(_orphan_row(t))
+            pending_orphans = fn_orphans.get(fn, [])
+
+        result.append(row)
+
+    # Flush orphans that belong to the last function in the file.
+    for t in pending_orphans:
+        result.append(_orphan_row(t))
+
+    count = sum(len(v) for v in fn_orphans.values())
+    write_hierarchy_csv(combined_csv, result)
+    print(f"[orphan-mopup] appended {count} orphan valve rows → {combined_csv.name}")
+    return count
+
+
 def run_hierarchy_for_tag(
     *,
     tag: str,
@@ -455,6 +596,12 @@ def main() -> int:
     print(f"report: {report_json}")
     print(f"combined CSV: {combined_csv}")
     log_path.write_text(json.dumps(summary, indent=2), encoding="utf-8")
+
+    # Mop up valve position tags that the AI hierarchy step missed (e.g. valves
+    # on steam/condensate supply headers with no nearby FUNCTION equipment node).
+    if combined_csv.exists() and combined_csv.stat().st_size > 0:
+        structural_path = json_path(out_dir, f"{base}.structural_dump.json")
+        _append_orphan_valve_rows(combined_csv, structural_path, inv_path)
 
     if combined_csv.exists() and combined_csv.stat().st_size > 0:
         limit_s = str(args.limit if args.limit > 0 else 0)

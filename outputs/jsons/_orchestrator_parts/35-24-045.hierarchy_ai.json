@@ -73,7 +73,7 @@
       ],
       "dossier": "Parent tag: 35-24-045\nParent category/block: lines / \nParent XY: (1751.063563563564, 68.75)\nNearby descriptions: 35-24-045-WFL-15-E10H2A\n\nSame-tag CAD family:\n- (none)\n\nNearby line numbers (short ids preferred in output):\n- 35-25-034/2-WAF-500-E10H2A  full=35-25-034/2-WAF-500-E10H2A  d=189  layer=P-LINEPOS\n- 35-24-222  full=35-24-222-PP-400-E10H2A  d=179  layer=P-LINEPOS\n- 35-24-220  full=35-24-220-PP-80-E10H2A  d=147  layer=P-LINEPOS\n- 35-24-042  full=35-24-042-WFL-15-E10H2A  d=58  layer=P-LINEPOS\n- 35-24-045  full=35-24-045-WFL-15-E10H2A  d=0  layer=P-LINEPOS\n- 35-24-048  full=35-24-048-WFL-15-E10H2A  d=52  layer=P-LINEPOS\n- 35-24-041  full=35-24-041-WFC-15-E10H2A  d=140  layer=P-LINEPOS\n- 35-24-050  full=35-24-050-WFL-15-E10H2A  d=115  layer=P-LINEPOS\n- 35-24-047  full=35-24-047-PP-150-E10H2A  d=124  layer=P-LINEPOS\n- 35-24-046  full=35-24-046-PP-250-E10H2A  d=132  layer=P-LINEPOS\n- 35-24-044  full=35-24-044-PP-900-E10H2A  d=171  layer=P-LINEPOS\n\nNearby devices (valves/instruments/pumps/\u2026):\n- line_markers: PPI_1100A  d=170  block=PPI_1100A\n- valves: PPI_0900A  d=194  block=PPI_0900A\n- control_valves: PPI_1000A  d=198  block=PPI_1000A\n- instruments: PPI_0100X  d=21  block=PPI_0100X\n- pumps: P7A0200  d=174  block=P7A0200\n- motors: PPI_1504A-25_0  d=139  block=PPI_1504A-25_0\n\nNearby peer primary equipment (do NOT nest under parent):\n- 35-24P506 (pumps, d=174)\n- 35-24P507 (pumps, d=195)\n\nNearby drawing text tokens:\n- A1  d=158  layer=P-TEXT\n- GEARBOX 1  d=129  layer=P-OTHER\n- 2621 ADTPD  d=185  layer=P-TEXT\n- HP-63G2  d=191  layer=P-EQUIPMENT_POS\n- 660  d=142  layer=P-INSTRPOS_TEXTS\n- 35-24  d=154  layer=P-INSTRPOS_TEXTS\n- 547  d=200  layer=P-INSTRPOS_TEXTS\n- 9268  d=188  layer=P-INSTRPOS_TEXTS\n- 9269  d=121  layer=P-INSTRPOS_TEXTS\n- 540  d=49  layer=P-INSTRPOS_TEXTS\n- 9270  d=80  layer=P-INSTRPOS_TEXTS\n- 549  d=128  layer=P-INSTRPOS_TEXTS\n- 9276  d=96  layer=P-INSTRPOS_TEXTS\n- 9272  d=27  layer=P-INSTRPOS_TEXTS\n- 9274  d=37  layer=P-INSTRPOS_TEXTS\n- 545  d=22  layer=P-INSTRPOS_TEXTS\n- 538  d=178  layer=P-INSTRPOS_TEXTS\n- 546  d=67  layer=P-INSTRPOS_TEXTS\n- 9273  d=21  layer=P-INSTRPOS_TEXTS\n- 9271  d=71  layer=P-INSTRPOS_TEXTS\n- 9275  d=46  layer=P-INSTRPOS_TEXTS\n- 9277  d=106  layer=P-INSTRPOS_TEXTS\n- REEL PULPER ROTOR 1  d=87  layer=P-TEXT\n- 35-24P506  d=160  layer=P-PUMP_POS\n- 860  d=157  layer=P-PUMP_POS\n- 22  d=150  layer=P-PUMP_POS\n- 250  d=152  layer=P-PUMP_POS\n- 1000  d=146  layer=P-PUMP_POS\n- 20  d=198  layer=P-PUMP_POS\n- 4  d=194  layer=P-PUMP_POS\n- 35-24-005.4  d=94  layer=P-MOTOR_POS\n- 1,5  d=90  layer=P-MOTOR_POS\n- 1500  d=81  layer=P-MOTOR_POS\n- 35-24-005.3  d=103  layer=P-MOTOR_POS\n- 35-24-005.1  d=120  layer=P-MOTOR_POS\n- 630  d=115  layer=P-MOTOR_POS\n- 35-24-005.2  d=135  layer=P-MOTOR_POS\n- 35-24-1111  d=193  layer=P-VALVEPOS\n- 001-15  d=189  layer=P-VALVEPOS\n- 35-24-1123  d=162  layer=P-VALVEPOS",
       "ai": {
-        "raw_text": "I'll analyze the P&ID image carefully for FUNCTION 35-24-045.\n\n**Observations from the image:**\n- `35-24-045` is labeled as a line: `35-24-045-WFL-15-E10H2A` (white water flow line, DN15)\n- The red box scope shows the circuit for this line\n- On the 35-24-045 line segment I can see: PI 9272, FI 9273, FS 545 instruments, and valve 35-24-139 (003-15)\n- The line 35-24-045-WFL-15-E10H2A is the main header; 35-24-139 is a hand valve (003-15) on this line\n- Instruments PI 9272, FI 9273 are locally mounted (plain circles) on the 35-24-045 segment\n- FS 545 is a flow switch on the 35-24-045 segment\n- The valve 35-24-139 shows outline/transparent bowtie triangles with no actuator \u2192 HV\n- 35-24-042 and 35-24-048 are peer lines (adjacent WFL lines with their own valve/instrument sets)\n- 35-24-005.3 and 35-24-005.4 are motor tags for Reel Pulper Rotor 1 & 2 (different numeric base \u2192 peers)\n- 35-24-1107 belongs to the 35-24-042 segment\n- 35-24-136 belongs to the 35-24-048 segment\n\n**Valve 35-24-139**: Symbol shows outline-only (transparent) bowtie, no actuator circle \u2192 `HV`\n\n**Instruments on 35-24-045 segment**: PI-9272, FI-9273, FS-545 \u2014 locally mounted instruments nested under the line.\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24-045\",\n  \"description\": \"35-24-045 WFL LINE DN15\",\n  \"rows\": [\n    {\"equipment\": \"35-24-139\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-139 003-15 ISOL VLV HV\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24PI-9272\", \"mask\": \"\", \"description\": \"35-24PI-9272 PRESS IND\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24FI-9273\", \"mask\": \"\", \"description\": \"35-24FI-9273 FLOW IND\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24FS-545\", \"mask\": \"\", \"description\": \"35-24FS-545 FLOW SWITCH\"}\n  ],\n  \"peers\": [\n    {\"tag\": \"35-24-042\", \"evidence\": \"Adjacent WFL-15 line with own valve 35-24-1107 and instruments PI-9270/FI-9271/FS-540\"},\n    {\"tag\": \"35-24-048\", \"evidence\": \"Adjacent WFL-15 line with own valve 35-24-136 and instruments PI-9274/FI-9275/FS-546\"},\n    {\"tag\": \"35-24-005.3\", \"evidence\": \"Motor tag for Reel Pulper Rotor 1 - different numeric base, peer equipment\"},\n    {\"tag\": \"35-24-005.4\", \"evidence\": \"Motor tag for Reel Pulper Rotor 2 - different numeric base, peer equipment\"},\n    {\"tag\": \"35-24TV-9269\", \"evidence\": \"Temperature control valve on separate 35-24-146 circuit, not on 045 line\"},\n    {\"tag\": \"35-24-146\", \"evidence\": \"Separate line feeding TC/TV circuit, not part of 045\"},\n    {\"tag\": \"35-24P506\", \"evidence\": \"Peer pump visible in crop, not a child of line function\"},\n    {\"tag\": \"35-24P507\", \"evidence\": \"Peer pump visible in crop, not a child of line function\"}\n  ],\n  \"notes\": [\n    \"35-24-045-WFL-15-E10H2A is a white water flow line DN15; treated as line FUNCTION per rule 11\",\n    \"35-24-139 (003-15) is the isolation hand valve directly on the 045 line segment\",\n    \"PI-9272, FI-9273, FS-545 are the instrument cluster on the 045 line segment between valve and tee\",\n    \"35-24-1107 assigned to 35-24-042 segment; 35-24-136 assigned to 35-24-048 segment\"\n  ],\n  \"confidence\": \"high\"\n}\n```",
+        "raw_text": "I'll analyze the P&ID image carefully for FUNCTION 35-24-045.\n\n**Observations from the image:**\n- `35-24-045` is labeled as a line: `35-24-045-WFL-15-E10H2A` (white water flow line, DN15)\n- The red box scope shows the circuit for this line\n- On the 35-24-045 line segment I can see: PI 9272, FI 9273, FS 545 instruments, and valve 35-24-139 (003-15)\n- The line 35-24-045-WFL-15-E10H2A is the main header; 35-24-139 is a hand valve (003-15) on this line\n- Instruments PI 9272, FI 9273 are locally mounted (plain circles) on the 35-24-045 segment\n- FS 545 is a flow switch on the 35-24-045 segment\n- The valve 35-24-139 shows outline/transparent bowtie triangles with no actuator \u2192 HV\n- Neighboring lines 35-24-042 and 35-24-048 are peers (separate line numbers)\n- Motors 35-24-005.3 and 35-24-005.4 belong to the REEL PULPER ROTOR system, not to this line\n- 35-24-1107 is on line 35-24-042, not 35-24-045\n- 35-24-136 is on line 35-24-048\n\n**Children of 35-24-045:**\n- The branch spool with PI 9272, FI 9273, FS 545 sits on the 35-24-045 segment\n- Valve 35-24-139 (003-15) is the isolation valve on this line\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24-045\",\n  \"description\": \"35-24-045 WFL LINE DN15\",\n  \"rows\": [\n    {\"equipment\": \"35-24-139\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-139 ISOL VLV HV\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24PI-9272\", \"mask\": \"\", \"description\": \"35-24PI-9272 PRESS IND\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24FI-9273\", \"mask\": \"\", \"description\": \"35-24FI-9273 FLOW IND\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24FS-545\", \"mask\": \"\", \"description\": \"35-24FS-545 FLOW SWITCH\"}\n  ],\n  \"peers\": [\n    {\"tag\": \"35-24-042\", \"evidence\": \"separate WFL-15 line number visible left of scope\"},\n    {\"tag\": \"35-24-048\", \"evidence\": \"separate WFL-15 line number visible right of scope\"},\n    {\"tag\": \"35-24-1107\", \"evidence\": \"valve 003-15 sits on line 35-24-042, not 35-24-045\"},\n    {\"tag\": \"35-24-136\", \"evidence\": \"valve 003-15 sits on line 35-24-048, not 35-24-045\"},\n    {\"tag\": \"35-24-005.3\", \"evidence\": \"motor for REEL PULPER ROTOR 1, different numeric base\"},\n    {\"tag\": \"35-24-005.4\", \"evidence\": \"motor for REEL PULPER ROTOR 2 / GEARBOX OIL PUMP, different numeric base\"},\n    {\"tag\": \"35-24P506\", \"evidence\": \"peer pump, nearby but not child of this line\"},\n    {\"tag\": \"35-24P507\", \"evidence\": \"peer pump, nearby but not child of this line\"},\n    {\"tag\": \"35-24TV-9269\", \"evidence\": \"temperature control valve on separate circuit 35-24-146\"}\n  ],\n  \"notes\": [\n    \"35-24-045-WFL-15-E10H2A is a DN15 white water flow line (WFL)\",\n    \"35-24-139 valve symbol shows outline/transparent bowtie with no actuator circle \u2014 classified HV\",\n    \"PI 9272, FI 9273, FS 545 are the instruments directly on the 35-24-045 line segment per image\",\n    \"35-24-1107 and 35-24-136 are valves on adjacent lines 35-24-042 and 35-24-048 respectively\"\n  ],\n  \"confidence\": \"high\"\n}\n```",
         "parsed": {
           "sub_process": "BR1",
           "function": "35-24-045",
@@ -83,7 +83,7 @@
               "equipment": "35-24-139",
               "subequipment": "",
               "mask": "",
-              "description": "35-24-139 003-15 ISOL VLV HV"
+              "description": "35-24-139 ISOL VLV HV"
             },
             {
               "equipment": "",
@@ -107,42 +107,46 @@
           "peers": [
             {
               "tag": "35-24-042",
-              "evidence": "Adjacent WFL-15 line with own valve 35-24-1107 and instruments PI-9270/FI-9271/FS-540"
+              "evidence": "separate WFL-15 line number visible left of scope"
             },
             {
               "tag": "35-24-048",
-              "evidence": "Adjacent WFL-15 line with own valve 35-24-136 and instruments PI-9274/FI-9275/FS-546"
+              "evidence": "separate WFL-15 line number visible right of scope"
+            },
+            {
+              "tag": "35-24-1107",
+              "evidence": "valve 003-15 sits on line 35-24-042, not 35-24-045"
+            },
+            {
+              "tag": "35-24-136",
+              "evidence": "valve 003-15 sits on line 35-24-048, not 35-24-045"
             },
             {
               "tag": "35-24-005.3",
-              "evidence": "Motor tag for Reel Pulper Rotor 1 - different numeric base, peer equipment"
+              "evidence": "motor for REEL PULPER ROTOR 1, different numeric base"
             },
             {
               "tag": "35-24-005.4",
-              "evidence": "Motor tag for Reel Pulper Rotor 2 - different numeric base, peer equipment"
-            },
-            {
-              "tag": "35-24TV-9269",
-              "evidence": "Temperature control valve on separate 35-24-146 circuit, not on 045 line"
-            },
-            {
-              "tag": "35-24-146",
-              "evidence": "Separate line feeding TC/TV circuit, not part of 045"
+              "evidence": "motor for REEL PULPER ROTOR 2 / GEARBOX OIL PUMP, different numeric base"
             },
             {
               "tag": "35-24P506",
-              "evidence": "Peer pump visible in crop, not a child of line function"
+              "evidence": "peer pump, nearby but not child of this line"
             },
             {
               "tag": "35-24P507",
-              "evidence": "Peer pump visible in crop, not a child of line function"
+              "evidence": "peer pump, nearby but not child of this line"
+            },
+            {
+              "tag": "35-24TV-9269",
+              "evidence": "temperature control valve on separate circuit 35-24-146"
             }
           ],
           "notes": [
-            "35-24-045-WFL-15-E10H2A is a white water flow line DN15; treated as line FUNCTION per rule 11",
-            "35-24-139 (003-15) is the isolation hand valve directly on the 045 line segment",
-            "PI-9272, FI-9273, FS-545 are the instrument cluster on the 045 line segment between valve and tee",
-            "35-24-1107 assigned to 35-24-042 segment; 35-24-136 assigned to 35-24-048 segment"
+            "35-24-045-WFL-15-E10H2A is a DN15 white water flow line (WFL)",
+            "35-24-139 valve symbol shows outline/transparent bowtie with no actuator circle \u2014 classified HV",
+            "PI 9272, FI 9273, FS 545 are the instruments directly on the 35-24-045 line segment per image",
+            "35-24-1107 and 35-24-136 are valves on adjacent lines 35-24-042 and 35-24-048 respectively"
           ],
           "confidence": "high"
         },
@@ -202,7 +206,7 @@
           "equipment": "35-24-139",
           "subequipment": "",
           "mask": "",
-          "description": "35-24-139 003-15 ISOL VLV HV"
+          "description": "35-24-139 ISOL VLV HV"
         },
         {
           "equipment": "",
@@ -229,22 +233,16 @@
           "description": "35-24-045"
         },
         {
-          "equipment": "35-24-1107",
-          "subequipment": "",
-          "mask": "",
-          "description": "35-24-1107"
-        },
-        {
-          "equipment": "35-24-136",
-          "subequipment": "",
-          "mask": "",
-          "description": "35-24-136"
-        },
-        {
           "equipment": "35-24-005.1",
           "subequipment": "",
           "mask": "",
           "description": "35-24-005.1"
+        },
+        {
+          "equipment": "35-24-146",
+          "subequipment": "",
+          "mask": "",
+          "description": "35-24-146"
         }
       ]
     }

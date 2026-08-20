@@ -3,19 +3,13 @@ ORDER,SITE,LINE,PROCESS,SUB-PROCESS,FUNCTION,EQUIPMENT,SUB-EQUIPMENT,MASK,DESCRI
 2,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,BR1,,,,5001-PM03-BR-BR1,BROKE SYSTEM
 3,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,BR1,35-24-106,,,5001-PM03-BR-BR1-35-24-106,35-24-106 WAF 500 BROKE LN
 4,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,35-24LI-587,,,35-24LI-587 LVL IND
-5,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,35-24-090,,,35-24-090 VLV NC
-6,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,35-24FV-593,,,35-24FV-593 FL CTRL VLV AV
-7,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,35-24KV-594,,,35-24KV-594 VLV AV
-8,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,35-24HV-583,,,35-24HV-583 VLV AV
-9,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,35-24-086,,,35-24-086 ISOL VLV HV
-10,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,35-24-102,,,35-24-102 WFL 15 BRANCH LN
-11,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,,35-24-088,,35-24-088 VLV NC
-12,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,,35-24PI-9296,,35-24PI-9296 PI
-13,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,,35-24FI-9297,,35-24FI-9297 FI
-14,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,,35-24FS-586,,35-24FS-586 FS
-15,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,35-24-104,,,35-24-104 WFL 15 BRANCH LN
-16,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,,35-24-1124,,35-24-1124 VLV NC
-17,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,,35-24PI-9298,,35-24PI-9298 PI
-18,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,,35-24FI-9299,,35-24FI-9299 FI
-19,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,,35-24FS-592,,35-24FS-592 FS
-20,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,35-24-106,,,35-24-106
+5,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,35-24-090,,,35-24-090 BRANCH SPOOL 003-50
+6,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,,35-24FV-593,,35-24FV-593 FL CTRL VLV AV NC
+7,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,35-24-086,,,35-24-086 BRANCH SPOOL 101-500
+8,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,,35-24KV-594,,35-24KV-594 ISOL VLV AV NC
+9,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,,35-24HV-583,,35-24HV-583 ISOL VLV HV
+10,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,35-24-102,,,35-24-102 WFL FLSHG SPOOL
+11,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,,35-24-088,,35-24-088 VLV HV
+12,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,35-24-104,,,35-24-104 WFL FLSHG SPOOL
+13,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,,35-24-1124,,35-24-1124 VLV HV
+14,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,35-24-106,,,35-24-106

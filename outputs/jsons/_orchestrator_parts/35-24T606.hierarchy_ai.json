@@ -59,7 +59,7 @@
       ],
       "dossier": "Parent tag: 35-24T606\nParent category/block: tanks / PPI_0700A-25_0\nParent XY: (5552.5, 322.5)\nNearby descriptions: BROKE REJECT; TANK; 15 m\u00b3\n\nSame-tag CAD family:\n- tanks @ (5552.5,322.5) block=PPI_0700A-25_0 nearby=35-24T606; 35-24; 35-24L404; 35-24; 35-24L010\n- valves @ (5608.75,307.5) block=PPI_0900A nearby=35-24T606; 35-24L404; 35-24P518\n- instruments @ (5532.5,325.0) block=PPI_1204A nearby=35-24; 35-24T606; 35-24; 35-24L404; 35-24L010\n- instruments @ (5542.5,312.5) block=PPI_0102B nearby=35-24T606; 35-24; 35-24L404; 35-24; 35-24L010\n\nNearby line numbers (short ids preferred in output):\n- DN100  full=DN100  d=189  layer=P-LINEPOS\n- 35-24-173  full=35-24-173-PSR-250-E10H2A  d=50  layer=P-LINEPOS\n- 35-24-169  full=35-24-169-PSR-100-E10H2A  d=59  layer=P-LINEPOS\n- 35-24-170  full=35-24-170-PP-300-E10H2A  d=121  layer=P-LINEPOS\n- 35-24-166  full=35-24-166-PSR-200-E10H2A  d=149  layer=P-LINEPOS\n- 35-24-172  full=35-24-172-PSR-150-E10H2A  d=73  layer=P-LINEPOS\n- 35-24-174  full=35-24-174-PSR-250-E10H2A  d=73  layer=P-LINEPOS\n- 35-24-168  full=35-24-168-PSR-100-E10H2A  d=70  layer=P-LINEPOS\n\nNearby devices (valves/instruments/pumps/\u2026):\n- line_markers: PPI_1100A  d=69  block=PPI_1100A\n- valves: PPI_0900A  d=72  block=PPI_0900A\n- control_valves: PPI_1000A  d=169  block=PPI_1000A\n- instruments: PPI_1204A  d=20  block=PPI_1204A\n- pumps: P7A0200  d=117  block=P7A0200\n- motors: PPI_1504A-25_0  d=83  block=PPI_1504A-25_0\n\nNearby peer primary equipment (do NOT nest under parent):\n- 35-24L010 (process_equipment, d=86)\n- 35-24L404 (agitators, d=43)\n- 35-24P518 (pumps, d=117)\n\nNearby drawing text tokens:\n- DN300  d=123  layer=P-TEXT\n- DN100  d=118  layer=P-TEXT\n- DN350  d=123  layer=P-TEXT\n- DN200  d=124  layer=P-TEXT\n- 35-24L404  d=47  layer=P-AGITATOR_POS\n- 35-24L010  d=80  layer=P-EQUIPMENT_POS\n- ProFS-250HC  d=83  layer=P-EQUIPMENT_POS\n- 645  d=47  layer=P-INSTRPOS_TEXTS\n- 35-24  d=59  layer=P-INSTRPOS_TEXTS\n- 640  d=169  layer=P-INSTRPOS_TEXTS\n- 642  d=101  layer=P-INSTRPOS_TEXTS\n- 644  d=115  layer=P-INSTRPOS_TEXTS\n- 638  d=180  layer=P-INSTRPOS_TEXTS\n- 641  d=160  layer=P-INSTRPOS_TEXTS\n- 639  d=180  layer=P-INSTRPOS_TEXTS\n- 649  d=158  layer=P-INSTRPOS_TEXTS\n- 646  d=22  layer=P-INSTRPOS_TEXTS\n- 688  d=192  layer=P-INSTRPOS_TEXTS\n- 689  d=177  layer=P-INSTRPOS_TEXTS\n- 35-24T606  d=7  layer=P-TANK_POS\n- 15 m\u00b3  d=21  layer=P-TANK_POS\n- 2,7 %  d=26  layer=P-TANK_POS\n- 35-24P518  d=130  layer=P-PUMP_POS\n- 45  d=131  layer=P-PUMP_POS\n- 37  d=133  layer=P-PUMP_POS\n- 1500  d=143  layer=P-PUMP_POS\n- 35-24-010.1  d=78  layer=P-MOTOR_POS\n- 160  d=77  layer=P-MOTOR_POS\n- 35-24-015  d=141  layer=P-VALVEPOS\n- 350-200  d=142  layer=P-VALVEPOS\n- 35-24-013  d=86  layer=P-VALVEPOS\n- 003-50  d=81  layer=P-VALVEPOS\n- 35-24-011  d=66  layer=P-VALVEPOS\n- 101-150  d=71  layer=P-VALVEPOS\n- 35-24-1121  d=51  layer=P-VALVEPOS\n- 101-250  d=54  layer=P-VALVEPOS\n- 35-24-009  d=84  layer=P-VALVEPOS\n- 001-80  d=88  layer=P-VALVEPOS\n- 35-24-008  d=102  layer=P-VALVEPOS\n- 35-24-006  d=134  layer=P-VALVEPOS",
       "ai": {
-        "raw_text": "I'll analyze the P&ID image carefully for 35-24T606 (BROKE REJECT TANK, 15 m\u00b3).\n\n**Evidence from image:**\n- Tank 35-24T606 is clearly labeled \"BROKE REJECT TANK 15 m\u00b3 2,7%\"\n- LC 646 instrument is directly on the tank (level controller)\n- Lines visible on/around tank: 35-24-173 (PSR-250), 35-24-174 (PSR-250), 35-24-172 (PSR-150), 35-24-169 (PSR-100), 35-24-168 (PSR-100)\n- Valve 35-24-1121 (101-250) is on the outlet line from tank \u2014 solid filled triangles = NC\n- Valves 35-24-011 (101-150), 35-24-009 (001-80), 35-24-008 (003-50) are on bottom drain/outlet lines \u2014 solid filled = NC\n- 35-24-013 (003-50) is on inlet line \u2014 outline triangles = HV\n- 35-24L404 is the agitator inside the tank \u2192 peer\n- 35-24L010 (BROKE SCREEN ProFS-250HC) \u2192 peer\n- 35-24P518 \u2192 peer pump\n- 35-24-010.1 motor belongs to 35-24L010 \u2192 peer\n- 35-24FV-644, 35-24HV-642 \u2192 belong to upstream circuit, not T606\n\n**Valve type analysis:**\n- 35-24-1121: solid/filled triangles, no actuator circle \u2192 NC (hand valve NC)\n- 35-24-011: solid filled triangles \u2192 NC HV\n- 35-24-009: solid filled triangles \u2192 NC HV  \n- 35-24-008: solid filled triangles \u2192 NC HV\n- 35-24-013: outline triangles, no actuator \u2192 HV\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24T606\",\n  \"description\": \"35-24T606 BROKE REJECT TNK 15M3\",\n  \"rows\": [\n    {\"equipment\": \"35-24LC-646\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24LC-646 LVL CTRL\"},\n    {\"equipment\": \"35-24-173\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-173 PSR-250 INLET LINE\"},\n    {\"equipment\": \"35-24-169\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-169 PSR-100 LINE\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-013\", \"mask\": \"\", \"description\": \"35-24-013 VLV HV\"},\n    {\"equipment\": \"35-24-168\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-168 PSR-100 LINE\"},\n    {\"equipment\": \"35-24-172\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-172 PSR-150 OUTLET LINE\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-011\", \"mask\": \"\", \"description\": \"35-24-011 VLV NC\"},\n    {\"equipment\": \"35-24-174\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-174 PSR-250 OUTLET LINE\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-1121\", \"mask\": \"\", \"description\": \"35-24-1121 VLV NC\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-009\", \"mask\": \"\", \"description\": \"35-24-009 VLV NC\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-008\", \"mask\": \"\", \"description\": \"35-24-008 VLV NC\"}\n  ],\n  \"peers\": [\n    {\"tag\": \"35-24L404\", \"evidence\": \"agitator inside T606 \u2014 peer primary equipment, same-level tag\"},\n    {\"tag\": \"35-24L010\", \"evidence\": \"BROKE SCREEN ProFS-250HC \u2014 separate process equipment, own tag\"},\n    {\"tag\": \"35-24P518\", \"evidence\": \"pump \u2014 peer primary equipment downstream of tank\"},\n    {\"tag\": \"35-24-010.1\", \"evidence\": \"motor branch belongs to 35-24L010, not T606 numeric base\"},\n    {\"tag\": \"35-24FV-644\", \"evidence\": \"FFC 644 control valve on upstream feed line, not T606 circuit\"},\n    {\"tag\": \"35-24HV-642\", \"evidence\": \"HV-642/HS-642 on upstream screen circuit, not T606\"},\n    {\"tag\": \"35-24-170\", \"evidence\": \"PP-300 main header line \u2014 upstream of tank, separate circuit\"}\n  ],\n  \"notes\": [\n    \"LC-646 is locally mounted instrument directly on tank nozzle\",\n    \"35-24-013 (003-50) outline bowtie = HV; 35-24-1121/011/009/008 solid-filled bowties = NC\",\n    \"35-24-172 and 35-24-174 are outlet/drain lines from tank bottom; valves nested under respective lines\",\n    \"2,7% consistency noted on drawing for tank contents\"\n  ],\n  \"confidence\": \"high\"\n}\n```",
+        "raw_text": "I'll analyze the P&ID image carefully, identifying what's directly connected to tank 35-24T606.\n\n**Evidence from image:**\n- 35-24T606 = BROKE REJECT TANK, 15 m\u00b3, 2.7%\n- LC 646 instrument on the tank (level controller)\n- Lines connected: 35-24-173 (PSR-250), 35-24-169 (PSR-100), 35-24-172 (PSR-150), 35-24-168 (PSR-100), 35-24-174 (PSR-250)\n- Valve 35-24-1121 (101-250) on outlet line \u2014 solid filled triangles = NC\n- Valves 35-24-011 (101-150), 35-24-009 (001-80), 35-24-008 (003-50) on bottom drain/outlet lines \u2014 solid filled = NC\n- 35-24-013 (003-50) on inlet \u2014 appears as outline/transparent = HV\n- Peers: 35-24L404 (agitator inside tank), 35-24L010 (broke screen), 35-24P518 (pump)\n\n**Valve type analysis:**\n- 35-24-1121: solid filled bowtie triangles \u2192 NC\n- 35-24-011: solid filled \u2192 NC\n- 35-24-009: solid filled \u2192 NC\n- 35-24-008: solid filled \u2192 NC\n- 35-24-013: outline/transparent, no actuator \u2192 HV\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24T606\",\n  \"description\": \"35-24T606 BROKE REJECT TNK 15M3\",\n  \"rows\": [\n    {\n      \"equipment\": \"35-24LC-646\",\n      \"subequipment\": \"\",\n      \"mask\": \"\",\n      \"description\": \"35-24LC-646 LVL CTRL\"\n    },\n    {\n      \"equipment\": \"35-24-173\",\n      \"subequipment\": \"\",\n      \"mask\": \"\",\n      \"description\": \"35-24-173 PSR-250 INLET LINE\"\n    },\n    {\n      \"equipment\": \"35-24-169\",\n      \"subequipment\": \"\",\n      \"mask\": \"\",\n      \"description\": \"35-24-169 PSR-100 LINE\"\n    },\n    {\n      \"equipment\": \"35-24-168\",\n      \"subequipment\": \"\",\n      \"mask\": \"\",\n      \"description\": \"35-24-168 PSR-100 LINE\"\n    },\n    {\n      \"equipment\": \"35-24-172\",\n      \"subequipment\": \"\",\n      \"mask\": \"\",\n      \"description\": \"35-24-172 PSR-150 OUTLET LINE\"\n    },\n    {\n      \"equipment\": \"\",\n      \"subequipment\": \"35-24-011\",\n      \"mask\": \"\",\n      \"description\": \"35-24-011 VLV NC 101-150\"\n    },\n    {\n      \"equipment\": \"\",\n      \"subequipment\": \"35-24-009\",\n      \"mask\": \"\",\n      \"description\": \"35-24-009 VLV NC 001-80\"\n    },\n    {\n      \"equipment\": \"35-24-174\",\n      \"subequipment\": \"\",\n      \"mask\": \"\",\n      \"description\": \"35-24-174 PSR-250 OUTLET LINE\"\n    },\n    {\n      \"equipment\": \"\",\n      \"subequipment\": \"35-24-1121\",\n      \"mask\": \"\",\n      \"description\": \"35-24-1121 VLV NC 101-250\"\n    },\n    {\n      \"equipment\": \"35-24-013\",\n      \"subequipment\": \"\",\n      \"mask\": \"\",\n      \"description\": \"35-24-013 VLV HV 003-50\"\n    },\n    {\n      \"equipment\": \"35-24-008\",\n      \"subequipment\": \"\",\n      \"mask\": \"\",\n      \"description\": \"35-24-008 VLV NC 003-50\"\n    }\n  ],\n  \"peers\": [\n    {\n      \"tag\": \"35-24L404\",\n      \"evidence\": \"Agitator inside 35-24T606 \u2014 peer primary equipment, same-level tag\"\n    },\n    {\n      \"tag\": \"35-24L010\",\n      \"evidence\": \"Broke screen ProFS-250HC \u2014 separate process equipment upstream, own tag\"\n    },\n    {\n      \"tag\": \"35-24P518\",\n      \"evidence\": \"Pump downstream of tank \u2014 peer primary equipment with own tag\"\n    },\n    {\n      \"tag\": \"35-24-010.1\",\n      \"evidence\": \"Motor tag numeric base 010 matches 35-24L010, not 35-24T606\"\n    },\n    {\n      \"tag\": \"35-24FV-644\",\n      \"evidence\": \"FFC 644 flow control on inlet \u2014 associated with upstream screen circuit 35-24L010\"\n    },\n    {\n      \"tag\": \"35-24HV-642\",\n      \"evidence\": \"HV-642 with HS-642 \u2014 belongs to upstream screen/diverter circuit\"\n    },\n    {\n      \"tag\": \"35-24-170\",\n      \"evidence\": \"PP-300 main header line at top of drawing \u2014 upstream supply, not tank nozzle\"\n    },\n    {\n      \"tag\": \"35-24-166\",\n      \"evidence\": \"PSR-200 line \u2014 distance and routing indicate upstream circuit, not directly on T606\"\n    }\n  ],\n  \"notes\": [\n    \"LC-646 is locally mounted instrument on tank nozzle \u2014 included as direct child\",\n    \"35-24-172 carries valves 35-24-011 and 35-24-009 on bottom outlet manifold; 35-24-008 listed separately as it may be on adjacent spool 35-24-008\",\n    \"35-24-1121 nested under 35-24-174 as it is the isolation valve on that 250mm outlet\",\n    \"35-24-013 symbol shows outline/transparent bowtie with no actuator circle \u2014 classified HV\",\n    \"Valve fill assessment: 35-24-011, 35-24-009, 35-24-1121 show solid-filled triangles on dark background = NC\"\n  ],\n  \"confidence\": \"medium\"\n}\n```",
         "parsed": {
           "sub_process": "BR1",
           "function": "35-24T606",
@@ -84,12 +84,6 @@
               "description": "35-24-169 PSR-100 LINE"
             },
             {
-              "equipment": "",
-              "subequipment": "35-24-013",
-              "mask": "",
-              "description": "35-24-013 VLV HV"
-            },
-            {
               "equipment": "35-24-168",
               "subequipment": "",
               "mask": "",
@@ -105,7 +99,13 @@
               "equipment": "",
               "subequipment": "35-24-011",
               "mask": "",
-              "description": "35-24-011 VLV NC"
+              "description": "35-24-011 VLV NC 101-150"
+            },
+            {
+              "equipment": "",
+              "subequipment": "35-24-009",
+              "mask": "",
+              "description": "35-24-009 VLV NC 001-80"
             },
             {
               "equipment": "35-24-174",
@@ -117,58 +117,63 @@
               "equipment": "",
               "subequipment": "35-24-1121",
               "mask": "",
-              "description": "35-24-1121 VLV NC"
+              "description": "35-24-1121 VLV NC 101-250"
             },
             {
-              "equipment": "",
-              "subequipment": "35-24-009",
+              "equipment": "35-24-013",
+              "subequipment": "",
               "mask": "",
-              "description": "35-24-009 VLV NC"
+              "description": "35-24-013 VLV HV 003-50"
             },
             {
-              "equipment": "",
-              "subequipment": "35-24-008",
+              "equipment": "35-24-008",
+              "subequipment": "",
               "mask": "",
-              "description": "35-24-008 VLV NC"
+              "description": "35-24-008 VLV NC 003-50"
             }
           ],
           "peers": [
             {
               "tag": "35-24L404",
-              "evidence": "agitator inside T606 \u2014 peer primary equipment, same-level tag"
+              "evidence": "Agitator inside 35-24T606 \u2014 peer primary equipment, same-level tag"
             },
             {
               "tag": "35-24L010",
-              "evidence": "BROKE SCREEN ProFS-250HC \u2014 separate process equipment, own tag"
+              "evidence": "Broke screen ProFS-250HC \u2014 separate process equipment upstream, own tag"
             },
             {
               "tag": "35-24P518",
-              "evidence": "pump \u2014 peer primary equipment downstream of tank"
+              "evidence": "Pump downstream of tank \u2014 peer primary equipment with own tag"
             },
             {
               "tag": "35-24-010.1",
-              "evidence": "motor branch belongs to 35-24L010, not T606 numeric base"
+              "evidence": "Motor tag numeric base 010 matches 35-24L010, not 35-24T606"
             },
             {
               "tag": "35-24FV-644",
-              "evidence": "FFC 644 control valve on upstream feed line, not T606 circuit"
+              "evidence": "FFC 644 flow control on inlet \u2014 associated with upstream screen circuit 35-24L010"
             },
             {
               "tag": "35-24HV-642",
-              "evidence": "HV-642/HS-642 on upstream screen circuit, not T606"
+              "evidence": "HV-642 with HS-642 \u2014 belongs to upstream screen/diverter circuit"
             },
             {
               "tag": "35-24-170",
-              "evidence": "PP-300 main header line \u2014 upstream of tank, separate circuit"
+              "evidence": "PP-300 main header line at top of drawing \u2014 upstream supply, not tank nozzle"
+            },
+            {
+              "tag": "35-24-166",
+              "evidence": "PSR-200 line \u2014 distance and routing indicate upstream circuit, not directly on T606"
             }
           ],
           "notes": [
-            "LC-646 is locally mounted instrument directly on tank nozzle",
-            "35-24-013 (003-50) outline bowtie = HV; 35-24-1121/011/009/008 solid-filled bowties = NC",
-            "35-24-172 and 35-24-174 are outlet/drain lines from tank bottom; valves nested under respective lines",
-            "2,7% consistency noted on drawing for tank contents"
+            "LC-646 is locally mounted instrument on tank nozzle \u2014 included as direct child",
+            "35-24-172 carries valves 35-24-011 and 35-24-009 on bottom outlet manifold; 35-24-008 listed separately as it may be on adjacent spool 35-24-008",
+            "35-24-1121 nested under 35-24-174 as it is the isolation valve on that 250mm outlet",
+            "35-24-013 symbol shows outline/transparent bowtie with no actuator circle \u2014 classified HV",
+            "Valve fill assessment: 35-24-011, 35-24-009, 35-24-1121 show solid-filled triangles on dark background = NC"
           ],
-          "confidence": "high"
+          "confidence": "medium"
         },
         "model_id": "eu.anthropic.claude-sonnet-4-6",
         "region": "eu-west-2",
@@ -227,12 +232,6 @@
           "description": "35-24-169 PSR-100 LN"
         },
         {
-          "equipment": "",
-          "subequipment": "35-24-013",
-          "mask": "",
-          "description": "35-24-013 VLV HV"
-        },
-        {
           "equipment": "35-24-168",
           "subequipment": "",
           "mask": "",
@@ -248,7 +247,13 @@
           "equipment": "",
           "subequipment": "35-24-011",
           "mask": "",
-          "description": "35-24-011 VLV NC"
+          "description": "35-24-011 VLV NC 101-150"
+        },
+        {
+          "equipment": "",
+          "subequipment": "35-24-009",
+          "mask": "",
+          "description": "35-24-009 VLV NC 001-80"
         },
         {
           "equipment": "35-24-174",
@@ -260,19 +265,19 @@
           "equipment": "",
           "subequipment": "35-24-1121",
           "mask": "",
-          "description": "35-24-1121 VLV NC"
+          "description": "35-24-1121 VLV NC 101-250"
         },
         {
-          "equipment": "",
-          "subequipment": "35-24-009",
+          "equipment": "35-24-013",
+          "subequipment": "",
           "mask": "",
-          "description": "35-24-009 VLV NC"
+          "description": "35-24-013 VLV HV 003-50"
         },
         {
-          "equipment": "",
-          "subequipment": "35-24-008",
+          "equipment": "35-24-008",
+          "subequipment": "",
           "mask": "",
-          "description": "35-24-008 VLV NC"
+          "description": "35-24-008 VLV NC 003-50"
         },
         {
           "equipment": "35-24T606.1",

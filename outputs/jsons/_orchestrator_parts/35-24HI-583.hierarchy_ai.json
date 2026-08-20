@@ -45,47 +45,43 @@
       ],
       "dossier": "Parent tag: 35-24HI-583\nParent category/block: instruments / \nParent XY: (3411.34422478717, 401.0416666666666)\nNearby descriptions: HI 583 (35-24)\n\nSame-tag CAD family:\n- (none)\n\nNearby line numbers (short ids preferred in output):\n- 35-24-184  full=35-24-184-WAF-200-E10H2A  d=78  layer=P-LINEPOS\n- 35-24-094  full=35-24-094-WAF-300-E10H2A  d=86  layer=P-LINEPOS\n- 35-24-098  full=35-24-098-WAF-300-E10H2A  d=101  layer=P-LINEPOS\n- 35-24-105  full=35-24-105-WAF-300-E10H2A  d=131  layer=P-LINEPOS\n- 35-24-107  full=35-24-107-WAF-100-E10H2A  d=119  layer=P-LINEPOS\n- 35-24-108  full=35-24-108-PP-100-E10H2A  d=148  layer=P-LINEPOS\n\nNearby devices (valves/instruments/pumps/\u2026):\n- line_markers: PPI_1100A  d=150  block=PPI_1100A\n- control_valves: PPI_1000A  d=139  block=PPI_1000A\n- instruments: PPI_1204A  d=173  block=PPI_1204A\n- pumps: PPI_0521A-25_0  d=174  block=PPI_0521A-25_0\n\nNearby peer primary equipment (do NOT nest under parent):\n- 35-24L001 (process_equipment, d=175)\n- 35-24L011 (process_equipment, d=136)\n- 35-24P504 (pumps, d=174)\n\nNearby drawing text tokens:\n- S1  d=133  layer=P-TEXT\n- S2  d=153  layer=P-TEXT\n- 2 bar  d=159  layer=P-TEXT\n- 2621 ADTPD  d=189  layer=P-TEXT\n- 35-24  d=37  layer=P-INSTRPOS_TEXTS\n- SHOWER S2  d=12  layer=P-TEXT\n- S3  d=126  layer=P-TEXT\n- 35-24L001  d=173  layer=P-EQUIPMENT_POS\n- HP-50G2  d=185  layer=P-EQUIPMENT_POS\n- 35-24L011  d=137  layer=P-EQUIPMENT_POS\n- BROKE CONVEYOR 1  d=146  layer=P-EQUIPMENT_POS\n- 585  d=54  layer=P-INSTRPOS_TEXTS\n- 588  d=125  layer=P-INSTRPOS_TEXTS\n- 580  d=18  layer=P-INSTRPOS_TEXTS\n- 591  d=137  layer=P-INSTRPOS_TEXTS\n- 589  d=171  layer=P-INSTRPOS_TEXTS\n- 590  d=176  layer=P-INSTRPOS_TEXTS\n- 583  d=4  layer=P-INSTRPOS_TEXTS\n- 654  d=49  layer=P-INSTRPOS_TEXTS\n- 35-24P504  d=177  layer=P-PUMP_POS\n- 20  d=182  layer=P-PUMP_POS\n- 10  d=182  layer=P-PUMP_POS\n- 4  d=187  layer=P-PUMP_POS\n- 1500  d=187  layer=P-PUMP_POS\n- 35-24-184  d=78  layer=P-LINEPOS\n- 35-24-094  d=86  layer=P-LINEPOS\n- 35-24-098  d=101  layer=P-LINEPOS\n- 35-24-105  d=131  layer=P-LINEPOS\n- 35-24-107  d=119  layer=P-LINEPOS\n- 35-24-108  d=148  layer=P-LINEPOS\n- 35-24HV-591  d=138  layer=P-CVPOS\n- 80  d=143  layer=P-CVPOS",
       "ai": {
-        "raw_text": "Looking at the P&ID image, I can see that 35-24HI-583 is an instrument (Hand Indicator / position indicator) located within a LOCAL PANEL box. It is labeled \"PRESS PULPER SHOWER S2\" and sits alongside an HS (hand switch) instrument above it.\n\nThe instrument 35-24HI-583 is clearly a standalone instrument tag \u2014 it is a locally-mounted panel instrument (square symbol with horizontal line = local control panel instrument per legend). It has no child lines, valves, or sub-instruments hanging off it directly.\n\nThe nearby instruments visible in the same local panel:\n- 35-24HS (above 583, for SHOWER S2) \u2014 this is a peer instrument, not a child\n- 35-24HI-580 (SHOWER S1 group) \u2014 peer\n- 35-24HS-585 (PRESS PULPER START/STOP) \u2014 peer\n- 35-24HI-654 (SHOWER S3 group) \u2014 peer\n\nPer the rules: \"If 35-24HI-583 is an instrument (LC/PI/FV/XS/\u2026) and no labelled accessories sit on it, emit the FUNCTION header + description only \u2014 empty `rows` is correct.\"\n\nThe description: HI = Hand Indicator, context is PRESS PULPER SHOWER S2.\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24HI-583\",\n  \"description\": \"35-24HI-583 PRESS PLPR SHW S2 HI\",\n  \"rows\": [],\n  \"peers\": [\n    {\"tag\": \"35-24HI-580\", \"evidence\": \"Peer HI instrument in same local panel, SHOWER S1 group\"},\n    {\"tag\": \"35-24HS-585\", \"evidence\": \"Peer HS instrument in same local panel, PRESS PULPER START/STOP\"},\n    {\"tag\": \"35-24HI-654\", \"evidence\": \"Peer HI instrument in same local panel, SHOWER S3 group\"},\n    {\"tag\": \"35-24L001\", \"evidence\": \"Peer process equipment (pulper vessel), different function base\"},\n    {\"tag\": \"35-24L011\", \"evidence\": \"Peer process equipment, different function base\"},\n    {\"tag\": \"35-24P504\", \"evidence\": \"Peer pump, different function base\"},\n    {\"tag\": \"35-24XS-588\", \"evidence\": \"Peer XS instrument (MCS SIGNAL), different function base\"}\n  ],\n  \"notes\": [\n    \"35-24HI-583 is a local control panel instrument (square symbol per legend) indicating position/status for PRESS PULPER SHOWER S2\",\n    \"No child lines, valves or sub-instruments are directly attached to this HI tag on the P&ID\",\n    \"The HS instrument immediately above 583 in the SHOWER S2 group is a separate tag (not labelled in crop but likely 35-24HS-583 or similar \u2014 insufficient evidence to assert)\",\n    \"Nearby line numbers 35-24-184, 35-24-094, 35-24-098, 35-24-105, 35-24-107, 35-24-108 are process lines in the lower portion of the crop, not directly connected to this instrument tag\"\n  ],\n  \"confidence\": \"high\"\n}\n```",
+        "raw_text": "Looking at the P&ID image, I can see that 35-24HI-583 is an instrument (Hand Indicator / position indicator) located within a LOCAL PANEL box. It is labeled \"PRESS PULPER SHOWER S2\" and sits alongside an HS (hand switch) instrument above it.\n\nThe local panel contains:\n- 35-24HS (above 583) \u2014 the hand switch for shower S2\n- 35-24HI-583 \u2014 the hand indicator for shower S2\n\nFrom the image, the HS paired with HI-583 (shower S2) appears to be at position 583's companion \u2014 looking at the text tokens, the HS above HI-583 is in the same cluster. The nearby instrument text tokens show \"583\" at d=4 (very close) and the HS circle is directly above the HI-583 box.\n\nThe instrument 35-24HI-583 is a **locally mounted panel instrument** (square symbol with circle = local control panel instrument per legend). It is a standalone indicator \u2014 no child lines, valves, or sub-instruments are directly attached to it as children in the hierarchy.\n\nPeers visible nearby: 35-24HI-580 (shower S1), 35-24HI-654 (shower S3), 35-24HS-585 (press pulper start/stop), 35-24XS-588 (MCS signal), and the process equipment 35-24L001, 35-24L011, 35-24P504.\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24HI-583\",\n  \"description\": \"35-24HI-583 PRESS PLPR SHOWER S2 HI\",\n  \"rows\": [],\n  \"peers\": [\n    {\"tag\": \"35-24L001\", \"evidence\": \"peer process equipment vessel visible in crop, not child of instrument\"},\n    {\"tag\": \"35-24L011\", \"evidence\": \"peer process equipment visible in crop, not child of instrument\"},\n    {\"tag\": \"35-24P504\", \"evidence\": \"peer pump visible in crop, not child of instrument\"},\n    {\"tag\": \"35-24HV-591\", \"evidence\": \"peer control valve on nearby line, not attached to this instrument\"},\n    {\"tag\": \"35-24XS-588\", \"evidence\": \"peer MCS signal instrument in same area, separate function\"},\n    {\"tag\": \"35-24HS-585\", \"evidence\": \"peer hand switch for press pulper start/stop, separate function\"}\n  ],\n  \"notes\": [\n    \"35-24HI-583 is a local panel hand indicator for Press Pulper Shower S2, shown inside LOCAL PANEL boundary on P&ID\",\n    \"No child lines, valves or sub-instruments are directly subordinate to this indicator tag\",\n    \"Companion HS instrument above HI-583 in the panel is a separate tag (likely 35-24HS-583 or similar) \u2014 not confirmed in dossier so omitted\",\n    \"Nearby lines 35-24-184, 35-24-094, 35-24-098, 35-24-105, 35-24-107, 35-24-108 are process lines in the wider area, not children of this instrument\"\n  ],\n  \"confidence\": \"high\"\n}\n```",
         "parsed": {
           "sub_process": "BR1",
           "function": "35-24HI-583",
-          "description": "35-24HI-583 PRESS PLPR SHW S2 HI",
+          "description": "35-24HI-583 PRESS PLPR SHOWER S2 HI",
           "rows": [],
           "peers": [
             {
-              "tag": "35-24HI-580",
-              "evidence": "Peer HI instrument in same local panel, SHOWER S1 group"
-            },
-            {
-              "tag": "35-24HS-585",
-              "evidence": "Peer HS instrument in same local panel, PRESS PULPER START/STOP"
-            },
-            {
-              "tag": "35-24HI-654",
-              "evidence": "Peer HI instrument in same local panel, SHOWER S3 group"
-            },
-            {
               "tag": "35-24L001",
-              "evidence": "Peer process equipment (pulper vessel), different function base"
+              "evidence": "peer process equipment vessel visible in crop, not child of instrument"
             },
             {
               "tag": "35-24L011",
-              "evidence": "Peer process equipment, different function base"
+              "evidence": "peer process equipment visible in crop, not child of instrument"
             },
             {
               "tag": "35-24P504",
-              "evidence": "Peer pump, different function base"
+              "evidence": "peer pump visible in crop, not child of instrument"
+            },
+            {
+              "tag": "35-24HV-591",
+              "evidence": "peer control valve on nearby line, not attached to this instrument"
             },
             {
               "tag": "35-24XS-588",
-              "evidence": "Peer XS instrument (MCS SIGNAL), different function base"
+              "evidence": "peer MCS signal instrument in same area, separate function"
+            },
+            {
+              "tag": "35-24HS-585",
+              "evidence": "peer hand switch for press pulper start/stop, separate function"
             }
           ],
           "notes": [
-            "35-24HI-583 is a local control panel instrument (square symbol per legend) indicating position/status for PRESS PULPER SHOWER S2",
-            "No child lines, valves or sub-instruments are directly attached to this HI tag on the P&ID",
-            "The HS instrument immediately above 583 in the SHOWER S2 group is a separate tag (not labelled in crop but likely 35-24HS-583 or similar \u2014 insufficient evidence to assert)",
-            "Nearby line numbers 35-24-184, 35-24-094, 35-24-098, 35-24-105, 35-24-107, 35-24-108 are process lines in the lower portion of the crop, not directly connected to this instrument tag"
+            "35-24HI-583 is a local panel hand indicator for Press Pulper Shower S2, shown inside LOCAL PANEL boundary on P&ID",
+            "No child lines, valves or sub-instruments are directly subordinate to this indicator tag",
+            "Companion HS instrument above HI-583 in the panel is a separate tag (likely 35-24HS-583 or similar) \u2014 not confirmed in dossier so omitted",
+            "Nearby lines 35-24-184, 35-24-094, 35-24-098, 35-24-105, 35-24-107, 35-24-108 are process lines in the wider area, not children of this instrument"
           ],
           "confidence": "high"
         },

@@ -2,9 +2,9 @@ ORDER,SITE,LINE,PROCESS,SUB-PROCESS,FUNCTION,EQUIPMENT,SUB-EQUIPMENT,MASK,DESCRI
 1,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,,,5001-PM03-BR,BROKE SYSTEM
 2,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,BR1,,,,5001-PM03-BR-BR1,BROKE SYSTEM
 3,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,BR1,35-24-115,,,5001-PM03-BR-BR1-35-24-115,35-24-115 WAF 250 COUCH PIT FD LN
-4,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,35-24-115,,,35-24-115 WAF 250 PROS LN
-5,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,,35-24HV-597,,35-24HV-597 ISOL VLV AV NC
-6,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,,35-24FV-598,,35-24FV-598 FL CTRL VLV AV
-7,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,,35-24KV-595,,35-24KV-595 ISOL VLV AV
+4,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,35-24HV-597,,,35-24HV-597 ISOL VLV HV
+5,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,35-24FV-598,,,35-24FV-598 FL CTRL VLV AV NC
+6,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,,35-24FC-598,,35-24FC-598 FL CONTROLLER
+7,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,35-24-115,,,35-24-115
 8,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,35-24-401.2,,,35-24-401.2
 9,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,35-24-403.2,,,35-24-403.2

@@ -68,7 +68,7 @@
       ],
       "dossier": "Parent tag: 35-24P503\nParent category/block: pumps / PPI_0521A-25_0\nParent XY: (3200.0, 200.0)\nNearby descriptions: PRESS PULPER ROTOR 1; GEAR BOX OIL PUMP; 2621 ADTPD\n\nSame-tag CAD family:\n- pumps @ (3225.037084313363,225.0) block=P7A0200 nearby=35-24P503; 35-24; 35-24L001\n- pumps @ (3200.0,200.0) block=PPI_0521A-25_0 nearby=35-24P503; 35-24\n- motors @ (3267.5,200.0) block=PPI_1504A-25_0 nearby=35-24P503\n- motors @ (3272.5,185.0) block=PPI_1504A-25_0 nearby=35-24P503\n- valves @ (3268.75,215.0) block=PPI_0900A nearby=35-24P503; 35-24L001\n- valves @ (3200.0,235.0) block=PPI_0900A nearby=35-24P503; 35-24; 35-24\n- valves @ (3172.5,235.0) block=PPI_0900A nearby=35-24; 35-24P503; 35-24\n- valves @ (3181.25,215.0) block=PPI_0900A nearby=35-24P503; 35-24; 35-24\n- valves @ (3133.75,217.5) block=PPI_0900A nearby=35-24; 35-24; 35-24; 35-24P503\n- control_valves @ (3144.25,235.0) block=PPI_1000A nearby=35-24; 35-24; 35-24P503; 35-24\n- control_valves @ (3201.875,110.0) block=PPI_1000A nearby=35-24; 35-24; 35-24; 35-24; 35-24P503\n- instruments @ (3167.5,192.5) block=PPI_1204A nearby=35-24; 35-24P503; 35-24; 35-24\n\nNearby line numbers (short ids preferred in output):\n- 35-24-209  full=35-24-209-PP-100-E10H2A  d=194  layer=P-LINEPOS\n- 35-24-090  full=35-24-090-WFC-15-E10H2A  d=186  layer=P-LINEPOS\n- 35-24-097  full=35-24-097-WFL-15-E10H2A  d=144  layer=P-LINEPOS\n- 35-24-099  full=35-24-099-WFL-15-E10H2A  d=165  layer=P-LINEPOS\n- 35-24-102  full=35-24-102-WFL-15-E10H2A  d=194  layer=P-LINEPOS\n- 35-24-092  full=35-24-092-WFC-15-E10H2A  d=152  layer=P-LINEPOS\n- 35-24-091  full=35-24-091-WAB-20-E10H2A  d=194  layer=P-LINEPOS\n- 35-24-101  full=35-24-101-PP-150-E10H2A  d=117  layer=P-LINEPOS\n- 35-24-095  full=35-24-095-PP-200-E10H2A  d=67  layer=P-LINEPOS\n- 35-24-096  full=35-24-096-PP-900-E10H2A  d=32  layer=P-LINEPOS\n- 35-24-093  full=35-24-093-PP-700-E10H2A  d=188  layer=P-LINEPOS\n- 35-24-100  full=35-24-100-PP-250-E10H2A  d=116  layer=P-LINEPOS\n\nNearby devices (valves/instruments/pumps/\u2026):\n- line_markers: PPI_1100A  d=116  block=PPI_1100A\n- valves: PPI_0900A  d=126  block=PPI_0900A\n- control_valves: PPI_1000A  d=69  block=PPI_1000A\n- instruments: PPI_0100X  d=147  block=PPI_0100X\n- pumps: P7A0200  d=24  block=P7A0200\n- motors: PPI_1504A-25_0  d=60  block=PPI_1504A-25_0\n\nNearby peer primary equipment (do NOT nest under parent):\n- 35-24L001 (process_equipment, d=109)\n- 35-24L011 (process_equipment, d=159)\n- 35-24P504 (pumps, d=195)\n\nNearby drawing text tokens:\n- S1  d=147  layer=P-TEXT\n- S2  d=128  layer=P-TEXT\n- A1  d=84  layer=P-TEXT\n- 2 bar  d=123  layer=P-TEXT\n- GEARBOX 1  d=94  layer=P-OTHER\n- 2621 ADTPD  d=91  layer=P-TEXT\n- S3  d=154  layer=P-TEXT\n- 35-24L001  d=109  layer=P-EQUIPMENT_POS\n- HP-50G2  d=96  layer=P-EQUIPMENT_POS\n- 35-24L011  d=162  layer=P-EQUIPMENT_POS\n- BROKE CONVEYOR 1  d=154  layer=P-EQUIPMENT_POS\n- 35-24  d=198  layer=P-INSTRPOS_TEXTS\n- 588  d=167  layer=P-INSTRPOS_TEXTS\n- 9290  d=147  layer=P-INSTRPOS_TEXTS\n- 9291  d=108  layer=P-INSTRPOS_TEXTS\n- 9296  d=167  layer=P-INSTRPOS_TEXTS\n- 586  d=191  layer=P-INSTRPOS_TEXTS\n- 577  d=47  layer=P-INSTRPOS_TEXTS\n- 9292  d=122  layer=P-INSTRPOS_TEXTS\n- 581  d=129  layer=P-INSTRPOS_TEXTS\n- 589  d=147  layer=P-INSTRPOS_TEXTS\n- 590  d=132  layer=P-INSTRPOS_TEXTS\n- 9294  d=138  layer=P-INSTRPOS_TEXTS\n- 584  d=155  layer=P-INSTRPOS_TEXTS\n- 576  d=85  layer=P-INSTRPOS_TEXTS\n- 9293  d=123  layer=P-INSTRPOS_TEXTS\n- 9295  d=143  layer=P-INSTRPOS_TEXTS\n- 9297  d=174  layer=P-INSTRPOS_TEXTS\n- PRESS PULPER ROTOR 1  d=108  layer=P-TEXT\n- 670  d=130  layer=P-INSTRPOS_TEXTS\n- 35-24P503  d=12  layer=P-PUMP_POS\n- 860  d=18  layer=P-PUMP_POS\n- 17  d=19  layer=P-PUMP_POS\n- 200  d=23  layer=P-PUMP_POS\n- 1000  d=23  layer=P-PUMP_POS\n- 20  d=199  layer=P-PUMP_POS\n- 4  d=200  layer=P-PUMP_POS\n- 35-24-001.4  d=137  layer=P-MOTOR_POS\n- 1,5  d=139  layer=P-MOTOR_POS\n- 1500  d=129  layer=P-MOTOR_POS",
       "ai": {
-        "raw_text": "I'll analyze the P&ID image carefully, focusing on what's within the red boundary box for FUNCTION=35-24P503.\n\n**Observations from the image:**\n\n1. **Pump 35-24P503** data box shows: 860 l/s, 17m, 200kW, 1000rpm \u2014 this is the GEAR BOX OIL PUMP for PRESS PULPER ROTOR 1\n\n2. **Motors visible**: 35-24-001.1 (200kW, 1500rpm) and 35-24-001.2 (200kW, 1500rpm) \u2014 these share numeric base \"001\" not \"503\", so they are peers. Wait \u2014 looking again, the motor rule says motor tag must share numeric base with P503. 35-24-001.1 and 35-24-001.2 don't match P503's base. They belong to the pulper rotor system.\n\n3. **Lines within the red box**: 35-24-096 (PP-900), 35-24-095 (PP-200) visible on the main discharge line. 35-24-096 is the closest (d=32).\n\n4. **Valves within box**: \n   - 35-24LV2-576 (control valve with actuator circle \u2014 AV)\n   - 35-24-207 (hand valve \u2014 outline bowtie, no actuator \u2192 HV)\n   - 35-24-217 (solid filled triangles \u2192 NC)\n   - 35-24-093 (solid filled triangles \u2192 NC)\n   - NC 577 instrument bubble\n\n5. **Instrument**: LC 576 (level controller), NC 577\n\n6. **Lines**: 35-24-096 (suction/discharge), 35-24-095 (PP-200 main line above)\n\n7. **35-24-234** appears as a line tag (350-500)\n\n8. **35-24-1105** visible on right side\n\n**Valve type analysis:**\n- 35-24LV2-576: has actuator circle on top \u2192 AV (control valve)\n- 35-24-207: outline bowtie, no actuator \u2192 HV\n- 35-24-217: solid/filled triangles, no actuator \u2192 NC\n- 35-24-093: solid/filled triangles, no actuator \u2192 NC\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24P503\",\n  \"description\": \"35-24P503 PRESS PLPR GRBX OIL PMP\",\n  \"rows\": [\n    {\"equipment\": \"35-24-096\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-096 PP-900 SUCT/DIS LINE\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24LV2-576\", \"mask\": \"\", \"description\": \"35-24LV2-576 LVL CTRL VLV AV\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-217\", \"mask\": \"\", \"description\": \"35-24-217 ISOL VLV NC\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-093\", \"mask\": \"\", \"description\": \"35-24-093 ISOL VLV NC\"},\n    {\"equipment\": \"35-24-095\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-095 PP-200 MAIN LINE\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-207\", \"mask\": \"\", \"description\": \"35-24-207 ISOL VLV HV\"},\n    {\"equipment\": \"35-24-234\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-234 SUCT LINE 350-500\"},\n    {\"equipment\": \"35-24-1105\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-1105 CONN LINE\"}\n  ],\n  \"peers\": [\n    {\"tag\": \"35-24L001\", \"evidence\": \"peer vessel PRESS PULPER HP-50G2, separate FUNCTION\"},\n    {\"tag\": \"35-24L011\", \"evidence\": \"peer process equipment visible nearby, separate FUNCTION\"},\n    {\"tag\": \"35-24P504\", \"evidence\": \"peer pump, same area but separate FUNCTION\"},\n    {\"tag\": \"35-24-001.1\", \"evidence\": \"motor tag numeric base 001 does not match P503; belongs to pulper rotor\"},\n    {\"tag\": \"35-24-001.2\", \"evidence\": \"motor tag numeric base 001 does not match P503; belongs to pulper rotor\"},\n    {\"tag\": \"35-24-001.3\", \"evidence\": \"motor/branch tag for PRESS PULPER ROTOR 1, base 001 not P503\"},\n    {\"tag\": \"35-24-001.4\", \"evidence\": \"motor/branch tag for PRESS PULPER ROTOR 2, base 001 not P503\"},\n    {\"tag\": \"35-24TV-9290\", \"evidence\": \"temperature control valve for GEARBOX 2 circuit, separate sub-system\"},\n    {\"tag\": \"35-24TV-9291\", \"evidence\": \"temperature control valve for GEARBOX 1 circuit, separate sub-system\"}\n  ],\n  \"notes\": [\n    \"35-24P503 is the GEAR BOX OIL PUMP for PRESS PULPER ROTOR 1 (860 l/s, 17m, 200kW, 1000rpm)\",\n    \"35-24-096 (PP-900) is the primary suction/discharge line directly connected to the pump within the red boundary\",\n    \"35-24-095 (PP-200) is the main header line running above the pump circuit\",\n    \"Motor tags 35-24-001.x share base 001 not 503 \u2014 treated as peers per numeric base rule\",\n    \"LC 576 / NC 577 instrument bubbles visible; 35-24LV2-576 is the associated control valve nested under 35-24-096\"\n  ],\n  \"confidence\": \"medium\"\n}\n```",
+        "raw_text": "I'll analyze the P&ID image carefully, focusing on what's within the red boundary box for FUNCTION=35-24P503.\n\n**Observations from the image:**\n\n1. **Pump 35-24P503** data box shows: 860 l/s, 17m, 200kW, 1000rpm \u2014 this is the GEAR BOX OIL PUMP for PRESS PULPER ROTOR 1\n\n2. **Motors visible**: 35-24-001.1 (200kW, 1500rpm) and 35-24-001.2 (200kW, 1500rpm) \u2014 these share numeric base \"001\" not \"503\", so they are peers. Wait \u2014 looking again at the rule: motor tag must share numeric base with P503. 35-24-001.x doesn't match P503, so peers.\n\n3. **Lines within the red box**:\n   - 35-24-096 (PP-900) \u2014 the main discharge line, very close (d=32), directly connected to pump\n   - 35-24-095 (PP-200) \u2014 suction line (d=67)\n   - 35-24-096 is the closest line\n\n4. **Valves on lines**:\n   - 35-24-207 (003-50) \u2014 hand valve on the circuit, solid filled triangles = NC\n   - 35-24-217 (001-80) \u2014 NC valve (solid filled)\n   - 35-24-093 (001-80) \u2014 NC valve on right side\n   - 35-24-234 (350-500) \u2014 hand valve\n   - 35-24-1105 (003-50) \u2014 on right side\n\n5. **Instruments**: 35-24LV2-576 (level valve, automatic with circle actuator = AV), LC 576 instrument\n\n6. **NC 577** \u2014 instrument bubble near pump\n\n7. **35-24TV-9291** and **35-24TV-9290** \u2014 temperature valves for gearboxes, below the main circuit\n\nLooking at valve symbols:\n- 35-24-207: solid filled triangles = NC (Valve Normally Closed)\n- 35-24-217: solid filled triangles = NC\n- 35-24-093: solid filled triangles = NC\n- 35-24LV2-576: has circle actuator = AV (automatic valve)\n- 35-24-234: appears to be hand valve (outline triangles)\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24P503\",\n  \"description\": \"35-24P503 PRESS PLPR GRBX OIL PMP\",\n  \"rows\": [\n    {\"equipment\": \"35-24-096\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-096 PP-900 DISCHARGE LINE\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-1105\", \"mask\": \"\", \"description\": \"35-24-1105 VLV NC\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-093\", \"mask\": \"\", \"description\": \"35-24-093 VLV NC\"},\n    {\"equipment\": \"35-24-095\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-095 PP-200 SUCTION LINE\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24LV2-576\", \"mask\": \"\", \"description\": \"35-24LV2-576 LVL VLV AV\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-207\", \"mask\": \"\", \"description\": \"35-24-207 VLV NC\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-217\", \"mask\": \"\", \"description\": \"35-24-217 VLV NC\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-234\", \"mask\": \"\", \"description\": \"35-24-234 VLV HV\"}\n  ],\n  \"peers\": [\n    {\"tag\": \"35-24L001\", \"evidence\": \"peer vessel PRESS PULPER, separate FUNCTION\"},\n    {\"tag\": \"35-24L011\", \"evidence\": \"peer vessel BROKE CONVEYOR 1, separate FUNCTION\"},\n    {\"tag\": \"35-24P504\", \"evidence\": \"peer pump, separate FUNCTION\"},\n    {\"tag\": \"35-24-001.1\", \"evidence\": \"motor numeric base 001 does not match P503\"},\n    {\"tag\": \"35-24-001.2\", \"evidence\": \"motor numeric base 001 does not match P503\"},\n    {\"tag\": \"35-24-001.3\", \"evidence\": \"motor/branch for PRESS PULPER ROTOR 1, base 001\"},\n    {\"tag\": \"35-24-001.4\", \"evidence\": \"motor/branch for PRESS PULPER ROTOR 2, base 001\"},\n    {\"tag\": \"35-24TV-9290\", \"evidence\": \"gearbox 2 temperature valve, separate circuit\"},\n    {\"tag\": \"35-24TV-9291\", \"evidence\": \"gearbox 1 temperature valve, separate circuit\"}\n  ],\n  \"notes\": [\n    \"35-24P503 is GEAR BOX OIL PUMP for PRESS PULPER ROTOR 1 (860 l/s, 17m, 200kW, 1000rpm)\",\n    \"35-24-096 PP-900 is the closest line (d=32) \u2014 main discharge circuit\",\n    \"35-24-095 PP-200 is suction line (d=67)\",\n    \"Motors 35-24-001.1/.2 visible in crop but numeric base 001 \u2260 503 \u2014 placed as peers\",\n    \"NC 577 instrument bubble visible near pump \u2014 tag 35-24NC-577 not in candidate list, omitted\"\n  ],\n  \"confidence\": \"medium\"\n}\n```",
         "parsed": {
           "sub_process": "BR1",
           "function": "35-24P503",
@@ -78,95 +78,95 @@
               "equipment": "35-24-096",
               "subequipment": "",
               "mask": "",
-              "description": "35-24-096 PP-900 SUCT/DIS LINE"
+              "description": "35-24-096 PP-900 DISCHARGE LINE"
             },
             {
               "equipment": "",
-              "subequipment": "35-24LV2-576",
+              "subequipment": "35-24-1105",
               "mask": "",
-              "description": "35-24LV2-576 LVL CTRL VLV AV"
-            },
-            {
-              "equipment": "",
-              "subequipment": "35-24-217",
-              "mask": "",
-              "description": "35-24-217 ISOL VLV NC"
+              "description": "35-24-1105 VLV NC"
             },
             {
               "equipment": "",
               "subequipment": "35-24-093",
               "mask": "",
-              "description": "35-24-093 ISOL VLV NC"
+              "description": "35-24-093 VLV NC"
             },
             {
               "equipment": "35-24-095",
               "subequipment": "",
               "mask": "",
-              "description": "35-24-095 PP-200 MAIN LINE"
+              "description": "35-24-095 PP-200 SUCTION LINE"
+            },
+            {
+              "equipment": "",
+              "subequipment": "35-24LV2-576",
+              "mask": "",
+              "description": "35-24LV2-576 LVL VLV AV"
             },
             {
               "equipment": "",
               "subequipment": "35-24-207",
               "mask": "",
-              "description": "35-24-207 ISOL VLV HV"
+              "description": "35-24-207 VLV NC"
             },
             {
-              "equipment": "35-24-234",
-              "subequipment": "",
+              "equipment": "",
+              "subequipment": "35-24-217",
               "mask": "",
-              "description": "35-24-234 SUCT LINE 350-500"
+              "description": "35-24-217 VLV NC"
             },
             {
-              "equipment": "35-24-1105",
-              "subequipment": "",
+              "equipment": "",
+              "subequipment": "35-24-234",
               "mask": "",
-              "description": "35-24-1105 CONN LINE"
+              "description": "35-24-234 VLV HV"
             }
           ],
           "peers": [
             {
               "tag": "35-24L001",
-              "evidence": "peer vessel PRESS PULPER HP-50G2, separate FUNCTION"
+              "evidence": "peer vessel PRESS PULPER, separate FUNCTION"
             },
             {
               "tag": "35-24L011",
-              "evidence": "peer process equipment visible nearby, separate FUNCTION"
+              "evidence": "peer vessel BROKE CONVEYOR 1, separate FUNCTION"
             },
             {
               "tag": "35-24P504",
-              "evidence": "peer pump, same area but separate FUNCTION"
+              "evidence": "peer pump, separate FUNCTION"
             },
             {
               "tag": "35-24-001.1",
-              "evidence": "motor tag numeric base 001 does not match P503; belongs to pulper rotor"
+              "evidence": "motor numeric base 001 does not match P503"
             },
             {
               "tag": "35-24-001.2",
-              "evidence": "motor tag numeric base 001 does not match P503; belongs to pulper rotor"
+              "evidence": "motor numeric base 001 does not match P503"
             },
             {
               "tag": "35-24-001.3",
-              "evidence": "motor/branch tag for PRESS PULPER ROTOR 1, base 001 not P503"
+              "evidence": "motor/branch for PRESS PULPER ROTOR 1, base 001"
             },
             {
               "tag": "35-24-001.4",
-              "evidence": "motor/branch tag for PRESS PULPER ROTOR 2, base 001 not P503"
+              "evidence": "motor/branch for PRESS PULPER ROTOR 2, base 001"
             },
             {
               "tag": "35-24TV-9290",
-              "evidence": "temperature control valve for GEARBOX 2 circuit, separate sub-system"
+              "evidence": "gearbox 2 temperature valve, separate circuit"
             },
             {
               "tag": "35-24TV-9291",
-              "evidence": "temperature control valve for GEARBOX 1 circuit, separate sub-system"
+              "evidence": "gearbox 1 temperature valve, separate circuit"
             }
           ],
           "notes": [
-            "35-24P503 is the GEAR BOX OIL PUMP for PRESS PULPER ROTOR 1 (860 l/s, 17m, 200kW, 1000rpm)",
-            "35-24-096 (PP-900) is the primary suction/discharge line directly connected to the pump within the red boundary",
-            "35-24-095 (PP-200) is the main header line running above the pump circuit",
-            "Motor tags 35-24-001.x share base 001 not 503 \u2014 treated as peers per numeric base rule",
-            "LC 576 / NC 577 instrument bubbles visible; 35-24LV2-576 is the associated control valve nested under 35-24-096"
+            "35-24P503 is GEAR BOX OIL PUMP for PRESS PULPER ROTOR 1 (860 l/s, 17m, 200kW, 1000rpm)",
+            "35-24-096 PP-900 is the closest line (d=32) \u2014 main discharge circuit",
+            "35-24-095 PP-200 is suction line (d=67)",
+            "Motors 35-24-001.1/.2 visible in crop but numeric base 001 \u2260 503 \u2014 placed as peers",
+            "NC 577 instrument bubble visible near pump \u2014 tag 35-24NC-577 not in candidate list, omitted"
           ],
           "confidence": "medium"
         },
@@ -221,49 +221,49 @@
           "equipment": "35-24-096",
           "subequipment": "",
           "mask": "",
-          "description": "35-24-096 PP-900 SUCT/DIS LN"
+          "description": "35-24-096 PP-900 DIS LN"
         },
         {
           "equipment": "",
-          "subequipment": "35-24LV2-576",
+          "subequipment": "35-24-1105",
           "mask": "",
-          "description": "35-24LV2-576 LVL CTRL VLV AV"
-        },
-        {
-          "equipment": "",
-          "subequipment": "35-24-217",
-          "mask": "",
-          "description": "35-24-217 ISOL VLV NC"
+          "description": "35-24-1105 VLV NC"
         },
         {
           "equipment": "",
           "subequipment": "35-24-093",
           "mask": "",
-          "description": "35-24-093 ISOL VLV NC"
+          "description": "35-24-093 VLV NC"
         },
         {
           "equipment": "35-24-095",
           "subequipment": "",
           "mask": "",
-          "description": "35-24-095 PP-200 MAIN LN"
+          "description": "35-24-095 PP-200 SUCT LN"
+        },
+        {
+          "equipment": "",
+          "subequipment": "35-24LV2-576",
+          "mask": "",
+          "description": "35-24LV2-576 LVL VLV AV"
         },
         {
           "equipment": "",
           "subequipment": "35-24-207",
           "mask": "",
-          "description": "35-24-207 ISOL VLV HV"
+          "description": "35-24-207 VLV NC"
         },
         {
-          "equipment": "35-24-234",
-          "subequipment": "",
+          "equipment": "",
+          "subequipment": "35-24-217",
           "mask": "",
-          "description": "35-24-234 SUCT LN 350-500"
+          "description": "35-24-217 VLV NC"
         },
         {
-          "equipment": "35-24-1105",
-          "subequipment": "",
+          "equipment": "",
+          "subequipment": "35-24-234",
           "mask": "",
-          "description": "35-24-1105 CONN LN"
+          "description": "35-24-234 VLV HV"
         },
         {
           "equipment": "35-24P503.1",

@@ -37,7 +37,26 @@ from dwg_pure_dump import evidence_dir, find_json, json_path, safe_name, write_j
 
 LEGEND_PATH = Path("inputs/legend.png")
 DEFAULT_MODEL_ID = "eu.anthropic.claude-sonnet-4-6"
-VALVE_LAYERS = {"P-VALVEPOS", "P-CVPOS"}
+VALVE_LAYERS = frozenset({"P-VALVEPOS", "P-CVPOS", "P-SYMB"})
+
+# Shared bowtie fill rules — white (Shotton P&ID) and red/colored (GOR legend sheets).
+_BOWTIE_FILL_RULES = """\
+    Inspect EACH triangle separately (left vs right, or top vs bottom):
+
+    CHK : EXACTLY ONE triangle filled solid (white, red, or other color) AND the other
+          triangle outline-only (background/black visible inside). Half-and-half bowtie
+          = CHK, never NC or HV. If BOTH triangles look the same (both filled or both
+          outline) it is NOT CHK. Also CHK if a diagonal bar crosses the bowtie centre.
+
+    NC  : BOTH triangles filled solid (white, red, magenta, or other solid color) —
+          normally closed hand valve. Only when NEITHER triangle is outline-only.
+          Never NC if one triangle is transparent/outline and the other is filled (CHK).
+
+    HV  : BOTH triangles outline-only / transparent (background/black visible in BOTH).
+          Thin line edges with dark interior = HV outline, NOT solid fill. Only when
+          neither triangle is filled solid. Never HV if any triangle is filled solid
+          (white or colored)."""
+
 _CONVEYOR_RE = re.compile(r"\b(CVYR|CONVEYOR)\b", re.I)
 _VESSEL_HINT_RE = re.compile(r"\b(PLPR|PULPER|TNK|TANK|CHEST|VESSEL|THICKENER)\b", re.I)
 
@@ -88,21 +107,7 @@ STEP 2 — BODY / ACTUATOR TYPE (Image 2):
   Actuated valves on drain lines are AV + DRN, not AV alone.
 
   No circle actuator → hand valve — classify by BODY FILL (Image 2):
-    Inspect EACH triangle separately (left vs right, or top vs bottom):
-
-    CHK : EXACTLY ONE triangle filled solid AND the other triangle outline-only
-          (background/black visible inside). Half-and-half bowtie = CHK, never NC or HV.
-          If BOTH triangles look the same (both filled or both outline) it is NOT CHK.
-          Also CHK if a diagonal bar crosses the bowtie centre (per legend).
-
-    NC  : BOTH triangles filled solid white — normally closed hand valve.
-          Only when NEITHER triangle is outline-only. Never NC if one triangle
-          is transparent and the other is filled (that is CHK).
-
-    HV  : BOTH triangles outline-only / transparent (background/black visible in BOTH).
-          Thin white line edges with dark interior = HV outline, NOT solid fill.
-          Only when neither triangle is filled solid. Never HV if any triangle
-          is filled solid white.
+{_BOWTIE_FILL_RULES}
 
     PRV : extra line segments parallel to each triangle base
     SV  : stem on top ending in a horizontal T-cap
@@ -187,7 +192,7 @@ STEP 4 — RETURN JSON ONLY (no other text):
   Examples: {{"type": "NC", "attachment": "DRN"}}
             {{"type": "AV", "attachment": "DRN"}}
             {{"type": "HV", "attachment": "none"}}
-"""
+""".replace("{_BOWTIE_FILL_RULES}", _BOWTIE_FILL_RULES)
 
 _EXCLUSIVE_ATTACHMENTS = frozenset({"DRN", "FLS", "SMP"})
 
@@ -1167,14 +1172,14 @@ _FILL_CONFIRM_PROMPT = """\
 Respond with ONLY a JSON object: {{"type": "NC", "attachment": "none"}} or {{"type": "HV", "attachment": "none"}}
 Valve {TAG}: follow the leader/tag line from label "{TAG}" to the bowtie it connects to.
 Classify ONLY that bowtie — ignore other nearby bowties.
-BOTH triangles solid white fill → NC. BOTH triangles outline-only (dark interior) → HV.
+BOTH triangles solid fill (white, red, or colored) → NC. BOTH outline-only (dark interior) → HV.
 """
 
 
 _BODY_FILL_CONFIRM = """\
 Respond with ONLY a JSON object: {{"type": "NC", "attachment": "none"}} or {{"type": "HV", "attachment": "none"}} or {{"type": "CHK", "attachment": "none"}}
-Valve {TAG} bowtie only: BOTH triangles solid white → NC. BOTH outline (dark interior) → HV.
-EXACTLY one filled + one outline → CHK.
+Valve {TAG} bowtie only: BOTH triangles solid fill (white/red/colored) → NC. BOTH outline → HV.
+EXACTLY one filled (white/red/colored) + one outline → CHK.
 """
 
 
@@ -1268,24 +1273,70 @@ def _confirm_nc_vs_hv(
         return result
     if pipe_dn_near:
         return result
+    tight_cx = max(0.35, min(0.55, cx_frac - 0.05))
     hv_votes = 0
+    for cx_off, frac in ((cx_frac, 0.20), (tight_cx, 0.12)):
+        for _ in range(2):
+            raw = _bedrock_short_ask(
+                _FILL_CONFIRM_PROMPT.replace("{TAG}", tag),
+                marked,
+                model_id=model_id,
+                region=region,
+                max_tokens=120,
+                extra_images=[zoom_center_png(crop_path, frac=frac, cx_frac=cx_off, cy_frac=cy_frac)],
+            )
+            fixed = _parse_one_pass(raw)
+            if fixed and strip_attachment_tokens(fixed).split()[0] == "HV":
+                hv_votes += 1
+        if hv_votes >= 2:
+            break
+    if hv_votes < 2:
+        return result
+    attach = [t for t in tokens if t in _EXCLUSIVE_ATTACHMENTS]
+    return merge_body_and_attachment("HV", attach[0] if attach else "")
+
+
+def _confirm_chk_body_fill(
+    result: str,
+    *,
+    tag: str,
+    marked: Path,
+    crop_path: Path,
+    model_id: str,
+    region: str,
+    cx_frac: float,
+    cy_frac: float,
+) -> str:
+    """Re-check CHK on plain numeric tags — adjacent half-filled bowties bleed into outline valves."""
+    tokens = str(result or "").upper().split()
+    if "CHK" not in tokens:
+        return result
+    if any(t in tokens for t in ("AV", "AV-M", "FLS", "SMP")):
+        return result
+    if not _PLAIN_NUMERIC_TAG_RE.match(_norm_tag(tag)):
+        return result
+    # Left-bias tight zoom isolates the ring-centre bowtie when a CHK neighbour sits to the right.
+    tight_cx = max(0.35, min(0.55, cx_frac - 0.05))
+    tight = zoom_center_png(crop_path, frac=0.12, cx_frac=tight_cx, cy_frac=cy_frac)
+    votes: List[str] = []
     for _ in range(2):
         raw = _bedrock_short_ask(
             _FILL_CONFIRM_PROMPT.replace("{TAG}", tag),
             marked,
             model_id=model_id,
             region=region,
-            extra_images=[
-                zoom_center_png(crop_path, frac=0.20, cx_frac=cx_frac, cy_frac=cy_frac),
-            ],
+            max_tokens=120,
+            extra_images=[tight],
         )
         fixed = _parse_one_pass(raw)
-        if fixed and strip_attachment_tokens(fixed).split()[0] == "HV":
-            hv_votes += 1
-    if hv_votes < 2:
-        return result
-    attach = [t for t in tokens if t in _EXCLUSIVE_ATTACHMENTS]
-    return merge_body_and_attachment("HV", attach[0] if attach else "")
+        if fixed:
+            body = strip_attachment_tokens(fixed).split()[0]
+            if body in {"NC", "HV"}:
+                votes.append(body)
+    if len(votes) == 2 and votes[0] == votes[1] == "HV":
+        attach = [t for t in tokens if t in _EXCLUSIVE_ATTACHMENTS]
+        return merge_body_and_attachment("HV", attach[0] if attach else "")
+    return result
 
 
 def _parse_one_pass(raw: str) -> str:
@@ -1420,14 +1471,23 @@ def bedrock_classify_crop(
             if att:
                 result = merge_body_and_attachment(body_only, att)
     return _normalize_drain_hand_body(
-        _confirm_nc_vs_hv(
-            _refine_drain_body_fill(
-                _confirm_hv_not_false_av(
-                    result,
+        _confirm_chk_body_fill(
+            _confirm_nc_vs_hv(
+                _refine_drain_body_fill(
+                    _confirm_hv_not_false_av(
+                        result,
+                        tag=tag or crop_path.stem,
+                        marked=marked,
+                        model_id=model_id,
+                        region=region,
+                    ),
                     tag=tag or crop_path.stem,
                     marked=marked,
+                    crop_path=crop_path,
                     model_id=model_id,
                     region=region,
+                    cx_frac=cx_frac,
+                    cy_frac=cy_frac,
                 ),
                 tag=tag or crop_path.stem,
                 marked=marked,
@@ -1436,6 +1496,7 @@ def bedrock_classify_crop(
                 region=region,
                 cx_frac=cx_frac,
                 cy_frac=cy_frac,
+                pipe_dn_near=pipe_dn_near,
             ),
             tag=tag or crop_path.stem,
             marked=marked,
@@ -1444,7 +1505,6 @@ def bedrock_classify_crop(
             region=region,
             cx_frac=cx_frac,
             cy_frac=cy_frac,
-            pipe_dn_near=pipe_dn_near,
         )
     )
 

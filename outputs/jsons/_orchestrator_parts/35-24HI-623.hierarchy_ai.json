@@ -55,73 +55,73 @@
       ],
       "dossier": "Parent tag: 35-24HI-623\nParent category/block: instruments / \nParent XY: (4923.807188188188, 501.041625)\nNearby descriptions: HI 623 (35-24)\n\nSame-tag CAD family:\n- (none)\n\nNearby line numbers (short ids preferred in output):\n- 35-24-149  full=35-24-149-WAA-300-E10H2A  d=117  layer=P-LINEPOS\n- 35-24-152  full=35-24-152-PP-300-E10H2A  d=100  layer=P-LINEPOS\n- 35-24-151  full=35-24-151-PP-600-E10H2A  d=132  layer=P-LINEPOS\n- 35-24-154  full=35-24-154-PP-700-E10H2A  d=175  layer=P-LINEPOS\n- 35-24-159  full=35-24-159-PP-300-E10H2A  d=183  layer=P-LINEPOS\n- 35-24-150  full=35-24-150-WAA-400-E10H2A  d=152  layer=P-LINEPOS\n\nNearby devices (valves/instruments/pumps/\u2026):\n- line_markers: PPI_1100A  d=154  block=PPI_1100A\n- valves: PPI_0900A  d=197  block=PPI_0900A\n- control_valves: PPI_1000A  d=119  block=PPI_1000A\n- instruments: PPI_1204A  d=174  block=PPI_1204A\n- motors: PPI_1504A-25_0  d=118  block=PPI_1504A-25_0\n\nNearby peer primary equipment (do NOT nest under parent):\n- 35-24T605 (tanks, d=179)\n- 35-24L002 (process_equipment, d=111)\n\nNearby drawing text tokens:\n- 35-24L002  d=106  layer=P-EQUIPMENT_POS\n- GT-2540  d=116  layer=P-EQUIPMENT_POS\n- DN500  d=101  layer=P-PTERMINAL_POS\n- DN600  d=75  layer=P-PTERMINAL_POS\n- DN300  d=90  layer=P-PTERMINAL_POS\n- DN\u00d860  d=55  layer=P-PTERMINAL_POS\n- 630  d=137  layer=P-INSTRPOS_TEXTS\n- 35-24  d=125  layer=P-INSTRPOS_TEXTS\n- 629  d=131  layer=P-INSTRPOS_TEXTS\n- 623  d=4  layer=P-INSTRPOS_TEXTS\n- 626  d=79  layer=P-INSTRPOS_TEXTS\n- 628  d=74  layer=P-INSTRPOS_TEXTS\n- 625  d=66  layer=P-INSTRPOS_TEXTS\n- 622  d=112  layer=P-INSTRPOS_TEXTS\n- 624  d=177  layer=P-INSTRPOS_TEXTS\n- 662  d=104  layer=P-INSTRPOS_TEXTS\n- 663  d=143  layer=P-INSTRPOS_TEXTS\n- 35-24T605  d=183  layer=P-TANK_POS\n- 70 m\u00b3  d=200  layer=P-TANK_POS\n- 35-24-002.1  d=115  layer=P-MOTOR_POS\n- 15  d=117  layer=P-MOTOR_POS\n- 1500  d=108  layer=P-MOTOR_POS\n- 35-24-033  d=79  layer=P-VALVEPOS\n- 003-15  d=79  layer=P-VALVEPOS\n- 35-24-032  d=31  layer=P-VALVEPOS\n- 35-24-1110  d=95  layer=P-VALVEPOS\n- 003-25  d=100  layer=P-VALVEPOS\n- 35-24-030  d=27  layer=P-VALVEPOS\n- 001-65  d=27  layer=P-VALVEPOS\n- 35-24-029  d=41  layer=P-VALVEPOS\n- 35-24-027  d=193  layer=P-VALVEPOS\n- 350-400  d=198  layer=P-VALVEPOS\n- 35-24-149  d=117  layer=P-LINEPOS\n- 35-24-152  d=100  layer=P-LINEPOS\n- 35-24-151  d=132  layer=P-LINEPOS\n- 35-24-154  d=175  layer=P-LINEPOS\n- 35-24-159  d=183  layer=P-LINEPOS\n- 35-24-150  d=152  layer=P-LINEPOS\n- 35-24HV-623  d=24  layer=P-CVPOS\n- 65  d=32  layer=P-CVPOS",
       "ai": {
-        "raw_text": "I'll analyze the P&ID image carefully for FUNCTION=35-24HI-623.\n\n**Observations from the image:**\n\n1. **35-24HI-623** is an instrument (HI = High Indicator / Hand Indicator) shown as a circle with \"HI 623\" label, connected to **35-24HV-623** (a control valve, tag \"65\", DN size visible).\n\n2. The HI-623 instrument bubble is directly connected to **35-24HV-623** \u2014 the control valve on line 35-24-030 (001-65).\n\n3. **35-24HV-623** symbol: Looking at the image, it shows a bowtie with a circle actuator on top (automatic valve). The triangles appear solid/filled = NC (normally closed). This is an AV NC type.\n\n4. **35-24-030** (001-65) is the line carrying the HV-623 valve, visible at top of the crop.\n\n5. Since 35-24HI-623 is an **instrument** (indicator), per the rules: \"If 35-24HI-623 is an instrument and no labelled accessories sit on it, emit the FUNCTION header + description only.\" However, 35-24HV-623 is clearly the paired hand valve/control valve directly associated with this HI instrument (same numeric base 623, physically connected).\n\n6. **35-24HV-623** is the associated valve \u2014 same numeric base, directly connected to the HI instrument. It should be listed as equipment under this function.\n\n7. **35-24-030** (line 001-65) is the line on which HV-623 sits \u2014 include as equipment, with HV-623 nested under it.\n\n**Valve type for 35-24HV-623:** The symbol shows a bowtie with a circle on top (automatic valve). The triangles appear filled/white = NC. \u2192 `AV NC`\n\n**Peers:** 35-24L002 (vessel, peer primary equipment), 35-24T605 (tank, peer), 35-24-002.1 (motor for different base equipment).\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24HI-623\",\n  \"description\": \"35-24HI-623 BROKE THICKENER LVL HI\",\n  \"rows\": [\n    {\"equipment\": \"35-24-030\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-030 OVERFLOW LINE 001-65\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24HV-623\", \"mask\": \"\", \"description\": \"35-24HV-623 CTRL VLV AV NC\"}\n  ],\n  \"peers\": [\n    {\"tag\": \"35-24L002\", \"evidence\": \"peer primary equipment - broke thickener vessel GT-2540, different function base\"},\n    {\"tag\": \"35-24T605\", \"evidence\": \"peer tank, different numeric base, not child of HI instrument\"},\n    {\"tag\": \"35-24-002.1\", \"evidence\": \"motor for GT-2540/L002, numeric base 002 does not match 623\"},\n    {\"tag\": \"35-24LV-622\", \"evidence\": \"level control valve on separate line 35-24-1110, different numeric base\"},\n    {\"tag\": \"35-24HV-626\", \"evidence\": \"separate hand valve numeric base 626, belongs to different instrument loop\"},\n    {\"tag\": \"35-24HV-628\", \"evidence\": \"separate hand valve numeric base 628, outside scope of HI-623\"},\n    {\"tag\": \"35-24-032\", \"evidence\": \"isolation valve on thickener body line 003-15, not on HI-623 circuit\"},\n    {\"tag\": \"35-24-029\", \"evidence\": \"isolation valve 003-15 on thickener outlet, not on HI-623 circuit\"},\n    {\"tag\": \"35-24-033\", \"evidence\": \"isolation valve 003-15 on thickener inlet, not on HI-623 circuit\"},\n    {\"tag\": \"35-24-1110\", \"evidence\": \"valve on LC-622 circuit, different function\"}\n  ],\n  \"notes\": [\n    \"35-24HI-623 is a locally mounted high-level indicator instrument paired with control valve 35-24HV-623 on overflow line 35-24-030\",\n    \"35-24HV-623 symbol shows automatic actuator circle on top with filled (NC) triangles = AV NC\",\n    \"Line 35-24-030 short id used per rule 3; full id 35-24-030-001-65 per valve label\"\n  ],\n  \"confidence\": \"high\"\n}\n```",
+        "raw_text": "I'll analyze the P&ID image carefully for FUNCTION=35-24HI-623.\n\n**Observations from the image:**\n\n1. **35-24HI-623** is an instrument (HI = High Indicator / Hand Indicator) shown as a circle with \"HI 623\" label, connected to **35-24HV-623** (a control valve, tag \"65\", DN size visible).\n\n2. The HI-623 instrument bubble is directly connected to **35-24HV-623** \u2014 the control valve on line 35-24-030 (001-65).\n\n3. **35-24HV-623** symbol: Looking at the image, it shows a bowtie with what appears to be an actuator circle on top \u2014 this is an **AV** (automatic valve). The triangles appear solid/filled = **NC** (normally closed).\n\n4. The HI instrument itself has no sub-accessories \u2014 it's a simple indicator instrument.\n\n5. **35-24HV-623** is the associated hand control valve directly paired with the HI-623 indicator \u2014 it sits on line **35-24-030** (001-65).\n\n6. Peers: 35-24L002 (vessel), 35-24T605 (tank), 35-24-002.1 (motor for different base), 35-24HV-628, 35-24HV-626, 35-24LV-622 all belong to other functions.\n\n**Valve type analysis for 35-24HV-623:**\n- The symbol shows a bowtie with a circle actuator on top = AV\n- The triangles appear filled/solid white = NC\n- So: `AV NC`\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24HI-623\",\n  \"description\": \"35-24HI-623 BROKE THICKENER LVL HI\",\n  \"rows\": [\n    {\"equipment\": \"35-24HV-623\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24HV-623 CTRL VLV AV NC\"},\n    {\"equipment\": \"35-24-030\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-030 ISOL VLV HV\"}\n  ],\n  \"peers\": [\n    {\"tag\": \"35-24L002\", \"evidence\": \"peer vessel - broke thickener GT-2540, separate primary equipment\"},\n    {\"tag\": \"35-24T605\", \"evidence\": \"peer tank, separate primary equipment\"},\n    {\"tag\": \"35-24-002.1\", \"evidence\": \"motor for GT-2540, numeric base 002 does not match HI-623\"},\n    {\"tag\": \"35-24HV-626\", \"evidence\": \"separate HV instrument, own function\"},\n    {\"tag\": \"35-24HV-628\", \"evidence\": \"separate HV instrument with HS-628, own function\"},\n    {\"tag\": \"35-24LV-622\", \"evidence\": \"level control valve on separate LC-622 loop\"},\n    {\"tag\": \"35-24-1110\", \"evidence\": \"valve on separate line 35-24-149 circuit\"},\n    {\"tag\": \"35-24-029\", \"evidence\": \"isolation valve on separate line circuit\"},\n    {\"tag\": \"35-24-032\", \"evidence\": \"isolation valve on separate line circuit\"},\n    {\"tag\": \"35-24-033\", \"evidence\": \"isolation valve on separate line circuit\"}\n  ],\n  \"notes\": [\n    \"35-24HI-623 is a locally mounted high indicator instrument paired with control valve 35-24HV-623 on line 35-24-030 (001-65 DN65)\",\n    \"35-24HV-623 symbol shows circle actuator (AV) with filled triangles (NC)\",\n    \"35-24-030 is the isolation hand valve (outline bowtie, no actuator) on the same branch\"\n  ],\n  \"confidence\": \"medium\"\n}\n```",
         "parsed": {
           "sub_process": "BR1",
           "function": "35-24HI-623",
           "description": "35-24HI-623 BROKE THICKENER LVL HI",
           "rows": [
             {
+              "equipment": "35-24HV-623",
+              "subequipment": "",
+              "mask": "",
+              "description": "35-24HV-623 CTRL VLV AV NC"
+            },
+            {
               "equipment": "35-24-030",
               "subequipment": "",
               "mask": "",
-              "description": "35-24-030 OVERFLOW LINE 001-65"
-            },
-            {
-              "equipment": "",
-              "subequipment": "35-24HV-623",
-              "mask": "",
-              "description": "35-24HV-623 CTRL VLV AV NC"
+              "description": "35-24-030 ISOL VLV HV"
             }
           ],
           "peers": [
             {
               "tag": "35-24L002",
-              "evidence": "peer primary equipment - broke thickener vessel GT-2540, different function base"
+              "evidence": "peer vessel - broke thickener GT-2540, separate primary equipment"
             },
             {
               "tag": "35-24T605",
-              "evidence": "peer tank, different numeric base, not child of HI instrument"
+              "evidence": "peer tank, separate primary equipment"
             },
             {
               "tag": "35-24-002.1",
-              "evidence": "motor for GT-2540/L002, numeric base 002 does not match 623"
-            },
-            {
-              "tag": "35-24LV-622",
-              "evidence": "level control valve on separate line 35-24-1110, different numeric base"
+              "evidence": "motor for GT-2540, numeric base 002 does not match HI-623"
             },
             {
               "tag": "35-24HV-626",
-              "evidence": "separate hand valve numeric base 626, belongs to different instrument loop"
+              "evidence": "separate HV instrument, own function"
             },
             {
               "tag": "35-24HV-628",
-              "evidence": "separate hand valve numeric base 628, outside scope of HI-623"
+              "evidence": "separate HV instrument with HS-628, own function"
             },
             {
-              "tag": "35-24-032",
-              "evidence": "isolation valve on thickener body line 003-15, not on HI-623 circuit"
-            },
-            {
-              "tag": "35-24-029",
-              "evidence": "isolation valve 003-15 on thickener outlet, not on HI-623 circuit"
-            },
-            {
-              "tag": "35-24-033",
-              "evidence": "isolation valve 003-15 on thickener inlet, not on HI-623 circuit"
+              "tag": "35-24LV-622",
+              "evidence": "level control valve on separate LC-622 loop"
             },
             {
               "tag": "35-24-1110",
-              "evidence": "valve on LC-622 circuit, different function"
+              "evidence": "valve on separate line 35-24-149 circuit"
+            },
+            {
+              "tag": "35-24-029",
+              "evidence": "isolation valve on separate line circuit"
+            },
+            {
+              "tag": "35-24-032",
+              "evidence": "isolation valve on separate line circuit"
+            },
+            {
+              "tag": "35-24-033",
+              "evidence": "isolation valve on separate line circuit"
             }
           ],
           "notes": [
-            "35-24HI-623 is a locally mounted high-level indicator instrument paired with control valve 35-24HV-623 on overflow line 35-24-030",
-            "35-24HV-623 symbol shows automatic actuator circle on top with filled (NC) triangles = AV NC",
-            "Line 35-24-030 short id used per rule 3; full id 35-24-030-001-65 per valve label"
+            "35-24HI-623 is a locally mounted high indicator instrument paired with control valve 35-24HV-623 on line 35-24-030 (001-65 DN65)",
+            "35-24HV-623 symbol shows circle actuator (AV) with filled triangles (NC)",
+            "35-24-030 is the isolation hand valve (outline bowtie, no actuator) on the same branch"
           ],
-          "confidence": "high"
+          "confidence": "medium"
         },
         "model_id": "eu.anthropic.claude-sonnet-4-6",
         "region": "eu-west-2",
@@ -158,16 +158,22 @@
       },
       "refined_rows": [
         {
+          "equipment": "35-24HV-623",
+          "subequipment": "",
+          "mask": "",
+          "description": "35-24HV-623 CTRL VLV AV NC"
+        },
+        {
           "equipment": "35-24-030",
           "subequipment": "",
           "mask": "",
-          "description": "35-24-030 OVRFL LN 001-65"
+          "description": "35-24-030 ISOL VLV HV"
         },
         {
-          "equipment": "",
-          "subequipment": "35-24HV-623",
+          "equipment": "35-24-149",
+          "subequipment": "",
           "mask": "",
-          "description": "35-24HV-623 CTRL VLV AV NC"
+          "description": "35-24-149"
         }
       ]
     }

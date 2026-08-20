@@ -70,29 +70,29 @@
       ],
       "dossier": "Parent tag: 35-24-122\nParent category/block: lines / \nParent XY: (3913.563563563564, 68.75)\nNearby descriptions: 35-24-122-WFL-15-E10H2A\n\nSame-tag CAD family:\n- (none)\n\nNearby line numbers (short ids preferred in output):\n- 35-25-034  full=35-25-034-WAF-600-E10H2A  d=130  layer=P-LINEPOS\n- 35-24-116  full=35-24-116-WFC-15-E10H2A  d=148  layer=P-LINEPOS\n- 35-24-121  full=35-24-121-WFL-15-E10H2A  d=50  layer=P-LINEPOS\n- 35-24-122  full=35-24-122-WFL-15-E10H2A  d=0  layer=P-LINEPOS\n- 35-24-123  full=35-24-123-WFL-15-E10H2A  d=52  layer=P-LINEPOS\n- 35-24-125  full=35-24-125-WFL-15-E10H2A  d=102  layer=P-LINEPOS\n- 35-24-117  full=35-24-117-PP-250-E10H2A  d=184  layer=P-LINEPOS\n- 35-24-120  full=35-24-120-PP-900-E10H2A  d=200  layer=P-LINEPOS\n\nNearby devices (valves/instruments/pumps/\u2026):\n- line_markers: PPI_1100A  d=199  block=PPI_1100A\n- valves: PPI_0900A  d=37  block=PPI_0900A\n- control_valves: PPI_1000A  d=184  block=PPI_1000A\n- instruments: PPI_0100X  d=21  block=PPI_0100X\n- pumps: P7A0200  d=183  block=P7A0200\n- motors: PPI_1504A-25_0  d=167  block=PPI_1504A-25_0\n\nNearby peer primary equipment (do NOT nest under parent):\n- 35-24P501 (pumps, d=183)\n- 35-24P502 (pumps, d=157)\n\nNearby drawing text tokens:\n- GEARBOX 1  d=137  layer=P-OTHER\n- 9300  d=197  layer=P-INSTRPOS_TEXTS\n- 9301  d=129  layer=P-INSTRPOS_TEXTS\n- 35-24  d=140  layer=P-INSTRPOS_TEXTS\n- 9308  d=85  layer=P-INSTRPOS_TEXTS\n- 9306  d=38  layer=P-INSTRPOS_TEXTS\n- 608  d=67  layer=P-INSTRPOS_TEXTS\n- 610  d=116  layer=P-INSTRPOS_TEXTS\n- 9304  d=27  layer=P-INSTRPOS_TEXTS\n- 9302  d=72  layer=P-INSTRPOS_TEXTS\n- 606  d=22  layer=P-INSTRPOS_TEXTS\n- 604  d=42  layer=P-INSTRPOS_TEXTS\n- 9303  d=63  layer=P-INSTRPOS_TEXTS\n- 9305  d=21  layer=P-INSTRPOS_TEXTS\n- 9307  d=46  layer=P-INSTRPOS_TEXTS\n- 9309  d=94  layer=P-INSTRPOS_TEXTS\n- COUCH PIT AGITATOR 1  d=143  layer=P-TEXT\n- 35-24P501  d=141  layer=P-PUMP_POS\n- 1300  d=137  layer=P-PUMP_POS\n- 50  d=135  layer=P-PUMP_POS\n- 780  d=131  layer=P-PUMP_POS\n- 1000  d=130  layer=P-PUMP_POS\n- 35-24P502  d=152  layer=P-PUMP_POS\n- 60  d=147  layer=P-PUMP_POS\n- 55  d=143  layer=P-PUMP_POS\n- 1500  d=139  layer=P-PUMP_POS\n- 35-24-403.2  d=153  layer=P-MOTOR_POS\n- 1,5  d=150  layer=P-MOTOR_POS\n- 35-24-401.2  d=161  layer=P-MOTOR_POS\n- 35-24-078  d=190  layer=P-VALVEPOS\n- 350-250  d=185  layer=P-VALVEPOS\n- 35-24-075  d=169  layer=P-VALVEPOS\n- 001-80  d=163  layer=P-VALVEPOS\n- 35-24-074  d=175  layer=P-VALVEPOS\n- 003-50  d=169  layer=P-VALVEPOS\n- 35-24-073  d=44  layer=P-VALVEPOS\n- 003-15  d=41  layer=P-VALVEPOS\n- 35-24-1138  d=189  layer=P-VALVEPOS\n- 35-24-070  d=12  layer=P-VALVEPOS\n- 35-24-235  d=176  layer=P-VALVEPOS",
       "ai": {
-        "raw_text": "Looking at the P&ID image, I can see that 35-24-122 is a process line (WFL-15-E10H2A). The crop shows a header line with multiple branch spurs, each containing PI/FI instruments and FS flow switches, plus drain valves below.\n\nFor the 35-24-122 segment specifically, I can see:\n- The line label `35-24-122-WFL-15-E10H2A` is shown at the bottom\n- Above it: PI 9304, FI 9305, FS 606 instruments\n- Below it: valve `35-24-070` with tag `003-15`\n\nThe valve `35-24-070` appears to be a normally-closed valve (solid/filled bowtie triangles) based on the legend \u2014 it's a drain valve (downward branch). Looking at the image, the valve symbol below 35-24-122 shows filled triangles = NC, and it branches downward = DRN.\n\nThe instruments PI-9304, FI-9305, FS-606 sit on the 35-24-122 line segment.\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24-122\",\n  \"description\": \"35-24-122 WFL LINE BR1\",\n  \"rows\": [\n    {\n      \"equipment\": \"35-24-122\",\n      \"subequipment\": \"\",\n      \"mask\": \"\",\n      \"description\": \"35-24-122 WFL-15 PROCESS LINE\"\n    },\n    {\n      \"equipment\": \"\",\n      \"subequipment\": \"35-24PI-9304\",\n      \"mask\": \"\",\n      \"description\": \"35-24PI-9304 PRESSURE INDICATOR\"\n    },\n    {\n      \"equipment\": \"\",\n      \"subequipment\": \"35-24FI-9305\",\n      \"mask\": \"\",\n      \"description\": \"35-24FI-9305 FLOW INDICATOR\"\n    },\n    {\n      \"equipment\": \"\",\n      \"subequipment\": \"35-24FS-606\",\n      \"mask\": \"\",\n      \"description\": \"35-24FS-606 FLOW SWITCH\"\n    },\n    {\n      \"equipment\": \"\",\n      \"subequipment\": \"35-24-070\",\n      \"mask\": \"\",\n      \"description\": \"35-24-070 VLV DRN NC\"\n    }\n  ],\n  \"peers\": [\n    {\n      \"tag\": \"35-24-121\",\n      \"evidence\": \"Adjacent WFL-15 line segment, own label 35-24-121-WFL-15-E10H2A, separate function\"\n    },\n    {\n      \"tag\": \"35-24-123\",\n      \"evidence\": \"Adjacent WFL-15 line segment, own label 35-24-123-WFL-15-E10H2A, separate function\"\n    },\n    {\n      \"tag\": \"35-24-125\",\n      \"evidence\": \"Adjacent WFL-15 line segment, own label 35-24-125-WFL-15-E10H2A, separate function\"\n    },\n    {\n      \"tag\": \"35-24-073\",\n      \"evidence\": \"Drain valve on 35-24-121 segment, not on 35-24-122\"\n    },\n    {\n      \"tag\": \"35-24-1103\",\n      \"evidence\": \"Drain valve on 35-24-123 segment, not on 35-24-122\"\n    },\n    {\n      \"tag\": \"35-24P501\",\n      \"evidence\": \"Peer pump, major equipment, not a child of a line function\"\n    },\n    {\n      \"tag\": \"35-24P502\",\n      \"evidence\": \"Peer pump, major equipment, not a child of a line function\"\n    },\n    {\n      \"tag\": \"35-24TV-9301\",\n      \"evidence\": \"Control valve on upstream circuit, belongs to different line/function\"\n    },\n    {\n      \"tag\": \"35-24-1109\",\n      \"evidence\": \"Valve on upstream 001-15 line, different numeric base\"\n    }\n  ],\n  \"notes\": [\n    \"35-24-122 is a WFL-15-E10H2A process line (white water flush line, DN15)\",\n    \"PI-9304 and FI-9305 are locally mounted instruments visible directly on the 35-24-122 segment\",\n    \"FS-606 flow switch sits on the 35-24-122 segment per instrument position text proximity\",\n    \"35-24-070 (003-15) is the drain valve below the 35-24-122 line segment; filled bowtie = NC, downward branch = DRN\",\n    \"Adjacent line segments 35-24-121, 35-24-123, 35-24-125 are peers with their own drain valves and instruments\"\n  ],\n  \"confidence\": \"high\"\n}\n```",
+        "raw_text": "Looking at the P&ID image, I can see that 35-24-122 is a WFL (white water flow line) pipe segment. The crop shows a series of parallel shower/spray lines (35-24-121, 35-24-122, 35-24-123, 35-24-125) each with the same pattern: PI + FI instruments, an FS flow switch, and a drain valve below.\n\nFor 35-24-122 specifically, I can see:\n- **PI 9304** and **FI 9305** instruments on the line\n- **FS 606** flow switch on the line\n- **35-24-070** drain valve below (003-15, visible with tag \"35-24-070\" and \"003-15\")\n\nThe drain valve 35-24-070 appears as a normally-closed bowtie (both triangles solid/filled white) with a downward drain branch \u2014 matching `NC DRN` tokens.\n\nThe instruments PI-9304, FI-9305, FS-606 are locally mounted circle instruments on the line.\n\nPeers: 35-24P501, 35-24P502 are pump equipment nearby but not children of this line.\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24-122\",\n  \"description\": \"35-24-122 WFL SHOWER LINE DN15\",\n  \"rows\": [\n    {\"equipment\": \"35-24-122\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-122 WFL LINE DN15\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24PI-9304\", \"mask\": \"\", \"description\": \"35-24PI-9304 PRESS IND\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24FI-9305\", \"mask\": \"\", \"description\": \"35-24FI-9305 FLOW IND\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24FS-606\", \"mask\": \"\", \"description\": \"35-24FS-606 FLOW SWITCH\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-070\", \"mask\": \"\", \"description\": \"35-24-070 DRN VLV NC DRN\"}\n  ],\n  \"peers\": [\n    {\"tag\": \"35-24P501\", \"evidence\": \"peer pump visible in crop, not child of line function\"},\n    {\"tag\": \"35-24P502\", \"evidence\": \"peer pump visible in crop, not child of line function\"},\n    {\"tag\": \"35-24-121\", \"evidence\": \"adjacent parallel shower line, own function\"},\n    {\"tag\": \"35-24-123\", \"evidence\": \"adjacent parallel shower line, own function\"},\n    {\"tag\": \"35-24-125\", \"evidence\": \"adjacent parallel shower line, own function\"},\n    {\"tag\": \"35-24TV-9301\", \"evidence\": \"control valve on upstream header, not on 35-24-122 circuit\"},\n    {\"tag\": \"35-24-1109\", \"evidence\": \"upstream isolation valve on different line segment\"}\n  ],\n  \"notes\": [\n    \"35-24-122 is a WFL-15 (white water flow line DN15) shower/spray line\",\n    \"Pattern matches adjacent lines 35-24-121/123/125 each with PI+FI+FS+drain valve\",\n    \"PI-9304 and FI-9305 are locally mounted instruments (plain circle symbol)\",\n    \"FS-606 is a flow switch on the line\",\n    \"35-24-070 drain valve (003-15) sits below the line with NC filled bowtie and drain branch\"\n  ],\n  \"confidence\": \"high\"\n}\n```",
         "parsed": {
           "sub_process": "BR1",
           "function": "35-24-122",
-          "description": "35-24-122 WFL LINE BR1",
+          "description": "35-24-122 WFL SHOWER LINE DN15",
           "rows": [
             {
               "equipment": "35-24-122",
               "subequipment": "",
               "mask": "",
-              "description": "35-24-122 WFL-15 PROCESS LINE"
+              "description": "35-24-122 WFL LINE DN15"
             },
             {
               "equipment": "",
               "subequipment": "35-24PI-9304",
               "mask": "",
-              "description": "35-24PI-9304 PRESSURE INDICATOR"
+              "description": "35-24PI-9304 PRESS IND"
             },
             {
               "equipment": "",
               "subequipment": "35-24FI-9305",
               "mask": "",
-              "description": "35-24FI-9305 FLOW INDICATOR"
+              "description": "35-24FI-9305 FLOW IND"
             },
             {
               "equipment": "",
@@ -104,53 +104,45 @@
               "equipment": "",
               "subequipment": "35-24-070",
               "mask": "",
-              "description": "35-24-070 VLV DRN NC"
+              "description": "35-24-070 DRN VLV NC DRN"
             }
           ],
           "peers": [
             {
-              "tag": "35-24-121",
-              "evidence": "Adjacent WFL-15 line segment, own label 35-24-121-WFL-15-E10H2A, separate function"
-            },
-            {
-              "tag": "35-24-123",
-              "evidence": "Adjacent WFL-15 line segment, own label 35-24-123-WFL-15-E10H2A, separate function"
-            },
-            {
-              "tag": "35-24-125",
-              "evidence": "Adjacent WFL-15 line segment, own label 35-24-125-WFL-15-E10H2A, separate function"
-            },
-            {
-              "tag": "35-24-073",
-              "evidence": "Drain valve on 35-24-121 segment, not on 35-24-122"
-            },
-            {
-              "tag": "35-24-1103",
-              "evidence": "Drain valve on 35-24-123 segment, not on 35-24-122"
-            },
-            {
               "tag": "35-24P501",
-              "evidence": "Peer pump, major equipment, not a child of a line function"
+              "evidence": "peer pump visible in crop, not child of line function"
             },
             {
               "tag": "35-24P502",
-              "evidence": "Peer pump, major equipment, not a child of a line function"
+              "evidence": "peer pump visible in crop, not child of line function"
+            },
+            {
+              "tag": "35-24-121",
+              "evidence": "adjacent parallel shower line, own function"
+            },
+            {
+              "tag": "35-24-123",
+              "evidence": "adjacent parallel shower line, own function"
+            },
+            {
+              "tag": "35-24-125",
+              "evidence": "adjacent parallel shower line, own function"
             },
             {
               "tag": "35-24TV-9301",
-              "evidence": "Control valve on upstream circuit, belongs to different line/function"
+              "evidence": "control valve on upstream header, not on 35-24-122 circuit"
             },
             {
               "tag": "35-24-1109",
-              "evidence": "Valve on upstream 001-15 line, different numeric base"
+              "evidence": "upstream isolation valve on different line segment"
             }
           ],
           "notes": [
-            "35-24-122 is a WFL-15-E10H2A process line (white water flush line, DN15)",
-            "PI-9304 and FI-9305 are locally mounted instruments visible directly on the 35-24-122 segment",
-            "FS-606 flow switch sits on the 35-24-122 segment per instrument position text proximity",
-            "35-24-070 (003-15) is the drain valve below the 35-24-122 line segment; filled bowtie = NC, downward branch = DRN",
-            "Adjacent line segments 35-24-121, 35-24-123, 35-24-125 are peers with their own drain valves and instruments"
+            "35-24-122 is a WFL-15 (white water flow line DN15) shower/spray line",
+            "Pattern matches adjacent lines 35-24-121/123/125 each with PI+FI+FS+drain valve",
+            "PI-9304 and FI-9305 are locally mounted instruments (plain circle symbol)",
+            "FS-606 is a flow switch on the line",
+            "35-24-070 drain valve (003-15) sits below the line with NC filled bowtie and drain branch"
           ],
           "confidence": "high"
         },
@@ -207,19 +199,19 @@
           "equipment": "35-24-122",
           "subequipment": "",
           "mask": "",
-          "description": "35-24-122 WFL-15 PROS LN"
+          "description": "35-24-122 WFL LN DN15"
         },
         {
           "equipment": "",
           "subequipment": "35-24PI-9304",
           "mask": "",
-          "description": "35-24PI-9304 PI"
+          "description": "35-24PI-9304 PRESS IND"
         },
         {
           "equipment": "",
           "subequipment": "35-24FI-9305",
           "mask": "",
-          "description": "35-24FI-9305 FI"
+          "description": "35-24FI-9305 FL IND"
         },
         {
           "equipment": "",
@@ -231,7 +223,7 @@
           "equipment": "",
           "subequipment": "35-24-070",
           "mask": "",
-          "description": "35-24-070 VLV DRN NC"
+          "description": "35-24-070 DRN VLV NC DRN"
         }
       ]
     }

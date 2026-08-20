@@ -46,7 +46,7 @@
       ],
       "dossier": "Parent tag: 35-24HI-552\nParent category/block: instruments / \nParent XY: (1846.307140473807, 423.5416666666666)\nNearby descriptions: HI 552 (35-24)\n\nSame-tag CAD family:\n- (none)\n\nNearby line numbers (short ids preferred in output):\n- 35-24-051  full=35-24-051-PP-100-E10H2A  d=170  layer=P-LINEPOS\n- 35-24-049  full=35-24-049-PP-800-E10H2A  d=178  layer=P-LINEPOS\n\nNearby devices (valves/instruments/pumps/\u2026):\n- line_markers: PPI_1100A  d=179  block=PPI_1100A\n- valves: PPI_0900A  d=188  block=PPI_0900A\n- control_valves: PPI_1000A  d=157  block=PPI_1000A\n- instruments: PPI_0100X  d=196  block=PPI_0100X\n- pumps: PPI_0521A-25_0  d=198  block=PPI_0521A-25_0\n- fittings: P7A1220  d=166  block=P7A1220\n\nNearby peer primary equipment (do NOT nest under parent):\n- 35-24L006 (process_equipment, d=139)\n- 35-24P507 (pumps, d=198)\n\nNearby drawing text tokens:\n- S3  d=160  layer=P-TEXT\n- S2  d=149  layer=P-TEXT\n- S4  d=160  layer=P-TEXT\n- 2 bar  d=152  layer=P-TEXT\n- S1/ST1  d=128  layer=P-TEXT\n- 35-24  d=15  layer=P-INSTRPOS_TEXTS\n- SHOWER S1  d=29  layer=P-TEXT\n- 35-24L006  d=142  layer=P-EQUIPMENT_POS\n- BROKE CONVEYOR 3  d=150  layer=P-EQUIPMENT_POS\n- 35-24L005  d=199  layer=P-EQUIPMENT_POS\n- 541  d=118  layer=P-INSTRPOS_TEXTS\n- 548  d=158  layer=P-INSTRPOS_TEXTS\n- 544  d=121  layer=P-INSTRPOS_TEXTS\n- 543  d=119  layer=P-INSTRPOS_TEXTS\n- 542  d=50  layer=P-INSTRPOS_TEXTS\n- 552  d=4  layer=P-INSTRPOS_TEXTS\n- 555  d=27  layer=P-INSTRPOS_TEXTS\n- 653  d=49  layer=P-INSTRPOS_TEXTS\n- 652  d=56  layer=P-INSTRPOS_TEXTS\n- 534  d=92  layer=P-INSTRPOS_TEXTS\n- 696  d=182  layer=P-INSTRPOS_TEXTS\n- 35-24-232  d=166  layer=P-VALVEPOS\n- 001-80  d=168  layer=P-VALVEPOS\n- 35-24-233  d=173  layer=P-VALVEPOS\n- 35-24-140  d=191  layer=P-VALVEPOS\n- 350-300  d=194  layer=P-VALVEPOS\n- 35-24-051  d=170  layer=P-LINEPOS\n- 35-24-049  d=178  layer=P-LINEPOS\n- 35-24FV-696  d=198  layer=P-CVPOS\n- 80  d=197  layer=P-CVPOS\n- 35-24HV-548  d=155  layer=P-CVPOS",
       "ai": {
-        "raw_text": "Looking at the P&ID image, I can see that 35-24HI-552 is a **High Indicator instrument** located on a LOCAL PANEL, labeled \"REEL PULPER TAIL SHOWER ST\" (Start/Stop indication). It appears as an HI bubble (circle with horizontal line = local control panel instrument per legend) with tag 552 in the 35-24 area.\n\nThe instrument is a standalone indicator on the local panel \u2014 it shows the status of the Reel Pulper Tail Shower. There are no child lines, valves, or sub-instruments directly attached to this HI bubble itself. The nearby instruments (HI-555, HI-653, HI-652, HI-534, HS-542, HS-543, HS-544, HS-541) are peer instruments on the same panel, not children of 552.\n\nThe nearby lines 35-24-051 and 35-24-049 are process lines in the vicinity but are not sub-components of this instrument tag. Peer equipment 35-24L006 and 35-24P507 are major equipment items.\n\nPer Rule 8 and the worked examples: *\"If 35-24HI-552 is an instrument and no labelled accessories sit on it, emit the FUNCTION header + description only \u2014 empty `rows` is correct.\"*\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24HI-552\",\n  \"description\": \"35-24HI-552 REEL PLPR TAIL SHW ST IND\",\n  \"rows\": [],\n  \"peers\": [\n    {\n      \"tag\": \"35-24L006\",\n      \"evidence\": \"Peer process equipment (broke conveyor/pulper vessel) visible nearby; not a child of an instrument tag\"\n    },\n    {\n      \"tag\": \"35-24P507\",\n      \"evidence\": \"Peer pump visible nearby; not a child of an instrument tag\"\n    },\n    {\n      \"tag\": \"35-24HV-548\",\n      \"evidence\": \"Peer control valve on adjacent circuit; not attached to HI-552\"\n    },\n    {\n      \"tag\": \"35-24FV-696\",\n      \"evidence\": \"Peer control valve on adjacent circuit; not attached to HI-552\"\n    },\n    {\n      \"tag\": \"35-24-051\",\n      \"evidence\": \"Nearby process line; not a sub-component of this instrument\"\n    },\n    {\n      \"tag\": \"35-24-049\",\n      \"evidence\": \"Nearby process line; not a sub-component of this instrument\"\n    }\n  ],\n  \"notes\": [\n    \"35-24HI-552 is a local panel High Indicator for Reel Pulper Tail Shower status (ST = start/stop indication)\",\n    \"Symbol matches LOCAL CONTROL PANEL INSTRUMENT (circle with horizontal line) per legend\",\n    \"No child lines, valves or sub-instruments are directly attached to this HI bubble; rows intentionally empty\",\n    \"Peer panel instruments HI-555, HI-653, HI-652, HI-534, HS-542/543/544/541 are siblings on same local panel, not children\"\n  ],\n  \"confidence\": \"high\"\n}\n```",
+        "raw_text": "Looking at the P&ID image, I can see that 35-24HI-552 is a **High Indication instrument** (HI = Hand Indicator / local indicator) located on a LOCAL PANEL. The image shows it labeled as \"REEL PULPER TAIL SHOWER ST\" \u2014 it's a local panel instrument showing status/indication for the tail shower.\n\nThe instrument symbol shows a circle with a horizontal line through it (local control panel instrument per the legend), with an HS (Hand Switch) above it labeled 35-24 / HS above the HI 552.\n\n**Key observations:**\n- 35-24HI-552 is a standalone instrument (indicator) on the local panel\n- It is paired with an HS (hand switch) above it \u2014 but the HS has its own tag number (visible as 35-24HS-552 implied by the same numeric base)\n- The description text reads \"REEL PULPER TAIL SHOWER ST\" (ST = status)\n- No pipe lines, valves, or sub-equipment are directly attached to this instrument tag\n- Peer instruments visible: 35-24HI-653, 35-24HI-534, 35-24HI-555, 35-24HI-652, 35-24HS-542, 35-24HS-541, 35-24HS-543, 35-24HS-544\n- Peer major equipment: 35-24L006, 35-24P507\n\nSince 35-24HI-552 is a pure instrument (indicator) with no labelled accessories sitting on it, the correct output is the FUNCTION header + description only \u2014 empty `rows` is correct per the rules.\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24HI-552\",\n  \"description\": \"35-24HI-552 REEL PLPR TAIL SHW ST IND\",\n  \"rows\": [],\n  \"peers\": [\n    {\"tag\": \"35-24L006\", \"evidence\": \"nearby process equipment (broke conveyor/pulper vessel), different equipment class, not a child of an instrument\"},\n    {\"tag\": \"35-24P507\", \"evidence\": \"nearby pump, peer major equipment, not a child of an instrument\"},\n    {\"tag\": \"35-24HV-548\", \"evidence\": \"control valve on adjacent circuit, not attached to HI-552\"},\n    {\"tag\": \"35-24FV-696\", \"evidence\": \"flow control valve on adjacent circuit, not attached to HI-552\"},\n    {\"tag\": \"35-24L005\", \"evidence\": \"nearby process equipment, different numeric base, peer only\"}\n  ],\n  \"notes\": [\n    \"35-24HI-552 is a local panel indicator (HI) for Reel Pulper Tail Shower status, symbol matches LOCAL CONTROL PANEL INSTRUMENT per legend\",\n    \"Paired HS above (same local panel block) shares numeric base 552 but is a separate instrument tag\",\n    \"No pipe lines, valves or sub-equipment are directly attached to this instrument \u2014 rows intentionally empty\",\n    \"Nearby line short-ids 35-24-051 and 35-24-049 are on the process side feeding the shower circuit, not children of this indicator\"\n  ],\n  \"confidence\": \"high\"\n}\n```",
         "parsed": {
           "sub_process": "BR1",
           "function": "35-24HI-552",
@@ -55,34 +55,30 @@
           "peers": [
             {
               "tag": "35-24L006",
-              "evidence": "Peer process equipment (broke conveyor/pulper vessel) visible nearby; not a child of an instrument tag"
+              "evidence": "nearby process equipment (broke conveyor/pulper vessel), different equipment class, not a child of an instrument"
             },
             {
               "tag": "35-24P507",
-              "evidence": "Peer pump visible nearby; not a child of an instrument tag"
+              "evidence": "nearby pump, peer major equipment, not a child of an instrument"
             },
             {
               "tag": "35-24HV-548",
-              "evidence": "Peer control valve on adjacent circuit; not attached to HI-552"
+              "evidence": "control valve on adjacent circuit, not attached to HI-552"
             },
             {
               "tag": "35-24FV-696",
-              "evidence": "Peer control valve on adjacent circuit; not attached to HI-552"
+              "evidence": "flow control valve on adjacent circuit, not attached to HI-552"
             },
             {
-              "tag": "35-24-051",
-              "evidence": "Nearby process line; not a sub-component of this instrument"
-            },
-            {
-              "tag": "35-24-049",
-              "evidence": "Nearby process line; not a sub-component of this instrument"
+              "tag": "35-24L005",
+              "evidence": "nearby process equipment, different numeric base, peer only"
             }
           ],
           "notes": [
-            "35-24HI-552 is a local panel High Indicator for Reel Pulper Tail Shower status (ST = start/stop indication)",
-            "Symbol matches LOCAL CONTROL PANEL INSTRUMENT (circle with horizontal line) per legend",
-            "No child lines, valves or sub-instruments are directly attached to this HI bubble; rows intentionally empty",
-            "Peer panel instruments HI-555, HI-653, HI-652, HI-534, HS-542/543/544/541 are siblings on same local panel, not children"
+            "35-24HI-552 is a local panel indicator (HI) for Reel Pulper Tail Shower status, symbol matches LOCAL CONTROL PANEL INSTRUMENT per legend",
+            "Paired HS above (same local panel block) shares numeric base 552 but is a separate instrument tag",
+            "No pipe lines, valves or sub-equipment are directly attached to this instrument \u2014 rows intentionally empty",
+            "Nearby line short-ids 35-24-051 and 35-24-049 are on the process side feeding the shower circuit, not children of this indicator"
           ],
           "confidence": "high"
         },

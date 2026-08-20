@@ -59,47 +59,46 @@
       ],
       "dossier": "Parent tag: 35-25-072\nParent category/block: lines / \nParent XY: (5932.5, 156.25)\nNearby descriptions: 35-25-072-WAF-350-E10H2A\n\nSame-tag CAD family:\n- (none)\n\nNearby line numbers (short ids preferred in output):\n- 35-24-203  full=35-24-203-WFL-15-E10H2A  d=100  layer=P-LINEPOS\n- 35-24-224  full=35-24-224-WFL-15-E10H2A  d=140  layer=P-LINEPOS\n- 35-24-181  full=35-24-181-PP-300-E10H2A  d=165  layer=P-LINEPOS\n- 35-24-178  full=35-24-178-PP-350-E10H2A  d=161  layer=P-LINEPOS\n- 35-24-176  full=35-24-176-PP-150-E10H2A  d=142  layer=P-LINEPOS\n- 35-24-143  full=35-24-143-WAF-150-E10H2A  d=55  layer=P-LINEPOS\n- 35-24-182  full=35-24-182-WAF-100-E10H2A  d=33  layer=P-LINEPOS\n- 35-24-180  full=35-24-180-PSR-200-E10H2A  d=72  layer=P-LINEPOS\n- 35-25-072  full=35-25-072-WAF-350-E10H2A  d=0  layer=P-LINEPOS\n\nNearby devices (valves/instruments/pumps/\u2026):\n- line_markers: PPI_1100A  d=1  block=PPI_1100A\n- valves: PPI_0900A  d=172  block=PPI_0900A\n- instruments: PPI_1200A  d=137  block=PPI_1200A\n- pumps: P7A0200  d=147  block=P7A0200\n- fittings: P7A1210  d=8  block=P7A1210\n\nNearby peer primary equipment (do NOT nest under parent):\n- 35-24L407 (agitators, d=176)\n- 35-24P517 (pumps, d=147)\n\nNearby drawing text tokens:\n- 35-24L407  d=169  layer=P-AGITATOR_POS\n- 657  d=70  layer=P-INSTRPOS_TEXTS\n- 35-24  d=67  layer=P-INSTRPOS_TEXTS\n- 9332  d=83  layer=P-INSTRPOS_TEXTS\n- 656  d=114  layer=P-INSTRPOS_TEXTS\n- 9330  d=141  layer=P-INSTRPOS_TEXTS\n- 9331  d=133  layer=P-INSTRPOS_TEXTS\n- 9333  d=78  layer=P-INSTRPOS_TEXTS\n- HYDRAZINE, N2H4  d=160  layer=P-OTHER\n- SULPHURIC ACID, H2SO4  d=167  layer=P-OTHER\n- ALUMINUM SULPHATE, AL2(SO4)3  d=166  layer=P-OTHER\n- 35 m\u00b3  d=193  layer=P-TANK_POS\n- 3,6 %  d=190  layer=P-TANK_POS\n- 35-24P517  d=121  layer=P-PUMP_POS\n- 120  d=116  layer=P-PUMP_POS\n- 12  d=114  layer=P-PUMP_POS\n- 22  d=111  layer=P-PUMP_POS\n- 1000  d=109  layer=P-PUMP_POS\n- 35-24-224  d=126  layer=P-VALVEPOS\n- 003-15  d=127  layer=P-VALVEPOS\n- 35-24-004  d=176  layer=P-VALVEPOS\n- 350-350  d=171  layer=P-VALVEPOS\n- 35-24-003  d=149  layer=P-VALVEPOS\n- 350-150  d=144  layer=P-VALVEPOS\n- 35-24-203  d=80  layer=P-VALVEPOS\n- 35-24-002  d=153  layer=P-VALVEPOS\n- 35-24-215  d=138  layer=P-VALVEPOS\n- 003-50  d=133  layer=P-VALVEPOS\n- 35-24-001  d=153  layer=P-VALVEPOS\n- 350-300  d=149  layer=P-VALVEPOS\n- 35-24-181  d=165  layer=P-LINEPOS\n- 35-24-178  d=161  layer=P-LINEPOS\n- 35-24-176  d=142  layer=P-LINEPOS\n- 35-24-143  d=55  layer=P-LINEPOS\n- 35-24-182  d=33  layer=P-LINEPOS\n- 35-24-180  d=72  layer=P-LINEPOS\n- 35-25-072  d=0  layer=P-LINEPOS",
       "ai": {
-        "raw_text": "I'll analyze the P&ID image carefully for FUNCTION 35-25-072.\n\n**Observations from the image:**\n- `35-25-072-WAF-350-E10H2A` is a process line (WAF = white water/stock line, DN350)\n- The line runs horizontally and is labeled \"FROM WHITE WATER TANK 35-25P513\"\n- It connects into the area near the broke dosing tank system\n- The line tag `35-25-072` is a piping header (NNN format \u2192 Line FUNCTION per Rule 11)\n- Nearby connected line `35-24-143-WAF-150-E10H2A` is visible branching off to the left\n- The check valve symbol (one filled triangle) is visible on the 35-25-072 line \u2014 this is the fitting `P7A1210` at d=8\n- `35-24-182-WAF-100-E10H2A` is a separate parallel line above (FROM WHITE WATER TANK 35-25P502)\n- No instruments are directly labeled on 35-25-072 itself in the crop\n- `35-24-143` branches off the 35-25-072 circuit at close proximity (d=55)\n- The check valve on the line is visible as a CHK symbol\n\n**Peers:** 35-24L407 (agitator), 35-24P517 (pump) \u2014 clearly peer major equipment. 35-25P513 and 35-25P502 are source pumps on other diagrams.\n\n**Children of 35-25-072:**\n- `35-24-143` is the closest branch line (d=55, WAF-150) connecting off this header \u2014 visible in image\n- The check valve fitting on the line itself\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-25-072\",\n  \"description\": \"35-25-072 WAF LINE DN350 FM WHT WTR TNK\",\n  \"rows\": [\n    {\n      \"equipment\": \"35-24-143\",\n      \"subequipment\": \"\",\n      \"mask\": \"\",\n      \"description\": \"35-24-143 WAF LINE DN150 BRANCH\"\n    }\n  ],\n  \"peers\": [\n    {\n      \"tag\": \"35-24L407\",\n      \"evidence\": \"agitator on broke dosing tank \u2014 peer major equipment, different numeric base\"\n    },\n    {\n      \"tag\": \"35-24P517\",\n      \"evidence\": \"pump on broke dosing tank circuit \u2014 peer major equipment\"\n    },\n    {\n      \"tag\": \"35-24-182\",\n      \"evidence\": \"separate parallel WAF-100 line from white water tank to 35-25P502 \u2014 own line tag, not a branch of 35-25-072\"\n    },\n    {\n      \"tag\": \"35-25P513\",\n      \"evidence\": \"source pump referenced as FROM WHITE WATER TANK 35-25P513 \u2014 peer equipment on another diagram\"\n    },\n    {\n      \"tag\": \"35-25P502\",\n      \"evidence\": \"source pump for 35-24-182 line \u2014 peer equipment on another diagram\"\n    }\n  ],\n  \"notes\": [\n    \"35-25-072 is a WAF (white water/stock) piping header DN350 feeding from white water tank via 35-25P513\",\n    \"35-24-143 WAF-150 is the closest visible branch off this header at d=55\",\n    \"Check valve fitting P7A1210 at d=8 is on the 35-25-072 line itself (no separate tag visible)\",\n    \"35-24-182 is a separate parallel line (d=33) but carries its own tag and feeds from 35-25P502 \u2014 not a child of 35-25-072\",\n    \"No instruments with explicit tags are directly labelled on 35-25-072 in this crop\"\n  ],\n  \"confidence\": \"medium\"\n}\n```",
+        "raw_text": "I'll analyze the P&ID image carefully for FUNCTION 35-25-072.\n\n**Observations from the image:**\n- `35-25-072-WAF-350-E10H2A` is a process line (WAF = white water/stock line, DN350)\n- The line runs horizontally and is labeled \"FROM WHITE WATER TANK 35-25P513\"\n- It connects into the area near the broke dosing tank system\n- The line tag `35-25-072` is a piping header (NNN format \u2192 treat as line FUNCTION per Rule 11)\n- Nearby connected line `35-24-143-WAF-150-E10H2A` is visible branching off to the left of 35-25-072\n- The check valve symbol (one filled triangle) is visible on the 35-25-072 line \u2014 it's a CHK valve\n- `35-24-182-WAF-100-E10H2A` is visible above, connecting \"FROM WHITE WATER TANK 35-25P502\"\n- No instruments are directly labeled on 35-25-072 itself in the crop\n\n**Line children analysis:**\n- `35-24-143` (WAF-150) branches off 35-25-072 at d=55 \u2014 closest connected branch\n- The check valve on 35-25-072 line (visible as outline bowtie with one filled half = CHK)\n- `35-24-182` is a separate parallel line (FROM WHITE WATER TANK 35-25P502), not a child of 35-25-072\n\n**Peers:**\n- `35-24L407` \u2014 agitator, peer major equipment\n- `35-24P517` \u2014 pump, peer major equipment\n- `35-25P513` \u2014 source pump/tank referenced but not a child\n- `35-25P502` \u2014 referenced on 35-24-182 line, not a child\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-25-072\",\n  \"description\": \"35-25-072 WAF LINE DN350\",\n  \"rows\": [\n    {\n      \"equipment\": \"35-24-143\",\n      \"subequipment\": \"\",\n      \"mask\": \"\",\n      \"description\": \"35-24-143 WAF BRANCH DN150\"\n    }\n  ],\n  \"peers\": [\n    {\n      \"tag\": \"35-24L407\",\n      \"evidence\": \"agitator on broke dosing tank, peer major equipment not child of line\"\n    },\n    {\n      \"tag\": \"35-24P517\",\n      \"evidence\": \"pump peer visible in crop, not child of line FUNCTION\"\n    },\n    {\n      \"tag\": \"35-25P513\",\n      \"evidence\": \"source white water tank/pump referenced as origin of 35-25-072 line\"\n    },\n    {\n      \"tag\": \"35-25P502\",\n      \"evidence\": \"source referenced on parallel line 35-24-182, not child of 35-25-072\"\n    },\n    {\n      \"tag\": \"35-24-182\",\n      \"evidence\": \"parallel WAF-100 line from different white water tank, separate circuit\"\n    }\n  ],\n  \"notes\": [\n    \"35-25-072 is a WAF-350 piping header treated as line FUNCTION per Rule 11\",\n    \"35-24-143 WAF-150 branch is the closest directly connected spool at d=55\",\n    \"Check valve symbol visible on 35-25-072 line but no separate valve tag label found in crop to assign\",\n    \"35-24-182 runs parallel FROM WHITE WATER TANK 35-25P502 and is a separate line, not nested under 35-25-072\"\n  ],\n  \"confidence\": \"medium\"\n}\n```",
         "parsed": {
           "sub_process": "BR1",
           "function": "35-25-072",
-          "description": "35-25-072 WAF LINE DN350 FM WHT WTR TNK",
+          "description": "35-25-072 WAF LINE DN350",
           "rows": [
             {
               "equipment": "35-24-143",
               "subequipment": "",
               "mask": "",
-              "description": "35-24-143 WAF LINE DN150 BRANCH"
+              "description": "35-24-143 WAF BRANCH DN150"
             }
           ],
           "peers": [
             {
               "tag": "35-24L407",
-              "evidence": "agitator on broke dosing tank \u2014 peer major equipment, different numeric base"
+              "evidence": "agitator on broke dosing tank, peer major equipment not child of line"
             },
             {
               "tag": "35-24P517",
-              "evidence": "pump on broke dosing tank circuit \u2014 peer major equipment"
-            },
-            {
-              "tag": "35-24-182",
-              "evidence": "separate parallel WAF-100 line from white water tank to 35-25P502 \u2014 own line tag, not a branch of 35-25-072"
+              "evidence": "pump peer visible in crop, not child of line FUNCTION"
             },
             {
               "tag": "35-25P513",
-              "evidence": "source pump referenced as FROM WHITE WATER TANK 35-25P513 \u2014 peer equipment on another diagram"
+              "evidence": "source white water tank/pump referenced as origin of 35-25-072 line"
             },
             {
               "tag": "35-25P502",
-              "evidence": "source pump for 35-24-182 line \u2014 peer equipment on another diagram"
+              "evidence": "source referenced on parallel line 35-24-182, not child of 35-25-072"
+            },
+            {
+              "tag": "35-24-182",
+              "evidence": "parallel WAF-100 line from different white water tank, separate circuit"
             }
           ],
           "notes": [
-            "35-25-072 is a WAF (white water/stock) piping header DN350 feeding from white water tank via 35-25P513",
-            "35-24-143 WAF-150 is the closest visible branch off this header at d=55",
-            "Check valve fitting P7A1210 at d=8 is on the 35-25-072 line itself (no separate tag visible)",
-            "35-24-182 is a separate parallel line (d=33) but carries its own tag and feeds from 35-25P502 \u2014 not a child of 35-25-072",
-            "No instruments with explicit tags are directly labelled on 35-25-072 in this crop"
+            "35-25-072 is a WAF-350 piping header treated as line FUNCTION per Rule 11",
+            "35-24-143 WAF-150 branch is the closest directly connected spool at d=55",
+            "Check valve symbol visible on 35-25-072 line but no separate valve tag label found in crop to assign",
+            "35-24-182 runs parallel FROM WHITE WATER TANK 35-25P502 and is a separate line, not nested under 35-25-072"
           ],
           "confidence": "medium"
         },
@@ -145,7 +144,7 @@
           "equipment": "35-24-143",
           "subequipment": "",
           "mask": "",
-          "description": "35-24-143 WAF LN DN150 BRANCH"
+          "description": "35-24-143 WAF BRANCH DN150"
         },
         {
           "equipment": "35-25-072",

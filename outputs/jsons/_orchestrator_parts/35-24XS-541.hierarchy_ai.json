@@ -55,7 +55,7 @@
       ],
       "dossier": "Parent tag: 35-24XS-541\nParent category/block: instruments / \nParent XY: (1728.408824128629, 431.04166625)\nNearby descriptions: XS 541 (35-24)\n\nSame-tag CAD family:\n- (none)\n\nNearby line numbers (short ids preferred in output):\n- 35-24-223  full=35-24-223-PP-100-E10H2A  d=161  layer=P-LINEPOS\n- 35-24-222  full=35-24-222-PP-400-E10H2A  d=191  layer=P-LINEPOS\n- 35-24-043  full=35-24-043-PP-300-E10H2A  d=168  layer=P-LINEPOS\n- 35-24-044  full=35-24-044-PP-900-E10H2A  d=199  layer=P-LINEPOS\n\nNearby devices (valves/instruments/pumps/\u2026):\n- line_markers: PPI_1100A  d=200  block=PPI_1100A\n- valves: PPI_0900A  d=169  block=PPI_0900A\n- control_valves: PPI_1000A  d=154  block=PPI_1000A\n- instruments: PPI_0100X  d=186  block=PPI_0100X\n- pumps: P7A0200  d=168  block=P7A0200\n- fittings: P7A1220  d=148  block=P7A1220\n\nNearby peer primary equipment (do NOT nest under parent):\n- 35-24L005 (process_equipment, d=159)\n- 35-24L006 (process_equipment, d=169)\n- 35-24P520 (pumps, d=177)\n\nNearby drawing text tokens:\n- S3  d=152  layer=P-TEXT\n- S2  d=161  layer=P-TEXT\n- S4  d=140  layer=P-TEXT\n- 2 bar  d=158  layer=P-TEXT\n- S1/ST1  d=147  layer=P-TEXT\n- 2621 ADTPD  d=182  layer=P-TEXT\n- 35-24  d=108  layer=P-INSTRPOS_TEXTS\n- SHOWER S1  d=134  layer=P-TEXT\n- 35-24L006  d=175  layer=P-EQUIPMENT_POS\n- BROKE CONVEYOR 3  d=179  layer=P-EQUIPMENT_POS\n- 35-24L005  d=162  layer=P-EQUIPMENT_POS\n- HP-63G2  d=175  layer=P-EQUIPMENT_POS\n- 541  d=4  layer=P-INSTRPOS_TEXTS\n- 544  d=35  layer=P-INSTRPOS_TEXTS\n- 543  d=20  layer=P-INSTRPOS_TEXTS\n- 542  d=81  layer=P-INSTRPOS_TEXTS\n- 552  d=118  layer=P-INSTRPOS_TEXTS\n- 555  d=122  layer=P-INSTRPOS_TEXTS\n- 653  d=168  layer=P-INSTRPOS_TEXTS\n- 652  d=171  layer=P-INSTRPOS_TEXTS\n- 696  d=133  layer=P-INSTRPOS_TEXTS\n- 35-24P520  d=178  layer=P-PUMP_POS\n- 21  d=183  layer=P-PUMP_POS\n- 17  d=178  layer=P-PUMP_POS\n- 35-24-1112  d=198  layer=P-VALVEPOS\n- 35-24-1131  d=177  layer=P-VALVEPOS\n- 350-400  d=181  layer=P-VALVEPOS\n- 35-24-232  d=125  layer=P-VALVEPOS\n- 001-80  d=130  layer=P-VALVEPOS\n- 35-24-233  d=135  layer=P-VALVEPOS\n- 35-24-228  d=178  layer=P-VALVEPOS\n- 350-500  d=183  layer=P-VALVEPOS\n- 35-24-140  d=167  layer=P-VALVEPOS\n- 350-300  d=172  layer=P-VALVEPOS\n- 35-24-223  d=161  layer=P-LINEPOS\n- 35-24-222  d=191  layer=P-LINEPOS\n- 35-24-043  d=168  layer=P-LINEPOS\n- 35-24-044  d=199  layer=P-LINEPOS\n- 35-24FV-696  d=153  layer=P-CVPOS\n- 80  d=158  layer=P-CVPOS",
       "ai": {
-        "raw_text": "Looking at the P&ID image, I can see that **35-24XS-541** is an instrument tag (XS = position switch / status signal) shown in a control panel box labeled \"MCS SIGNAL\". It appears as a square instrument bubble with \"XS 541\" inside, tagged as \"35-24 XS 541\" with the description \"MCS SIGNAL\".\n\nThis is a standalone instrument (status switch providing MCS signal for the Reel Pulper). Looking at the crop:\n- The red box highlights the parent 35-24XS-541 as an MCS SIGNAL instrument\n- Also visible in the same panel box are 35-24KJ-543 (REEL PULPER START) and 35-24KJ-544 (REEL PULPER STOP) \u2014 these are peer instruments in the same panel, not children of XS-541\n- No piping lines, valves, or sub-instruments are directly attached to XS-541 itself\n\nPer the rules: \"If 35-24XS-541 is an instrument (LC/PI/FV/XS/\u2026) and no labelled accessories sit on it, emit the FUNCTION header + description only \u2014 empty `rows` is correct.\"\n\nThe nearby instruments 35-24KJ-543 and 35-24KJ-544 are separate instrument tags (KJ = control station), not children of XS-541. The peer equipment (35-24L005, 35-24L006, 35-24P520) are clearly major equipment peers.\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24XS-541\",\n  \"description\": \"35-24XS-541 REEL PLPR MCS SIG\",\n  \"rows\": [],\n  \"peers\": [\n    {\n      \"tag\": \"35-24KJ-543\",\n      \"evidence\": \"Separate instrument tag (KJ-543 REEL PULPER START) visible in same panel box but not a child of XS-541\"\n    },\n    {\n      \"tag\": \"35-24KJ-544\",\n      \"evidence\": \"Separate instrument tag (KJ-544 REEL PULPER STOP) visible in same panel box but not a child of XS-541\"\n    },\n    {\n      \"tag\": \"35-24L005\",\n      \"evidence\": \"Peer process equipment (REEL PULPER vessel) visible nearby, different numeric base\"\n    },\n    {\n      \"tag\": \"35-24L006\",\n      \"evidence\": \"Peer process equipment (BROKE CONVEYOR 3) visible nearby, different numeric base\"\n    },\n    {\n      \"tag\": \"35-24P520\",\n      \"evidence\": \"Peer pump visible nearby, different numeric base\"\n    },\n    {\n      \"tag\": \"35-24FV-696\",\n      \"evidence\": \"Control valve on nearby line circuit, not attached to XS-541\"\n    }\n  ],\n  \"notes\": [\n    \"35-24XS-541 is a status/position switch providing MCS SIGNAL for the Reel Pulper start/stop circuit\",\n    \"No piping lines, valves, or sub-instruments are directly attached to this instrument tag\",\n    \"KJ-543 and KJ-544 are co-located panel instruments but are independent tags, not children\"\n  ],\n  \"confidence\": \"high\"\n}\n```",
+        "raw_text": "Looking at the P&ID image, I can see that **35-24XS-541** is an instrument tag (XS = position switch / status signal) shown in a control panel box labeled \"MCS SIGNAL\". It appears as a square instrument bubble with \"XS 541\" inside, tagged as \"35-24 XS 541\" with the description \"MCS SIGNAL\".\n\nThis is a standalone instrument (status switch providing MCS signal for the Reel Pulper). Looking at the crop:\n- The instrument box shows XS-541 as an MCS control signal instrument\n- Nearby instruments KJ-543 (REEL PULPER START) and KJ-544 (REEL PULPER STOP) are peer instruments in the same panel, not children of XS-541\n- No valves, lines, or sub-instruments are directly attached to or nested under XS-541 itself\n- The nearby lines (35-24-223, 35-24-222, 35-24-043, 35-24-044) belong to the broader circuit, not specifically to this instrument\n- Peer equipment (35-24L005, 35-24L006, 35-24P520) are clearly separate major equipment items\n\nSince XS-541 is a pure instrument with no labelled accessories sitting on it, the correct output is the FUNCTION header + description only, with empty rows.\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24XS-541\",\n  \"description\": \"35-24XS-541 REEL PLPR MCS SIG\",\n  \"rows\": [],\n  \"peers\": [\n    {\n      \"tag\": \"35-24KJ-543\",\n      \"evidence\": \"Peer instrument in same local panel \u2014 REEL PULPER START, separate tag base KJ-543\"\n    },\n    {\n      \"tag\": \"35-24KJ-544\",\n      \"evidence\": \"Peer instrument in same local panel \u2014 REEL PULPER STOP, separate tag base KJ-544\"\n    },\n    {\n      \"tag\": \"35-24L005\",\n      \"evidence\": \"Peer process equipment \u2014 REEL PULPER vessel, separate major equipment tag\"\n    },\n    {\n      \"tag\": \"35-24L006\",\n      \"evidence\": \"Peer process equipment \u2014 BROKE CONVEYOR 3 vessel, separate major equipment tag\"\n    },\n    {\n      \"tag\": \"35-24P520\",\n      \"evidence\": \"Peer pump \u2014 separate major equipment tag, not a child of an instrument\"\n    },\n    {\n      \"tag\": \"35-24FV-696\",\n      \"evidence\": \"Control valve on line 35-24-043/223 circuit, belongs to its own line FUNCTION not to XS-541\"\n    },\n    {\n      \"tag\": \"35-24HV-548\",\n      \"evidence\": \"Hand valve visible at crop edge, belongs to 35-24L006 shower circuit not XS-541\"\n    }\n  ],\n  \"notes\": [\n    \"35-24XS-541 is a status/position switch instrument providing MCS signal for the Reel Pulper start/stop circuit.\",\n    \"No piping, valves, or sub-instruments are directly attached to this instrument tag; rows intentionally empty per rule 12 (instrument with no labelled accessories).\",\n    \"KJ-543 and KJ-544 are co-located panel instruments but are independent tags, not children of XS-541.\"\n  ],\n  \"confidence\": \"high\"\n}\n```",
         "parsed": {
           "sub_process": "BR1",
           "function": "35-24XS-541",
@@ -64,33 +64,37 @@
           "peers": [
             {
               "tag": "35-24KJ-543",
-              "evidence": "Separate instrument tag (KJ-543 REEL PULPER START) visible in same panel box but not a child of XS-541"
+              "evidence": "Peer instrument in same local panel \u2014 REEL PULPER START, separate tag base KJ-543"
             },
             {
               "tag": "35-24KJ-544",
-              "evidence": "Separate instrument tag (KJ-544 REEL PULPER STOP) visible in same panel box but not a child of XS-541"
+              "evidence": "Peer instrument in same local panel \u2014 REEL PULPER STOP, separate tag base KJ-544"
             },
             {
               "tag": "35-24L005",
-              "evidence": "Peer process equipment (REEL PULPER vessel) visible nearby, different numeric base"
+              "evidence": "Peer process equipment \u2014 REEL PULPER vessel, separate major equipment tag"
             },
             {
               "tag": "35-24L006",
-              "evidence": "Peer process equipment (BROKE CONVEYOR 3) visible nearby, different numeric base"
+              "evidence": "Peer process equipment \u2014 BROKE CONVEYOR 3 vessel, separate major equipment tag"
             },
             {
               "tag": "35-24P520",
-              "evidence": "Peer pump visible nearby, different numeric base"
+              "evidence": "Peer pump \u2014 separate major equipment tag, not a child of an instrument"
             },
             {
               "tag": "35-24FV-696",
-              "evidence": "Control valve on nearby line circuit, not attached to XS-541"
+              "evidence": "Control valve on line 35-24-043/223 circuit, belongs to its own line FUNCTION not to XS-541"
+            },
+            {
+              "tag": "35-24HV-548",
+              "evidence": "Hand valve visible at crop edge, belongs to 35-24L006 shower circuit not XS-541"
             }
           ],
           "notes": [
-            "35-24XS-541 is a status/position switch providing MCS SIGNAL for the Reel Pulper start/stop circuit",
-            "No piping lines, valves, or sub-instruments are directly attached to this instrument tag",
-            "KJ-543 and KJ-544 are co-located panel instruments but are independent tags, not children"
+            "35-24XS-541 is a status/position switch instrument providing MCS signal for the Reel Pulper start/stop circuit.",
+            "No piping, valves, or sub-instruments are directly attached to this instrument tag; rows intentionally empty per rule 12 (instrument with no labelled accessories).",
+            "KJ-543 and KJ-544 are co-located panel instruments but are independent tags, not children of XS-541."
           ],
           "confidence": "high"
         },

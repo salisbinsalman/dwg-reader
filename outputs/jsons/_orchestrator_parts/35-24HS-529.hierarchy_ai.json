@@ -40,42 +40,38 @@
       ],
       "dossier": "Parent tag: 35-24HS-529\nParent category/block: instruments / \nParent XY: (1350.770232732733, 423.8073000000001)\nNearby descriptions: HS 529 (35-24)\n\nSame-tag CAD family:\n- (none)\n\nNearby line numbers (short ids preferred in output):\n- 35-24-029  full=35-24-029-PP-600-E10H2A  d=179  layer=P-LINEPOS\n\nNearby devices (valves/instruments/pumps/\u2026):\n- line_markers: PPI_1100A  d=180  block=PPI_1100A\n- valves: PPI_0900A  d=196  block=PPI_0900A\n- instruments: PPI_1205A  d=52  block=PPI_1205A\n- fittings: P7A1220  d=187  block=P7A1220\n\nNearby peer primary equipment (do NOT nest under parent):\n- (none)\n\nNearby drawing text tokens:\n- 2 bar  d=198  layer=P-TEXT\n- 1 bar  d=165  layer=P-TEXT\n- S1  d=186  layer=P-TEXT\n- S2  d=138  layer=P-TEXT\n- 35-24  d=30  layer=P-INSTRPOS_TEXTS\n- SHOWER S1  d=24  layer=P-TEXT\n- 529  d=11  layer=P-INSTRPOS_TEXTS\n- 524  d=115  layer=P-INSTRPOS_TEXTS\n- 523  d=116  layer=P-INSTRPOS_TEXTS\n- 522  d=53  layer=P-INSTRPOS_TEXTS\n- 690  d=118  layer=P-INSTRPOS_TEXTS\n- S4  d=95  layer=P-TEXT\n- S3  d=109  layer=P-TEXT\n- 532  d=14  layer=P-INSTRPOS_TEXTS\n- 35-24-029  d=179  layer=P-LINEPOS",
       "ai": {
-        "raw_text": "Looking at the P&ID image, I can see:\n\n1. **35-24HS-529** is an instrument (Hand Switch / selector switch) shown in the LOCAL PANEL area, labeled \"SLABBING PULPER SHOWER S1\" - it's a locally mounted panel instrument (circle with horizontal line through it = local control panel instrument per legend).\n\n2. The instrument panel box shows:\n   - 35-24HS (top, red circle = locally mounted) paired with 35-24HI-529 (below it) \u2192 labeled \"SLABBING PULPER SHOWER S1\"\n   - 35-24HS-522 paired with description \"SLABBING PULPER START/STOP\"\n   - 35-24HS (bottom, red circle) paired with 35-24HI-532 \u2192 labeled \"SLABBING PULPER SHOWER S2\"\n\n3. **35-24HS-529** is specifically the hand switch for SHOWER S1 on the slabbing pulper, with **35-24HI-529** as its associated indicator.\n\n4. The nearby line **35-24-029** is visible in the dossier but is a pipe line in the lower portion of the drawing associated with the shower system.\n\n5. Per the rules: HS-529 is an instrument tag \u2014 if no labelled accessories sit directly on it as children, emit FUNCTION header + description only. However, **35-24HI-529** is clearly paired/associated with it in the same panel bubble grouping.\n\nSince 35-24HS-529 is an instrument (hand switch), and 35-24HI-529 is its paired indicator visible in the same instrument cluster, I'll include HI-529 as equipment. The line 35-24-029 is nearby but belongs to the piping circuit, not a child of this instrument.\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24HS-529\",\n  \"description\": \"35-24HS-529 SLABBING PLPR SHW S1 HS\",\n  \"rows\": [\n    {\n      \"equipment\": \"35-24HI-529\",\n      \"subequipment\": \"\",\n      \"mask\": \"\",\n      \"description\": \"35-24HI-529 SLABBING PLPR SHW S1 HI\"\n    }\n  ],\n  \"peers\": [\n    {\n      \"tag\": \"35-24HS-522\",\n      \"evidence\": \"Separate HS instrument in same local panel for SLABBING PULPER START/STOP \u2014 different numeric base, peer instrument\"\n    },\n    {\n      \"tag\": \"35-24HI-532\",\n      \"evidence\": \"HI indicator paired with separate HS for SHOWER S2 \u2014 different numeric base 532, peer instrument\"\n    },\n    {\n      \"tag\": \"35-24L007\",\n      \"evidence\": \"SLABBING PULPER vessel visible in lower crop \u2014 major equipment, not a child of an HS instrument\"\n    },\n    {\n      \"tag\": \"35-24-029\",\n      \"evidence\": \"Nearby pipe line on shower circuit but belongs to piping hierarchy, not nested under an instrument function\"\n    }\n  ],\n  \"notes\": [\n    \"35-24HS-529 is a local panel hand switch (selector) for SLABBING PULPER SHOWER S1\",\n    \"35-24HI-529 is the paired hand indicator shown in the same panel bubble grouping\",\n    \"SHOWER S1 label at d=24 and instrument position text 529 at d=11 confirm this pairing\",\n    \"No valves or line accessories are directly children of this instrument tag\"\n  ],\n  \"confidence\": \"high\"\n}\n```",
+        "raw_text": "Looking at the P&ID image, I can see:\n\n1. **35-24HS-529** is an instrument (Hand Switch / selector switch) shown in the LOCAL PANEL area, labeled \"SLABBING PULPER SHOWER S1\" - it's a locally mounted panel instrument (circle with horizontal line through it = local control panel instrument per legend).\n\n2. The instrument panel box shows:\n   - 35-24HS (top, red circle = locally mounted) paired with 35-24HI-529 (below it) \u2192 labeled \"SLABBING PULPER SHOWER S1\"\n   - 35-24HS-522 paired with description \"SLABBING PULPER START/STOP\"\n   - 35-24HS (bottom, red circle) paired with 35-24HI-532 \u2192 labeled \"SLABBING PULPER SHOWER S2\"\n\n3. **35-24HS-529** is specifically the hand switch for SHOWER S1 (paired with HI-529). It is a standalone instrument \u2014 no valves or lines are children of this instrument tag itself.\n\n4. The nearby line **35-24-029** is in the dossier but belongs to the shower circuit, not a child of this HS instrument.\n\n5. Peers visible: 35-24HI-529 (indicator paired with this HS), 35-24HS-522, 35-24HI-532, 35-24L007 (slabbing pulper vessel below).\n\nSince 35-24HS-529 is a pure instrument (hand switch), it has no child equipment rows \u2014 the FUNCTION header + description only is correct per the rules.\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24HS-529\",\n  \"description\": \"35-24HS-529 SLBNG PLPR SHW S1 HS\",\n  \"rows\": [],\n  \"peers\": [\n    {\n      \"tag\": \"35-24HI-529\",\n      \"evidence\": \"Hand indicator paired with HS-529 on local panel for Shower S1 \u2014 separate instrument tag, not a child\"\n    },\n    {\n      \"tag\": \"35-24HS-522\",\n      \"evidence\": \"Separate HS instrument on same local panel for Slabbing Pulper Start/Stop \u2014 peer instrument\"\n    },\n    {\n      \"tag\": \"35-24HI-532\",\n      \"evidence\": \"Hand indicator for Shower S2 on same local panel \u2014 different numeric base, peer\"\n    },\n    {\n      \"tag\": \"35-24L007\",\n      \"evidence\": \"Slabbing Pulper vessel visible below \u2014 major equipment, not a child of an HS instrument\"\n    },\n    {\n      \"tag\": \"35-24-029\",\n      \"evidence\": \"Nearby shower supply line per dossier \u2014 belongs to shower circuit piping, not nested under an HS instrument\"\n    }\n  ],\n  \"notes\": [\n    \"35-24HS-529 is a local panel hand switch (HS) for Slabbing Pulper Shower S1; instrument-only tag with no child lines or valves\",\n    \"Local panel instrument symbol (circle with horizontal line) confirmed per legend Image 2\",\n    \"SHOWER S1 label confirmed by drawing text token d=24 and instrument position text 529 d=11\"\n  ],\n  \"confidence\": \"high\"\n}\n```",
         "parsed": {
           "sub_process": "BR1",
           "function": "35-24HS-529",
-          "description": "35-24HS-529 SLABBING PLPR SHW S1 HS",
-          "rows": [
-            {
-              "equipment": "35-24HI-529",
-              "subequipment": "",
-              "mask": "",
-              "description": "35-24HI-529 SLABBING PLPR SHW S1 HI"
-            }
-          ],
+          "description": "35-24HS-529 SLBNG PLPR SHW S1 HS",
+          "rows": [],
           "peers": [
             {
+              "tag": "35-24HI-529",
+              "evidence": "Hand indicator paired with HS-529 on local panel for Shower S1 \u2014 separate instrument tag, not a child"
+            },
+            {
               "tag": "35-24HS-522",
-              "evidence": "Separate HS instrument in same local panel for SLABBING PULPER START/STOP \u2014 different numeric base, peer instrument"
+              "evidence": "Separate HS instrument on same local panel for Slabbing Pulper Start/Stop \u2014 peer instrument"
             },
             {
               "tag": "35-24HI-532",
-              "evidence": "HI indicator paired with separate HS for SHOWER S2 \u2014 different numeric base 532, peer instrument"
+              "evidence": "Hand indicator for Shower S2 on same local panel \u2014 different numeric base, peer"
             },
             {
               "tag": "35-24L007",
-              "evidence": "SLABBING PULPER vessel visible in lower crop \u2014 major equipment, not a child of an HS instrument"
+              "evidence": "Slabbing Pulper vessel visible below \u2014 major equipment, not a child of an HS instrument"
             },
             {
               "tag": "35-24-029",
-              "evidence": "Nearby pipe line on shower circuit but belongs to piping hierarchy, not nested under an instrument function"
+              "evidence": "Nearby shower supply line per dossier \u2014 belongs to shower circuit piping, not nested under an HS instrument"
             }
           ],
           "notes": [
-            "35-24HS-529 is a local panel hand switch (selector) for SLABBING PULPER SHOWER S1",
-            "35-24HI-529 is the paired hand indicator shown in the same panel bubble grouping",
-            "SHOWER S1 label at d=24 and instrument position text 529 at d=11 confirm this pairing",
-            "No valves or line accessories are directly children of this instrument tag"
+            "35-24HS-529 is a local panel hand switch (HS) for Slabbing Pulper Shower S1; instrument-only tag with no child lines or valves",
+            "Local panel instrument symbol (circle with horizontal line) confirmed per legend Image 2",
+            "SHOWER S1 label confirmed by drawing text token d=24 and instrument position text 529 d=11"
           ],
           "confidence": "high"
         },

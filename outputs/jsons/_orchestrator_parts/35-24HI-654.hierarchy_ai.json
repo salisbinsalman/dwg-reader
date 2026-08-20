@@ -42,48 +42,55 @@
       ],
       "dossier": "Parent tag: 35-24HI-654\nParent category/block: instruments / \nParent XY: (3461.307140950951, 401.04166625)\nNearby descriptions: HI 654 (35-24)\n\nSame-tag CAD family:\n- (none)\n\nNearby line numbers (short ids preferred in output):\n- 35-24-184  full=35-24-184-WAF-200-E10H2A  d=62  layer=P-LINEPOS\n- 35-24-094  full=35-24-094-WAF-300-E10H2A  d=72  layer=P-LINEPOS\n- 35-24-098  full=35-24-098-WAF-300-E10H2A  d=90  layer=P-LINEPOS\n- 35-24-105  full=35-24-105-WAF-300-E10H2A  d=122  layer=P-LINEPOS\n- 35-24-107  full=35-24-107-WAF-100-E10H2A  d=110  layer=P-LINEPOS\n- 35-24-108  full=35-24-108-PP-100-E10H2A  d=151  layer=P-LINEPOS\n\nNearby devices (valves/instruments/pumps/\u2026):\n- line_markers: PPI_1100A  d=152  block=PPI_1100A\n- control_valves: PPI_1000A  d=150  block=PPI_1000A\n- instruments: PPI_1204A  d=138  block=PPI_1204A\n- pumps: PPI_0521A-25_0  d=183  block=PPI_0521A-25_0\n\nNearby peer primary equipment (do NOT nest under parent):\n- 35-24L011 (process_equipment, d=164)\n- 35-24P504 (pumps, d=183)\n\nNearby drawing text tokens:\n- S1  d=173  layer=P-TEXT\n- S2  d=190  layer=P-TEXT\n- 2 bar  d=195  layer=P-TEXT\n- 35-24  d=71  layer=P-INSTRPOS_TEXTS\n- SHOWER S2  d=39  layer=P-TEXT\n- S3  d=165  layer=P-TEXT\n- 35-24L011  d=164  layer=P-EQUIPMENT_POS\n- BROKE CONVEYOR 1  d=173  layer=P-EQUIPMENT_POS\n- 585  d=103  layer=P-INSTRPOS_TEXTS\n- 588  d=171  layer=P-INSTRPOS_TEXTS\n- 580  d=54  layer=P-INSTRPOS_TEXTS\n- 591  d=142  layer=P-INSTRPOS_TEXTS\n- 583  d=51  layer=P-INSTRPOS_TEXTS\n- 654  d=4  layer=P-INSTRPOS_TEXTS\n- 35-24P504  d=185  layer=P-PUMP_POS\n- 20  d=190  layer=P-PUMP_POS\n- 10  d=187  layer=P-PUMP_POS\n- 4  d=195  layer=P-PUMP_POS\n- 1500  d=192  layer=P-PUMP_POS\n- 35-24-184  d=62  layer=P-LINEPOS\n- 35-24-094  d=72  layer=P-LINEPOS\n- 35-24-098  d=90  layer=P-LINEPOS\n- 35-24-105  d=122  layer=P-LINEPOS\n- 35-24-107  d=110  layer=P-LINEPOS\n- 35-24-108  d=151  layer=P-LINEPOS\n- 35-24HV-591  d=152  layer=P-CVPOS\n- 80  d=154  layer=P-CVPOS",
       "ai": {
-        "raw_text": "Looking at the P&ID image, I can see that 35-24HI-654 is a **Hand Indicator (HI)** instrument \u2014 specifically a locally mounted indicator showing \"PRESS PULPER SHOWER S3\". It appears as a circle with \"HI 654\" inside, paired with an HS (Hand Switch) above it, both labeled \"35-24\" and associated with \"PRESS PULPER SHOWER S3\".\n\nThis is a standalone instrument tag (HI = Hand Indicator / local indicator). Looking at the image:\n- The instrument bubble shows HI 654 with a circle symbol (locally mounted instrument per legend)\n- It's paired with an HS (hand switch) above it for Shower S3\n- No child lines, valves, or sub-instruments are directly attached to this HI tag itself\n- The nearby lines (35-24-184, 35-24-094, etc.) belong to the broader shower/broke system circuit, not specifically children of this instrument\n\nPer Rule 12 and the worked examples: \"If 35-24HI-654 is an instrument... and no labelled accessories sit on it, emit the FUNCTION header + description only \u2014 empty `rows` is correct.\"\n\nThe peers are the other nearby major equipment visible in the crop.\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24HI-654\",\n  \"description\": \"35-24HI-654 PRESS PLPR SHOWER S3 IND\",\n  \"rows\": [],\n  \"peers\": [\n    {\n      \"tag\": \"35-24L011\",\n      \"evidence\": \"Peer process equipment (broke conveyor/pulper vessel) visible in crop, different numeric base, not a child of an HI instrument\"\n    },\n    {\n      \"tag\": \"35-24P504\",\n      \"evidence\": \"Peer pump visible in crop, different numeric base, not a child of an HI instrument\"\n    },\n    {\n      \"tag\": \"35-24HV-591\",\n      \"evidence\": \"Control valve on line 35-24-108 in lower portion of crop, belongs to separate circuit, not attached to HI-654\"\n    },\n    {\n      \"tag\": \"35-24XS-588\",\n      \"evidence\": \"MCS signal instrument visible in crop, separate function, different numeric base\"\n    },\n    {\n      \"tag\": \"35-24HI-583\",\n      \"evidence\": \"Peer HI instrument for Shower S2, same instrument family but separate tag\"\n    },\n    {\n      \"tag\": \"35-24HI-580\",\n      \"evidence\": \"Peer HI instrument for Shower S1, same instrument family but separate tag\"\n    },\n    {\n      \"tag\": \"35-24HI-591\",\n      \"evidence\": \"Peer HI instrument near HV-591 circuit, separate tag\"\n    }\n  ],\n  \"notes\": [\n    \"35-24HI-654 is a locally mounted hand indicator for Press Pulper Shower S3\",\n    \"Instrument symbol matches 'locally mounted instrument' circle per legend (Image 2)\",\n    \"Paired with an HS (hand switch) above it \u2014 the HS is a separate tag not subordinate to HI\",\n    \"No piping branches, valves, or sub-instruments are directly children of this HI tag\",\n    \"Nearby lines 35-24-184, 35-24-094, 35-24-098, 35-24-107, 35-24-105 are shower supply headers, not children of this instrument\"\n  ],\n  \"confidence\": \"high\"\n}\n```",
+        "raw_text": "Looking at the P&ID image, I can see that 35-24HI-654 is a **Hand Indicator (HI)** instrument \u2014 specifically a locally mounted indicator showing \"PRESS PULPER SHOWER S3\" (the rightmost of three shower indicators: S1=580, S2=583, S3=654).\n\nThe instrument symbol shows a circle with a horizontal line through it (local panel instrument per legend). It is paired with an HS (hand switch) above it, both labelled \"35-24\" with number 654.\n\n**Analysis:**\n- 35-24HI-654 is a **locally mounted hand indicator** instrument (HI = Hand Indicator / High Indicator \u2014 here clearly a pressure/flow indicator for shower S3)\n- It sits on the local panel alongside HS for shower S3\n- Per Rule 12 / worked example C: \"If 35-24HI-654 is an instrument... and no labelled accessories sit on it, emit the FUNCTION header + description only \u2014 empty `rows` is correct\"\n- No child lines, valves, or sub-instruments are directly attached to this HI tag\n- Nearby lines (35-24-184, 35-24-094, etc.) belong to the broader shower circuit, not specifically children of this instrument tag\n- Peer equipment: 35-24L011, 35-24P504, 35-24HV-591 are all separate functions\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24HI-654\",\n  \"description\": \"35-24HI-654 PRESS PLPR SHW S3 IND\",\n  \"rows\": [],\n  \"peers\": [\n    {\"tag\": \"35-24L011\", \"evidence\": \"Broke Conveyor 1 vessel \u2014 peer process equipment, separate FUNCTION\"},\n    {\"tag\": \"35-24P504\", \"evidence\": \"Pump \u2014 peer major equipment, separate FUNCTION\"},\n    {\"tag\": \"35-24HV-591\", \"evidence\": \"Control valve on line 35-24-108, separate instrument FUNCTION\"},\n    {\"tag\": \"35-24-184\", \"evidence\": \"WAF-200 header line \u2014 belongs to shower circuit header, not child of HI instrument\"},\n    {\"tag\": \"35-24-094\", \"evidence\": \"WAF-300 header line \u2014 circuit header, not child of HI instrument\"},\n    {\"tag\": \"35-24-098\", \"evidence\": \"WAF-300 header line \u2014 circuit header, not child of HI instrument\"},\n    {\"tag\": \"35-24-105\", \"evidence\": \"WAF-300 header line \u2014 circuit header, not child of HI instrument\"},\n    {\"tag\": \"35-24-107\", \"evidence\": \"WAF-100 header line \u2014 circuit header, not child of HI instrument\"},\n    {\"tag\": \"35-24-108\", \"evidence\": \"PP-100 line carrying HV-591 \u2014 separate piping FUNCTION\"}\n  ],\n  \"notes\": [\n    \"35-24HI-654 is a locally mounted hand indicator for Press Pulper Shower S3\",\n    \"Paired with an HS (hand switch) on the same local panel cluster (S1/S2/S3 shower indicators)\",\n    \"No child instruments, valves or sub-lines are directly tagged under this HI \u2014 rows intentionally empty\",\n    \"Instrument symbol matches LOCAL PANEL INSTRUMENT per legend (circle with horizontal line)\"\n  ],\n  \"confidence\": \"high\"\n}\n```",
         "parsed": {
           "sub_process": "BR1",
           "function": "35-24HI-654",
-          "description": "35-24HI-654 PRESS PLPR SHOWER S3 IND",
+          "description": "35-24HI-654 PRESS PLPR SHW S3 IND",
           "rows": [],
           "peers": [
             {
               "tag": "35-24L011",
-              "evidence": "Peer process equipment (broke conveyor/pulper vessel) visible in crop, different numeric base, not a child of an HI instrument"
+              "evidence": "Broke Conveyor 1 vessel \u2014 peer process equipment, separate FUNCTION"
             },
             {
               "tag": "35-24P504",
-              "evidence": "Peer pump visible in crop, different numeric base, not a child of an HI instrument"
+              "evidence": "Pump \u2014 peer major equipment, separate FUNCTION"
             },
             {
               "tag": "35-24HV-591",
-              "evidence": "Control valve on line 35-24-108 in lower portion of crop, belongs to separate circuit, not attached to HI-654"
+              "evidence": "Control valve on line 35-24-108, separate instrument FUNCTION"
             },
             {
-              "tag": "35-24XS-588",
-              "evidence": "MCS signal instrument visible in crop, separate function, different numeric base"
+              "tag": "35-24-184",
+              "evidence": "WAF-200 header line \u2014 belongs to shower circuit header, not child of HI instrument"
             },
             {
-              "tag": "35-24HI-583",
-              "evidence": "Peer HI instrument for Shower S2, same instrument family but separate tag"
+              "tag": "35-24-094",
+              "evidence": "WAF-300 header line \u2014 circuit header, not child of HI instrument"
             },
             {
-              "tag": "35-24HI-580",
-              "evidence": "Peer HI instrument for Shower S1, same instrument family but separate tag"
+              "tag": "35-24-098",
+              "evidence": "WAF-300 header line \u2014 circuit header, not child of HI instrument"
             },
             {
-              "tag": "35-24HI-591",
-              "evidence": "Peer HI instrument near HV-591 circuit, separate tag"
+              "tag": "35-24-105",
+              "evidence": "WAF-300 header line \u2014 circuit header, not child of HI instrument"
+            },
+            {
+              "tag": "35-24-107",
+              "evidence": "WAF-100 header line \u2014 circuit header, not child of HI instrument"
+            },
+            {
+              "tag": "35-24-108",
+              "evidence": "PP-100 line carrying HV-591 \u2014 separate piping FUNCTION"
             }
           ],
           "notes": [
             "35-24HI-654 is a locally mounted hand indicator for Press Pulper Shower S3",
-            "Instrument symbol matches 'locally mounted instrument' circle per legend (Image 2)",
-            "Paired with an HS (hand switch) above it \u2014 the HS is a separate tag not subordinate to HI",
-            "No piping branches, valves, or sub-instruments are directly children of this HI tag",
-            "Nearby lines 35-24-184, 35-24-094, 35-24-098, 35-24-107, 35-24-105 are shower supply headers, not children of this instrument"
+            "Paired with an HS (hand switch) on the same local panel cluster (S1/S2/S3 shower indicators)",
+            "No child instruments, valves or sub-lines are directly tagged under this HI \u2014 rows intentionally empty",
+            "Instrument symbol matches LOCAL PANEL INSTRUMENT per legend (circle with horizontal line)"
           ],
           "confidence": "high"
         },
@@ -107,38 +114,7 @@
         "prompt_chars": 9299,
         "vision": true
       },
-      "refined_rows": [
-        {
-          "equipment": "35-24-184",
-          "subequipment": "",
-          "mask": "",
-          "description": "35-24-184"
-        },
-        {
-          "equipment": "35-24-094",
-          "subequipment": "",
-          "mask": "",
-          "description": "35-24-094"
-        },
-        {
-          "equipment": "35-24-098",
-          "subequipment": "",
-          "mask": "",
-          "description": "35-24-098"
-        },
-        {
-          "equipment": "35-24-107",
-          "subequipment": "",
-          "mask": "",
-          "description": "35-24-107"
-        },
-        {
-          "equipment": "35-24-105",
-          "subequipment": "",
-          "mask": "",
-          "description": "35-24-105"
-        }
-      ]
+      "refined_rows": []
     }
   ]
 }

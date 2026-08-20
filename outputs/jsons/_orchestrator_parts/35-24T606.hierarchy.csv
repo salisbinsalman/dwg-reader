@@ -5,14 +5,14 @@ ORDER,SITE,LINE,PROCESS,SUB-PROCESS,FUNCTION,EQUIPMENT,SUB-EQUIPMENT,MASK,DESCRI
 4,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,35-24LC-646,,,35-24LC-646 LVL CTRL
 5,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,35-24-173,,,35-24-173 PSR-250 IN LN
 6,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,35-24-169,,,35-24-169 PSR-100 LN
-7,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,,35-24-013,,35-24-013 VLV HV
-8,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,35-24-168,,,35-24-168 PSR-100 LN
-9,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,35-24-172,,,35-24-172 PSR-150 OUT LN
-10,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,,35-24-011,,35-24-011 VLV NC
+7,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,35-24-168,,,35-24-168 PSR-100 LN
+8,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,35-24-172,,,35-24-172 PSR-150 OUT LN
+9,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,,35-24-011,,35-24-011 VLV NC 101-150
+10,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,,35-24-009,,35-24-009 VLV NC 001-80
 11,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,35-24-174,,,35-24-174 PSR-250 OUT LN
-12,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,,35-24-1121,,35-24-1121 VLV NC
-13,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,,35-24-009,,35-24-009 VLV NC
-14,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,,35-24-008,,35-24-008 VLV NC
+12,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,,35-24-1121,,35-24-1121 VLV NC 101-250
+13,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,35-24-013,,,35-24-013 VLV HV 003-50
+14,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,35-24-008,,,35-24-008 VLV NC 003-50
 15,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,35-24T606.1,,,35-24T606.1
 16,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,35-24-606.1,,,35-24-606.1
 17,"Shotton Paper Mill, United Kingdom",Shotton PM3,Broke System,,,35-24T606.2,,,35-24T606.2

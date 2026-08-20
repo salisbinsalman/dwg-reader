@@ -65,11 +65,11 @@
       ],
       "dossier": "Parent tag: 35-24HS-555\nParent category/block: instruments / \nParent XY: (2023.270232732733, 181.3073)\nNearby descriptions: HS 555 (35-24)\n\nSame-tag CAD family:\n- (none)\n\nNearby line numbers (short ids preferred in output):\n- 35-25-034/2-WAF-500-E10H2A  full=35-25-034/2-WAF-500-E10H2A  d=144  layer=P-LINEPOS\n- 35-24-207  full=35-24-207-PP-100-E10H2A  d=122  layer=P-LINEPOS\n- 35-24-035  full=35-24-035-WAF-350-E10H2A  d=78  layer=P-LINEPOS\n- 35-24-057  full=35-24-057-WAF-350-E10H2A  d=34  layer=P-LINEPOS\n- 35-24-036  full=35-24-036-WAF-350-E10H2A  d=56  layer=P-LINEPOS\n- 35-24-052  full=35-24-052-WAF-300-E10H2A  d=65  layer=P-LINEPOS\n- 35-24-053  full=35-24-053-WAF-100-E10H2A  d=35  layer=P-LINEPOS\n- 35-24-055  full=35-24-055-WAF-100-E10H2A  d=14  layer=P-LINEPOS\n- 35-24-056  full=35-24-056-WAF-350-E10H2A  d=12  layer=P-LINEPOS\n- 35-24-050  full=35-24-050-WFL-15-E10H2A  d=193  layer=P-LINEPOS\n- 35-24-054  full=35-24-054-WAF-500-E10H2A  d=102  layer=P-LINEPOS\n- 35-24-058  full=35-24-058-WAB-15-E10H2A  d=127  layer=P-LINEPOS\n- 35-24-060  full=35-24-060-PP-800-E10H2A  d=194  layer=P-LINEPOS\n- 35-24-051  full=35-24-051-PP-100-E10H2A  d=149  layer=P-LINEPOS\n- 35-24-049  full=35-24-049-PP-800-E10H2A  d=145  layer=P-LINEPOS\n\nNearby devices (valves/instruments/pumps/\u2026):\n- line_markers: PPI_1100A  d=145  block=PPI_1100A\n- valves: PPI_0900A  d=177  block=PPI_0900A\n- control_valves: PPI_1000A  d=43  block=PPI_1000A\n- instruments: PPI_0100X  d=96  block=PPI_0100X\n- pumps: PPI_0521A-25_0  d=155  block=PPI_0521A-25_0\n- fittings: P7A1214  d=79  block=P7A1214\n\nNearby peer primary equipment (do NOT nest under parent):\n- 35-24P507 (pumps, d=155)\n\nNearby drawing text tokens:\n- 35-24  d=11  layer=P-INSTRPOS_TEXTS\n- 653  d=27  layer=P-INSTRPOS_TEXTS\n- 547  d=110  layer=P-INSTRPOS_TEXTS\n- 548  d=166  layer=P-INSTRPOS_TEXTS\n- 549  d=173  layer=P-INSTRPOS_TEXTS\n- 550  d=80  layer=P-INSTRPOS_TEXTS\n- 552  d=48  layer=P-INSTRPOS_TEXTS\n- 555  d=14  layer=P-INSTRPOS_TEXTS\n- 553  d=27  layer=P-INSTRPOS_TEXTS\n- 9277  d=193  layer=P-INSTRPOS_TEXTS\n- 668  d=193  layer=P-INSTRPOS_TEXTS\n- 652  d=69  layer=P-INSTRPOS_TEXTS\n- 534  d=47  layer=P-INSTRPOS_TEXTS\n- 35-24P507  d=149  layer=P-PUMP_POS\n- 20  d=148  layer=P-PUMP_POS\n- 10  d=136  layer=P-PUMP_POS\n- 4  d=146  layer=P-PUMP_POS\n- 1500  d=137  layer=P-PUMP_POS\n- 35-24-135  d=182  layer=P-VALVEPOS\n- 003-15  d=183  layer=P-VALVEPOS\n- 35-24-138  d=93  layer=P-VALVEPOS\n- 003-50  d=94  layer=P-VALVEPOS\n- 35-24-134  d=126  layer=P-VALVEPOS\n- 101-500  d=131  layer=P-VALVEPOS\n- 35-24-132  d=158  layer=P-VALVEPOS\n- 003-20  d=156  layer=P-VALVEPOS\n- 35-24-133  d=152  layer=P-VALVEPOS\n- 35-25-034/2-WAF-500-E10H2A  d=144  layer=P-LINEPOS\n- 35-24-207  d=122  layer=P-LINEPOS\n- 35-24-035  d=78  layer=P-LINEPOS\n- 35-24-057  d=34  layer=P-LINEPOS\n- 35-24-036  d=56  layer=P-LINEPOS\n- 35-24-052  d=65  layer=P-LINEPOS\n- 35-24-053  d=35  layer=P-LINEPOS\n- 35-24-055  d=14  layer=P-LINEPOS\n- 35-24-056  d=12  layer=P-LINEPOS\n- 35-24-050  d=193  layer=P-LINEPOS\n- 35-24-054  d=102  layer=P-LINEPOS\n- 35-24-058  d=127  layer=P-LINEPOS\n- 35-24-060  d=194  layer=P-LINEPOS",
       "ai": {
-        "raw_text": "Looking at the P&ID image, I can see that 35-24HS-555 is a hand switch (HS) instrument that is part of a group of similar HS/HI instrument pairs controlling HV valves. The parent tag 35-24HS-555 is specifically associated with the valve 35-24HV-555 on line 35-24-055-WAF-100-E10H2A, with a paired indicator 35-24HI-555.\n\nThe image shows a selector/distribution station with multiple HS+HI pairs controlling HV valves:\n- HS-552 + HI-552 \u2192 HV-552 on line 35-24-052\n- KS-553 \u2192 KV-553 on line 35-24-053\n- **HS-555 + HI-555 \u2192 HV-555 on line 35-24-055** \u2190 our parent\n- HS-653 + HI-653 \u2192 HV-653 on line 35-24-056\n- HS-534 + HI-534 \u2192 HV-534 on line 35-24-036\n- HS-652 + HI-652 \u2192 HV-652 on line 35-24-035\n\nThe HV-555 valve symbol shows an outline/transparent bowtie with a circle actuator on top \u2192 `AV`. The valve is on line 35-24-055 (WAF-100).\n\n35-24HS-555 is an instrument (hand switch). Its direct children are the associated indicator HI-555, the controlled valve HV-555, and the line it sits on (35-24-055).\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24HS-555\",\n  \"description\": \"35-24HS-555 HAND SWITCH BROKE SEL\",\n  \"rows\": [\n    {\"equipment\": \"35-24HI-555\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24HI-555 HAND INDICATOR\"},\n    {\"equipment\": \"35-24-055\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-055 WAF-100 LINE\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24HV-555\", \"mask\": \"\", \"description\": \"35-24HV-555 ISOL VLV AV\"}\n  ],\n  \"peers\": [\n    {\"tag\": \"35-24HV-552\", \"evidence\": \"separate HS-552/HI-552 triplet on line 35-24-052, different numeric base\"},\n    {\"tag\": \"35-24KV-553\", \"evidence\": \"separate KS-553 triplet on line 35-24-053, different numeric base\"},\n    {\"tag\": \"35-24HV-653\", \"evidence\": \"separate HS-653/HI-653 triplet on line 35-24-056, different numeric base\"},\n    {\"tag\": \"35-24HV-534\", \"evidence\": \"separate HS-534/HI-534 triplet on line 35-24-036, different numeric base\"},\n    {\"tag\": \"35-24HV-652\", \"evidence\": \"separate HS-652/HI-652 triplet on line 35-24-035, different numeric base\"},\n    {\"tag\": \"35-24FV-550\", \"evidence\": \"flow control valve on FC-550 loop, different circuit\"},\n    {\"tag\": \"35-24P507\", \"evidence\": \"peer pump, major equipment not child of instrument\"},\n    {\"tag\": \"35-24-138\", \"evidence\": \"hand valve on separate branch, different numeric base\"}\n  ],\n  \"notes\": [\n    \"35-24HS-555 is a hand switch instrument controlling HV-555 on line 35-24-055-WAF-100\",\n    \"HV-555 symbol shows circle actuator (AV) with outline bowtie \u2014 automatic valve\",\n    \"HI-555 is the paired hand indicator in the same instrument triplet\"\n  ],\n  \"confidence\": \"high\"\n}\n```",
+        "raw_text": "Looking at the P&ID image, I can see that 35-24HS-555 is a hand switch (HS) instrument that is part of a group of similar HS/HI instrument pairs controlling HV valves. The visible pattern shows:\n\n- HS 555 (35-24) paired with HI 555 (35-24) \u2192 controlling 35-24HV-555 on line 35-24-055-WAF-100\n- The HS-555 is the hand switch selector instrument itself\n\nThe parent function 35-24HS-555 is an instrument (hand switch). Looking at the image, the HS-555 instrument sits above HI-555, and below them is valve 35-24HV-555 on line 35-24-055. The HS instrument controls the HV valve on that line.\n\nSince 35-24HS-555 is an instrument (not a vessel/pump/line), and its directly associated valve 35-24HV-555 and indicator 35-24HI-555 are its logical children, plus the line 35-24-055 it sits on:\n\nThe valve 35-24HV-555 appears as an outline bowtie with a small circle actuator on top (automatic valve, AV type). The triangles appear solid/filled = NC.\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24HS-555\",\n  \"description\": \"35-24HS-555 HAND SWITCH\",\n  \"rows\": [\n    {\"equipment\": \"35-24HI-555\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24HI-555 HAND INDICATOR\"},\n    {\"equipment\": \"35-24-055\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-055 WAF-100 LINE\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24HV-555\", \"mask\": \"\", \"description\": \"35-24HV-555 ISOL VLV AV NC\"}\n  ],\n  \"peers\": [\n    {\"tag\": \"35-24HS-552\", \"evidence\": \"sibling HS instrument on adjacent HV-552 circuit\"},\n    {\"tag\": \"35-24HV-552\", \"evidence\": \"sibling HV valve on line 35-24-052, different numeric base\"},\n    {\"tag\": \"35-24KV-553\", \"evidence\": \"sibling KV instrument on line 35-24-053, different numeric base\"},\n    {\"tag\": \"35-24HV-653\", \"evidence\": \"sibling HV valve on line 35-24-056, different numeric base\"},\n    {\"tag\": \"35-24HV-534\", \"evidence\": \"sibling HV valve on line 35-24-036, different numeric base\"},\n    {\"tag\": \"35-24HV-652\", \"evidence\": \"sibling HV valve on line 35-24-035, different numeric base\"},\n    {\"tag\": \"35-24FV-550\", \"evidence\": \"flow control valve on separate FC-550 circuit\"},\n    {\"tag\": \"35-24P507\", \"evidence\": \"peer pump, separate major equipment\"}\n  ],\n  \"notes\": [\n    \"35-24HS-555 is a hand switch instrument controlling 35-24HV-555 on line 35-24-055-WAF-100\",\n    \"HV-555 symbol shows circle actuator (AV) with filled triangles (NC)\",\n    \"HI-555 is the associated hand indicator paired with this HS\"\n  ],\n  \"confidence\": \"high\"\n}\n```",
         "parsed": {
           "sub_process": "BR1",
           "function": "35-24HS-555",
-          "description": "35-24HS-555 HAND SWITCH BROKE SEL",
+          "description": "35-24HS-555 HAND SWITCH",
           "rows": [
             {
               "equipment": "35-24HI-555",
@@ -87,47 +87,47 @@
               "equipment": "",
               "subequipment": "35-24HV-555",
               "mask": "",
-              "description": "35-24HV-555 ISOL VLV AV"
+              "description": "35-24HV-555 ISOL VLV AV NC"
             }
           ],
           "peers": [
             {
+              "tag": "35-24HS-552",
+              "evidence": "sibling HS instrument on adjacent HV-552 circuit"
+            },
+            {
               "tag": "35-24HV-552",
-              "evidence": "separate HS-552/HI-552 triplet on line 35-24-052, different numeric base"
+              "evidence": "sibling HV valve on line 35-24-052, different numeric base"
             },
             {
               "tag": "35-24KV-553",
-              "evidence": "separate KS-553 triplet on line 35-24-053, different numeric base"
+              "evidence": "sibling KV instrument on line 35-24-053, different numeric base"
             },
             {
               "tag": "35-24HV-653",
-              "evidence": "separate HS-653/HI-653 triplet on line 35-24-056, different numeric base"
+              "evidence": "sibling HV valve on line 35-24-056, different numeric base"
             },
             {
               "tag": "35-24HV-534",
-              "evidence": "separate HS-534/HI-534 triplet on line 35-24-036, different numeric base"
+              "evidence": "sibling HV valve on line 35-24-036, different numeric base"
             },
             {
               "tag": "35-24HV-652",
-              "evidence": "separate HS-652/HI-652 triplet on line 35-24-035, different numeric base"
+              "evidence": "sibling HV valve on line 35-24-035, different numeric base"
             },
             {
               "tag": "35-24FV-550",
-              "evidence": "flow control valve on FC-550 loop, different circuit"
+              "evidence": "flow control valve on separate FC-550 circuit"
             },
             {
               "tag": "35-24P507",
-              "evidence": "peer pump, major equipment not child of instrument"
-            },
-            {
-              "tag": "35-24-138",
-              "evidence": "hand valve on separate branch, different numeric base"
+              "evidence": "peer pump, separate major equipment"
             }
           ],
           "notes": [
-            "35-24HS-555 is a hand switch instrument controlling HV-555 on line 35-24-055-WAF-100",
-            "HV-555 symbol shows circle actuator (AV) with outline bowtie \u2014 automatic valve",
-            "HI-555 is the paired hand indicator in the same instrument triplet"
+            "35-24HS-555 is a hand switch instrument controlling 35-24HV-555 on line 35-24-055-WAF-100",
+            "HV-555 symbol shows circle actuator (AV) with filled triangles (NC)",
+            "HI-555 is the associated hand indicator paired with this HS"
           ],
           "confidence": "high"
         },
@@ -185,7 +185,7 @@
           "equipment": "",
           "subequipment": "35-24HV-555",
           "mask": "",
-          "description": "35-24HV-555 ISOL VLV AV"
+          "description": "35-24HV-555 ISOL VLV AV NC"
         },
         {
           "equipment": "35-24-056",

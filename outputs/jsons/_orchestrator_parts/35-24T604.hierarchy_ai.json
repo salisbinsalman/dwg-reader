@@ -67,7 +67,7 @@
       ],
       "dossier": "Parent tag: 35-24T604\nParent category/block: tanks / PPI_0700A-25_0\nParent XY: (4807.5, 272.5)\nNearby descriptions: BROKE FILTRATE; TANK; 40 m\u00b3\n\nSame-tag CAD family:\n- tanks @ (4807.5,272.5) block=PPI_0700A-25_0 nearby=35-24T604; 35-24\n- valves @ (4783.75,257.5) block=PPI_0900A nearby=35-24T604; 35-24; 35-24P516\n- valves @ (4800.0,230.0) block=PPI_0900A nearby=35-24T604; 35-24; 35-24P516\n- valves @ (4843.75,295.0) block=PPI_0900A nearby=35-24; 35-24T604; 35-24\n- instruments @ (4855.0,267.5) block=PPI_1204A nearby=35-24; 35-24T604; 35-24\n- instruments @ (4845.0,250.0) block=PPI_0102B nearby=35-24; 35-24T604\n\nNearby line numbers (short ids preferred in output):\n- 35-24-149  full=35-24-149-WAA-300-E10H2A  d=143  layer=P-LINEPOS\n- 35-24-151  full=35-24-151-PP-600-E10H2A  d=181  layer=P-LINEPOS\n- 35-24-148  full=35-24-148-WAA-150-E10H2A  d=57  layer=P-LINEPOS\n- 35-24-145  full=35-24-145-WAA-300-E10H2A  d=78  layer=P-LINEPOS\n- 35-24-146  full=35-24-146-WAA-400-E10H2A  d=63  layer=P-LINEPOS\n- 35-24-144  full=35-24-144-WAA-200-E10H2A  d=108  layer=P-LINEPOS\n- 35-24-154  full=35-24-154-PP-700-E10H2A  d=200  layer=P-LINEPOS\n- 35-24-155  full=35-24-155-PP-150-E10H2A  d=195  layer=P-LINEPOS\n- 35-24-150  full=35-24-150-WAA-400-E10H2A  d=104  layer=P-LINEPOS\n- 35-24-143  bind=medium  pipe=LWPOLYLINE  d=188\n\nNearby devices (valves/instruments/pumps/\u2026):\n- line_markers: PPI_1100A  d=103  block=PPI_1100A\n- valves: PPI_0900A  d=199  block=PPI_0900A\n- control_valves: PPI_1000A  d=141  block=PPI_1000A\n- instruments: PPI_1204A  d=134  block=PPI_1204A\n- pumps: P7A0200  d=86  block=P7A0200\n- motors: PPI_1504A-25_0  d=178  block=PPI_1504A-25_0\n- fittings: P7A1212  d=117  block=P7A1212\n\nNearby peer primary equipment (do NOT nest under parent):\n- 35-24T605 (tanks, d=157)\n- 35-24L002 (process_equipment, d=198)\n- 35-24L405 (agitators, d=150)\n- 35-24P516 (pumps, d=86)\n\nNearby drawing text tokens:\n- 35-24L405  d=156  layer=P-AGITATOR_POS\n- 35-24L002  d=194  layer=P-EQUIPMENT_POS\n- GT-2540  d=182  layer=P-EQUIPMENT_POS\n- DN500  d=166  layer=P-PTERMINAL_POS\n- DN600  d=192  layer=P-PTERMINAL_POS\n- DN300  d=167  layer=P-PTERMINAL_POS\n- 622  d=161  layer=P-INSTRPOS_TEXTS\n- 35-24  d=159  layer=P-INSTRPOS_TEXTS\n- 621  d=46  layer=P-INSTRPOS_TEXTS\n- 624  d=131  layer=P-INSTRPOS_TEXTS\n- 35-24T604  d=7  layer=P-TANK_POS\n- 40 m\u00b3  d=21  layer=P-TANK_POS\n- 0,5 %  d=26  layer=P-TANK_POS\n- 35-24T605  d=161  layer=P-TANK_POS\n- 70 m\u00b3  d=151  layer=P-TANK_POS\n- 4 %  d=150  layer=P-TANK_POS\n- 35-24P516  d=91  layer=P-PUMP_POS\n- 130  d=95  layer=P-PUMP_POS\n- 48  d=85  layer=P-PUMP_POS\n- 90  d=98  layer=P-PUMP_POS\n- 1500  d=89  layer=P-PUMP_POS\n- 35-24-002.1  d=174  layer=P-MOTOR_POS\n- 15  d=170  layer=P-MOTOR_POS\n- 35-24-210  d=126  layer=P-VALVEPOS\n- 003-50  d=123  layer=P-VALVEPOS\n- 35-24-200  d=121  layer=P-VALVEPOS\n- 003-15  d=119  layer=P-VALVEPOS\n- 35-24-1117  d=67  layer=P-VALVEPOS\n- 001-80  d=66  layer=P-VALVEPOS\n- 35-24-036  d=33  layer=P-VALVEPOS\n- 101-300  d=35  layer=P-VALVEPOS\n- 35-24-035  d=44  layer=P-VALVEPOS\n- 101-150  d=48  layer=P-VALVEPOS\n- 35-24-1136  d=37  layer=P-VALVEPOS\n- 101-400  d=36  layer=P-VALVEPOS\n- 35-24-1110  d=179  layer=P-VALVEPOS\n- 003-25  d=177  layer=P-VALVEPOS\n- 35-24-026  d=197  layer=P-VALVEPOS\n- 350-400  d=197  layer=P-VALVEPOS\n- 35-24-143  d=188  layer=P-LINEPOS",
       "ai": {
-        "raw_text": "I'll analyze the P&ID image systematically for FUNCTION=35-24T604 (Broke Filtrate Tank, 40 m\u00b3).\n\n## Analysis\n\n**Parent:** 35-24T604 \u2014 BROKE FILTRATE TANK, 40 m\u00b3, 0.5%\n\n**Instruments directly on tank:**\n- `35-24LC-621` (LC instrument bubble visible on tank wall, labeled \"LC 621\") \u2014 level controller on the vessel\n\n**Lines connected to tank (from image):**\n- `35-24-146` (WAA-400) \u2014 inlet line entering tank top (green line from top)\n- `35-24-145` (WAA-300) \u2014 line at bottom/suction area\n- `35-24-148` (WAA-150) \u2014 outlet line at bottom labeled 35-24-148-WAA-150\n- `35-24-150` (WAA-400) \u2014 line entering from top right area\n- `35-24-144` (WAA-200) \u2014 line on left side\n\n**Valves on tank lines (nested under their lines):**\n- `35-24-1136` (101-400) \u2014 on line 35-24-146, symbol shows filled triangles = NC\n- `35-24-036` (101-300) \u2014 on line 35-24-145, symbol shows outline triangles = HV\n- `35-24-035` (101-150) \u2014 on line 35-24-148, symbol shows filled triangles = NC\n- `35-24-1117` (001-80) \u2014 on line 35-24-145 area, symbol shows filled triangles = NC\n\n**Peers (not children):**\n- 35-24P516 \u2014 pump (separate primary equipment)\n- 35-24T605 \u2014 neighbouring tank\n- 35-24L405 \u2014 agitator (peer equipment)\n- 35-24L002 \u2014 process equipment peer\n- 35-24LV-621 \u2014 control valve associated with level control loop (belongs to pump/discharge circuit, not nested under tank)\n\n**Valve symbol analysis:**\n- `35-24-1136`: filled/solid triangles \u2192 NC\n- `35-24-036`: outline/transparent triangles, no actuator \u2192 HV\n- `35-24-035`: filled/solid triangles \u2192 NC\n- `35-24-1117`: filled/solid triangles \u2192 NC\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24T604\",\n  \"description\": \"35-24T604 BROKE FILTRATE TNK 40M3\",\n  \"rows\": [\n    {\"equipment\": \"35-24LC-621\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24LC-621 LVL CONTROLLER\"},\n    {\"equipment\": \"35-24-146\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-146 WAA-400 INLET LINE\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-1136\", \"mask\": \"\", \"description\": \"35-24-1136 VLV NC\"},\n    {\"equipment\": \"35-24-145\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-145 WAA-300 LINE\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-036\", \"mask\": \"\", \"description\": \"35-24-036 VLV HV\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-1117\", \"mask\": \"\", \"description\": \"35-24-1117 VLV NC\"},\n    {\"equipment\": \"35-24-148\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-148 WAA-150 OUTLET LINE\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-035\", \"mask\": \"\", \"description\": \"35-24-035 VLV NC\"},\n    {\"equipment\": \"35-24-150\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-150 WAA-400 INLET LINE\"},\n    {\"equipment\": \"35-24-144\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-144 WAA-200 LINE\"}\n  ],\n  \"peers\": [\n    {\"tag\": \"35-24P516\", \"evidence\": \"pump \u2014 separate primary equipment, own tag block visible\"},\n    {\"tag\": \"35-24T605\", \"evidence\": \"neighbouring tank, own tag, peer vessel\"},\n    {\"tag\": \"35-24L405\", \"evidence\": \"agitator on P-AGITATOR_POS layer, peer equipment\"},\n    {\"tag\": \"35-24L002\", \"evidence\": \"process equipment on P-EQUIPMENT_POS layer, peer\"},\n    {\"tag\": \"35-24LV-621\", \"evidence\": \"level control valve on discharge/feed circuit, not a tank nozzle child\"}\n  ],\n  \"notes\": [\n    \"35-24LC-621 is the level controller bubble shown directly on tank wall\",\n    \"35-24-1136 (101-400) on line 35-24-146 \u2014 solid filled triangles = NC\",\n    \"35-24-036 (101-300) on line 35-24-145 \u2014 outline transparent triangles = HV\",\n    \"35-24-035 (101-150) on line 35-24-148 \u2014 solid filled triangles = NC\",\n    \"35-24-1117 (001-80) on line 35-24-145 circuit \u2014 solid filled triangles = NC\",\n    \"Lines 35-24-149/151/154/155/143 not directly visible on tank nozzles \u2014 omitted\"\n  ],\n  \"confidence\": \"high\"\n}\n```",
+        "raw_text": "I'll analyze the P&ID image systematically for FUNCTION=35-24T604 (Broke Filtrate Tank, 40 m\u00b3).\n\n## Analysis\n\n**Parent:** 35-24T604 \u2014 BROKE FILTRATE TANK, 40 m\u00b3, 0.5%\n\n**Lines directly connected to the tank (from image):**\n- **35-24-146** (WAA-400) \u2014 inlet line from top, green pipe entering tank top\n- **35-24-148** (WAA-150) \u2014 outlet/bottom line (35-24-148-WAA-150-E10H2A visible at bottom)\n- **35-24-145** (WAA-300) \u2014 line visible with pump suction area\n- **35-24-150** (WAA-400) \u2014 visible at top of image entering tank area\n- **35-24-144** (WAA-200) \u2014 visible on left side of tank circuit\n\n**Valves on tank lines (from image):**\n- **35-24-1136** (101-400) \u2014 valve on top inlet line (35-24-146), symbol shows filled triangles = NC\n- **35-24-036** (101-300) \u2014 valve on line 35-24-145 area, symbol shows filled triangles = NC\n- **35-24-035** (101-150) \u2014 valve on 35-24-148 outlet, symbol shows filled triangles = NC\n- **35-24-1117** (001-80) \u2014 valve on suction side near pump, automatic valve symbol (circle actuator) = AV\n\n**Instruments on tank:**\n- **35-24LC-621** \u2014 Level Controller on tank (LC bubble visible at right side of tank, d=46 closest instrument)\n- **35-24LV-621** \u2014 Level valve associated with LC-621 (visible on line 35-24-144, has actuator circle = AV)\n\n**Peers (not children):**\n- 35-24P516 \u2014 pump (peer primary equipment)\n- 35-24T605 \u2014 adjacent tank\n- 35-24L405 \u2014 agitator\n- 35-24L002 \u2014 process equipment\n\n**Valve symbol analysis:**\n- **35-24-1136**: Both triangles appear solid/filled white \u2192 NC\n- **35-24-036**: Both triangles solid/filled \u2192 NC  \n- **35-24-035**: Both triangles solid/filled \u2192 NC\n- **35-24-1117**: Has actuator circle on top \u2192 AV\n- **35-24LV-621**: Has actuator circle \u2192 AV (control valve on level control loop)\n\n**Line nesting:**\n- 35-24-1136 sits on line 35-24-146 \u2192 SUB-EQUIPMENT under 35-24-146\n- 35-24-035 sits on line 35-24-148 \u2192 SUB-EQUIPMENT under 35-24-148\n- 35-24-036 sits on line 35-24-145 \u2192 SUB-EQUIPMENT under 35-24-145\n- 35-24-1117 sits on line 35-24-145 (suction area) \u2192 SUB-EQUIPMENT under 35-24-145\n- 35-24LV-621 sits on line 35-24-144 \u2192 SUB-EQUIPMENT under 35-24-144\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24T604\",\n  \"description\": \"35-24T604 BROKE FILTRATE TNK 40M3\",\n  \"rows\": [\n    {\"equipment\": \"35-24LC-621\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24LC-621 LVL CONTROLLER\"},\n    {\"equipment\": \"35-24-144\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-144 WAA-200 INLET LINE\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24LV-621\", \"mask\": \"\", \"description\": \"35-24LV-621 LVL VLV AV\"},\n    {\"equipment\": \"35-24-146\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-146 WAA-400 INLET LINE\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-1136\", \"mask\": \"\", \"description\": \"35-24-1136 VLV NC\"},\n    {\"equipment\": \"35-24-145\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-145 WAA-300 SUCT LINE\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-1117\", \"mask\": \"\", \"description\": \"35-24-1117 VLV AV\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-036\", \"mask\": \"\", \"description\": \"35-24-036 VLV NC\"},\n    {\"equipment\": \"35-24-148\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-148 WAA-150 OUTLET LINE\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-035\", \"mask\": \"\", \"description\": \"35-24-035 VLV NC\"},\n    {\"equipment\": \"35-24-150\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-150 WAA-400 INLET LINE\"}\n  ],\n  \"peers\": [\n    {\"tag\": \"35-24P516\", \"evidence\": \"pump \u2014 peer primary equipment, own tag block d=86\"},\n    {\"tag\": \"35-24T605\", \"evidence\": \"adjacent tank \u2014 peer primary equipment d=157\"},\n    {\"tag\": \"35-24L405\", \"evidence\": \"agitator on neighbouring tank, d=150, P-AGITATOR_POS layer\"},\n    {\"tag\": \"35-24L002\", \"evidence\": \"process equipment peer, d=194, P-EQUIPMENT_POS layer\"},\n    {\"tag\": \"35-24-002.1\", \"evidence\": \"motor tag numeric base 002 does not match T604\"},\n    {\"tag\": \"35-24-210\", \"evidence\": \"valve 35-24-210 / 35-24-200 on left-side circuit outside tank boundary\"},\n    {\"tag\": \"35-24-200\", \"evidence\": \"valve on left-side circuit, associated with 35-24LV-621 upstream feed not tank nozzle\"}\n  ],\n  \"notes\": [\n    \"35-24LC-621 confirmed by LC bubble d=46 on tank right wall; instrument loop tag 621 confirmed in P-INSTRPOS_TEXTS\",\n    \"35-24LV-621 is the level control valve on line 35-24-144 (WAA-200); actuator circle visible \u2192 AV\",\n    \"35-24-1136 (101-400) on line 35-24-146 top inlet; both triangles filled white \u2192 NC\",\n    \"35-24-036 (101-300) on line 35-24-145; both triangles filled white \u2192 NC\",\n    \"35-24-035 (101-150) on line 35-24-148 outlet; both triangles filled white \u2192 NC\",\n    \"35-24-1117 (001-80) near pump suction on 35-24-145; circle actuator visible \u2192 AV\",\n    \"35-24-150 included as top-of-image inlet line visibly entering tank circuit\",\n    \"Lines 35-24-149/151/154/155/143 not directly attached to T604 nozzles \u2014 omitted\"\n  ],\n  \"confidence\": \"high\"\n}\n```",
         "parsed": {
           "sub_process": "BR1",
           "function": "35-24T604",
@@ -78,6 +78,18 @@
               "subequipment": "",
               "mask": "",
               "description": "35-24LC-621 LVL CONTROLLER"
+            },
+            {
+              "equipment": "35-24-144",
+              "subequipment": "",
+              "mask": "",
+              "description": "35-24-144 WAA-200 INLET LINE"
+            },
+            {
+              "equipment": "",
+              "subequipment": "35-24LV-621",
+              "mask": "",
+              "description": "35-24LV-621 LVL VLV AV"
             },
             {
               "equipment": "35-24-146",
@@ -95,19 +107,19 @@
               "equipment": "35-24-145",
               "subequipment": "",
               "mask": "",
-              "description": "35-24-145 WAA-300 LINE"
-            },
-            {
-              "equipment": "",
-              "subequipment": "35-24-036",
-              "mask": "",
-              "description": "35-24-036 VLV HV"
+              "description": "35-24-145 WAA-300 SUCT LINE"
             },
             {
               "equipment": "",
               "subequipment": "35-24-1117",
               "mask": "",
-              "description": "35-24-1117 VLV NC"
+              "description": "35-24-1117 VLV AV"
+            },
+            {
+              "equipment": "",
+              "subequipment": "35-24-036",
+              "mask": "",
+              "description": "35-24-036 VLV NC"
             },
             {
               "equipment": "35-24-148",
@@ -126,43 +138,47 @@
               "subequipment": "",
               "mask": "",
               "description": "35-24-150 WAA-400 INLET LINE"
-            },
-            {
-              "equipment": "35-24-144",
-              "subequipment": "",
-              "mask": "",
-              "description": "35-24-144 WAA-200 LINE"
             }
           ],
           "peers": [
             {
               "tag": "35-24P516",
-              "evidence": "pump \u2014 separate primary equipment, own tag block visible"
+              "evidence": "pump \u2014 peer primary equipment, own tag block d=86"
             },
             {
               "tag": "35-24T605",
-              "evidence": "neighbouring tank, own tag, peer vessel"
+              "evidence": "adjacent tank \u2014 peer primary equipment d=157"
             },
             {
               "tag": "35-24L405",
-              "evidence": "agitator on P-AGITATOR_POS layer, peer equipment"
+              "evidence": "agitator on neighbouring tank, d=150, P-AGITATOR_POS layer"
             },
             {
               "tag": "35-24L002",
-              "evidence": "process equipment on P-EQUIPMENT_POS layer, peer"
+              "evidence": "process equipment peer, d=194, P-EQUIPMENT_POS layer"
             },
             {
-              "tag": "35-24LV-621",
-              "evidence": "level control valve on discharge/feed circuit, not a tank nozzle child"
+              "tag": "35-24-002.1",
+              "evidence": "motor tag numeric base 002 does not match T604"
+            },
+            {
+              "tag": "35-24-210",
+              "evidence": "valve 35-24-210 / 35-24-200 on left-side circuit outside tank boundary"
+            },
+            {
+              "tag": "35-24-200",
+              "evidence": "valve on left-side circuit, associated with 35-24LV-621 upstream feed not tank nozzle"
             }
           ],
           "notes": [
-            "35-24LC-621 is the level controller bubble shown directly on tank wall",
-            "35-24-1136 (101-400) on line 35-24-146 \u2014 solid filled triangles = NC",
-            "35-24-036 (101-300) on line 35-24-145 \u2014 outline transparent triangles = HV",
-            "35-24-035 (101-150) on line 35-24-148 \u2014 solid filled triangles = NC",
-            "35-24-1117 (001-80) on line 35-24-145 circuit \u2014 solid filled triangles = NC",
-            "Lines 35-24-149/151/154/155/143 not directly visible on tank nozzles \u2014 omitted"
+            "35-24LC-621 confirmed by LC bubble d=46 on tank right wall; instrument loop tag 621 confirmed in P-INSTRPOS_TEXTS",
+            "35-24LV-621 is the level control valve on line 35-24-144 (WAA-200); actuator circle visible \u2192 AV",
+            "35-24-1136 (101-400) on line 35-24-146 top inlet; both triangles filled white \u2192 NC",
+            "35-24-036 (101-300) on line 35-24-145; both triangles filled white \u2192 NC",
+            "35-24-035 (101-150) on line 35-24-148 outlet; both triangles filled white \u2192 NC",
+            "35-24-1117 (001-80) near pump suction on 35-24-145; circle actuator visible \u2192 AV",
+            "35-24-150 included as top-of-image inlet line visibly entering tank circuit",
+            "Lines 35-24-149/151/154/155/143 not directly attached to T604 nozzles \u2014 omitted"
           ],
           "confidence": "high"
         },
@@ -219,6 +235,18 @@
           "description": "35-24LC-621 LVL CONTROLLER"
         },
         {
+          "equipment": "35-24-144",
+          "subequipment": "",
+          "mask": "",
+          "description": "35-24-144 WAA-200 IN LN"
+        },
+        {
+          "equipment": "",
+          "subequipment": "35-24LV-621",
+          "mask": "",
+          "description": "35-24LV-621 LVL VLV AV"
+        },
+        {
           "equipment": "35-24-146",
           "subequipment": "",
           "mask": "",
@@ -234,19 +262,19 @@
           "equipment": "35-24-145",
           "subequipment": "",
           "mask": "",
-          "description": "35-24-145 WAA-300 LN"
-        },
-        {
-          "equipment": "",
-          "subequipment": "35-24-036",
-          "mask": "",
-          "description": "35-24-036 VLV HV"
+          "description": "35-24-145 WAA-300 SUCT LN"
         },
         {
           "equipment": "",
           "subequipment": "35-24-1117",
           "mask": "",
-          "description": "35-24-1117 VLV NC"
+          "description": "35-24-1117 VLV AV"
+        },
+        {
+          "equipment": "",
+          "subequipment": "35-24-036",
+          "mask": "",
+          "description": "35-24-036 VLV NC"
         },
         {
           "equipment": "35-24-148",
@@ -265,12 +293,6 @@
           "subequipment": "",
           "mask": "",
           "description": "35-24-150 WAA-400 IN LN"
-        },
-        {
-          "equipment": "35-24-144",
-          "subequipment": "",
-          "mask": "",
-          "description": "35-24-144 WAA-200 LN"
         },
         {
           "equipment": "35-24T604.1",

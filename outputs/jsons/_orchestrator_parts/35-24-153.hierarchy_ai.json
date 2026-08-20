@@ -39,59 +39,61 @@
       ],
       "dossier": "Parent tag: 35-24-153\nParent category/block: lines / \nParent XY: (4970.0, 58.75)\nNearby descriptions: 35-24-153-WFL-15-E10H2A\n\nSame-tag CAD family:\n- (none)\n\nNearby line numbers (short ids preferred in output):\n- 35-24-160  full=35-24-160-WFL-15-E10H2A  d=172  layer=P-LINEPOS\n- 35-24-157  full=35-24-157-WFL-15-E10H2A  d=100  layer=P-LINEPOS\n- 35-24-153  full=35-24-153-WFL-15-E10H2A  d=0  layer=P-LINEPOS\n\nNearby devices (valves/instruments/pumps/\u2026):\n- line_markers: P7A1304  d=3  block=P7A1304\n- valves: PPI_0900A  d=113  block=PPI_0900A\n- instruments: PPI_1200A  d=86  block=PPI_1200A\n\nNearby peer primary equipment (do NOT nest under parent):\n- (none)\n\nNearby drawing text tokens:\n- 627  d=30  layer=P-INSTRPOS_TEXTS\n- 35-24  d=35  layer=P-INSTRPOS_TEXTS\n- 9318  d=36  layer=P-INSTRPOS_TEXTS\n- 635  d=185  layer=P-INSTRPOS_TEXTS\n- 9322  d=153  layer=P-INSTRPOS_TEXTS\n- 632  d=114  layer=P-INSTRPOS_TEXTS\n- 9320  d=83  layer=P-INSTRPOS_TEXTS\n- 9319  d=30  layer=P-INSTRPOS_TEXTS\n- 9321  d=92  layer=P-INSTRPOS_TEXTS\n- 9323  d=163  layer=P-INSTRPOS_TEXTS\n- 35-24-1134  d=20  layer=P-VALVEPOS\n- 003-15  d=16  layer=P-VALVEPOS\n- 35-24-022  d=107  layer=P-VALVEPOS\n- 35-24-020  d=179  layer=P-VALVEPOS\n- 35-24-160  d=172  layer=P-LINEPOS\n- 35-24-157  d=100  layer=P-LINEPOS\n- 35-24-153  d=0  layer=P-LINEPOS",
       "ai": {
-        "raw_text": "I'll analyze the P&ID crop carefully.\n\n**Observations from Image 1:**\n- FUNCTION `35-24-153` is a process line (WFL-15-E10H2A suffix confirms piping line)\n- Within the red crop boundary, I can see:\n  - Line `35-24-153-WFL-15-E10H2A` running vertically\n  - Instruments on the line: `PI 9318` (35-24 PI 9318) and `FI 9319` (35-24 FI 9319) \u2014 locally mounted circles\n  - Flow switch `FS 627` (35-24 FS 627) \u2014 square symbol = DCS control instrument\n  - Valve `35-24-1134` with `003-15` size notation \u2014 the valve symbol shows both triangles appear solid/filled (white-filled bowtie = NC), no actuator circle visible \u2192 **NC**\n- Outside the crop (right side): `35-24-157` line with PI 9320, FI 9321, FS 632, valve 35-24-022 \u2014 these belong to line 35-24-157, not 35-24-153\n\n**Valve 35-24-1134 analysis:** The bowtie symbol shows filled/solid triangles (white-filled on dark background) with no actuator circle on top \u2192 `NC` (normally closed hand valve... but wait \u2014 white-filled = NC per rules, not HV). The symbol appears to be a normally closed valve.\n\n**Instruments:** PI-9318, FI-9319, FS-627 are on line 35-24-153. These are instrument tags in format `35-24PI-9318`, `35-24FI-9319`, `35-24FS-627`.\n\n**Structure:** Line 35-24-153 as FUNCTION, with instruments nested as SUB-EQUIPMENT under the line itself (since 35-24-153 IS the line/FUNCTION, instruments go as EQUIPMENT rows per Example C pattern).\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24-153\",\n  \"description\": \"35-24-153 PROC LINE WFL\",\n  \"rows\": [\n    {\"equipment\": \"35-24-1134\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-1134 VLV NC 003-15\"},\n    {\"equipment\": \"35-24PI-9318\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24PI-9318 PRESS IND\"},\n    {\"equipment\": \"35-24FI-9319\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24FI-9319 FLOW IND\"},\n    {\"equipment\": \"35-24FS-627\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24FS-627 FLOW SWITCH\"}\n  ],\n  \"peers\": [\n    {\"tag\": \"35-24-157\", \"evidence\": \"adjacent line visible right of crop boundary, own instruments PI-9320 FI-9321 FS-632 and valve 35-24-022\"},\n    {\"tag\": \"35-24-160\", \"evidence\": \"nearby line per dossier, not within 35-24-153 crop boundary\"},\n    {\"tag\": \"35-24-022\", \"evidence\": \"valve on line 35-24-157, outside crop boundary\"},\n    {\"tag\": \"35-24-020\", \"evidence\": \"valve tag visible in dossier but not within 35-24-153 circuit\"}\n  ],\n  \"notes\": [\n    \"35-24-1134 valve symbol shows filled/solid bowtie triangles (NC) with no actuator \u2014 classified NC\",\n    \"Instruments PI-9318, FI-9319, FS-627 are directly on line 35-24-153 per P&ID crop\",\n    \"35-24-157 is a peer line with its own instrument cluster outside the red crop boundary\"\n  ],\n  \"confidence\": \"high\"\n}\n```",
+        "raw_text": "I'll analyze the P&ID crop carefully.\n\n**Observations from Image 1:**\n- FUNCTION `35-24-153` is a process line (WFL-15-E10H2A suffix confirms piping line)\n- Within the red crop boundary, I can see:\n  - Line `35-24-153-WFL-15-E10H2A` running vertically\n  - Instruments on the line: `PI 9318` (35-24 PI 9318) and `FI 9319` (35-24 FI 9319) \u2014 locally mounted instruments\n  - Flow switch `FS 627` (35-24 FS 627) \u2014 square symbol = control room instrument with DCS\n  - Valve `35-24-1134` with size `003-15` \u2014 the valve symbol shows both triangles appear solid/filled (white-filled bowtie = NC), no actuator circle visible \u2192 **NC**\n- Outside the crop (right side): `35-24-157` line with PI 9320, FI 9321, FS 632, valve 35-24-022 \u2014 these belong to line 35-24-157, not 35-24-153\n\n**Valve 35-24-1134 analysis:** The bowtie symbol shows filled/solid triangles (white-filled on dark background) with no actuator circle on top \u2192 `NC` (normally closed hand valve... but white-filled = NOT HV). The symbol appears to be a normally closed valve \u2192 `NC`.\n\n**Instrument tags:**\n- `35-24PI-9318` \u2014 PI instrument\n- `35-24FI-9319` \u2014 FI instrument  \n- `35-24FS-627` \u2014 FS flow switch\n\n**Structure:** Line 35-24-153 as FUNCTION, with instruments and valve nested as SUB-EQUIPMENT under it.\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24-153\",\n  \"description\": \"35-24-153 PROC LINE WFL\",\n  \"rows\": [\n    {\"equipment\": \"35-24-153\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-153 PROC LINE WFL\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24PI-9318\", \"mask\": \"\", \"description\": \"35-24PI-9318 PRESS IND\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24FI-9319\", \"mask\": \"\", \"description\": \"35-24FI-9319 FLOW IND\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24FS-627\", \"mask\": \"\", \"description\": \"35-24FS-627 FLOW SWITCH\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-1134\", \"mask\": \"\", \"description\": \"35-24-1134 VLV NC\"}\n  ],\n  \"peers\": [\n    {\"tag\": \"35-24-157\", \"evidence\": \"adjacent line visible right of crop boundary, own instruments PI-9320/FI-9321/FS-632/022\"},\n    {\"tag\": \"35-24-160\", \"evidence\": \"nearby line per dossier, not within crop boundary of 35-24-153\"},\n    {\"tag\": \"35-24-022\", \"evidence\": \"valve on line 35-24-157, outside crop boundary\"}\n  ],\n  \"notes\": [\n    \"35-24-1134 valve symbol shows filled/solid bowtie triangles (NC) with no actuator circle; tagged NC\",\n    \"Instruments PI-9318, FI-9319, FS-627 all sit on line 35-24-153 within crop boundary\",\n    \"35-24-157 and its instruments are outside the red crop boundary and belong to a peer line\"\n  ],\n  \"confidence\": \"high\"\n}\n```",
         "parsed": {
           "sub_process": "BR1",
           "function": "35-24-153",
           "description": "35-24-153 PROC LINE WFL",
           "rows": [
             {
-              "equipment": "35-24-1134",
+              "equipment": "35-24-153",
               "subequipment": "",
               "mask": "",
-              "description": "35-24-1134 VLV NC 003-15"
+              "description": "35-24-153 PROC LINE WFL"
             },
             {
-              "equipment": "35-24PI-9318",
-              "subequipment": "",
+              "equipment": "",
+              "subequipment": "35-24PI-9318",
               "mask": "",
               "description": "35-24PI-9318 PRESS IND"
             },
             {
-              "equipment": "35-24FI-9319",
-              "subequipment": "",
+              "equipment": "",
+              "subequipment": "35-24FI-9319",
               "mask": "",
               "description": "35-24FI-9319 FLOW IND"
             },
             {
-              "equipment": "35-24FS-627",
-              "subequipment": "",
+              "equipment": "",
+              "subequipment": "35-24FS-627",
               "mask": "",
               "description": "35-24FS-627 FLOW SWITCH"
+            },
+            {
+              "equipment": "",
+              "subequipment": "35-24-1134",
+              "mask": "",
+              "description": "35-24-1134 VLV NC"
             }
           ],
           "peers": [
             {
               "tag": "35-24-157",
-              "evidence": "adjacent line visible right of crop boundary, own instruments PI-9320 FI-9321 FS-632 and valve 35-24-022"
+              "evidence": "adjacent line visible right of crop boundary, own instruments PI-9320/FI-9321/FS-632/022"
             },
             {
               "tag": "35-24-160",
-              "evidence": "nearby line per dossier, not within 35-24-153 crop boundary"
+              "evidence": "nearby line per dossier, not within crop boundary of 35-24-153"
             },
             {
               "tag": "35-24-022",
               "evidence": "valve on line 35-24-157, outside crop boundary"
-            },
-            {
-              "tag": "35-24-020",
-              "evidence": "valve tag visible in dossier but not within 35-24-153 circuit"
             }
           ],
           "notes": [
-            "35-24-1134 valve symbol shows filled/solid bowtie triangles (NC) with no actuator \u2014 classified NC",
-            "Instruments PI-9318, FI-9319, FS-627 are directly on line 35-24-153 per P&ID crop",
-            "35-24-157 is a peer line with its own instrument cluster outside the red crop boundary"
+            "35-24-1134 valve symbol shows filled/solid bowtie triangles (NC) with no actuator circle; tagged NC",
+            "Instruments PI-9318, FI-9319, FS-627 all sit on line 35-24-153 within crop boundary",
+            "35-24-157 and its instruments are outside the red crop boundary and belong to a peer line"
           ],
           "confidence": "high"
         },
@@ -114,34 +116,34 @@
       },
       "refined_rows": [
         {
-          "equipment": "35-24-1134",
+          "equipment": "35-24-153",
           "subequipment": "",
           "mask": "",
-          "description": "35-24-1134 VLV NC 003-15"
+          "description": "35-24-153 PROC LN WFL"
         },
         {
-          "equipment": "35-24PI-9318",
-          "subequipment": "",
+          "equipment": "",
+          "subequipment": "35-24PI-9318",
           "mask": "",
           "description": "35-24PI-9318 PRESS IND"
         },
         {
-          "equipment": "35-24FI-9319",
-          "subequipment": "",
+          "equipment": "",
+          "subequipment": "35-24FI-9319",
           "mask": "",
           "description": "35-24FI-9319 FL IND"
         },
         {
-          "equipment": "35-24FS-627",
-          "subequipment": "",
+          "equipment": "",
+          "subequipment": "35-24FS-627",
           "mask": "",
           "description": "35-24FS-627 FS"
         },
         {
-          "equipment": "35-24-153",
-          "subequipment": "",
+          "equipment": "",
+          "subequipment": "35-24-1134",
           "mask": "",
-          "description": "35-24-153"
+          "description": "35-24-1134 VLV NC"
         }
       ]
     }

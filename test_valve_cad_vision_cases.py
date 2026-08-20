@@ -56,12 +56,21 @@ EXPECTED_TYPES = {
     "35-24-198": {"NC", "FLS"},
     "35-24-199": {"NC"},
     "35-24-196": {"HV"},
+    "35-27-739": {"HV"},
+    "35-27-740": {"CHK"},
+}
+
+# Tags that live on a drawing other than the default --input (Broke System).
+TAG_INPUT = {
+    "35-27-739": "inputs/RAU8F00290.10_Steam and Condensate.dwg",
+    "35-27-740": "inputs/RAU8F00290.10_Steam and Condensate.dwg",
 }
 
 DEFAULT_TAGS = (
     "35-32-1105,35-24-093,35-24-001,34-24-215,35-24-108,35-24LV1-560,35-24-137,"
     "35-24-107,35-24-110,35-24-230,35-24-105,35-24HV-618,35-24-217,35-24-121,35-24-123,"
-    "35-24-191,35-24-192,35-24XV-665,35-24-198,35-24-199,35-24-196"
+    "35-24-191,35-24-192,35-24XV-665,35-24-198,35-24-199,35-24-196,"
+    "35-27-739,35-27-740"
 )
 
 
@@ -104,6 +113,44 @@ def load_hierarchy_rows(path: Path) -> Dict[str, Dict[str, str]]:
     return out
 
 
+def _input_for_tag(tag: str, default_input: str) -> str:
+    return TAG_INPUT.get(tag, default_input)
+
+
+def _group_tags_by_input(tags: List[str], default_input: str) -> Dict[str, List[str]]:
+    groups: Dict[str, List[str]] = {}
+    for tag in tags:
+        inp = _input_for_tag(tag, default_input)
+        groups.setdefault(inp, []).append(tag)
+    return groups
+
+
+def _load_drawing_context(input_path: Path, out_dir: Path, hierarchy_csv: str) -> Dict[str, object]:
+    base = safe_name(input_path)
+    hier_path = (
+        Path(hierarchy_csv).expanduser().resolve()
+        if hierarchy_csv
+        else out_dir / f"{base}.hierarchy_orchestrator.csv"
+    )
+    struct_path = find_json(out_dir, f"{base}.structural_dump.json")
+    if not hier_path.exists():
+        raise SystemExit(f"Missing hierarchy CSV: {hier_path}")
+    if not struct_path.exists():
+        raise SystemExit(f"Missing structural dump: {struct_path}")
+    structural = json.loads(struct_path.read_text(encoding="utf-8"))
+    inv_path = find_json(out_dir, f"{base}.pid_inventory.json")
+    inventory = json.loads(inv_path.read_text(encoding="utf-8")) if inv_path.exists() else {}
+    return {
+        "input_path": input_path,
+        "hierarchy": load_hierarchy_rows(hier_path),
+        "structural": structural,
+        "inventory": inventory,
+        "text_locations": collect_text_locations(structural),
+        "valve_inserts": collect_valve_inserts(structural),
+        "symb_inserts": collect_symb_bowtie_inserts(structural),
+    }
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="Probe valve types from CAD+Vision for selected tags")
     parser.add_argument("--input", default="inputs/Broke System.dwg")
@@ -124,107 +171,97 @@ def main() -> int:
     args = parser.parse_args()
     os.environ["AWS_PROFILE"] = str(args.aws_profile or "foundrydev")
 
-    input_path = Path(args.input).expanduser().resolve()
     out_dir = Path(args.output_dir).expanduser().resolve()
-    base = safe_name(input_path)
+    default_input = str(Path(args.input).expanduser().resolve())
     legend_path = Path(args.legend).expanduser().resolve()
-    hier_path = (
-        Path(args.hierarchy_csv).expanduser().resolve()
-        if args.hierarchy_csv
-        else out_dir / f"{base}.hierarchy_orchestrator.csv"
-    )
-    struct_path = find_json(out_dir, f"{base}.structural_dump.json")
-    if not hier_path.exists():
-        raise SystemExit(f"Missing hierarchy CSV: {hier_path}")
-    if not struct_path.exists():
-        raise SystemExit(f"Missing structural dump: {struct_path}")
-
-    hierarchy = load_hierarchy_rows(hier_path)
-    structural = json.loads(struct_path.read_text(encoding="utf-8"))
-    inv_path = find_json(out_dir, f"{base}.pid_inventory.json")
-    inventory = json.loads(inv_path.read_text(encoding="utf-8")) if inv_path.exists() else {}
-    text_locations = collect_text_locations(structural)
-    valve_inserts = collect_valve_inserts(structural)
-    symb_inserts = collect_symb_bowtie_inserts(structural)
-
     tags = [_norm(t) for t in args.tags.split(",") if t.strip()]
+    tag_groups = _group_tags_by_input(tags, default_input)
     rows: List[Dict[str, str]] = []
-
-    doc = None
-    if not args.skip_vision:
-        from dwg_pid_hierarchy_ai import load_drawing
-
-        doc = load_drawing(input_path)
 
     crop_dir = evidence_dir(out_dir) / "_valve_crops"
     crop_dir.mkdir(parents=True, exist_ok=True)
-
     cx_frac, cy_frac = valve_ring_frac(float(args.crop_half), float(args.extra_below))
 
-    for tag in tags:
-        meta = hierarchy.get(tag) or {"fn": "", "description": ""}
-        desc = meta.get("description") or ""
-        fn = meta.get("fn") or ""
-        loc = locate_valve(
-            tag,
-            text_locations=text_locations,
-            valve_inserts=valve_inserts,
-            symb_inserts=symb_inserts,
-            wfl_drain_hint=wfl_drain_line_hint(tag, inventory),
-        )
-        cad_type = infer_valve_type(tag, desc) if desc else ""
-        vision_type = ""
-        crop_file = ""
-        vision_error = ""
-        if loc and doc is not None:
-            crop_path = crop_dir / f"{tag}.png"
-            # Always re-render fresh crops for test runs
-            rendered = tight_valve_screenshot(
-                doc,
-                float(loc["x"]),
-                float(loc["y"]),
-                crop_path,
-                half=float(args.crop_half),
-                extra_below=float(args.extra_below),
-            )
-            if rendered:
-                crop_file = str(rendered)
-                if not args.skip_vision:
-                    try:
-                        vision_type = apply_wfl_drain_attachment(
-                            bedrock_classify_crop(
-                                rendered,
-                                legend_path,
-                                model_id=args.model_id,
-                                region=args.region,
-                                tag=tag,
-                                cx_frac=cx_frac,
-                                cy_frac=cy_frac,
-                                crop_half=float(args.crop_half),
-                                extra_below=float(args.extra_below),
-                                pipe_dn_near=pipe_dn_label_near_tag(tag, text_locations, structural),
-                            ),
-                            wfl_drain_hint=wfl_drain_line_hint(tag, inventory),
-                        )
-                        print(f"  [vision] {tag} → {vision_type!r}", flush=True)
-                    except Exception as exc:  # noqa: BLE001 - report per-tag vision failures
-                        vision_error = f"{type(exc).__name__}: {exc}"
-                        print(f"  [vision] {tag} ERROR: {vision_error}", flush=True)
+    if not args.skip_vision:
+        from dwg_pid_hierarchy_ai import load_drawing
+    else:
+        load_drawing = None  # type: ignore[assignment,misc]
 
-        rows.append(
-            {
-                "tag": tag,
-                "function": fn,
-                "description": desc,
-                "cad_type": cad_type,
-                "vision_type": vision_type,
-                "vision_error": vision_error,
-                "x": str(loc["x"]) if loc else "",
-                "y": str(loc["y"]) if loc else "",
-                "layer": str(loc.get("layer") or "") if loc else "",
-                "crop": crop_file,
-            }
-        )
+    for input_name, group_tags in tag_groups.items():
+        ctx = _load_drawing_context(Path(input_name), out_dir, args.hierarchy_csv)
+        hierarchy = ctx["hierarchy"]
+        structural = ctx["structural"]
+        inventory = ctx["inventory"]
+        text_locations = ctx["text_locations"]
+        valve_inserts = ctx["valve_inserts"]
+        symb_inserts = ctx["symb_inserts"]
+        doc = load_drawing(ctx["input_path"]) if load_drawing is not None else None
+        if len(tag_groups) > 1:
+            print(f"\n--- {Path(input_name).name} ({len(group_tags)} tags) ---", flush=True)
+
+        for tag in group_tags:
+            meta = hierarchy.get(tag) or {"fn": "", "description": ""}
+            desc = meta.get("description") or ""
+            fn = meta.get("fn") or ""
+            loc = locate_valve(
+                tag,
+                text_locations=text_locations,
+                valve_inserts=valve_inserts,
+                symb_inserts=symb_inserts,
+                wfl_drain_hint=wfl_drain_line_hint(tag, inventory),
+            )
+            cad_type = infer_valve_type(tag, desc) if desc else ""
+            vision_type = ""
+            crop_file = ""
+            vision_error = ""
+            if loc and doc is not None:
+                crop_path = crop_dir / f"{tag}.png"
+                rendered = tight_valve_screenshot(
+                    doc,
+                    float(loc["x"]),
+                    float(loc["y"]),
+                    crop_path,
+                    half=float(args.crop_half),
+                    extra_below=float(args.extra_below),
+                )
+                if rendered:
+                    crop_file = str(rendered)
+                    if not args.skip_vision:
+                        try:
+                            vision_type = apply_wfl_drain_attachment(
+                                bedrock_classify_crop(
+                                    rendered,
+                                    legend_path,
+                                    model_id=args.model_id,
+                                    region=args.region,
+                                    tag=tag,
+                                    cx_frac=cx_frac,
+                                    cy_frac=cy_frac,
+                                    crop_half=float(args.crop_half),
+                                    extra_below=float(args.extra_below),
+                                    pipe_dn_near=pipe_dn_label_near_tag(tag, text_locations, structural),
+                                ),
+                                wfl_drain_hint=wfl_drain_line_hint(tag, inventory),
+                            )
+                            print(f"  [vision] {tag} → {vision_type!r}", flush=True)
+                        except Exception as exc:  # noqa: BLE001 - report per-tag vision failures
+                            vision_error = f"{type(exc).__name__}: {exc}"
+                            print(f"  [vision] {tag} ERROR: {vision_error}", flush=True)
+
+            rows.append(
+                {
+                    "tag": tag,
+                    "function": fn,
+                    "description": desc,
+                    "cad_type": cad_type,
+                    "vision_type": vision_type,
+                    "vision_error": vision_error,
+                    "x": str(loc["x"]) if loc else "",
+                    "y": str(loc["y"]) if loc else "",
+                    "layer": str(loc.get("layer") or "") if loc else "",
+                    "crop": crop_file,
+                }
+            )
 
     headers = [
         "tag",

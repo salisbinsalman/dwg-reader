@@ -54,68 +54,66 @@
       ],
       "dossier": "Parent tag: 35-24-185\nParent category/block: lines / \nParent XY: (344.8598598598599, 83.75)\nNearby descriptions: 35-24-185-WAF-150-E10H2A\n\nSame-tag CAD family:\n- (none)\n\nNearby line numbers (short ids preferred in output):\n- 35-24-194  full=35-24-194-WFL-15-E10H2A  d=167  layer=P-LINEPOS\n- 35-24-195  full=35-24-195-WFL-15-E10H2A  d=106  layer=P-LINEPOS\n- 35-24-204  full=35-24-204-PP-100-E10H2A  d=176  layer=P-LINEPOS\n- 35-24-190  full=35-24-190-PP-200-E10H2A  d=157  layer=P-LINEPOS\n- 35-24-189  full=35-24-189-PP-300-E10H2A  d=200  layer=P-LINEPOS\n- 35-24-185  full=35-24-185-WAF-150-E10H2A  d=0  layer=P-LINEPOS\n- 35-24-003  full=35-24-003-WFC-15-E10H2A  d=141  layer=P-LINEPOS\n- 35-24-001  full=35-24-001-WAB-20-E10H2A  d=183  layer=P-LINEPOS\n\nNearby devices (valves/instruments/pumps/\u2026):\n- line_markers: PPI_1100A  d=182  block=PPI_1100A\n- valves: PPI_0900A  d=198  block=PPI_0900A\n- control_valves: PPI_1000A  d=189  block=PPI_1000A\n- instruments: PPI_1200A  d=162  block=PPI_1200A\n- motors: PPI_1504A-25_0  d=192  block=PPI_1504A-25_0\n- fittings: P7A1271  d=171  block=P7A1271\n\nNearby peer primary equipment (do NOT nest under parent):\n- (none)\n\nNearby drawing text tokens:\n- GEARBOX 2  d=160  layer=P-OTHER\n- 9250  d=159  layer=P-INSTRPOS_TEXTS\n- 35-24  d=151  layer=P-INSTRPOS_TEXTS\n- 675  d=106  layer=P-INSTRPOS_TEXTS\n- 677  d=116  layer=P-INSTRPOS_TEXTS\n- 678  d=154  layer=P-INSTRPOS_TEXTS\n- 679  d=92  layer=P-INSTRPOS_TEXTS\n- 9334  d=186  layer=P-INSTRPOS_TEXTS\n- 9336  d=124  layer=P-INSTRPOS_TEXTS\n- 9335  d=177  layer=P-INSTRPOS_TEXTS\n- 9337  d=114  layer=P-INSTRPOS_TEXTS\n- 676  d=113  layer=P-INSTRPOS_TEXTS\n- 35-24-009.1  d=186  layer=P-MOTOR_POS\n- 160  d=182  layer=P-MOTOR_POS\n- 1500  d=175  layer=P-MOTOR_POS\n- 35-24-195  d=159  layer=P-VALVEPOS\n- 003-15  d=157  layer=P-VALVEPOS\n- 35-24-218  d=97  layer=P-VALVEPOS\n- 35-24-194  d=162  layer=P-VALVEPOS\n- 350-200  d=157  layer=P-VALVEPOS\n- 35-24-193  d=27  layer=P-VALVEPOS\n- 101-150  d=30  layer=P-VALVEPOS\n- 35-24-190  d=117  layer=P-VALVEPOS\n- 001-15  d=118  layer=P-VALVEPOS\n- 35-24-189  d=151  layer=P-VALVEPOS\n- 35-24-188  d=191  layer=P-VALVEPOS\n- 35-24-204  d=176  layer=P-LINEPOS\n- 35-24-185  d=0  layer=P-LINEPOS\n- 35-24-003  d=141  layer=P-LINEPOS\n- 35-24-001  d=183  layer=P-LINEPOS\n- 35-24NV-675  d=98  layer=P-CVPOS\n- 65  d=91  layer=P-CVPOS\n- 35-24HV-676  d=93  layer=P-CVPOS\n- 80  d=88  layer=P-CVPOS\n- 35-24KV-677  d=94  layer=P-CVPOS\n- 100  d=91  layer=P-CVPOS\n- 35-24TV-9250  d=180  layer=P-CVPOS",
       "ai": {
-        "raw_text": "I'll analyze the P&ID crop carefully for FUNCTION 35-24-185 (full tag: 35-24-185-WAF-150-E10H2A).\n\n**Observations from the image:**\n\n1. **35-24-185** is a WAF (Wire/Approach Flow?) line, DN150, visible as the main line labeled `35-24-185-WAF-150-E10H2A` within the red bounding box.\n\n2. **Within the crop boundary**, I can see:\n   - The line `35-24-185-WAF-150-E10H2A` is the main header\n   - `35-24-193` with label `101-150` \u2014 a hand valve on a branch off this line (visible at bottom right of the red box, with a bowtie symbol that appears to be outline/transparent = HV)\n   - `35-24-218` with label `003-15` \u2014 visible at the left side within/near the box, appears to be a valve on line 35-24-195/218 area\n\n3. **35-24-193 / 101-150**: The valve symbol appears as an outline bowtie (transparent, no actuator circle) \u2192 `HV`\n\n4. **35-24-218 / 003-15**: Visible near the left edge of the red box on line 35-24-195 connection \u2014 outline bowtie \u2192 `HV`\n\n5. **Instruments within the box**: The FS instruments (678, 679, 9336, 9337) and PI/FI appear to be on lines 35-24-195/194, not directly on 35-24-185.\n\n6. **35-24-195** and **35-24-194** are WFL-15 lines (branches) that connect into this area \u2014 they are peer/connected lines, not children of 35-24-185.\n\n7. The valves **35-24NV-675**, **35-24HV-676**, **35-24KV-677** are above the red box on line 35-24-190/195 circuit \u2014 peers.\n\n**Scope decision**: 35-24-185 is a WAF-150 line. The directly attached child within its circuit is the branch valve 35-24-193 (101-150, HV symbol). 35-24-218 is on the 35-24-195 branch connection.\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24-185\",\n  \"description\": \"35-24-185 WAF 150 LINE\",\n  \"rows\": [\n    {\n      \"equipment\": \"35-24-193\",\n      \"subequipment\": \"\",\n      \"mask\": \"\",\n      \"description\": \"35-24-193 VLV HV\"\n    },\n    {\n      \"equipment\": \"35-24-218\",\n      \"subequipment\": \"\",\n      \"mask\": \"\",\n      \"description\": \"35-24-218 VLV HV\"\n    }\n  ],\n  \"peers\": [\n    {\"tag\": \"35-24-195\", \"evidence\": \"WFL-15 branch line connecting into this area, own line number\"},\n    {\"tag\": \"35-24-194\", \"evidence\": \"WFL-15 branch line, own line number, not part of 185 circuit\"},\n    {\"tag\": \"35-24-190\", \"evidence\": \"PP-200 line, separate line number, peer circuit\"},\n    {\"tag\": \"35-24-189\", \"evidence\": \"PP-300 line, separate line number, peer circuit\"},\n    {\"tag\": \"35-24NV-675\", \"evidence\": \"Control valve on 35-24-195 circuit, above crop boundary\"},\n    {\"tag\": \"35-24HV-676\", \"evidence\": \"Hand valve with HI/HS instruments on 35-24-195 circuit\"},\n    {\"tag\": \"35-24KV-677\", \"evidence\": \"Valve with KS instrument on 35-24-195 circuit\"},\n    {\"tag\": \"35-24TV-9250\", \"evidence\": \"Temperature control valve near gearbox, separate circuit\"},\n    {\"tag\": \"35-24-009.1\", \"evidence\": \"Motor tag numeric base 009 does not match 185\"}\n  ],\n  \"notes\": [\n    \"35-24-185-WAF-150-E10H2A is the main approach flow line DN150\",\n    \"35-24-193 (101-150) is a hand valve directly on the 185 line branch, outline bowtie = HV\",\n    \"35-24-218 (003-15) appears at the boundary of the 185 circuit near the 195 connection\",\n    \"FS/PI/FI instruments 9336/9337/678/679 sit on lines 35-24-195/194, not on 185 directly\"\n  ],\n  \"confidence\": \"medium\"\n}\n```",
+        "raw_text": "I'll analyze the P&ID crop carefully for FUNCTION 35-24-185 (full tag: 35-24-185-WAF-150-E10H2A).\n\n**Analysis:**\n- 35-24-185 is a piping line (WAF = White Water Accepts Feed, 150mm DN) \u2014 a line FUNCTION per Rule 11\n- Inside the red crop box I can see:\n  - The line label `35-24-185-WAF-150-E10H2A` clearly\n  - `35-24-193` with `101-150` \u2014 a hand valve on this line (visible bowtie symbol, outline/transparent = HV)\n  - `35-24-218` with `003-15` \u2014 a valve visible on the 35-24-195 branch area, but label `35-24-218` is within the crop boundary on line 35-24-185's circuit\n\n**Valve type assessment:**\n- `35-24-193` (101-150): The bowtie symbol appears outline/transparent with no actuator circle \u2192 HV (hand valve)\n- `35-24-218` (003-15): Small bowtie, outline appears transparent, no actuator \u2192 HV\n\n**Lines connected to 35-24-185:**\n- 35-24-195 (WFL-15) connects into this circuit \u2014 visible entering the crop area\n- 35-24-193 sits directly on line 35-24-185\n\n**Peers:** Lines/valves outside the 35-24-185 circuit (35-24NV-675, 35-24HV-676, 35-24KV-677 are on the 35-24-190 PP-200 circuit above; 35-24-195 is a branch line feeding in)\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24-185\",\n  \"description\": \"35-24-185 WAF 150 BROKE LINE\",\n  \"rows\": [\n    {\"equipment\": \"35-24-195\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-195 WFL 15 BRANCH LINE\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-218\", \"mask\": \"\", \"description\": \"35-24-218 003-15 VLV HV\"},\n    {\"equipment\": \"35-24-193\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-193 101-150 VLV HV\"}\n  ],\n  \"peers\": [\n    {\"tag\": \"35-24NV-675\", \"evidence\": \"on 35-24-190 PP-200 circuit, above crop boundary\"},\n    {\"tag\": \"35-24HV-676\", \"evidence\": \"on 35-24-190 PP-200 circuit with HI-676/HS-677 instruments\"},\n    {\"tag\": \"35-24KV-677\", \"evidence\": \"on 35-24-190 PP-200 circuit, separate function\"},\n    {\"tag\": \"35-24-190\", \"evidence\": \"PP-200 peer line, separate circuit above\"},\n    {\"tag\": \"35-24-194\", \"evidence\": \"WFL-15 line on separate branch, not child of 35-24-185\"},\n    {\"tag\": \"35-24TV-9250\", \"evidence\": \"temperature control valve near GEARBOX 2, different circuit\"},\n    {\"tag\": \"35-24-009.1\", \"evidence\": \"motor tag numeric base 009 does not match 185\"}\n  ],\n  \"notes\": [\n    \"35-24-185 is WAF-150 (White Water Accepts Feed, DN150) piping header \u2014 treated as line FUNCTION\",\n    \"35-24-193 (101-150) sits directly on 35-24-185 line as hand valve \u2014 outline bowtie, no actuator\",\n    \"35-24-195 (WFL-15) branch enters 35-24-185 circuit; 35-24-218 valve sits on that branch spool\",\n    \"35-24NV/HV/KV-675/676/677 are on the 35-24-190 PP-200 circuit and excluded as peers\"\n  ],\n  \"confidence\": \"medium\"\n}\n```",
         "parsed": {
           "sub_process": "BR1",
           "function": "35-24-185",
-          "description": "35-24-185 WAF 150 LINE",
+          "description": "35-24-185 WAF 150 BROKE LINE",
           "rows": [
+            {
+              "equipment": "35-24-195",
+              "subequipment": "",
+              "mask": "",
+              "description": "35-24-195 WFL 15 BRANCH LINE"
+            },
+            {
+              "equipment": "",
+              "subequipment": "35-24-218",
+              "mask": "",
+              "description": "35-24-218 003-15 VLV HV"
+            },
             {
               "equipment": "35-24-193",
               "subequipment": "",
               "mask": "",
-              "description": "35-24-193 VLV HV"
-            },
-            {
-              "equipment": "35-24-218",
-              "subequipment": "",
-              "mask": "",
-              "description": "35-24-218 VLV HV"
+              "description": "35-24-193 101-150 VLV HV"
             }
           ],
           "peers": [
             {
-              "tag": "35-24-195",
-              "evidence": "WFL-15 branch line connecting into this area, own line number"
-            },
-            {
-              "tag": "35-24-194",
-              "evidence": "WFL-15 branch line, own line number, not part of 185 circuit"
-            },
-            {
-              "tag": "35-24-190",
-              "evidence": "PP-200 line, separate line number, peer circuit"
-            },
-            {
-              "tag": "35-24-189",
-              "evidence": "PP-300 line, separate line number, peer circuit"
-            },
-            {
               "tag": "35-24NV-675",
-              "evidence": "Control valve on 35-24-195 circuit, above crop boundary"
+              "evidence": "on 35-24-190 PP-200 circuit, above crop boundary"
             },
             {
               "tag": "35-24HV-676",
-              "evidence": "Hand valve with HI/HS instruments on 35-24-195 circuit"
+              "evidence": "on 35-24-190 PP-200 circuit with HI-676/HS-677 instruments"
             },
             {
               "tag": "35-24KV-677",
-              "evidence": "Valve with KS instrument on 35-24-195 circuit"
+              "evidence": "on 35-24-190 PP-200 circuit, separate function"
+            },
+            {
+              "tag": "35-24-190",
+              "evidence": "PP-200 peer line, separate circuit above"
+            },
+            {
+              "tag": "35-24-194",
+              "evidence": "WFL-15 line on separate branch, not child of 35-24-185"
             },
             {
               "tag": "35-24TV-9250",
-              "evidence": "Temperature control valve near gearbox, separate circuit"
+              "evidence": "temperature control valve near GEARBOX 2, different circuit"
             },
             {
               "tag": "35-24-009.1",
-              "evidence": "Motor tag numeric base 009 does not match 185"
+              "evidence": "motor tag numeric base 009 does not match 185"
             }
           ],
           "notes": [
-            "35-24-185-WAF-150-E10H2A is the main approach flow line DN150",
-            "35-24-193 (101-150) is a hand valve directly on the 185 line branch, outline bowtie = HV",
-            "35-24-218 (003-15) appears at the boundary of the 185 circuit near the 195 connection",
-            "FS/PI/FI instruments 9336/9337/678/679 sit on lines 35-24-195/194, not on 185 directly"
+            "35-24-185 is WAF-150 (White Water Accepts Feed, DN150) piping header \u2014 treated as line FUNCTION",
+            "35-24-193 (101-150) sits directly on 35-24-185 line as hand valve \u2014 outline bowtie, no actuator",
+            "35-24-195 (WFL-15) branch enters 35-24-185 circuit; 35-24-218 valve sits on that branch spool",
+            "35-24NV/HV/KV-675/676/677 are on the 35-24-190 PP-200 circuit and excluded as peers"
           ],
           "confidence": "medium"
         },
@@ -153,16 +151,22 @@
       },
       "refined_rows": [
         {
+          "equipment": "35-24-195",
+          "subequipment": "",
+          "mask": "",
+          "description": "35-24-195 WFL 15 BRANCH LN"
+        },
+        {
+          "equipment": "",
+          "subequipment": "35-24-218",
+          "mask": "",
+          "description": "35-24-218 003-15 VLV HV"
+        },
+        {
           "equipment": "35-24-193",
           "subequipment": "",
           "mask": "",
-          "description": "35-24-193 VLV HV"
-        },
-        {
-          "equipment": "35-24-218",
-          "subequipment": "",
-          "mask": "",
-          "description": "35-24-218 VLV HV"
+          "description": "35-24-193 101-150 VLV HV"
         },
         {
           "equipment": "35-24-185",

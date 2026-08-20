@@ -57,17 +57,17 @@
       ],
       "dossier": "Parent tag: 35-24-129\nParent category/block: lines / \nParent XY: (4254.321428571429, 58.75)\nNearby descriptions: 35-24-129-WFL-15-E10H2A\n\nSame-tag CAD family:\n- (none)\n\nNearby line numbers (short ids preferred in output):\n- 35-24-128  full=35-24-128-WFL-15-E10H2A  d=90  layer=P-LINEPOS\n- 35-24-137  full=35-24-137-WAF-125-E10H2A  d=187  layer=P-LINEPOS\n- 35-24-136  full=35-24-136-WFL-15-E10H2A  d=96  layer=P-LINEPOS\n- 35-24-134  full=35-24-134-WAF-125-E10H2A  d=133  layer=P-LINEPOS\n- 35-24-138  full=35-24-138-WFL-15-E10H2A  d=191  layer=P-LINEPOS\n- 35-24-129  full=35-24-129-WFL-15-E10H2A  d=0  layer=P-LINEPOS\n- 35-24-130  full=35-24-130-PP-200-E10H2A  d=153  layer=P-LINEPOS\n- 35-24-133  full=35-24-133-PP-500-E10H2A  d=196  layer=P-LINEPOS\n\nNearby devices (valves/instruments/pumps/\u2026):\n- line_markers: PPI_1100A  d=195  block=PPI_1100A\n- valves: PPI_0900A  d=200  block=PPI_0900A\n- instruments: PPI_1200A  d=32  block=PPI_1200A\n\nNearby peer primary equipment (do NOT nest under parent):\n- 35-24L402 (process_equipment, d=184)\n\nNearby drawing text tokens:\n- 35-24L402  d=172  layer=P-AGITATOR_POS\n- 9312  d=79  layer=P-INSTRPOS_TEXTS\n- 35-24  d=73  layer=P-INSTRPOS_TEXTS\n- 614  d=110  layer=P-INSTRPOS_TEXTS\n- 9314  d=171  layer=P-INSTRPOS_TEXTS\n- 9310  d=35  layer=P-INSTRPOS_TEXTS\n- 612  d=30  layer=P-INSTRPOS_TEXTS\n- 9311  d=30  layer=P-INSTRPOS_TEXTS\n- 9313  d=88  layer=P-INSTRPOS_TEXTS\n- 9315  d=181  layer=P-INSTRPOS_TEXTS\n- 35-24-061  d=70  layer=P-VALVEPOS\n- 003-15  d=69  layer=P-VALVEPOS\n- 35-24-059  d=21  layer=P-VALVEPOS\n- 35-24-056  d=165  layer=P-VALVEPOS\n- 350-200  d=161  layer=P-VALVEPOS\n- 350-500  d=196  layer=P-VALVEPOS\n- 35-24-055  d=179  layer=P-VALVEPOS\n- 001-80  d=175  layer=P-VALVEPOS\n- 35-24-1132  d=193  layer=P-VALVEPOS\n- 003-50  d=190  layer=P-VALVEPOS\n- 35-24-1104  d=170  layer=P-VALVEPOS\n- 35-24-1133  d=184  layer=P-VALVEPOS\n- 600-125  d=181  layer=P-VALVEPOS\n- 35-24-051  d=163  layer=P-VALVEPOS\n- 101-125  d=159  layer=P-VALVEPOS\n- 35-24-050  d=104  layer=P-VALVEPOS\n- 35-24-046  d=198  layer=P-VALVEPOS\n- 35-24-128  d=90  layer=P-LINEPOS\n- 35-24-137  d=187  layer=P-LINEPOS\n- 35-24-136  d=96  layer=P-LINEPOS\n- 35-24-134  d=133  layer=P-LINEPOS\n- 35-24-138  d=191  layer=P-LINEPOS\n- 35-24-129  d=0  layer=P-LINEPOS\n- 35-24-130  d=153  layer=P-LINEPOS\n- 35-24-133  d=196  layer=P-LINEPOS",
       "ai": {
-        "raw_text": "Looking at the P&ID image, I can see:\n\n- **35-24-129** is a process line (WFL-15-E10H2A) \u2014 a piping header\n- On the line, there are instruments: **PI 9310**, **FI 9311**, **FS 612** (all tagged with prefix \"35-24\")\n- A valve **35-24-059** (003-15) sits on the line \u2014 it appears as a bowtie with solid/filled triangles (NC) and no actuator circle, making it a normally closed hand valve... but looking more carefully, the triangles appear filled/solid white = NC\n- **35-24-061** (003-15) is visible lower left, connected to line 35-24-128 area (hand valve, outline triangles = HV)\n- The instruments on 35-24-129 are: 35-24PI-9310, 35-24FI-9311, 35-24FS-612\n- 35-24-128 is a peer/neighbouring line\n\nThe valve 35-24-059 on line 35-24-129 shows filled triangles = NC (normally closed hand valve).\n35-24-061 is on line 35-24-128 (not 35-24-129's circuit).\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24-129\",\n  \"description\": \"35-24-129 WFL LINE BR1\",\n  \"rows\": [\n    {\"equipment\": \"35-24-059\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-059 VLV NC\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24PI-9310\", \"mask\": \"\", \"description\": \"35-24PI-9310 PRESS IND\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24FI-9311\", \"mask\": \"\", \"description\": \"35-24FI-9311 FLOW IND\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24FS-612\", \"mask\": \"\", \"description\": \"35-24FS-612 FLOW SWITCH\"}\n  ],\n  \"peers\": [\n    {\"tag\": \"35-24-128\", \"evidence\": \"adjacent WFL-15 line visible in crop, separate line number\"},\n    {\"tag\": \"35-24-061\", \"evidence\": \"valve on line 35-24-128 circuit, not 35-24-129\"},\n    {\"tag\": \"35-24L402\", \"evidence\": \"process equipment agitator, peer major equipment\"},\n    {\"tag\": \"35-24-134\", \"evidence\": \"separate WAF-125 line in crop, different circuit\"}\n  ],\n  \"notes\": [\n    \"35-24-059 valve symbol shows filled/solid triangles = NC; no actuator circle present\",\n    \"Instruments PI-9310, FI-9311, FS-612 are on the 35-24-129 line segment per image layout\",\n    \"35-24-061 sits on 35-24-128 not 35-24-129 based on positional evidence\"\n  ],\n  \"confidence\": \"medium\"\n}\n```",
+        "raw_text": "I'll analyze the P&ID image carefully for FUNCTION 35-24-129.\n\n**Observations from the image:**\n- 35-24-129 is a piping line (WFL-15-E10H2A) \u2014 a process line FUNCTION\n- Within the red box for 35-24-129, I can see:\n  - The line 35-24-129-WFL-15-E10H2A running horizontally\n  - Instruments on the line: PI 9310, FI 9311 (tagged \"35-24\" prefix), and FS 612 (square box = DCS control instrument)\n  - Valve 35-24-059 / 003-15 \u2014 appears to be a hand valve (outline/transparent bowtie, no actuator circle) \u2014 HV\n  - Valve 35-24-061 / 003-15 \u2014 also appears to be a hand valve (outline bowtie, no actuator)\n  - Line 35-24-128 is the neighbouring line (visible but separate)\n  - The instruments PI-9310, FI-9311, FS-612 sit on the 35-24-129 circuit\n\n**Instrument tags:** Following the pattern \"35-24\" + instrument type + number:\n- 35-24PI-9310, 35-24FI-9311, 35-24FS-612\n\n**Valve 35-24-059**: outline bowtie, no actuator \u2192 HV\n**Valve 35-24-061**: outline bowtie, no actuator \u2192 HV\n\n35-24-128 is a peer line (separate line number, not a branch of 129).\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24-129\",\n  \"description\": \"35-24-129 WFL LINE BR1\",\n  \"rows\": [\n    {\"equipment\": \"35-24-129\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-129 WFL-15 PROC LINE\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24PI-9310\", \"mask\": \"\", \"description\": \"35-24PI-9310 PRESS IND\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24FI-9311\", \"mask\": \"\", \"description\": \"35-24FI-9311 FLOW IND\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24FS-612\", \"mask\": \"\", \"description\": \"35-24FS-612 FLOW SWITCH\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-059\", \"mask\": \"\", \"description\": \"35-24-059 003-15 VLV HV\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-061\", \"mask\": \"\", \"description\": \"35-24-061 003-15 VLV HV\"}\n  ],\n  \"peers\": [\n    {\"tag\": \"35-24-128\", \"evidence\": \"separate line number WFL-15-E10H2A visible adjacent, own circuit\"},\n    {\"tag\": \"35-24L402\", \"evidence\": \"process equipment agitator, peer major equipment not child of line\"}\n  ],\n  \"notes\": [\n    \"35-24-129 is a WFL-15-E10H2A white water flow line; instruments PI-9310, FI-9311, FS-612 and valves 059/061 are nested as sub-equipment on the line\",\n    \"Valve symbols 35-24-059 and 35-24-061 appear as outline/transparent bowties with no actuator circle \u2014 classified HV\",\n    \"35-24-128 is a neighbouring line of same spec but separate position number \u2014 treated as peer\"\n  ],\n  \"confidence\": \"high\"\n}\n```",
         "parsed": {
           "sub_process": "BR1",
           "function": "35-24-129",
           "description": "35-24-129 WFL LINE BR1",
           "rows": [
             {
-              "equipment": "35-24-059",
+              "equipment": "35-24-129",
               "subequipment": "",
               "mask": "",
-              "description": "35-24-059 VLV NC"
+              "description": "35-24-129 WFL-15 PROC LINE"
             },
             {
               "equipment": "",
@@ -86,32 +86,36 @@
               "subequipment": "35-24FS-612",
               "mask": "",
               "description": "35-24FS-612 FLOW SWITCH"
+            },
+            {
+              "equipment": "",
+              "subequipment": "35-24-059",
+              "mask": "",
+              "description": "35-24-059 003-15 VLV HV"
+            },
+            {
+              "equipment": "",
+              "subequipment": "35-24-061",
+              "mask": "",
+              "description": "35-24-061 003-15 VLV HV"
             }
           ],
           "peers": [
             {
               "tag": "35-24-128",
-              "evidence": "adjacent WFL-15 line visible in crop, separate line number"
-            },
-            {
-              "tag": "35-24-061",
-              "evidence": "valve on line 35-24-128 circuit, not 35-24-129"
+              "evidence": "separate line number WFL-15-E10H2A visible adjacent, own circuit"
             },
             {
               "tag": "35-24L402",
-              "evidence": "process equipment agitator, peer major equipment"
-            },
-            {
-              "tag": "35-24-134",
-              "evidence": "separate WAF-125 line in crop, different circuit"
+              "evidence": "process equipment agitator, peer major equipment not child of line"
             }
           ],
           "notes": [
-            "35-24-059 valve symbol shows filled/solid triangles = NC; no actuator circle present",
-            "Instruments PI-9310, FI-9311, FS-612 are on the 35-24-129 line segment per image layout",
-            "35-24-061 sits on 35-24-128 not 35-24-129 based on positional evidence"
+            "35-24-129 is a WFL-15-E10H2A white water flow line; instruments PI-9310, FI-9311, FS-612 and valves 059/061 are nested as sub-equipment on the line",
+            "Valve symbols 35-24-059 and 35-24-061 appear as outline/transparent bowties with no actuator circle \u2014 classified HV",
+            "35-24-128 is a neighbouring line of same spec but separate position number \u2014 treated as peer"
           ],
-          "confidence": "medium"
+          "confidence": "high"
         },
         "model_id": "eu.anthropic.claude-sonnet-4-6",
         "region": "eu-west-2",
@@ -150,10 +154,10 @@
       },
       "refined_rows": [
         {
-          "equipment": "35-24-059",
+          "equipment": "35-24-129",
           "subequipment": "",
           "mask": "",
-          "description": "35-24-059 VLV NC"
+          "description": "35-24-129 WFL-15 PROC LN"
         },
         {
           "equipment": "",
@@ -174,10 +178,16 @@
           "description": "35-24FS-612 FS"
         },
         {
-          "equipment": "35-24-129",
-          "subequipment": "",
+          "equipment": "",
+          "subequipment": "35-24-059",
           "mask": "",
-          "description": "35-24-129"
+          "description": "35-24-059 003-15 VLV HV"
+        },
+        {
+          "equipment": "",
+          "subequipment": "35-24-061",
+          "mask": "",
+          "description": "35-24-061 003-15 VLV HV"
         }
       ]
     }

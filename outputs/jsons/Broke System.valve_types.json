@@ -3,10 +3,10 @@
   "legend": "/Users/code-huddle-ensemble/Desktop/dwg-reader/inputs/legend.png",
   "model_id": "eu.anthropic.claude-sonnet-4-6",
   "region": "eu-west-2",
-  "count": 293,
+  "count": 316,
   "tags": {
     "35-24-001.1": {
-      "type": "NC",
+      "type": "DRN NC",
       "fn": "35-24L001",
       "fn_hierarchy": "35-24L001",
       "layer": "P-VALVEPOS",
@@ -17,7 +17,7 @@
       "source": "vision"
     },
     "35-24-001.2": {
-      "type": "NC",
+      "type": "CHK",
       "fn": "35-24L001",
       "fn_hierarchy": "35-24L001",
       "layer": "P-VALVEPOS",
@@ -39,7 +39,7 @@
       "source": "vision"
     },
     "35-24LV2-576": {
-      "type": "AV",
+      "type": "AV FLS",
       "fn": "35-24L001",
       "fn_hierarchy": "35-24L001",
       "layer": "P-CVPOS",
@@ -50,7 +50,7 @@
       "source": "vision"
     },
     "35-24-234": {
-      "type": "CHK HV",
+      "type": "FLS HV",
       "fn": "35-24L001",
       "fn_hierarchy": "35-24L001",
       "layer": "P-VALVEPOS",
@@ -61,7 +61,7 @@
       "source": "vision"
     },
     "35-24-096": {
-      "type": "NC SMP",
+      "type": "DRN NC",
       "fn": "35-24L001",
       "fn_hierarchy": "35-24L001",
       "layer": "P-VALVEPOS",
@@ -93,17 +93,6 @@
       "is_valve": true,
       "source": "vision"
     },
-    "35-24-093": {
-      "type": "NC",
-      "fn": "35-24L001",
-      "fn_hierarchy": "35-24L001",
-      "layer": "P-VALVEPOS",
-      "block": "PPI_0900A",
-      "x": 3268.75,
-      "y": 215.0,
-      "is_valve": true,
-      "source": "vision"
-    },
     "35-24-1105": {
       "type": "NC FLS",
       "fn": "35-24L001",
@@ -115,36 +104,36 @@
       "is_valve": true,
       "source": "vision"
     },
-    "35-24-108": {
-      "type": "NC FLS",
+    "35-24-093": {
+      "type": "DRN NC",
       "fn": "35-24L001",
       "fn_hierarchy": "35-24L001",
       "layer": "P-VALVEPOS",
       "block": "PPI_0900A",
-      "x": 2702.5,
-      "y": 242.5,
+      "x": 3268.75,
+      "y": 215.0,
+      "is_valve": true,
+      "source": "vision"
+    },
+    "35-24-089": {
+      "type": "DRN NC",
+      "fn": "35-24L001",
+      "fn_hierarchy": "35-24L001",
+      "layer": "P-VALVEPOS",
+      "block": "PPI_0900A",
+      "x": 3333.75,
+      "y": 200.613544153548,
       "is_valve": true,
       "source": "vision"
     },
     "35-24-033": {
-      "type": "SMP HV",
+      "type": "HV",
       "fn": "35-24L002",
       "fn_hierarchy": "35-24L002",
       "layer": "P-VALVEPOS",
       "block": "PPI_0900A",
       "x": 4857.5,
       "y": 470.0,
-      "is_valve": true,
-      "source": "vision"
-    },
-    "35-24-1110": {
-      "type": "DRN NC NO",
-      "fn": "35-24L002",
-      "fn_hierarchy": "35-24L002",
-      "layer": "P-VALVEPOS",
-      "block": "PPI_0900A",
-      "x": 4933.75,
-      "y": 405.0,
       "is_valve": true,
       "source": "vision"
     },
@@ -159,6 +148,17 @@
       "is_valve": true,
       "source": "vision"
     },
+    "35-24-1110": {
+      "type": "HV",
+      "fn": "35-24L002",
+      "fn_hierarchy": "35-24L002",
+      "layer": "P-VALVEPOS",
+      "block": "PPI_0900A",
+      "x": 4933.75,
+      "y": 405.0,
+      "is_valve": true,
+      "source": "vision"
+    },
     "35-24-032": {
       "type": "HV",
       "fn": "35-24L002",
@@ -167,6 +167,17 @@
       "block": "PPI_0900A",
       "x": 4921.25,
       "y": 470.0,
+      "is_valve": true,
+      "source": "vision"
+    },
+    "35-24HV-623": {
+      "type": "NC",
+      "fn": "35-24L002",
+      "fn_hierarchy": "35-24L002",
+      "layer": "P-CVPOS",
+      "block": "PPI_1000A",
+      "x": 4956.25,
+      "y": 495.0,
       "is_valve": true,
       "source": "vision"
     },
@@ -181,14 +192,14 @@
       "is_valve": true,
       "source": "vision"
     },
-    "35-24HV-623": {
+    "35-24HV-626": {
       "type": "HV",
       "fn": "35-24L002",
       "fn_hierarchy": "35-24L002",
       "layer": "P-CVPOS",
       "block": "PPI_1000A",
-      "x": 4956.25,
-      "y": 495.0,
+      "x": 4977.5,
+      "y": 425.0,
       "is_valve": true,
       "source": "vision"
     },
@@ -200,28 +211,6 @@
       "block": "PPI_0900A",
       "x": 4955.0,
       "y": 510.0,
-      "is_valve": true,
-      "source": "vision"
-    },
-    "35-24HV-626": {
-      "type": "NC",
-      "fn": "35-24L002",
-      "fn_hierarchy": "35-24L002",
-      "layer": "P-CVPOS",
-      "block": "PPI_1000A",
-      "x": 4977.5,
-      "y": 425.0,
-      "is_valve": true,
-      "source": "vision"
-    },
-    "35-24HV-628": {
-      "type": "AV",
-      "fn": "35-24L002",
-      "fn_hierarchy": "35-24L002",
-      "layer": "P-CVPOS",
-      "block": "PPI_1000A",
-      "x": 5010.0,
-      "y": 477.5,
       "is_valve": true,
       "source": "vision"
     },
@@ -258,6 +247,50 @@
       "is_valve": true,
       "source": "vision"
     },
+    "35-24FV-570": {
+      "type": "AV",
+      "fn": "35-24L003",
+      "fn_hierarchy": "35-24L003",
+      "layer": "P-CVPOS",
+      "block": "PPI_1000A",
+      "x": 2822.5,
+      "y": 150.0,
+      "is_valve": true,
+      "source": "vision"
+    },
+    "35-24-111": {
+      "type": "CHK",
+      "fn": "35-24L003",
+      "fn_hierarchy": "35-24L003",
+      "layer": "P-VALVEPOS",
+      "block": "PPI_0900A",
+      "x": 2661.25,
+      "y": 257.5,
+      "is_valve": true,
+      "source": "vision"
+    },
+    "35-24-108": {
+      "type": "NC FLS",
+      "fn": "35-24L003",
+      "fn_hierarchy": "35-24L003",
+      "layer": "P-VALVEPOS",
+      "block": "PPI_0900A",
+      "x": 2702.5,
+      "y": 242.5,
+      "is_valve": true,
+      "source": "vision"
+    },
+    "35-24-110": {
+      "type": "DRN NC",
+      "fn": "35-24L003",
+      "fn_hierarchy": "35-24L003",
+      "layer": "P-VALVEPOS",
+      "block": "PPI_0900A",
+      "x": 2672.5,
+      "y": 242.5,
+      "is_valve": true,
+      "source": "vision"
+    },
     "35-24-107": {
       "type": "DRN NC",
       "fn": "35-24L003",
@@ -280,41 +313,30 @@
       "is_valve": true,
       "source": "vision"
     },
-    "35-24-111": {
-      "type": "NC SMP",
+    "35-24-105": {
+      "type": "DRN NC",
       "fn": "35-24L003",
       "fn_hierarchy": "35-24L003",
       "layer": "P-VALVEPOS",
       "block": "PPI_0900A",
-      "x": 2661.25,
-      "y": 257.5,
+      "x": 2802.5,
+      "y": 225.0,
       "is_valve": true,
       "source": "vision"
     },
-    "35-24-110": {
-      "type": "NC FLS",
-      "fn": "35-24L003",
-      "fn_hierarchy": "35-24L003",
-      "layer": "P-VALVEPOS",
-      "block": "PPI_0900A",
-      "x": 2672.5,
-      "y": 242.5,
-      "is_valve": true,
-      "source": "vision"
-    },
-    "35-24-113": {
-      "type": "NC FLS",
-      "fn": "35-24L003",
-      "fn_hierarchy": "35-24L003",
-      "layer": "P-VALVEPOS",
-      "block": "PPI_0900A",
-      "x": 2637.5,
-      "y": 242.5,
-      "is_valve": true,
-      "source": "vision"
-    },
-    "35-24-003.4": {
+    "35-24HV-572": {
       "type": "HV",
+      "fn": "35-24L003",
+      "fn_hierarchy": "35-24L003",
+      "layer": "P-CVPOS",
+      "block": "PPI_1000A",
+      "x": 2855.900368873634,
+      "y": 150.0,
+      "is_valve": true,
+      "source": "vision"
+    },
+    "35-24TV-9283": {
+      "type": "AV",
       "fn": "35-24L003",
       "fn_hierarchy": "35-24L003",
       "layer": "P-CVPOS",
@@ -325,8 +347,8 @@
       "source": "vision"
     },
     "35-24-082": {
-      "type": "HV",
-      "fn": "35-24L004",
+      "type": "DRN NC",
+      "fn": "35-24T601",
       "fn_hierarchy": "35-24L004",
       "layer": "P-VALVEPOS",
       "block": "PPI_0900A",
@@ -346,20 +368,9 @@
       "is_valve": true,
       "source": "vision"
     },
-    "35-24-105": {
-      "type": "DRN NC NO",
-      "fn": "35-24L003",
-      "fn_hierarchy": "35-24L004",
-      "layer": "P-VALVEPOS",
-      "block": "PPI_0900A",
-      "x": 2802.5,
-      "y": 225.0,
-      "is_valve": true,
-      "source": "vision"
-    },
     "35-24-083": {
-      "type": "NC",
-      "fn": "35-24L004",
+      "type": "DRN NC",
+      "fn": "35-24T601",
       "fn_hierarchy": "35-24L004",
       "layer": "P-VALVEPOS",
       "block": "PPI_0900A",
@@ -390,17 +401,6 @@
       "is_valve": true,
       "source": "vision"
     },
-    "35-24FV-570": {
-      "type": "AV",
-      "fn": "35-24L004",
-      "fn_hierarchy": "35-24L004",
-      "layer": "P-CVPOS",
-      "block": "PPI_1000A",
-      "x": 2822.5,
-      "y": 150.0,
-      "is_valve": true,
-      "source": "vision"
-    },
     "35-24-088": {
       "type": "HV",
       "fn": "35-24L004",
@@ -412,17 +412,6 @@
       "is_valve": true,
       "source": "vision"
     },
-    "35-24HV-572": {
-      "type": "HV",
-      "fn": "35-24L004",
-      "fn_hierarchy": "35-24L004",
-      "layer": "P-CVPOS",
-      "block": "PPI_1000A",
-      "x": 2855.900368873634,
-      "y": 150.0,
-      "is_valve": true,
-      "source": "vision"
-    },
     "35-24KV-573": {
       "type": "NC FLS",
       "fn": "35-24L004",
@@ -431,17 +420,6 @@
       "block": "PPI_1000A",
       "x": 2882.0,
       "y": 150.0,
-      "is_valve": true,
-      "source": "vision"
-    },
-    "35-24-089": {
-      "type": "DRN NC",
-      "fn": "35-24L001",
-      "fn_hierarchy": "35-24L004",
-      "layer": "P-VALVEPOS",
-      "block": "PPI_0900A",
-      "x": 3333.75,
-      "y": 200.613544153548,
       "is_valve": true,
       "source": "vision"
     },
@@ -467,8 +445,30 @@
       "is_valve": true,
       "source": "vision"
     },
+    "35-24LV1-537": {
+      "type": "AV",
+      "fn": "35-24L005",
+      "fn_hierarchy": "35-24L005",
+      "layer": "P-CVPOS",
+      "block": "PPI_1000A",
+      "x": 1598.137653745864,
+      "y": 275.0,
+      "is_valve": true,
+      "source": "vision"
+    },
+    "35-24LV2-537": {
+      "type": "AV",
+      "fn": "35-24L005",
+      "fn_hierarchy": "35-24L005",
+      "layer": "P-CVPOS",
+      "block": "PPI_1000A",
+      "x": 1640.0,
+      "y": 237.5,
+      "is_valve": true,
+      "source": "vision"
+    },
     "35-24-223": {
-      "type": "NC",
+      "type": "DRN NC",
       "fn": "35-24L005",
       "fn_hierarchy": "35-24L005",
       "layer": "P-VALVEPOS",
@@ -490,7 +490,7 @@
       "source": "vision"
     },
     "35-24-043": {
-      "type": "NC FLS",
+      "type": "DRN NC",
       "fn": "35-24L005",
       "fn_hierarchy": "35-24L005",
       "layer": "P-VALVEPOS",
@@ -501,24 +501,13 @@
       "source": "vision"
     },
     "35-24-222": {
-      "type": "NC",
+      "type": "NC FLS",
       "fn": "35-24L005",
       "fn_hierarchy": "35-24L005",
       "layer": "P-VALVEPOS",
       "block": "PPI_0900A",
       "x": 23.40101225054694,
       "y": 277.5,
-      "is_valve": true,
-      "source": "vision"
-    },
-    "35-24LV2-537": {
-      "type": "AV",
-      "fn": "35-24L005",
-      "fn_hierarchy": "35-24L005",
-      "layer": "P-CVPOS",
-      "block": "PPI_1000A",
-      "x": 1640.0,
-      "y": 237.5,
       "is_valve": true,
       "source": "vision"
     },
@@ -544,19 +533,8 @@
       "is_valve": true,
       "source": "vision"
     },
-    "35-24LV1-537": {
-      "type": "AV",
-      "fn": "35-24L005",
-      "fn_hierarchy": "35-24L005",
-      "layer": "P-CVPOS",
-      "block": "PPI_1000A",
-      "x": 1598.137653745864,
-      "y": 275.0,
-      "is_valve": true,
-      "source": "vision"
-    },
     "35-24-1131": {
-      "type": "NC SMP",
+      "type": "HV",
       "fn": "35-24L005",
       "fn_hierarchy": "35-24L005",
       "layer": "P-VALVEPOS",
@@ -567,7 +545,7 @@
       "source": "vision"
     },
     "35-24-1112": {
-      "type": "NC NO SMP",
+      "type": "DRN NC",
       "fn": "35-24L005",
       "fn_hierarchy": "35-24L005",
       "layer": "P-VALVEPOS",
@@ -589,7 +567,7 @@
       "source": "vision"
     },
     "35-24-140": {
-      "type": "NC",
+      "type": "HV",
       "fn": "35-24L005",
       "fn_hierarchy": "35-24L005",
       "layer": "P-VALVEPOS",
@@ -600,7 +578,7 @@
       "source": "vision"
     },
     "35-24-228": {
-      "type": "DRN HV",
+      "type": "HV",
       "fn": "35-24L005",
       "fn_hierarchy": "35-24L005",
       "layer": "P-VALVEPOS",
@@ -633,7 +611,7 @@
       "source": "vision"
     },
     "35-24-005.4": {
-      "type": "NC",
+      "type": "HV",
       "fn": "35-24L005",
       "fn_hierarchy": "35-24L005",
       "layer": "P-CVPOS",
@@ -665,9 +643,31 @@
       "is_valve": true,
       "source": "vision"
     },
+    "35-24-232": {
+      "type": "HV",
+      "fn": "35-24L005",
+      "fn_hierarchy": "35-24L005",
+      "layer": "P-VALVEPOS",
+      "block": "PPI_0900A",
+      "x": 1735.0,
+      "y": 305.0,
+      "is_valve": true,
+      "source": "vision"
+    },
+    "35-24-233": {
+      "type": "HV",
+      "fn": "35-24L005",
+      "fn_hierarchy": "35-24L005",
+      "layer": "P-VALVEPOS",
+      "block": "PPI_0900A",
+      "x": 1735.0,
+      "y": 295.0,
+      "is_valve": true,
+      "source": "vision"
+    },
     "35-24-049": {
-      "type": "NC FLS",
-      "fn": "35-24L006",
+      "type": "DRN NC",
+      "fn": "35-24T602",
       "fn_hierarchy": "35-24L006",
       "layer": "P-VALVEPOS",
       "block": "PPI_0900A",
@@ -699,7 +699,7 @@
       "source": "vision"
     },
     "35-24-047": {
-      "type": "NC",
+      "type": "CHK",
       "fn": "35-24L006",
       "fn_hierarchy": "35-24L006",
       "layer": "P-VALVEPOS",
@@ -720,30 +720,8 @@
       "is_valve": true,
       "source": "vision"
     },
-    "35-24-007.1": {
-      "type": "NC FLS",
-      "fn": "35-24L007",
-      "fn_hierarchy": "35-24L007",
-      "layer": "P-VALVEPOS",
-      "block": "PPI_0900A",
-      "x": 1196.25,
-      "y": 227.5,
-      "is_valve": true,
-      "source": "vision"
-    },
-    "35-24-007.2": {
-      "type": "NC FLS",
-      "fn": "35-24L007",
-      "fn_hierarchy": "35-24L007",
-      "layer": "P-VALVEPOS",
-      "block": "PPI_0900A",
-      "x": 1196.25,
-      "y": 227.5,
-      "is_valve": true,
-      "source": "vision"
-    },
     "35-24LV1-518": {
-      "type": "AV",
+      "type": "AV FLS",
       "fn": "35-24L007",
       "fn_hierarchy": "35-24L007",
       "layer": "P-CVPOS",
@@ -754,7 +732,7 @@
       "source": "vision"
     },
     "35-24LV2-518": {
-      "type": "AV",
+      "type": "AV DRN",
       "fn": "35-24L007",
       "fn_hierarchy": "35-24L007",
       "layer": "P-CVPOS",
@@ -764,8 +742,30 @@
       "is_valve": true,
       "source": "vision"
     },
+    "35-24-007.1": {
+      "type": "FLS CHK",
+      "fn": "35-24L007",
+      "fn_hierarchy": "35-24L007",
+      "layer": "P-VALVEPOS",
+      "block": "PPI_0900A",
+      "x": 1196.25,
+      "y": 227.5,
+      "is_valve": true,
+      "source": "vision"
+    },
+    "35-24-007.2": {
+      "type": "DRN NC",
+      "fn": "35-24L007",
+      "fn_hierarchy": "35-24L007",
+      "layer": "P-VALVEPOS",
+      "block": "PPI_0900A",
+      "x": 1196.25,
+      "y": 227.5,
+      "is_valve": true,
+      "source": "vision"
+    },
     "35-24-160": {
-      "type": "HV",
+      "type": "FLS HV",
       "fn": "35-24L007",
       "fn_hierarchy": "35-24L007",
       "layer": "P-VALVEPOS",
@@ -776,7 +776,7 @@
       "source": "vision"
     },
     "35-24-164": {
-      "type": "NC",
+      "type": "HV",
       "fn": "35-24L007",
       "fn_hierarchy": "35-24L007",
       "layer": "P-VALVEPOS",
@@ -798,7 +798,7 @@
       "source": "vision"
     },
     "35-24-216": {
-      "type": "NC FLS",
+      "type": "DRN NC",
       "fn": "35-24L007",
       "fn_hierarchy": "35-24L007",
       "layer": "P-VALVEPOS",
@@ -809,7 +809,7 @@
       "source": "vision"
     },
     "35-24-025": {
-      "type": "NC",
+      "type": "DRN NC",
       "fn": "35-24L007",
       "fn_hierarchy": "35-24L007",
       "layer": "P-VALVEPOS",
@@ -820,7 +820,7 @@
       "source": "vision"
     },
     "35-24-227": {
-      "type": "HV",
+      "type": "FLS HV",
       "fn": "35-24L007",
       "fn_hierarchy": "35-24L007",
       "layer": "P-VALVEPOS",
@@ -842,7 +842,7 @@
       "source": "vision"
     },
     "35-24-161": {
-      "type": "NC FLS",
+      "type": "DRN NC",
       "fn": "35-24L007",
       "fn_hierarchy": "35-24L007",
       "layer": "P-VALVEPOS",
@@ -864,7 +864,7 @@
       "source": "vision"
     },
     "35-24-1096": {
-      "type": "NC CHK",
+      "type": "DRN NC",
       "fn": "35-24L007",
       "fn_hierarchy": "35-24L007",
       "layer": "P-VALVEPOS",
@@ -875,7 +875,7 @@
       "source": "vision"
     },
     "35-24-008.1": {
-      "type": "NC",
+      "type": "DRN NC",
       "fn": "35-24L008",
       "fn_hierarchy": "35-24L008",
       "layer": "P-VALVEPOS",
@@ -886,7 +886,7 @@
       "source": "vision"
     },
     "35-24-008.2": {
-      "type": "NC",
+      "type": "DRN NC",
       "fn": "35-24L008",
       "fn_hierarchy": "35-24L008",
       "layer": "P-VALVEPOS",
@@ -897,7 +897,7 @@
       "source": "vision"
     },
     "35-24-009": {
-      "type": "NC",
+      "type": "DRN NC",
       "fn": "35-24L008",
       "fn_hierarchy": "35-24L008",
       "layer": "P-VALVEPOS",
@@ -908,7 +908,7 @@
       "source": "vision"
     },
     "35-24-181": {
-      "type": "NC",
+      "type": "DRN NC",
       "fn": "35-24L008",
       "fn_hierarchy": "35-24L008",
       "layer": "P-VALVEPOS",
@@ -919,7 +919,7 @@
       "source": "vision"
     },
     "35-24-1088": {
-      "type": "NC",
+      "type": "NC FLS",
       "fn": "35-24L008",
       "fn_hierarchy": "35-24L008",
       "layer": "P-VALVEPOS",
@@ -941,7 +941,7 @@
       "source": "vision"
     },
     "35-24-180": {
-      "type": "NC",
+      "type": "HV",
       "fn": "35-24L008",
       "fn_hierarchy": "35-24L008",
       "layer": "P-VALVEPOS",
@@ -952,7 +952,7 @@
       "source": "vision"
     },
     "35-24-1094": {
-      "type": "CHK",
+      "type": "FLS CHK",
       "fn": "35-24L008",
       "fn_hierarchy": "35-24L008",
       "layer": "P-VALVEPOS",
@@ -963,7 +963,7 @@
       "source": "vision"
     },
     "35-24-184": {
-      "type": "NC SMP",
+      "type": "CHK",
       "fn": "35-24L008",
       "fn_hierarchy": "35-24L008",
       "layer": "P-VALVEPOS",
@@ -985,7 +985,7 @@
       "source": "vision"
     },
     "35-24-011": {
-      "type": "NC",
+      "type": "DRN NC",
       "fn": "35-24L008",
       "fn_hierarchy": "35-24L008",
       "layer": "P-VALVEPOS",
@@ -1007,7 +1007,7 @@
       "source": "vision"
     },
     "35-24-226": {
-      "type": "NO SMP HV",
+      "type": "FLS HV",
       "fn": "35-24L008",
       "fn_hierarchy": "35-24L008",
       "layer": "P-VALVEPOS",
@@ -1018,7 +1018,7 @@
       "source": "vision"
     },
     "35-24LV1-513": {
-      "type": "AV",
+      "type": "AV DRN",
       "fn": "35-24L008",
       "fn_hierarchy": "35-24L008",
       "layer": "P-CVPOS",
@@ -1029,123 +1029,13 @@
       "source": "vision"
     },
     "35-24-009.1": {
-      "type": "NC FLS",
+      "type": "HV",
       "fn": "35-24L009",
       "fn_hierarchy": "35-24L009",
       "layer": "P-VALVEPOS",
       "block": "PPI_0900A",
       "x": 195.0,
       "y": 227.5,
-      "is_valve": true,
-      "source": "vision"
-    },
-    "35-24-186": {
-      "type": "NC FLS",
-      "fn": "35-24L009",
-      "fn_hierarchy": "35-24L009",
-      "layer": "P-VALVEPOS",
-      "block": "PPI_0900A",
-      "x": 526.75,
-      "y": 218.75,
-      "is_valve": true,
-      "source": "vision"
-    },
-    "35-24-187": {
-      "type": "NC FLS",
-      "fn": "35-24L009",
-      "fn_hierarchy": "35-24L009",
-      "layer": "P-VALVEPOS",
-      "block": "PPI_0900A",
-      "x": 521.75,
-      "y": 230.0,
-      "is_valve": true,
-      "source": "vision"
-    },
-    "35-24-188": {
-      "type": "HV",
-      "fn": "35-24L009",
-      "fn_hierarchy": "35-24L009",
-      "layer": "P-VALVEPOS",
-      "block": "PPI_0900A",
-      "x": 541.25,
-      "y": 105.0,
-      "is_valve": true,
-      "source": "vision"
-    },
-    "35-24-189": {
-      "type": "HV",
-      "fn": "35-24L009",
-      "fn_hierarchy": "35-24L009",
-      "layer": "P-VALVEPOS",
-      "block": "PPI_0900A",
-      "x": 502.5,
-      "y": 92.5,
-      "is_valve": true,
-      "source": "vision"
-    },
-    "35-24-191": {
-      "type": "NC",
-      "fn": "35-24L009",
-      "fn_hierarchy": "35-24L009",
-      "layer": "P-VALVEPOS",
-      "block": "PPI_0900A",
-      "x": 438.401012250547,
-      "y": 277.5,
-      "is_valve": true,
-      "source": "vision"
-    },
-    "35-24-196": {
-      "type": "NC FLS",
-      "fn": "35-24L009",
-      "fn_hierarchy": "35-24L009",
-      "layer": "P-VALVEPOS",
-      "block": "PPI_0900A",
-      "x": 222.5,
-      "y": 260.0,
-      "is_valve": true,
-      "source": "vision"
-    },
-    "35-24-221": {
-      "type": "NC FLS",
-      "fn": "35-24L009",
-      "fn_hierarchy": "35-24L009",
-      "layer": "P-VALVEPOS",
-      "block": "PPI_0900A",
-      "x": 192.5,
-      "y": 242.5,
-      "is_valve": true,
-      "source": "vision"
-    },
-    "35-24-193": {
-      "type": "HV",
-      "fn": "35-24L009",
-      "fn_hierarchy": "35-24L009",
-      "layer": "P-VALVEPOS",
-      "block": "PPI_0900A",
-      "x": 375.0,
-      "y": 70.0,
-      "is_valve": true,
-      "source": "vision"
-    },
-    "35-24-199": {
-      "type": "AV-M",
-      "fn": "35-24L009",
-      "fn_hierarchy": "35-24L009",
-      "layer": "P-VALVEPOS",
-      "block": "PPI_0900A",
-      "x": 167.5,
-      "y": 260.0,
-      "is_valve": true,
-      "source": "vision"
-    },
-    "35-24-192": {
-      "type": "NC",
-      "fn": "35-24L009",
-      "fn_hierarchy": "35-24L009",
-      "layer": "P-VALVEPOS",
-      "block": "PPI_0900A",
-      "x": 438.401012250547,
-      "y": 267.5,
       "is_valve": true,
       "source": "vision"
     },
@@ -1172,7 +1062,7 @@
       "source": "vision"
     },
     "35-24-198": {
-      "type": "NC NO SMP",
+      "type": "NC FLS",
       "fn": "35-24L009",
       "fn_hierarchy": "35-24L009",
       "layer": "P-VALVEPOS",
@@ -1182,8 +1072,85 @@
       "is_valve": true,
       "source": "vision"
     },
-    "35-24-190": {
+    "35-24-193": {
       "type": "HV",
+      "fn": "35-24L009",
+      "fn_hierarchy": "35-24L009",
+      "layer": "P-VALVEPOS",
+      "block": "PPI_0900A",
+      "x": 375.0,
+      "y": 70.0,
+      "is_valve": true,
+      "source": "vision"
+    },
+    "35-24-199": {
+      "type": "NC",
+      "fn": "35-24L009",
+      "fn_hierarchy": "35-24L009",
+      "layer": "P-VALVEPOS",
+      "block": "PPI_0900A",
+      "x": 167.5,
+      "y": 260.0,
+      "is_valve": true,
+      "source": "vision"
+    },
+    "35-24-191": {
+      "type": "DRN NC",
+      "fn": "35-24L009",
+      "fn_hierarchy": "35-24L009",
+      "layer": "P-VALVEPOS",
+      "block": "PPI_0900A",
+      "x": 438.401012250547,
+      "y": 277.5,
+      "is_valve": true,
+      "source": "vision"
+    },
+    "35-24-196": {
+      "type": "HV",
+      "fn": "35-24L009",
+      "fn_hierarchy": "35-24L009",
+      "layer": "P-VALVEPOS",
+      "block": "PPI_0900A",
+      "x": 222.5,
+      "y": 260.0,
+      "is_valve": true,
+      "source": "vision"
+    },
+    "35-24-221": {
+      "type": "NC FLS",
+      "fn": "35-24L009",
+      "fn_hierarchy": "35-24L009",
+      "layer": "P-VALVEPOS",
+      "block": "PPI_0900A",
+      "x": 192.5,
+      "y": 242.5,
+      "is_valve": true,
+      "source": "vision"
+    },
+    "35-24-197": {
+      "type": "HV",
+      "fn": "35-24L009",
+      "fn_hierarchy": "35-24L009",
+      "layer": "P-VALVEPOS",
+      "block": "PPI_0900A",
+      "x": 195.0,
+      "y": 227.5,
+      "is_valve": true,
+      "source": "vision"
+    },
+    "35-24-189": {
+      "type": "DRN NC",
+      "fn": "35-24L009",
+      "fn_hierarchy": "35-24L009",
+      "layer": "P-VALVEPOS",
+      "block": "PPI_0900A",
+      "x": 502.5,
+      "y": 92.5,
+      "is_valve": true,
+      "source": "vision"
+    },
+    "35-24-190": {
+      "type": "DRN NC",
       "fn": "35-24L009",
       "fn_hierarchy": "35-24L009",
       "layer": "P-VALVEPOS",
@@ -1194,7 +1161,7 @@
       "source": "vision"
     },
     "35-24-194": {
-      "type": "NC",
+      "type": "DRN NC",
       "fn": "35-24L009",
       "fn_hierarchy": "35-24L009",
       "layer": "P-VALVEPOS",
@@ -1204,18 +1171,29 @@
       "is_valve": true,
       "source": "vision"
     },
-    "35-24-197": {
-      "type": "NC",
+    "35-24-192": {
+      "type": "DRN NC",
       "fn": "35-24L009",
       "fn_hierarchy": "35-24L009",
       "layer": "P-VALVEPOS",
       "block": "PPI_0900A",
-      "x": 195.0,
-      "y": 227.5,
+      "x": 438.401012250547,
+      "y": 267.5,
       "is_valve": true,
       "source": "vision"
     },
     "35-24-010.1": {
+      "type": "NO",
+      "fn": "35-24L010",
+      "fn_hierarchy": "35-24L010",
+      "layer": "P-CVPOS",
+      "block": "PPI_1000A",
+      "x": 5452.5,
+      "y": 350.0,
+      "is_valve": true,
+      "source": "vision"
+    },
+    "35-24HV-642": {
       "type": "AV",
       "fn": "35-24L010",
       "fn_hierarchy": "35-24L010",
@@ -1226,8 +1204,30 @@
       "is_valve": true,
       "source": "vision"
     },
+    "35-24FV-644": {
+      "type": "AV FLS",
+      "fn": "35-24L010",
+      "fn_hierarchy": "35-24L010",
+      "layer": "P-CVPOS",
+      "block": "PPI_1000A",
+      "x": 5482.5,
+      "y": 382.5,
+      "is_valve": true,
+      "source": "vision"
+    },
+    "35-24FV-640": {
+      "type": "AV",
+      "fn": "35-24L010",
+      "fn_hierarchy": "35-24L010",
+      "layer": "P-CVPOS",
+      "block": "PPI_1000A",
+      "x": 5423.75,
+      "y": 382.5,
+      "is_valve": true,
+      "source": "vision"
+    },
     "35-24-169": {
-      "type": "HV",
+      "type": "DRN NC",
       "fn": "35-24L010",
       "fn_hierarchy": "35-24L010",
       "layer": "P-VALVEPOS",
@@ -1237,19 +1237,8 @@
       "is_valve": true,
       "source": "vision"
     },
-    "35-24HV-642": {
-      "type": "HV",
-      "fn": "35-24L010",
-      "fn_hierarchy": "35-24L010",
-      "layer": "P-CVPOS",
-      "block": "PPI_1000A",
-      "x": 5452.5,
-      "y": 350.0,
-      "is_valve": true,
-      "source": "vision"
-    },
     "35-24-168": {
-      "type": "NC",
+      "type": "AV",
       "fn": "35-24L010",
       "fn_hierarchy": "35-24L010",
       "layer": "P-CVPOS",
@@ -1271,7 +1260,7 @@
       "source": "vision"
     },
     "35-24-166": {
-      "type": "NC",
+      "type": "NC FLS",
       "fn": "35-24L010",
       "fn_hierarchy": "35-24L010",
       "layer": "P-VALVEPOS",
@@ -1281,41 +1270,8 @@
       "is_valve": true,
       "source": "vision"
     },
-    "35-24FV-644": {
-      "type": "AV",
-      "fn": "35-24L010",
-      "fn_hierarchy": "35-24L010",
-      "layer": "P-CVPOS",
-      "block": "PPI_1000A",
-      "x": 5482.5,
-      "y": 382.5,
-      "is_valve": true,
-      "source": "vision"
-    },
-    "35-24-170": {
-      "type": "HV",
-      "fn": "35-24L010",
-      "fn_hierarchy": "35-24L010",
-      "layer": "P-VALVEPOS",
-      "block": "PPI_0900A",
-      "x": 1007.5,
-      "y": 95.0,
-      "is_valve": true,
-      "source": "vision"
-    },
-    "35-24FV-640": {
-      "type": "AV",
-      "fn": "35-24L010",
-      "fn_hierarchy": "35-24L010",
-      "layer": "P-CVPOS",
-      "block": "PPI_1000A",
-      "x": 5423.75,
-      "y": 382.5,
-      "is_valve": true,
-      "source": "vision"
-    },
     "35-24-015": {
-      "type": "NC",
+      "type": "DRN NC",
       "fn": "35-24L010",
       "fn_hierarchy": "35-24L010",
       "layer": "P-VALVEPOS",
@@ -1336,9 +1292,31 @@
       "is_valve": true,
       "source": "vision"
     },
+    "35-24-098": {
+      "type": "DRN NC",
+      "fn": "35-24L001",
+      "fn_hierarchy": "35-24L011",
+      "layer": "P-VALVEPOS",
+      "block": "PPI_0900A",
+      "x": 3042.037084313363,
+      "y": 250.0,
+      "is_valve": true,
+      "source": "vision"
+    },
+    "35-24-094": {
+      "type": "HV",
+      "fn": "35-24L011",
+      "fn_hierarchy": "35-24L011",
+      "layer": "P-VALVEPOS",
+      "block": "PPI_0900A",
+      "x": 3255.0,
+      "y": 77.5,
+      "is_valve": true,
+      "source": "vision"
+    },
     "35-24-1125": {
-      "type": "NC",
-      "fn": "35-24P501",
+      "type": "DRN NC",
+      "fn": "35-24T601",
       "fn_hierarchy": "35-24P501",
       "layer": "P-VALVEPOS",
       "block": "PPI_0900A",
@@ -1370,7 +1348,7 @@
       "source": "vision"
     },
     "35-24-072": {
-      "type": "NC FLS",
+      "type": "CHK",
       "fn": "35-24P501",
       "fn_hierarchy": "35-24P501",
       "layer": "P-VALVEPOS",
@@ -1392,8 +1370,8 @@
       "source": "vision"
     },
     "35-24LV1-609": {
-      "type": "AV",
-      "fn": "35-24P501",
+      "type": "AV DRN",
+      "fn": "35-24T601",
       "fn_hierarchy": "35-24P501",
       "layer": "P-CVPOS",
       "block": "PPI_1000A",
@@ -1414,7 +1392,7 @@
       "source": "vision"
     },
     "35-24LV3-609": {
-      "type": "NC",
+      "type": "AV",
       "fn": "35-24P501",
       "fn_hierarchy": "35-24P501",
       "layer": "P-CVPOS",
@@ -1425,8 +1403,8 @@
       "source": "vision"
     },
     "35-24-117": {
-      "type": "HV",
-      "fn": "35-24P501",
+      "type": "DRN NC",
+      "fn": "35-24P505",
       "fn_hierarchy": "35-24P501",
       "layer": "P-VALVEPOS",
       "block": "PPI_0900A",
@@ -1435,25 +1413,25 @@
       "is_valve": true,
       "source": "vision"
     },
+    "35-24-1120": {
+      "type": "DRN NC",
+      "fn": "35-24T602",
+      "fn_hierarchy": "35-24P501",
+      "layer": "P-VALVEPOS",
+      "block": "PPI_0900A",
+      "x": 4013.25,
+      "y": 217.5,
+      "is_valve": true,
+      "source": "vision"
+    },
     "35-24-075": {
-      "type": "NC",
-      "fn": "35-24P502",
+      "type": "DRN NC",
+      "fn": "35-24T601",
       "fn_hierarchy": "35-24P502",
       "layer": "P-VALVEPOS",
       "block": "PPI_0900A",
       "x": 3848.0,
       "y": 220.0,
-      "is_valve": true,
-      "source": "vision"
-    },
-    "35-24-1101": {
-      "type": "NC FLS",
-      "fn": "35-24P502",
-      "fn_hierarchy": "35-24P502",
-      "layer": "P-VALVEPOS",
-      "block": "PPI_0900A",
-      "x": 3816.287084313363,
-      "y": 270.0,
       "is_valve": true,
       "source": "vision"
     },
@@ -1468,8 +1446,19 @@
       "is_valve": true,
       "source": "vision"
     },
+    "35-24-1101": {
+      "type": "FLS HV",
+      "fn": "35-24P502",
+      "fn_hierarchy": "35-24P502",
+      "layer": "P-VALVEPOS",
+      "block": "PPI_0900A",
+      "x": 3816.287084313363,
+      "y": 270.0,
+      "is_valve": true,
+      "source": "vision"
+    },
     "35-24P504": {
-      "type": "",
+      "type": "NC",
       "fn": "35-24P504",
       "fn_hierarchy": "35-24P504",
       "layer": "P-CVPOS",
@@ -1477,10 +1466,10 @@
       "x": 3403.459273891951,
       "y": 262.5,
       "is_valve": true,
-      "source": "cad_layer"
+      "source": "vision"
     },
     "35-24-090": {
-      "type": "NC NO FLS",
+      "type": "NC FLS",
       "fn": "35-24P504",
       "fn_hierarchy": "35-24P504",
       "layer": "P-VALVEPOS",
@@ -1491,7 +1480,7 @@
       "source": "vision"
     },
     "35-24FV-593": {
-      "type": "AV",
+      "type": "AV FLS",
       "fn": "35-24P504",
       "fn_hierarchy": "35-24P504",
       "layer": "P-CVPOS",
@@ -1501,8 +1490,19 @@
       "is_valve": true,
       "source": "vision"
     },
-    "35-24P506": {
-      "type": "NC",
+    "35-24-113": {
+      "type": "NC FLS",
+      "fn": "35-24P505",
+      "fn_hierarchy": "35-24P505",
+      "layer": "P-VALVEPOS",
+      "block": "PPI_0900A",
+      "x": 2637.5,
+      "y": 242.5,
+      "is_valve": true,
+      "source": "vision"
+    },
+    "35-24-145": {
+      "type": "DRN NC",
       "fn": "35-24P506",
       "fn_hierarchy": "35-24P506",
       "layer": "P-VALVEPOS",
@@ -1523,19 +1523,19 @@
       "is_valve": true,
       "source": "vision"
     },
-    "35-24-145": {
-      "type": "NC FLS",
+    "35-24-141": {
+      "type": "DRN NC",
       "fn": "35-24P506",
       "fn_hierarchy": "35-24P506",
       "layer": "P-VALVEPOS",
       "block": "PPI_0900A",
-      "x": 1676.25,
+      "x": 1745.0,
       "y": 225.0,
       "is_valve": true,
       "source": "vision"
     },
     "35-24FV-550": {
-      "type": "AV",
+      "type": "AV FLS",
       "fn": "35-24P507",
       "fn_hierarchy": "35-24P507",
       "layer": "P-CVPOS",
@@ -1545,8 +1545,30 @@
       "is_valve": true,
       "source": "vision"
     },
+    "35-24-186": {
+      "type": "DRN NC",
+      "fn": "35-24L008",
+      "fn_hierarchy": "35-24P509",
+      "layer": "P-VALVEPOS",
+      "block": "PPI_0900A",
+      "x": 526.75,
+      "y": 218.75,
+      "is_valve": true,
+      "source": "vision"
+    },
+    "35-24-187": {
+      "type": "NC FLS",
+      "fn": "35-24P509",
+      "fn_hierarchy": "35-24P509",
+      "layer": "P-VALVEPOS",
+      "block": "PPI_0900A",
+      "x": 521.75,
+      "y": 230.0,
+      "is_valve": true,
+      "source": "vision"
+    },
     "35-24P510": {
-      "type": "",
+      "type": "NC",
       "fn": "35-24P510",
       "fn_hierarchy": "35-24P510",
       "layer": "P-VALVEPOS",
@@ -1554,7 +1576,7 @@
       "x": 2291.875,
       "y": 260.0,
       "is_valve": true,
-      "source": "cad_layer"
+      "source": "vision"
     },
     "35-24-062": {
       "type": "NC FLS",
@@ -1563,6 +1585,28 @@
       "layer": "P-VALVEPOS",
       "block": "PPI_0900A",
       "x": 4041.662084313363,
+      "y": 257.5,
+      "is_valve": true,
+      "source": "vision"
+    },
+    "35-24LV2-559": {
+      "type": "AV FLS",
+      "fn": "35-24P510",
+      "fn_hierarchy": "35-24P510",
+      "layer": "P-CVPOS",
+      "block": "PPI_1000A",
+      "x": 2225.0,
+      "y": 277.5,
+      "is_valve": true,
+      "source": "vision"
+    },
+    "35-24-205": {
+      "type": "NC FLS",
+      "fn": "35-24P510",
+      "fn_hierarchy": "35-24P510",
+      "layer": "P-VALVEPOS",
+      "block": "PPI_0900A",
+      "x": 2232.5,
       "y": 257.5,
       "is_valve": true,
       "source": "vision"
@@ -1578,30 +1622,8 @@
       "is_valve": true,
       "source": "vision"
     },
-    "35-24-205": {
-      "type": "NC FLS",
-      "fn": "35-24P510",
-      "fn_hierarchy": "35-24P510",
-      "layer": "P-VALVEPOS",
-      "block": "PPI_0900A",
-      "x": 2232.5,
-      "y": 257.5,
-      "is_valve": true,
-      "source": "vision"
-    },
-    "35-24-129": {
-      "type": "NC",
-      "fn": "35-24P510",
-      "fn_hierarchy": "35-24P510",
-      "layer": "P-VALVEPOS",
-      "block": "PPI_0900A",
-      "x": 2291.875,
-      "y": 260.0,
-      "is_valve": true,
-      "source": "vision"
-    },
     "35-24-130": {
-      "type": "NC",
+      "type": "CHK",
       "fn": "35-24P510",
       "fn_hierarchy": "35-24P510",
       "layer": "P-VALVEPOS",
@@ -1611,9 +1633,20 @@
       "is_valve": true,
       "source": "vision"
     },
+    "35-24-129": {
+      "type": "DRN NC",
+      "fn": "35-24T603",
+      "fn_hierarchy": "35-24P510",
+      "layer": "P-VALVEPOS",
+      "block": "PPI_0900A",
+      "x": 2291.875,
+      "y": 260.0,
+      "is_valve": true,
+      "source": "vision"
+    },
     "35-24-131": {
-      "type": "NC FLS",
-      "fn": "35-24P510",
+      "type": "DRN NC",
+      "fn": "35-24T603",
       "fn_hierarchy": "35-24P510",
       "layer": "P-VALVEPOS",
       "block": "PPI_0900A",
@@ -1622,19 +1655,8 @@
       "is_valve": true,
       "source": "vision"
     },
-    "35-24-065": {
-      "type": "FLS",
-      "fn": "35-24P510",
-      "fn_hierarchy": "35-24P510",
-      "layer": "P-VALVEPOS",
-      "block": "PPI_0900A",
-      "x": 4005.162084313363,
-      "y": 256.0,
-      "is_valve": true,
-      "source": "vision"
-    },
     "35-24-1114": {
-      "type": "NC CHK",
+      "type": "CHK",
       "fn": "35-24P510",
       "fn_hierarchy": "35-24P510",
       "layer": "P-VALVEPOS",
@@ -1652,6 +1674,28 @@
       "block": "PPI_0900A",
       "x": 2355.0,
       "y": 262.4999999999999,
+      "is_valve": true,
+      "source": "vision"
+    },
+    "35-24-126": {
+      "type": "FLS HV",
+      "fn": "35-24P510",
+      "fn_hierarchy": "35-24P510",
+      "layer": "P-VALVEPOS",
+      "block": "PPI_0900A",
+      "x": 2342.5,
+      "y": 227.4999999999999,
+      "is_valve": true,
+      "source": "vision"
+    },
+    "35-24-123": {
+      "type": "DRN NC",
+      "fn": "35-24T603",
+      "fn_hierarchy": "35-24P510",
+      "layer": "P-VALVEPOS",
+      "block": "PPI_0900A",
+      "x": 2364.967011171677,
+      "y": 227.4670111716763,
       "is_valve": true,
       "source": "vision"
     },
@@ -1677,36 +1721,36 @@
       "is_valve": true,
       "source": "vision"
     },
-    "35-24-126": {
-      "type": "FLS HV",
-      "fn": "35-24P510",
-      "fn_hierarchy": "35-24P510",
+    "35-24-065": {
+      "type": "DRN NC",
+      "fn": "35-24T602",
+      "fn_hierarchy": "35-24P511",
       "layer": "P-VALVEPOS",
       "block": "PPI_0900A",
-      "x": 2342.5,
-      "y": 227.4999999999999,
-      "is_valve": true,
-      "source": "vision"
-    },
-    "35-24-123": {
-      "type": "NC",
-      "fn": "35-24P510",
-      "fn_hierarchy": "35-24P510",
-      "layer": "P-VALVEPOS",
-      "block": "PPI_0900A",
-      "x": 2364.967011171677,
-      "y": 227.4670111716763,
+      "x": 4005.162084313363,
+      "y": 256.0,
       "is_valve": true,
       "source": "vision"
     },
     "35-24-1098": {
-      "type": "NC",
+      "type": "HV",
       "fn": "35-24P511",
       "fn_hierarchy": "35-24P511",
       "layer": "P-VALVEPOS",
       "block": "PPI_0900A",
       "x": 2392.5,
       "y": 277.4999999999999,
+      "is_valve": true,
+      "source": "vision"
+    },
+    "35-24-121": {
+      "type": "DRN NC",
+      "fn": "35-24T603",
+      "fn_hierarchy": "35-24P511",
+      "layer": "P-SYMB",
+      "block": "P7A1305",
+      "x": 2383.722038088568,
+      "y": 235.0000002726035,
       "is_valve": true,
       "source": "vision"
     },
@@ -1733,7 +1777,7 @@
       "source": "vision"
     },
     "35-24-209": {
-      "type": "NC NO SMP",
+      "type": "NC FLS",
       "fn": "35-24P512",
       "fn_hierarchy": "35-24P512",
       "layer": "P-VALVEPOS",
@@ -1744,8 +1788,8 @@
       "source": "vision"
     },
     "35-24-048": {
-      "type": "NC FLS",
-      "fn": "35-24P512",
+      "type": "DRN NC",
+      "fn": "35-24T602",
       "fn_hierarchy": "35-24P512",
       "layer": "P-VALVEPOS",
       "block": "PPI_0900A",
@@ -1766,7 +1810,7 @@
       "source": "vision"
     },
     "35-24-045": {
-      "type": "DRN NC",
+      "type": "DRN CHK",
       "fn": "35-24P512",
       "fn_hierarchy": "35-24P512",
       "layer": "P-VALVEPOS",
@@ -1798,20 +1842,64 @@
       "is_valve": true,
       "source": "vision"
     },
-    "35-24-021": {
-      "type": "NC",
+    "35-24-1122": {
+      "type": "HV",
+      "fn": "35-24P512",
+      "fn_hierarchy": "35-24P512",
+      "layer": "P-VALVEPOS",
+      "block": "PPI_0900A",
+      "x": 4567.5,
+      "y": 197.5,
+      "is_valve": true,
+      "source": "vision"
+    },
+    "35-24-1139": {
+      "type": "CHK",
+      "fn": "35-24P512",
+      "fn_hierarchy": "35-24P512",
+      "layer": "P-VALVEPOS",
+      "block": "PPI_0900A",
+      "x": 4567.5,
+      "y": 222.5,
+      "is_valve": true,
+      "source": "vision"
+    },
+    "35-24-201": {
+      "type": "CHK",
       "fn": "35-24P513",
       "fn_hierarchy": "35-24P513",
       "layer": "P-VALVEPOS",
       "block": "PPI_0900A",
-      "x": 5115.0,
-      "y": 270.0,
+      "x": 5092.0,
+      "y": 322.4999999999999,
+      "is_valve": true,
+      "source": "vision"
+    },
+    "35-24-1091": {
+      "type": "CHK",
+      "fn": "35-24P513",
+      "fn_hierarchy": "35-24P513",
+      "layer": "P-VALVEPOS",
+      "block": "PPI_0900A",
+      "x": 5159.375,
+      "y": 310.0,
+      "is_valve": true,
+      "source": "vision"
+    },
+    "35-24HV-633": {
+      "type": "NC",
+      "fn": "35-24P513",
+      "fn_hierarchy": "35-24P513",
+      "layer": "P-CVPOS",
+      "block": "PPI_1000A",
+      "x": 5095.0,
+      "y": 332.5,
       "is_valve": true,
       "source": "vision"
     },
     "35-24-019": {
-      "type": "NC FLS",
-      "fn": "35-24P513",
+      "type": "DRN NC",
+      "fn": "35-24T605",
       "fn_hierarchy": "35-24P513",
       "layer": "P-VALVEPOS",
       "block": "PPI_0900A",
@@ -1820,14 +1908,14 @@
       "is_valve": true,
       "source": "vision"
     },
-    "35-24-1091": {
-      "type": "NC SMP",
+    "35-24-213": {
+      "type": "NC FLS",
       "fn": "35-24P513",
       "fn_hierarchy": "35-24P513",
       "layer": "P-VALVEPOS",
       "block": "PPI_0900A",
-      "x": 5159.375,
-      "y": 310.0,
+      "x": 5216.25,
+      "y": 295.0,
       "is_valve": true,
       "source": "vision"
     },
@@ -1842,25 +1930,14 @@
       "is_valve": true,
       "source": "vision"
     },
-    "35-24-201": {
-      "type": "NC NO CHK",
-      "fn": "35-24P513",
-      "fn_hierarchy": "35-24P513",
-      "layer": "P-VALVEPOS",
-      "block": "PPI_0900A",
-      "x": 5092.0,
-      "y": 322.4999999999999,
-      "is_valve": true,
-      "source": "vision"
-    },
-    "35-24HV-633": {
-      "type": "NC SMP",
+    "35-24NV-634": {
+      "type": "NC",
       "fn": "35-24P513",
       "fn_hierarchy": "35-24P513",
       "layer": "P-CVPOS",
       "block": "PPI_1000A",
-      "x": 5095.0,
-      "y": 332.5,
+      "x": 5117.75,
+      "y": 235.0,
       "is_valve": true,
       "source": "vision"
     },
@@ -1875,14 +1952,36 @@
       "is_valve": true,
       "source": "vision"
     },
-    "35-24NV-634": {
-      "type": "NC",
+    "35-24-159": {
+      "type": "HV",
       "fn": "35-24P513",
       "fn_hierarchy": "35-24P513",
-      "layer": "P-CVPOS",
-      "block": "PPI_1000A",
-      "x": 5117.75,
-      "y": 235.0,
+      "layer": "P-VALVEPOS",
+      "block": "PPI_0900A",
+      "x": 1260.0,
+      "y": 77.5,
+      "is_valve": true,
+      "source": "vision"
+    },
+    "35-24-021": {
+      "type": "CHK",
+      "fn": "35-24P513",
+      "fn_hierarchy": "35-24P513",
+      "layer": "P-VALVEPOS",
+      "block": "PPI_0900A",
+      "x": 5115.0,
+      "y": 270.0,
+      "is_valve": true,
+      "source": "vision"
+    },
+    "35-24-1113": {
+      "type": "CHK",
+      "fn": "35-24P513",
+      "fn_hierarchy": "35-24P513",
+      "layer": "P-VALVEPOS",
+      "block": "PPI_0900A",
+      "x": 5284.25,
+      "y": 307.5,
       "is_valve": true,
       "source": "vision"
     },
@@ -1909,68 +2008,13 @@
       "source": "vision"
     },
     "35-24-132": {
-      "type": "NC SMP",
+      "type": "DRN NC",
       "fn": "35-24P514",
       "fn_hierarchy": "35-24P514",
       "layer": "P-VALVEPOS",
       "block": "PPI_0900A",
       "x": 2153.75,
       "y": 277.5,
-      "is_valve": true,
-      "source": "vision"
-    },
-    "35-24-133": {
-      "type": "NC SMP",
-      "fn": "35-24P514",
-      "fn_hierarchy": "35-24P514",
-      "layer": "P-VALVEPOS",
-      "block": "PPI_0900A",
-      "x": 2153.75,
-      "y": 267.5,
-      "is_valve": true,
-      "source": "vision"
-    },
-    "35-24-1132": {
-      "type": "NC FLS",
-      "fn": "35-24P514",
-      "fn_hierarchy": "35-24P514",
-      "layer": "P-VALVEPOS",
-      "block": "PPI_0900A",
-      "x": 4318.125,
-      "y": 242.5,
-      "is_valve": true,
-      "source": "vision"
-    },
-    "35-24-055": {
-      "type": "HV",
-      "fn": "35-24P514",
-      "fn_hierarchy": "35-24P514",
-      "layer": "P-VALVEPOS",
-      "block": "PPI_0900A",
-      "x": 4317.5,
-      "y": 227.5,
-      "is_valve": true,
-      "source": "vision"
-    },
-    "35-24-1133": {
-      "type": "HV",
-      "fn": "35-24P514",
-      "fn_hierarchy": "35-24P514",
-      "layer": "P-VALVEPOS",
-      "block": "PPI_0900A",
-      "x": 4343.75,
-      "y": 222.5,
-      "is_valve": true,
-      "source": "vision"
-    },
-    "35-24-1104": {
-      "type": "HV",
-      "fn": "35-24P514",
-      "fn_hierarchy": "35-24P514",
-      "layer": "P-VALVEPOS",
-      "block": "PPI_0900A",
-      "x": 4318.75,
-      "y": 217.5,
       "is_valve": true,
       "source": "vision"
     },
@@ -1982,6 +2026,61 @@
       "block": "PPI_1000A",
       "x": 4400.007344692958,
       "y": 292.5,
+      "is_valve": true,
+      "source": "vision"
+    },
+    "35-24-133": {
+      "type": "DRN NC",
+      "fn": "35-24P514",
+      "fn_hierarchy": "35-24P514",
+      "layer": "P-VALVEPOS",
+      "block": "PPI_0900A",
+      "x": 2153.75,
+      "y": 267.5,
+      "is_valve": true,
+      "source": "vision"
+    },
+    "35-24-1132": {
+      "type": "FLS CHK",
+      "fn": "35-24P514",
+      "fn_hierarchy": "35-24P514",
+      "layer": "P-VALVEPOS",
+      "block": "PPI_0900A",
+      "x": 4318.125,
+      "y": 242.5,
+      "is_valve": true,
+      "source": "vision"
+    },
+    "35-24-055": {
+      "type": "NC",
+      "fn": "35-24P514",
+      "fn_hierarchy": "35-24P514",
+      "layer": "P-VALVEPOS",
+      "block": "PPI_0900A",
+      "x": 4317.5,
+      "y": 227.5,
+      "is_valve": true,
+      "source": "vision"
+    },
+    "35-24-1133": {
+      "type": "NC",
+      "fn": "35-24P514",
+      "fn_hierarchy": "35-24P514",
+      "layer": "P-VALVEPOS",
+      "block": "PPI_0900A",
+      "x": 4343.75,
+      "y": 222.5,
+      "is_valve": true,
+      "source": "vision"
+    },
+    "35-24-1104": {
+      "type": "NC",
+      "fn": "35-24P514",
+      "fn_hierarchy": "35-24P514",
+      "layer": "P-VALVEPOS",
+      "block": "PPI_0900A",
+      "x": 4318.75,
+      "y": 217.5,
       "is_valve": true,
       "source": "vision"
     },
@@ -2007,8 +2106,19 @@
       "is_valve": true,
       "source": "vision"
     },
+    "35-24-1137": {
+      "type": "DRN NC",
+      "fn": "35-24T605",
+      "fn_hierarchy": "35-24P515",
+      "layer": "P-VALVEPOS",
+      "block": "PPI_0900A",
+      "x": 5045.0,
+      "y": 292.5,
+      "is_valve": true,
+      "source": "vision"
+    },
     "35-24-156": {
-      "type": "",
+      "type": "FLS HV",
       "fn": "35-24P515",
       "fn_hierarchy": "35-24P515",
       "layer": "P-VALVEPOS",
@@ -2016,11 +2126,11 @@
       "x": 1320.0,
       "y": 155.0,
       "is_valve": true,
-      "source": "cad_layer"
+      "source": "vision"
     },
     "35-24-026": {
-      "type": "HV",
-      "fn": "35-24P515",
+      "type": "DRN NC",
+      "fn": "35-24T605",
       "fn_hierarchy": "35-24P515",
       "layer": "P-VALVEPOS",
       "block": "PPI_0900A",
@@ -2030,46 +2140,35 @@
       "source": "vision"
     },
     "35-24-024": {
-      "type": "NC",
-      "fn": "35-24P515",
+      "type": "DRN NC",
+      "fn": "35-24T605",
       "fn_hierarchy": "35-24P515",
-      "layer": "P-VALVEPOS",
-      "block": "PPI_0900A",
-      "x": 5040.0,
-      "y": 307.5,
-      "is_valve": true,
-      "source": "vision"
-    },
-    "35-24-1137": {
-      "type": "NC",
-      "fn": "35-24P515",
-      "fn_hierarchy": "35-24P515",
-      "layer": "P-VALVEPOS",
-      "block": "PPI_0900A",
-      "x": 5045.0,
-      "y": 292.5,
-      "is_valve": true,
-      "source": "vision"
-    },
-    "35-24-154": {
-      "type": "CHK",
-      "fn": "35-24P515",
-      "fn_hierarchy": "35-24P515",
-      "layer": "P-VALVEPOS",
-      "block": "PPI_0900A",
-      "x": 1532.5,
-      "y": 95.0,
+      "layer": "P-SYMB",
+      "block": "P7A1305",
+      "x": 5025.0,
+      "y": 285.0,
       "is_valve": true,
       "source": "vision"
     },
     "35-24-1117": {
-      "type": "NC",
-      "fn": "35-24P516",
+      "type": "DRN NC",
+      "fn": "35-24T604",
       "fn_hierarchy": "35-24P516",
       "layer": "P-VALVEPOS",
       "block": "PPI_0900A",
       "x": 4753.359903084216,
       "y": 245.0,
+      "is_valve": true,
+      "source": "vision"
+    },
+    "35-24-200": {
+      "type": "CHK",
+      "fn": "35-24P516",
+      "fn_hierarchy": "35-24P516",
+      "layer": "P-VALVEPOS",
+      "block": "PPI_0900A",
+      "x": 4693.75,
+      "y": 262.5,
       "is_valve": true,
       "source": "vision"
     },
@@ -2085,8 +2184,8 @@
       "source": "vision"
     },
     "35-24-036": {
-      "type": "NC",
-      "fn": "35-24P516",
+      "type": "DRN NC",
+      "fn": "35-24T604",
       "fn_hierarchy": "35-24P516",
       "layer": "P-VALVEPOS",
       "block": "PPI_0900A",
@@ -2096,8 +2195,8 @@
       "source": "vision"
     },
     "35-24-035": {
-      "type": "NC",
-      "fn": "35-24P516",
+      "type": "DRN NC",
+      "fn": "35-24T604",
       "fn_hierarchy": "35-24P516",
       "layer": "P-VALVEPOS",
       "block": "PPI_0900A",
@@ -2106,25 +2205,36 @@
       "is_valve": true,
       "source": "vision"
     },
-    "35-24-200": {
-      "type": "CHK",
+    "35-24-210": {
+      "type": "NC FLS",
       "fn": "35-24P516",
       "fn_hierarchy": "35-24P516",
       "layer": "P-VALVEPOS",
       "block": "PPI_0900A",
-      "x": 4693.75,
-      "y": 262.5,
+      "x": 4691.802323494852,
+      "y": 302.5,
       "is_valve": true,
       "source": "vision"
     },
     "35-24-148": {
-      "type": "NC",
-      "fn": "35-24P516",
+      "type": "DRN NC",
+      "fn": "35-24P520",
       "fn_hierarchy": "35-24P516",
       "layer": "P-VALVEPOS",
       "block": "PPI_0900A",
       "x": 1561.25,
       "y": 257.5,
+      "is_valve": true,
+      "source": "vision"
+    },
+    "35-24-041": {
+      "type": "NC",
+      "fn": "35-24P516",
+      "fn_hierarchy": "35-24P516",
+      "layer": "P-VALVEPOS",
+      "block": "PPI_0900A",
+      "x": 4608.75,
+      "y": 275.0,
       "is_valve": true,
       "source": "vision"
     },
@@ -2140,7 +2250,7 @@
       "source": "vision"
     },
     "35-24-004": {
-      "type": "NC",
+      "type": "HV",
       "fn": "35-24P517",
       "fn_hierarchy": "35-24P517",
       "layer": "P-VALVEPOS",
@@ -2151,8 +2261,8 @@
       "source": "vision"
     },
     "35-24-003": {
-      "type": "NC",
-      "fn": "35-24P517",
+      "type": "DRN NC",
+      "fn": "35-24T607",
       "fn_hierarchy": "35-24P517",
       "layer": "P-VALVEPOS",
       "block": "PPI_0900A",
@@ -2162,23 +2272,12 @@
       "source": "vision"
     },
     "35-24-002": {
-      "type": "NC SMP",
+      "type": "CHK",
       "fn": "35-24P517",
       "fn_hierarchy": "35-24P517",
       "layer": "P-VALVEPOS",
       "block": "PPI_0900A",
       "x": 5925.0,
-      "y": 307.5,
-      "is_valve": true,
-      "source": "vision"
-    },
-    "35-24-001": {
-      "type": "FLS HV",
-      "fn": "35-24P517",
-      "fn_hierarchy": "35-24P517",
-      "layer": "P-VALVEPOS",
-      "block": "PPI_0900A",
-      "x": 5955.0,
       "y": 307.5,
       "is_valve": true,
       "source": "vision"
@@ -2194,8 +2293,30 @@
       "is_valve": true,
       "source": "vision"
     },
+    "35-24-001": {
+      "type": "FLS HV",
+      "fn": "35-24P517",
+      "fn_hierarchy": "35-24P517",
+      "layer": "P-VALVEPOS",
+      "block": "PPI_0900A",
+      "x": 5955.0,
+      "y": 307.5,
+      "is_valve": true,
+      "source": "vision"
+    },
+    "35-22-001": {
+      "type": "HV",
+      "fn": "35-24P517",
+      "fn_hierarchy": "35-24P517",
+      "layer": "P-VALVEPOS",
+      "block": "",
+      "x": 6208.217217217217,
+      "y": 378.7662662662663,
+      "is_valve": true,
+      "source": "vision"
+    },
     "35-24-174": {
-      "type": "NC FLS",
+      "type": "FLS CHK",
       "fn": "35-24P518",
       "fn_hierarchy": "35-24P518",
       "layer": "P-VALVEPOS",
@@ -2217,7 +2338,7 @@
       "source": "vision"
     },
     "35-24-008": {
-      "type": "NC FLS",
+      "type": "FLS HV",
       "fn": "35-24P518",
       "fn_hierarchy": "35-24P518",
       "layer": "P-VALVEPOS",
@@ -2239,7 +2360,7 @@
       "source": "vision"
     },
     "35-24-006": {
-      "type": "NC SMP",
+      "type": "CHK",
       "fn": "35-24P518",
       "fn_hierarchy": "35-24P518",
       "layer": "P-VALVEPOS",
@@ -2261,7 +2382,7 @@
       "source": "vision"
     },
     "35-24-214": {
-      "type": "NC FLS",
+      "type": "FLS CHK",
       "fn": "35-24P518",
       "fn_hierarchy": "35-24P518",
       "layer": "P-VALVEPOS",
@@ -2271,8 +2392,19 @@
       "is_valve": true,
       "source": "vision"
     },
-    "35-24-115": {
+    "35-24-1108": {
       "type": "NC",
+      "fn": "35-24P520",
+      "fn_hierarchy": "35-24P520",
+      "layer": "P-VALVEPOS",
+      "block": "PPI_0900A",
+      "x": 1561.25,
+      "y": 247.5,
+      "is_valve": true,
+      "source": "vision"
+    },
+    "35-24-115": {
+      "type": "DRN NC",
       "fn": "35-24T601",
       "fn_hierarchy": "35-24T601",
       "layer": "P-VALVEPOS",
@@ -2294,7 +2426,7 @@
       "source": "vision"
     },
     "35-24-079": {
-      "type": "HV",
+      "type": "DRN HV",
       "fn": "35-24T601",
       "fn_hierarchy": "35-24T601",
       "layer": "P-VALVEPOS",
@@ -2305,7 +2437,7 @@
       "source": "vision"
     },
     "35-24KV-595": {
-      "type": "HV",
+      "type": "NC",
       "fn": "35-24T601",
       "fn_hierarchy": "35-24T601",
       "layer": "P-CVPOS",
@@ -2315,30 +2447,8 @@
       "is_valve": true,
       "source": "vision"
     },
-    "35-24HV-597": {
-      "type": "NC FLS",
-      "fn": "35-24T601",
-      "fn_hierarchy": "35-24T601",
-      "layer": "P-CVPOS",
-      "block": "PPI_1000A",
-      "x": 3715.0,
-      "y": 150.0,
-      "is_valve": true,
-      "source": "vision"
-    },
-    "35-24FV-598": {
-      "type": "AV",
-      "fn": "35-24T601",
-      "fn_hierarchy": "35-24T601",
-      "layer": "P-CVPOS",
-      "block": "PPI_1000A",
-      "x": 3751.5,
-      "y": 155.0,
-      "is_valve": true,
-      "source": "vision"
-    },
     "35-24-1129": {
-      "type": "NC",
+      "type": "DRN NC",
       "fn": "35-24T602",
       "fn_hierarchy": "35-24T602",
       "layer": "P-VALVEPOS",
@@ -2349,7 +2459,7 @@
       "source": "vision"
     },
     "35-24-069": {
-      "type": "NC",
+      "type": "DRN NC",
       "fn": "35-24T602",
       "fn_hierarchy": "35-24T602",
       "layer": "P-VALVEPOS",
@@ -2359,25 +2469,36 @@
       "is_valve": true,
       "source": "vision"
     },
-    "35-24-121": {
-      "type": "HV",
-      "fn": "35-24T603",
-      "fn_hierarchy": "35-24T603",
-      "layer": "P-VALVEPOS",
-      "block": "PPI_0900A",
-      "x": 2392.5,
-      "y": 257.4999999999999,
-      "is_valve": true,
-      "source": "vision"
-    },
     "35-24-1130": {
-      "type": "NC",
+      "type": "CHK",
       "fn": "35-24T603",
       "fn_hierarchy": "35-24T603",
       "layer": "P-VALVEPOS",
       "block": "PPI_0900A",
       "x": 2392.25,
       "y": 219.9999999999999,
+      "is_valve": true,
+      "source": "vision"
+    },
+    "35-24-114": {
+      "type": "NC",
+      "fn": "35-24T603",
+      "fn_hierarchy": "35-24T603",
+      "layer": "P-VALVEPOS",
+      "block": "PPI_0900A",
+      "x": 2522.037084313363,
+      "y": 270.0,
+      "is_valve": true,
+      "source": "vision"
+    },
+    "35-24LV-621": {
+      "type": "AV FLS",
+      "fn": "35-24T604",
+      "fn_hierarchy": "35-24T604",
+      "layer": "P-CVPOS",
+      "block": "PPI_1000A",
+      "x": 4724.0,
+      "y": 310.0,
       "is_valve": true,
       "source": "vision"
     },
@@ -2392,6 +2513,17 @@
       "is_valve": true,
       "source": "vision"
     },
+    "35-24-154": {
+      "type": "CHK",
+      "fn": "35-24T605",
+      "fn_hierarchy": "35-24T605",
+      "layer": "P-VALVEPOS",
+      "block": "PPI_0900A",
+      "x": 1532.5,
+      "y": 95.0,
+      "is_valve": true,
+      "source": "vision"
+    },
     "35-24-173": {
       "type": "HV",
       "fn": "35-24T606",
@@ -2400,28 +2532,6 @@
       "block": "PPI_0900A",
       "x": 815.0,
       "y": 340.0,
-      "is_valve": true,
-      "source": "vision"
-    },
-    "35-24-159": {
-      "type": "HV",
-      "fn": "35-24ES-663",
-      "fn_hierarchy": "35-24ES-663",
-      "layer": "P-VALVEPOS",
-      "block": "PPI_0900A",
-      "x": 1260.0,
-      "y": 77.5,
-      "is_valve": true,
-      "source": "vision"
-    },
-    "35-24HV-501": {
-      "type": "HV",
-      "fn": "35-24HI-501",
-      "fn_hierarchy": "35-24HI-501",
-      "layer": "P-CVPOS",
-      "block": "PPI_1000A",
-      "x": 913.75,
-      "y": 175.0,
       "is_valve": true,
       "source": "vision"
     },
@@ -2436,8 +2546,19 @@
       "is_valve": true,
       "source": "vision"
     },
+    "35-24-218": {
+      "type": "HV",
+      "fn": "35-24HI-532",
+      "fn_hierarchy": "35-24HI-532",
+      "layer": "P-VALVEPOS",
+      "block": "PPI_0900A",
+      "x": 255.0,
+      "y": 77.5,
+      "is_valve": true,
+      "source": "vision"
+    },
     "35-24HV-534": {
-      "type": "AV",
+      "type": "HV",
       "fn": "35-24HI-534",
       "fn_hierarchy": "35-24HI-534",
       "layer": "P-CVPOS",
@@ -2447,36 +2568,25 @@
       "is_valve": true,
       "source": "vision"
     },
-    "35-24-094": {
-      "type": "HV",
-      "fn": "35-24HI-583",
-      "fn_hierarchy": "35-24HI-583",
+    "35-24-1102": {
+      "type": "DRN NC",
+      "fn": "35-24HI-575",
+      "fn_hierarchy": "35-24HI-575",
       "layer": "P-VALVEPOS",
       "block": "PPI_0900A",
-      "x": 3255.0,
-      "y": 77.5,
+      "x": 3067.5,
+      "y": 97.5,
       "is_valve": true,
       "source": "vision"
     },
-    "35-24-098": {
-      "type": "NC",
-      "fn": "35-24HI-583",
-      "fn_hierarchy": "35-24HI-583",
-      "layer": "P-VALVEPOS",
-      "block": "PPI_0900A",
-      "x": 3042.037084313363,
-      "y": 250.0,
-      "is_valve": true,
-      "source": "vision"
-    },
-    "35-24HV-652": {
-      "type": "HV",
-      "fn": "35-24HI-652",
-      "fn_hierarchy": "35-24HI-652",
+    "35-24HV-501": {
+      "type": "AV",
+      "fn": "35-24HS-501",
+      "fn_hierarchy": "35-24HS-501",
       "layer": "P-CVPOS",
       "block": "PPI_1000A",
-      "x": 2091.0,
-      "y": 145.0,
+      "x": 913.75,
+      "y": 175.0,
       "is_valve": true,
       "source": "vision"
     },
@@ -2492,13 +2602,68 @@
       "source": "vision"
     },
     "35-24HV-583": {
-      "type": "HV",
+      "type": "AV",
       "fn": "35-24HS-583",
       "fn_hierarchy": "35-24HS-583",
       "layer": "P-CVPOS",
       "block": "PPI_1000A",
       "x": 3542.25,
       "y": 145.0,
+      "is_valve": true,
+      "source": "vision"
+    },
+    "35-24HV-628": {
+      "type": "HV",
+      "fn": "35-24HS-628",
+      "fn_hierarchy": "35-24HS-628",
+      "layer": "P-CVPOS",
+      "block": "PPI_1000A",
+      "x": 5010.0,
+      "y": 477.5,
+      "is_valve": true,
+      "source": "vision"
+    },
+    "35-24HV-652": {
+      "type": "AV DRN",
+      "fn": "35-24HS-652",
+      "fn_hierarchy": "35-24HS-652",
+      "layer": "P-CVPOS",
+      "block": "PPI_1000A",
+      "x": 2091.0,
+      "y": 145.0,
+      "is_valve": true,
+      "source": "vision"
+    },
+    "35-24-038": {
+      "type": "NC",
+      "fn": "35-24KJ-687",
+      "fn_hierarchy": "35-24KJ-687",
+      "layer": "P-VALVEPOS",
+      "block": "PPI_0900A",
+      "x": 4568.75,
+      "y": 385.0,
+      "is_valve": true,
+      "source": "vision"
+    },
+    "35-24-1097": {
+      "type": "HV",
+      "fn": "35-24KJ-687",
+      "fn_hierarchy": "35-24KJ-687",
+      "layer": "P-VALVEPOS",
+      "block": "PPI_0900A",
+      "x": 4536.25,
+      "y": 410.0,
+      "is_valve": true,
+      "source": "vision"
+    },
+    "35-24-170": {
+      "type": "DRN NC",
+      "fn": "35-24KJ-688",
+      "fn_hierarchy": "35-24KJ-688",
+      "layer": "P-VALVEPOS",
+      "block": "PPI_0900A",
+      "x": 1007.5,
+      "y": 95.0,
       "is_valve": true,
       "source": "vision"
     },
@@ -2525,7 +2690,7 @@
       "source": "vision"
     },
     "35-24-1089": {
-      "type": "NC SMP",
+      "type": "HV",
       "fn": "35-24-008",
       "fn_hierarchy": "35-24-008",
       "layer": "P-VALVEPOS",
@@ -2535,8 +2700,19 @@
       "is_valve": true,
       "source": "vision"
     },
+    "35-24-188": {
+      "type": "HV",
+      "fn": "35-24-008",
+      "fn_hierarchy": "35-24-008",
+      "layer": "P-VALVEPOS",
+      "block": "PPI_0900A",
+      "x": 541.25,
+      "y": 105.0,
+      "is_valve": true,
+      "source": "vision"
+    },
     "35-24-1116": {
-      "type": "SMP HV",
+      "type": "HV",
       "fn": "35-24-010",
       "fn_hierarchy": "35-24-010",
       "layer": "P-VALVEPOS",
@@ -2547,8 +2723,8 @@
       "source": "vision"
     },
     "35-24-175": {
-      "type": "NC",
-      "fn": "35-24-010",
+      "type": "DRN NC",
+      "fn": "35-24L008",
       "fn_hierarchy": "35-24-010",
       "layer": "P-VALVEPOS",
       "block": "PPI_0900A",
@@ -2558,8 +2734,8 @@
       "source": "vision"
     },
     "35-24-012": {
-      "type": "HV",
-      "fn": "35-24-012",
+      "type": "DRN HV",
+      "fn": "35-24T606",
       "fn_hierarchy": "35-24-012",
       "layer": "P-VALVEPOS",
       "block": "PPI_0900A",
@@ -2580,7 +2756,7 @@
       "source": "vision"
     },
     "35-24HV-516": {
-      "type": "HV",
+      "type": "AV",
       "fn": "35-24-016",
       "fn_hierarchy": "35-24-016",
       "layer": "P-CVPOS",
@@ -2602,7 +2778,7 @@
       "source": "vision"
     },
     "35-24HV-503": {
-      "type": "NC",
+      "type": "HV",
       "fn": "35-24-016",
       "fn_hierarchy": "35-24-016",
       "layer": "P-CVPOS",
@@ -2613,7 +2789,7 @@
       "source": "vision"
     },
     "35-24-171": {
-      "type": "HV",
+      "type": "DRN HV",
       "fn": "35-24-017",
       "fn_hierarchy": "35-24-017",
       "layer": "P-VALVEPOS",
@@ -2624,7 +2800,7 @@
       "source": "vision"
     },
     "35-24-017": {
-      "type": "NC SMP",
+      "type": "SMP HV",
       "fn": "35-24-017",
       "fn_hierarchy": "35-24-017",
       "layer": "P-VALVEPOS",
@@ -2657,8 +2833,8 @@
       "source": "vision"
     },
     "35-24-163": {
-      "type": "HV",
-      "fn": "35-24-024",
+      "type": "DRN HV",
+      "fn": "35-24L007",
       "fn_hierarchy": "35-24-024",
       "layer": "P-VALVEPOS",
       "block": "PPI_0900A",
@@ -2679,7 +2855,7 @@
       "source": "vision"
     },
     "35-24NV-519": {
-      "type": "AV",
+      "type": "AV FLS",
       "fn": "35-24-030",
       "fn_hierarchy": "35-24-030",
       "layer": "P-CVPOS",
@@ -2697,17 +2873,6 @@
       "block": "PPI_1000A",
       "x": 1349.0,
       "y": 165.0,
-      "is_valve": true,
-      "source": "vision"
-    },
-    "35-24-218": {
-      "type": "HV",
-      "fn": "35-24-030",
-      "fn_hierarchy": "35-24-030",
-      "layer": "P-VALVEPOS",
-      "block": "PPI_0900A",
-      "x": 255.0,
-      "y": 77.5,
       "is_valve": true,
       "source": "vision"
     },
@@ -2733,8 +2898,30 @@
       "is_valve": true,
       "source": "vision"
     },
+    "35-24-037": {
+      "type": "NC",
+      "fn": "35-24-032",
+      "fn_hierarchy": "35-24-032",
+      "layer": "P-VALVEPOS",
+      "block": "PPI_0900A",
+      "x": 4609.25,
+      "y": 285.0,
+      "is_valve": true,
+      "source": "vision"
+    },
+    "35-24-1111": {
+      "type": "DRN NC",
+      "fn": "35-24P506",
+      "fn_hierarchy": "35-24-032",
+      "layer": "P-VALVEPOS",
+      "block": "PPI_0900A",
+      "x": 1567.5,
+      "y": 95.0,
+      "is_valve": true,
+      "source": "vision"
+    },
     "35-24-1107": {
-      "type": "NC SMP",
+      "type": "HV",
       "fn": "35-24-042",
       "fn_hierarchy": "35-24-042",
       "layer": "P-VALVEPOS",
@@ -2755,8 +2942,19 @@
       "is_valve": true,
       "source": "vision"
     },
+    "35-24-1123": {
+      "type": "HV",
+      "fn": "35-24-042",
+      "fn_hierarchy": "35-24-042",
+      "layer": "P-CVPOS",
+      "block": "PPI_1000A",
+      "x": 1596.875,
+      "y": 115.0,
+      "is_valve": true,
+      "source": "vision"
+    },
     "35-24-139": {
-      "type": "NC FLS",
+      "type": "HV",
       "fn": "35-24-045",
       "fn_hierarchy": "35-24-045",
       "layer": "P-VALVEPOS",
@@ -2767,9 +2965,9 @@
       "source": "vision"
     },
     "35-24-136": {
-      "type": "HV",
-      "fn": "35-24-045",
-      "fn_hierarchy": "35-24-045",
+      "type": "DRN HV",
+      "fn": "35-24P506",
+      "fn_hierarchy": "35-24-048",
       "layer": "P-VALVEPOS",
       "block": "PPI_0900A",
       "x": 1817.5,
@@ -2778,7 +2976,7 @@
       "source": "vision"
     },
     "35-24-050": {
-      "type": "HV",
+      "type": "DRN HV",
       "fn": "35-24-050",
       "fn_hierarchy": "35-24-050",
       "layer": "P-VALVEPOS",
@@ -2789,7 +2987,7 @@
       "source": "vision"
     },
     "35-24-138": {
-      "type": "NC FLS",
+      "type": "FLS HV",
       "fn": "35-24-052",
       "fn_hierarchy": "35-24-052",
       "layer": "P-VALVEPOS",
@@ -2844,7 +3042,7 @@
       "source": "vision"
     },
     "35-24-061": {
-      "type": "NC",
+      "type": "DRN NC",
       "fn": "35-24-061",
       "fn_hierarchy": "35-24-061",
       "layer": "P-VALVEPOS",
@@ -2877,13 +3075,24 @@
       "source": "vision"
     },
     "35-24-225": {
-      "type": "SMP HV",
+      "type": "NC",
       "fn": "35-24-068",
       "fn_hierarchy": "35-24-068",
       "layer": "P-VALVEPOS",
       "block": "PPI_0900A",
       "x": 2376.25,
       "y": 77.5,
+      "is_valve": true,
+      "source": "vision"
+    },
+    "35-24-1092": {
+      "type": "DRN NC",
+      "fn": "35-24T603",
+      "fn_hierarchy": "35-24-068",
+      "layer": "P-VALVEPOS",
+      "block": "PPI_0900A",
+      "x": 2500.0,
+      "y": 100.0,
       "is_valve": true,
       "source": "vision"
     },
@@ -2898,24 +3107,46 @@
       "is_valve": true,
       "source": "vision"
     },
-    "35-24-104": {
-      "type": "HV",
-      "fn": "35-24-079",
-      "fn_hierarchy": "35-24-079",
+    "35-24-1127": {
+      "type": "CHK",
+      "fn": "35-24-076",
+      "fn_hierarchy": "35-24-076",
       "layer": "P-VALVEPOS",
       "block": "PPI_0900A",
-      "x": 2805.0,
-      "y": 77.5,
+      "x": 2576.25,
+      "y": 112.5,
       "is_valve": true,
       "source": "vision"
     },
     "35-24-106": {
       "type": "HV",
-      "fn": "35-24-080",
-      "fn_hierarchy": "35-24-080",
+      "fn": "35-24-079",
+      "fn_hierarchy": "35-24-079",
       "layer": "P-VALVEPOS",
       "block": "PPI_0900A",
       "x": 2755.0,
+      "y": 77.5,
+      "is_valve": true,
+      "source": "vision"
+    },
+    "35-24-003.4": {
+      "type": "HV",
+      "fn": "35-24-079",
+      "fn_hierarchy": "35-24-079",
+      "layer": "P-CVPOS",
+      "block": "PPI_1000A",
+      "x": 2641.875,
+      "y": 112.5,
+      "is_valve": true,
+      "source": "vision"
+    },
+    "35-24-104": {
+      "type": "DRN NC",
+      "fn": "35-24P505",
+      "fn_hierarchy": "35-24-080",
+      "layer": "P-VALVEPOS",
+      "block": "PPI_0900A",
+      "x": 2805.0,
       "y": 77.5,
       "is_valve": true,
       "source": "vision"
@@ -2931,28 +3162,6 @@
       "is_valve": true,
       "source": "vision"
     },
-    "35-24-003.1": {
-      "type": "DRN NC",
-      "fn": "35-24L003",
-      "fn_hierarchy": "35-24-083",
-      "layer": "P-VALVEPOS",
-      "block": "PPI_0900A",
-      "x": 2736.25,
-      "y": 242.5,
-      "is_valve": true,
-      "source": "vision"
-    },
-    "35-24-003.2": {
-      "type": "NC FLS",
-      "fn": "35-24-083",
-      "fn_hierarchy": "35-24-083",
-      "layer": "P-VALVEPOS",
-      "block": "PPI_0900A",
-      "x": 2736.25,
-      "y": 242.5,
-      "is_valve": true,
-      "source": "vision"
-    },
     "35-24-1119": {
       "type": "HV",
       "fn": "35-24-087",
@@ -2964,9 +3173,31 @@
       "is_valve": true,
       "source": "vision"
     },
+    "35-24-1090": {
+      "type": "DRN NC",
+      "fn": "35-24-097",
+      "fn_hierarchy": "35-24-097",
+      "layer": "P-VALVEPOS",
+      "block": "PPI_0900A",
+      "x": 3102.5,
+      "y": 95.0,
+      "is_valve": true,
+      "source": "vision"
+    },
+    "35-24-1135": {
+      "type": "HV",
+      "fn": "35-24-097",
+      "fn_hierarchy": "35-24-097",
+      "layer": "P-VALVEPOS",
+      "block": "PPI_0900A",
+      "x": 3138.75,
+      "y": 95.0,
+      "is_valve": true,
+      "source": "vision"
+    },
     "35-24-099": {
-      "type": "NC SMP",
-      "fn": "35-24-099",
+      "type": "DRN NC",
+      "fn": "35-24L001",
       "fn_hierarchy": "35-24-099",
       "layer": "P-VALVEPOS",
       "block": "PPI_0900A",
@@ -2976,9 +3207,9 @@
       "source": "vision"
     },
     "35-24-091": {
-      "type": "SMP HV",
-      "fn": "35-24-102",
-      "fn_hierarchy": "35-24-102",
+      "type": "DRN HV",
+      "fn": "35-24L001",
+      "fn_hierarchy": "35-24-099",
       "layer": "P-VALVEPOS",
       "block": "PPI_0900A",
       "x": 3307.5,
@@ -2987,7 +3218,7 @@
       "source": "vision"
     },
     "35-24-1124": {
-      "type": "SMP HV",
+      "type": "HV",
       "fn": "35-24-102",
       "fn_hierarchy": "35-24-102",
       "layer": "P-VALVEPOS",
@@ -2998,7 +3229,7 @@
       "source": "vision"
     },
     "35-24KV-594": {
-      "type": "HV",
+      "type": "AV",
       "fn": "35-24-106",
       "fn_hierarchy": "35-24-106",
       "layer": "P-CVPOS",
@@ -3030,8 +3261,19 @@
       "is_valve": true,
       "source": "vision"
     },
-    "35-24-401.2": {
-      "type": "",
+    "35-24-085": {
+      "type": "DRN NC",
+      "fn": "35-24T601",
+      "fn_hierarchy": "35-24-109",
+      "layer": "P-VALVEPOS",
+      "block": "PPI_0900A",
+      "x": 3680.037084313363,
+      "y": 75.0,
+      "is_valve": true,
+      "source": "vision"
+    },
+    "35-24FV-598": {
+      "type": "AV",
       "fn": "35-24-112",
       "fn_hierarchy": "35-24-112",
       "layer": "P-CVPOS",
@@ -3039,10 +3281,32 @@
       "x": 3751.5,
       "y": 155.0,
       "is_valve": true,
-      "source": "cad_layer"
+      "source": "vision"
+    },
+    "35-24HV-597": {
+      "type": "NC FLS",
+      "fn": "35-24-112",
+      "fn_hierarchy": "35-24-112",
+      "layer": "P-CVPOS",
+      "block": "PPI_1000A",
+      "x": 3715.0,
+      "y": 150.0,
+      "is_valve": true,
+      "source": "vision"
+    },
+    "35-24-401.2": {
+      "type": "NC",
+      "fn": "35-24-112",
+      "fn_hierarchy": "35-24-112",
+      "layer": "P-CVPOS",
+      "block": "PPI_1000A",
+      "x": 3751.5,
+      "y": 155.0,
+      "is_valve": true,
+      "source": "vision"
     },
     "35-24-403.2": {
-      "type": "NO",
+      "type": "NC",
       "fn": "35-24-112",
       "fn_hierarchy": "35-24-112",
       "layer": "P-CVPOS",
@@ -3097,7 +3361,7 @@
       "source": "vision"
     },
     "35-24-1103": {
-      "type": "SMP HV",
+      "type": "HV",
       "fn": "35-24-123",
       "fn_hierarchy": "35-24-123",
       "layer": "P-VALVEPOS",
@@ -3108,7 +3372,7 @@
       "source": "vision"
     },
     "35-24-1126": {
-      "type": "SMP HV",
+      "type": "HV",
       "fn": "35-24-123",
       "fn_hierarchy": "35-24-123",
       "layer": "P-VALVEPOS",
@@ -3130,7 +3394,7 @@
       "source": "vision"
     },
     "35-24-1134": {
-      "type": "SMP HV",
+      "type": "HV",
       "fn": "35-24-153",
       "fn_hierarchy": "35-24-153",
       "layer": "P-VALVEPOS",
@@ -3141,7 +3405,7 @@
       "source": "vision"
     },
     "35-24-022": {
-      "type": "HV",
+      "type": "NC",
       "fn": "35-24-157",
       "fn_hierarchy": "35-24-157",
       "layer": "P-VALVEPOS",
@@ -3152,7 +3416,7 @@
       "source": "vision"
     },
     "35-24-020": {
-      "type": "HV",
+      "type": "NC",
       "fn": "35-24-160",
       "fn_hierarchy": "35-24-160",
       "layer": "P-VALVEPOS",
@@ -3163,7 +3427,7 @@
       "source": "vision"
     },
     "35-24-014": {
-      "type": "HV",
+      "type": "NC",
       "fn": "35-24-167",
       "fn_hierarchy": "35-24-167",
       "layer": "P-VALVEPOS",
@@ -3174,8 +3438,8 @@
       "source": "vision"
     },
     "35-24-167": {
-      "type": "NC SMP",
-      "fn": "35-24-167",
+      "type": "DRN NC",
+      "fn": "35-24L007",
       "fn_hierarchy": "35-24-167",
       "layer": "P-VALVEPOS",
       "block": "PPI_0900A",
@@ -3185,9 +3449,9 @@
       "source": "vision"
     },
     "35-24-195": {
-      "type": "HV",
-      "fn": "35-24-195",
-      "fn_hierarchy": "35-24-195",
+      "type": "DRN HV",
+      "fn": "35-24P519",
+      "fn_hierarchy": "35-24-185",
       "layer": "P-VALVEPOS",
       "block": "PPI_0900A",
       "x": 192.5,
@@ -3196,7 +3460,7 @@
       "source": "vision"
     },
     "35-24-203": {
-      "type": "HV",
+      "type": "DRN HV",
       "fn": "35-24-203",
       "fn_hierarchy": "35-24-203",
       "layer": "P-VALVEPOS",
@@ -3206,20 +3470,9 @@
       "is_valve": true,
       "source": "vision"
     },
-    "35-24-213": {
-      "type": "NC FLS",
-      "fn": "35-24-213",
-      "fn_hierarchy": "35-24-213",
-      "layer": "P-VALVEPOS",
-      "block": "PPI_0900A",
-      "x": 5216.25,
-      "y": 295.0,
-      "is_valve": true,
-      "source": "vision"
-    },
     "35-24-224": {
-      "type": "HV",
-      "fn": "35-24-224",
+      "type": "DRN HV",
+      "fn": "35-24T607",
       "fn_hierarchy": "35-24-224",
       "layer": "P-VALVEPOS",
       "block": "PPI_0900A",

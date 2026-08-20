@@ -57,29 +57,29 @@
       ],
       "dossier": "Parent tag: 35-24-138\nParent category/block: lines / \nParent XY: (4445.0, 58.75)\nNearby descriptions: 35-24-138-WFL-15-E10H2A\n\nSame-tag CAD family:\n- (none)\n\nNearby line numbers (short ids preferred in output):\n- 35-24-137  full=35-24-137-WAF-125-E10H2A  d=114  layer=P-LINEPOS\n- 35-24-136  full=35-24-136-WFL-15-E10H2A  d=95  layer=P-LINEPOS\n- 35-24-134  full=35-24-134-WAF-125-E10H2A  d=156  layer=P-LINEPOS\n- 35-24-138  full=35-24-138-WFL-15-E10H2A  d=0  layer=P-LINEPOS\n- 35-24-139  full=35-24-139-WAF-125-E10H2A  d=154  layer=P-LINEPOS\n- 35-24-129  full=35-24-129-WFL-15-E10H2A  d=191  layer=P-LINEPOS\n\nNearby devices (valves/instruments/pumps/\u2026):\n- line_markers: PPI_1100A  d=191  block=PPI_1100A\n- valves: PPI_0900A  d=166  block=PPI_0900A\n- control_valves: PPI_1000A  d=138  block=PPI_1000A\n- instruments: PPI_1204A  d=151  block=PPI_1204A\n- pumps: P7A0200  d=192  block=P7A0200\n- fittings: P7A1210  d=196  block=P7A1210\n\nNearby peer primary equipment (do NOT nest under parent):\n- 35-24P512 (pumps, d=192)\n\nNearby drawing text tokens:\n- 9312  d=120  layer=P-INSTRPOS_TEXTS\n- 35-24  d=131  layer=P-INSTRPOS_TEXTS\n- 614  d=89  layer=P-INSTRPOS_TEXTS\n- 9314  d=36  layer=P-INSTRPOS_TEXTS\n- 617  d=30  layer=P-INSTRPOS_TEXTS\n- 612  d=182  layer=P-INSTRPOS_TEXTS\n- 616  d=148  layer=P-INSTRPOS_TEXTS\n- 9313  d=111  layer=P-INSTRPOS_TEXTS\n- 9315  d=31  layer=P-INSTRPOS_TEXTS\n- 35-24P512  d=165  layer=P-PUMP_POS\n- 190  d=160  layer=P-PUMP_POS\n- 23  d=160  layer=P-PUMP_POS\n- 75  d=155  layer=P-PUMP_POS\n- 1000  d=155  layer=P-PUMP_POS\n- 35-24-059  d=185  layer=P-VALVEPOS\n- 003-15  d=183  layer=P-VALVEPOS\n- 35-24-1133  d=198  layer=P-VALVEPOS\n- 600-125  d=192  layer=P-VALVEPOS\n- 35-24-051  d=177  layer=P-VALVEPOS\n- 101-125  d=172  layer=P-VALVEPOS\n- 35-24-050  d=91  layer=P-VALVEPOS\n- 35-24-048  d=199  layer=P-VALVEPOS\n- 35-24-047  d=168  layer=P-VALVEPOS\n- 35-24-046  d=21  layer=P-VALVEPOS\n- 35-24-043  d=194  layer=P-VALVEPOS\n- 001-80  d=190  layer=P-VALVEPOS\n- 35-24-1122  d=181  layer=P-VALVEPOS\n- 35-24-137  d=114  layer=P-LINEPOS\n- 35-24-136  d=95  layer=P-LINEPOS\n- 35-24-134  d=156  layer=P-LINEPOS\n- 35-24-138  d=0  layer=P-LINEPOS\n- 35-24-139  d=154  layer=P-LINEPOS\n- 35-24-129  d=191  layer=P-LINEPOS\n- 35-24HV-618  d=186  layer=P-CVPOS\n- 250  d=181  layer=P-CVPOS\n- 35-24NV-616  d=141  layer=P-CVPOS\n- 100  d=135  layer=P-CVPOS",
       "ai": {
-        "raw_text": "Looking at the P&ID crop, I can see the PARENT 35-24-138 box clearly shows:\n\n- The line `35-24-138-WFL-15-E10H2A` (a 15mm water flush line)\n- Valve `35-24-046` with tag `003-15` below it\n- Instruments `PI 9314`, `FI 9315`, and `FS 617` on the circuit\n- The valve `35-24-046` appears to be a normally-closed valve (solid/filled triangles) based on the symbol visible in the crop\n\nThe left side (35-24-136 circuit with PI 9312, FI 9313, FS 614, valve 35-24-050) is clearly outside the red box \u2014 that belongs to line 35-24-136.\n\nFor valve 35-24-046: the symbol shows a bowtie with both triangles appearing solid/filled (NC), with no actuator circle \u2192 `NC` token applies. The size label is `003-15`.\n\nPeers: 35-24P512 is a pump (peer primary equipment per dossier), 35-24NV-616 is a control valve on the 35-24-137 circuit area, not on 35-24-138.\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24-138\",\n  \"description\": \"35-24-138 WFL LINE 15MM\",\n  \"rows\": [\n    {\n      \"equipment\": \"35-24-046\",\n      \"subequipment\": \"\",\n      \"mask\": \"\",\n      \"description\": \"35-24-046 VLV NC 003-15\"\n    },\n    {\n      \"equipment\": \"\",\n      \"subequipment\": \"35-24PI-9314\",\n      \"mask\": \"\",\n      \"description\": \"35-24PI-9314 PRESS IND\"\n    },\n    {\n      \"equipment\": \"\",\n      \"subequipment\": \"35-24FI-9315\",\n      \"mask\": \"\",\n      \"description\": \"35-24FI-9315 FLOW IND\"\n    },\n    {\n      \"equipment\": \"\",\n      \"subequipment\": \"35-24FS-617\",\n      \"mask\": \"\",\n      \"description\": \"35-24FS-617 FLOW SWITCH\"\n    }\n  ],\n  \"peers\": [\n    {\n      \"tag\": \"35-24P512\",\n      \"evidence\": \"Pump \u2014 peer primary equipment per dossier, not a child of a line FUNCTION\"\n    },\n    {\n      \"tag\": \"35-24NV-616\",\n      \"evidence\": \"Control valve labelled on 35-24-137 circuit area, outside 35-24-138 red box boundary\"\n    },\n    {\n      \"tag\": \"35-24-136\",\n      \"evidence\": \"Adjacent WFL line with own instruments PI-9312/FI-9313/FS-614 and valve 35-24-050; separate line FUNCTION\"\n    }\n  ],\n  \"notes\": [\n    \"35-24-138 is a WFL (water flush) 15mm line; the red crop box encloses valve 35-24-046 (003-15, NC symbol) plus instruments PI-9314, FI-9315, FS-617\",\n    \"Left-side instruments PI-9312, FI-9313, FS-614 and valve 35-24-050 belong to line 35-24-136, not included here\",\n    \"Instrument tags constructed as 35-24PI-9314 / 35-24FI-9315 / 35-24FS-617 following drawing text tokens 9314, 9315, 617 on P-INSTRPOS_TEXTS layer\"\n  ],\n  \"confidence\": \"high\"\n}\n```",
+        "raw_text": "Looking at the P&ID crop, I can see the PARENT 35-24-138 box clearly shows:\n\n- The line `35-24-138-WFL-15-E10H2A` (a 15mm water flush line)\n- Valve `35-24-046` with tag `003-15` below it\n- Instruments `PI 9314`, `FI 9315`, and `FS 617` on the circuit\n- The line connects upward (flow arrow pointing up)\n\nThe circuit within the red box mirrors the left-side circuit (35-24-136 with 35-24-050, PI 9312, FI 9313, FS 614).\n\n**Valve 35-24-046 analysis**: Looking at the symbol, it shows a bowtie with what appears to be a solid/filled body (NC - normally closed), size 003-15. No actuator circle on top, both triangles appear filled/solid white = NC hand valve... but wait - it has no actuator circle, triangles appear outline-only based on the drawing style. Comparing with 35-24-050 on the left which has the same symbol. These appear to be hand valves (outline bowtie, no actuator).\n\nThe instruments PI-9314, FI-9315, FS-617 are locally mounted instruments on the line.\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24-138\",\n  \"description\": \"35-24-138 WFL 15 FLUSH LINE\",\n  \"rows\": [\n    {\n      \"equipment\": \"35-24-046\",\n      \"subequipment\": \"\",\n      \"mask\": \"\",\n      \"description\": \"35-24-046 VLV HV 003-15\"\n    },\n    {\n      \"equipment\": \"\",\n      \"subequipment\": \"35-24PI-9314\",\n      \"mask\": \"\",\n      \"description\": \"35-24PI-9314 PRESSURE INDICATOR\"\n    },\n    {\n      \"equipment\": \"\",\n      \"subequipment\": \"35-24FI-9315\",\n      \"mask\": \"\",\n      \"description\": \"35-24FI-9315 FLOW INDICATOR\"\n    },\n    {\n      \"equipment\": \"\",\n      \"subequipment\": \"35-24FS-617\",\n      \"mask\": \"\",\n      \"description\": \"35-24FS-617 FLOW SWITCH\"\n    }\n  ],\n  \"peers\": [\n    {\n      \"tag\": \"35-24P512\",\n      \"evidence\": \"Pump block visible in crop upper area; peer primary equipment, not child of line FUNCTION\"\n    },\n    {\n      \"tag\": \"35-24NV-616\",\n      \"evidence\": \"Control valve on separate 35-24-137 WAF circuit, not on 35-24-138 WFL circuit\"\n    },\n    {\n      \"tag\": \"35-24-136\",\n      \"evidence\": \"Parallel WFL-15 line, separate FUNCTION, not a branch of 35-24-138\"\n    },\n    {\n      \"tag\": \"35-24-137\",\n      \"evidence\": \"WAF-125 line, separate FUNCTION\"\n    },\n    {\n      \"tag\": \"35-24-134\",\n      \"evidence\": \"WAF-125 line, separate FUNCTION\"\n    },\n    {\n      \"tag\": \"35-24-139\",\n      \"evidence\": \"WAF-125 line, separate FUNCTION\"\n    }\n  ],\n  \"notes\": [\n    \"35-24-138 is a WFL-15 (water flush, DN15) line; circuit contains isolation valve 35-24-046 plus PI/FI/FS instruments\",\n    \"Instrument tags use drawing text tokens 9314/9315/617 prefixed with 35-24 per P-INSTRPOS_TEXTS layer\",\n    \"35-24-046 valve symbol shows outline bowtie with no actuator circle \u2014 classified HV\"\n  ],\n  \"confidence\": \"high\"\n}\n```",
         "parsed": {
           "sub_process": "BR1",
           "function": "35-24-138",
-          "description": "35-24-138 WFL LINE 15MM",
+          "description": "35-24-138 WFL 15 FLUSH LINE",
           "rows": [
             {
               "equipment": "35-24-046",
               "subequipment": "",
               "mask": "",
-              "description": "35-24-046 VLV NC 003-15"
+              "description": "35-24-046 VLV HV 003-15"
             },
             {
               "equipment": "",
               "subequipment": "35-24PI-9314",
               "mask": "",
-              "description": "35-24PI-9314 PRESS IND"
+              "description": "35-24PI-9314 PRESSURE INDICATOR"
             },
             {
               "equipment": "",
               "subequipment": "35-24FI-9315",
               "mask": "",
-              "description": "35-24FI-9315 FLOW IND"
+              "description": "35-24FI-9315 FLOW INDICATOR"
             },
             {
               "equipment": "",
@@ -91,21 +91,33 @@
           "peers": [
             {
               "tag": "35-24P512",
-              "evidence": "Pump \u2014 peer primary equipment per dossier, not a child of a line FUNCTION"
+              "evidence": "Pump block visible in crop upper area; peer primary equipment, not child of line FUNCTION"
             },
             {
               "tag": "35-24NV-616",
-              "evidence": "Control valve labelled on 35-24-137 circuit area, outside 35-24-138 red box boundary"
+              "evidence": "Control valve on separate 35-24-137 WAF circuit, not on 35-24-138 WFL circuit"
             },
             {
               "tag": "35-24-136",
-              "evidence": "Adjacent WFL line with own instruments PI-9312/FI-9313/FS-614 and valve 35-24-050; separate line FUNCTION"
+              "evidence": "Parallel WFL-15 line, separate FUNCTION, not a branch of 35-24-138"
+            },
+            {
+              "tag": "35-24-137",
+              "evidence": "WAF-125 line, separate FUNCTION"
+            },
+            {
+              "tag": "35-24-134",
+              "evidence": "WAF-125 line, separate FUNCTION"
+            },
+            {
+              "tag": "35-24-139",
+              "evidence": "WAF-125 line, separate FUNCTION"
             }
           ],
           "notes": [
-            "35-24-138 is a WFL (water flush) 15mm line; the red crop box encloses valve 35-24-046 (003-15, NC symbol) plus instruments PI-9314, FI-9315, FS-617",
-            "Left-side instruments PI-9312, FI-9313, FS-614 and valve 35-24-050 belong to line 35-24-136, not included here",
-            "Instrument tags constructed as 35-24PI-9314 / 35-24FI-9315 / 35-24FS-617 following drawing text tokens 9314, 9315, 617 on P-INSTRPOS_TEXTS layer"
+            "35-24-138 is a WFL-15 (water flush, DN15) line; circuit contains isolation valve 35-24-046 plus PI/FI/FS instruments",
+            "Instrument tags use drawing text tokens 9314/9315/617 prefixed with 35-24 per P-INSTRPOS_TEXTS layer",
+            "35-24-046 valve symbol shows outline bowtie with no actuator circle \u2014 classified HV"
           ],
           "confidence": "high"
         },
@@ -149,19 +161,19 @@
           "equipment": "35-24-046",
           "subequipment": "",
           "mask": "",
-          "description": "35-24-046 VLV NC 003-15"
+          "description": "35-24-046 VLV HV 003-15"
         },
         {
           "equipment": "",
           "subequipment": "35-24PI-9314",
           "mask": "",
-          "description": "35-24PI-9314 PRESS IND"
+          "description": "35-24PI-9314 PI"
         },
         {
           "equipment": "",
           "subequipment": "35-24FI-9315",
           "mask": "",
-          "description": "35-24FI-9315 FL IND"
+          "description": "35-24FI-9315 FI"
         },
         {
           "equipment": "",
@@ -180,12 +192,6 @@
           "subequipment": "",
           "mask": "",
           "description": "35-24-050"
-        },
-        {
-          "equipment": "35-24-137",
-          "subequipment": "",
-          "mask": "",
-          "description": "35-24-137"
         }
       ]
     }

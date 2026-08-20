@@ -59,12 +59,30 @@
       ],
       "dossier": "Parent tag: 35-24-105\nParent category/block: lines / \nParent XY: (3457.500000000001, 278.75)\nNearby descriptions: 35-24-105-WAF-300-E10H2A\n\nSame-tag CAD family:\n- (none)\n\nNearby line numbers (short ids preferred in output):\n- 35-24-184  full=35-24-184-WAF-200-E10H2A  d=60  layer=P-LINEPOS\n- 35-24-094  full=35-24-094-WAF-300-E10H2A  d=50  layer=P-LINEPOS\n- 35-24-098  full=35-24-098-WAF-300-E10H2A  d=32  layer=P-LINEPOS\n- 35-24-105  full=35-24-105-WAF-300-E10H2A  d=0  layer=P-LINEPOS\n- 35-24-107  full=35-24-107-WAF-100-E10H2A  d=12  layer=P-LINEPOS\n- 35-24-106  full=35-24-106-WAF-500-E10H2A  d=158  layer=P-LINEPOS\n- 35-24-108  full=35-24-108-PP-100-E10H2A  d=37  layer=P-LINEPOS\n- 35-24-101  full=35-24-101-PP-150-E10H2A  d=168  layer=P-LINEPOS\n- 35-24-100  full=35-24-100-PP-250-E10H2A  d=164  layer=P-LINEPOS\n\nNearby devices (valves/instruments/pumps/\u2026):\n- line_markers: PPI_1100A  d=164  block=PPI_1100A\n- valves: PPI_0900A  d=146  block=PPI_0900A\n- control_valves: PPI_1000A  d=146  block=PPI_1000A\n- instruments: PPI_0100X  d=158  block=PPI_0100X\n- pumps: PPI_0521A-25_0  d=75  block=PPI_0521A-25_0\n- fittings: P7A1214  d=200  block=P7A1214\n\nNearby peer primary equipment (do NOT nest under parent):\n- 35-24L001 (process_equipment, d=190)\n- 35-24L011 (process_equipment, d=108)\n- 35-24P504 (pumps, d=75)\n\nNearby drawing text tokens:\n- S1  d=148  layer=P-TEXT\n- S2  d=148  layer=P-TEXT\n- A1  d=175  layer=P-TEXT\n- 2 bar  d=150  layer=P-TEXT\n- 2621 ADTPD  d=189  layer=P-TEXT\n- 35-24  d=119  layer=P-INSTRPOS_TEXTS\n- SHOWER S2  d=132  layer=P-TEXT\n- S3  d=138  layer=P-TEXT\n- 35-24L001  d=184  layer=P-EQUIPMENT_POS\n- HP-50G2  d=189  layer=P-EQUIPMENT_POS\n- 35-24L011  d=102  layer=P-EQUIPMENT_POS\n- BROKE CONVEYOR 1  d=108  layer=P-EQUIPMENT_POS\n- 585  d=162  layer=P-INSTRPOS_TEXTS\n- 587  d=108  layer=P-INSTRPOS_TEXTS\n- 588  d=174  layer=P-INSTRPOS_TEXTS\n- 580  d=155  layer=P-INSTRPOS_TEXTS\n- 591  d=37  layer=P-INSTRPOS_TEXTS\n- 593  d=117  layer=P-INSTRPOS_TEXTS\n- 583  d=139  layer=P-INSTRPOS_TEXTS\n- 594  d=127  layer=P-INSTRPOS_TEXTS\n- 592  d=198  layer=P-INSTRPOS_TEXTS\n- 654  d=174  layer=P-INSTRPOS_TEXTS\n- 35-24P504  d=74  layer=P-PUMP_POS\n- 20  d=78  layer=P-PUMP_POS\n- 10  d=71  layer=P-PUMP_POS\n- 4  d=82  layer=P-PUMP_POS\n- 1500  d=76  layer=P-PUMP_POS\n- 35-24-1105  d=196  layer=P-VALVEPOS\n- 003-50  d=195  layer=P-VALVEPOS\n- 35-24-089  d=151  layer=P-VALVEPOS\n- 350-250  d=153  layer=P-VALVEPOS\n- 35-24-090  d=130  layer=P-VALVEPOS\n- 35-24-184  d=60  layer=P-LINEPOS\n- 35-24-094  d=50  layer=P-LINEPOS\n- 35-24-098  d=32  layer=P-LINEPOS\n- 35-24-105  d=0  layer=P-LINEPOS\n- 35-24-107  d=12  layer=P-LINEPOS\n- 35-24-106  d=158  layer=P-LINEPOS\n- 35-24-108  d=37  layer=P-LINEPOS\n- 35-24-101  d=168  layer=P-LINEPOS",
       "ai": {
-        "raw_text": "I'll analyze the P&ID image carefully, focusing on what's inside the red bounding box labeled \"PARENT 35-24-105\".\n\n**Observations from the image:**\n\n1. **35-24-105** is a piping line (WAF-300-E10H2A) \u2014 it's a line FUNCTION (NNN format)\n2. Inside the red box, I can see:\n   - The main line **35-24-105-WAF-300-E10H2A** running horizontally\n   - **35-24-107-WAF-100-E10H2A** \u2014 a branch line very close (d=12), visible inside the box\n   - **35-24-108-PP-100-E10H2A** \u2014 visible inside the box with label shown\n   - **35-24HV-591** \u2014 a valve on line 35-24-108, with actuator circle (AV-M based on M symbol visible) and labeled \"80\"\n   - **35-24HI-591** \u2014 instrument (HI, locally mounted) associated with 35-24HV-591\n   - **35-24P504** \u2014 pump visible inside the box but it's a peer (P### equipment)\n   - **35-24L011** \u2014 peer vessel (BROKE CONVEYOR 1), not a child\n\n3. **35-24HV-591**: Looking at the symbol \u2014 it has a circle on top with what appears to be an M actuator (AV-M). The valve body appears to have filled triangles (NC).\n\n4. **35-24-107** is very close (d=12) and appears as a branch off 35-24-105.\n\n5. **35-24-108** branches off and carries **35-24HV-591** on it.\n\n6. Lines 35-24-094, 35-24-098, 35-24-184 are nearby but at greater distances and appear to be parallel header lines, not children of 35-24-105.\n\n**Structure:**\n- FUNCTION: 35-24-105 (WAF-300 line)\n- EQUIPMENT: 35-24-107 (branch WAF-100)\n- EQUIPMENT: 35-24-108 (branch PP-100)\n  - SUB-EQUIPMENT: 35-24HV-591 (valve on 35-24-108, AV-M NC based on filled triangles + M actuator)\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24-105\",\n  \"description\": \"35-24-105 WAF-300 PROC LINE\",\n  \"rows\": [\n    {\n      \"equipment\": \"35-24-107\",\n      \"subequipment\": \"\",\n      \"mask\": \"\",\n      \"description\": \"35-24-107 WAF-100 BRANCH LINE\"\n    },\n    {\n      \"equipment\": \"35-24-108\",\n      \"subequipment\": \"\",\n      \"mask\": \"\",\n      \"description\": \"35-24-108 PP-100 BRANCH LINE\"\n    },\n    {\n      \"equipment\": \"\",\n      \"subequipment\": \"35-24HV-591\",\n      \"mask\": \"\",\n      \"description\": \"35-24HV-591 ISOL VLV AV-M NC\"\n    }\n  ],\n  \"peers\": [\n    {\n      \"tag\": \"35-24P504\",\n      \"evidence\": \"Pump (P### equipment) visible inside crop boundary but is peer primary equipment per dossier, not a child of line FUNCTION\"\n    },\n    {\n      \"tag\": \"35-24L011\",\n      \"evidence\": \"BROKE CONVEYOR 1 vessel \u2014 peer process equipment, not a child of a line FUNCTION\"\n    },\n    {\n      \"tag\": \"35-24L001\",\n      \"evidence\": \"Peer process equipment listed in dossier nearby, not part of 35-24-105 circuit\"\n    },\n    {\n      \"tag\": \"35-24-094\",\n      \"evidence\": \"Parallel WAF-300 header line, separate line number, not a branch of 35-24-105\"\n    },\n    {\n      \"tag\": \"35-24-098\",\n      \"evidence\": \"Parallel WAF-300 header line, separate line number, not a branch of 35-24-105\"\n    },\n    {\n      \"tag\": \"35-24-184\",\n      \"evidence\": \"WAF-200 line at d=60, separate parallel header, not a branch of 35-24-105\"\n    }\n  ],\n  \"notes\": [\n    \"35-24-105 is a WAF-300-E10H2A process water line; treated as piping header FUNCTION\",\n    \"35-24-107 (WAF-100) and 35-24-108 (PP-100) are the two visible branches directly off 35-24-105 within the red crop boundary\",\n    \"35-24HV-591 sits on 35-24-108 branch; actuator circle with M visible = AV-M; filled triangles indicate NC\",\n    \"35-24HI-591 instrument bubble is associated with the HV-591 valve station but is an instrument tag on the same spool \u2014 omitted as separate row since it shares the 591 station identity with HV-591\",\n    \"Lines 35-24-094, 35-24-098, 35-24-184 are parallel headers visible in crop but are independent line FUNCTIONs\"\n  ],\n  \"confidence\": \"high\"\n}\n```",
+        "raw_text": "I'll analyze the P&ID image carefully, focusing on what's inside the red bounding box labeled \"PARENT 35-24-105\".\n\n**Observations from the image:**\n\n1. **35-24-105** is a piping line (WAF-300-E10H2A) \u2014 a process line FUNCTION per Rule 11.\n\n2. **Inside the red box**, I can see:\n   - Line **35-24-105-WAF-300-E10H2A** (the parent line itself)\n   - Line **35-24-107-WAF-100-E10H2A** (d=12, very close \u2014 branch off 105)\n   - Line **35-24-108-PP-100-E10H2A** (d=37, visible inside box)\n   - **35-24HV-591** \u2014 valve on line 35-24-108, with instrument HI-591 above it. The valve symbol appears to be an automatic valve (circle actuator on top of bowtie). The bowtie appears white-filled \u2192 NC. Circle on top \u2192 AV.\n   - **35-24-184** (d=60) \u2014 WAF-200 line, visible at top of box\n   - **35-24-094** (d=50) \u2014 WAF-300 line, visible inside box\n   - **35-24-098** (d=32) \u2014 WAF-300 line, visible inside box\n\n3. **35-24P504** \u2014 peer pump (separate equipment block, not a child of a line)\n4. **35-24L011** \u2014 peer vessel (BROKE CONVEYOR 1), not a child\n5. **35-24L001** \u2014 peer vessel, outside box\n\n6. **HV-591**: Looking at the symbol \u2014 it has a circle actuator on top (AV), and the bowtie triangles appear white/filled \u2192 NC. So: `AV NC`.\n\n7. Lines 35-24-094, 35-24-098, 35-24-184, 35-24-107 are branches connected to the 35-24-105 circuit within the box.\n\n8. **35-24-108** has **35-24HV-591** sitting on it \u2192 HV-591 nests under 35-24-108.\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24-105\",\n  \"description\": \"35-24-105 WAF LINE BR1 SHOWER\",\n  \"rows\": [\n    {\"equipment\": \"35-24-184\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-184 WAF-200 BRANCH LINE\"},\n    {\"equipment\": \"35-24-094\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-094 WAF-300 BRANCH LINE\"},\n    {\"equipment\": \"35-24-098\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-098 WAF-300 BRANCH LINE\"},\n    {\"equipment\": \"35-24-107\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-107 WAF-100 BRANCH LINE\"},\n    {\"equipment\": \"35-24-108\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-108 PP-100 BRANCH LINE\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24HV-591\", \"mask\": \"\", \"description\": \"35-24HV-591 ISOL VLV AV NC\"}\n  ],\n  \"peers\": [\n    {\"tag\": \"35-24P504\", \"evidence\": \"Pump block inside crop boundary but peer primary equipment per dossier, not child of line\"},\n    {\"tag\": \"35-24L011\", \"evidence\": \"BROKE CONVEYOR 1 \u2014 peer process equipment, not child of line FUNCTION\"},\n    {\"tag\": \"35-24L001\", \"evidence\": \"Peer vessel visible in crop, different numeric base\"},\n    {\"tag\": \"35-24-106\", \"evidence\": \"WAF-500 line visible at bottom of crop, outside red box boundary\"},\n    {\"tag\": \"35-24FV-593\", \"evidence\": \"On line 35-24-090/106 circuit, outside red box\"},\n    {\"tag\": \"35-24KV-594\", \"evidence\": \"On downstream line circuit, outside red box\"},\n    {\"tag\": \"35-24HV-583\", \"evidence\": \"On downstream line circuit, outside red box\"},\n    {\"tag\": \"35-24HV-580\", \"evidence\": \"On downstream line circuit, outside red box\"},\n    {\"tag\": \"35-24HV-654\", \"evidence\": \"On downstream line circuit, outside red box\"}\n  ],\n  \"notes\": [\n    \"35-24-105 is a WAF-300 process water/shower line serving the broke system shower circuit\",\n    \"35-24HV-591 sits physically on line 35-24-108 (PP-100) which branches from 35-24-105\",\n    \"HI-591 is an indicator instrument associated with HV-591; not given separate FLOC row as it is part of the valve assembly\",\n    \"Lines 35-24-094, 35-24-098, 35-24-184, 35-24-107 are all WAF branches within the 35-24-105 circuit boundary\"\n  ],\n  \"confidence\": \"medium\"\n}\n```",
         "parsed": {
           "sub_process": "BR1",
           "function": "35-24-105",
-          "description": "35-24-105 WAF-300 PROC LINE",
+          "description": "35-24-105 WAF LINE BR1 SHOWER",
           "rows": [
+            {
+              "equipment": "35-24-184",
+              "subequipment": "",
+              "mask": "",
+              "description": "35-24-184 WAF-200 BRANCH LINE"
+            },
+            {
+              "equipment": "35-24-094",
+              "subequipment": "",
+              "mask": "",
+              "description": "35-24-094 WAF-300 BRANCH LINE"
+            },
+            {
+              "equipment": "35-24-098",
+              "subequipment": "",
+              "mask": "",
+              "description": "35-24-098 WAF-300 BRANCH LINE"
+            },
             {
               "equipment": "35-24-107",
               "subequipment": "",
@@ -81,43 +99,54 @@
               "equipment": "",
               "subequipment": "35-24HV-591",
               "mask": "",
-              "description": "35-24HV-591 ISOL VLV AV-M NC"
+              "description": "35-24HV-591 ISOL VLV AV NC"
             }
           ],
           "peers": [
             {
               "tag": "35-24P504",
-              "evidence": "Pump (P### equipment) visible inside crop boundary but is peer primary equipment per dossier, not a child of line FUNCTION"
+              "evidence": "Pump block inside crop boundary but peer primary equipment per dossier, not child of line"
             },
             {
               "tag": "35-24L011",
-              "evidence": "BROKE CONVEYOR 1 vessel \u2014 peer process equipment, not a child of a line FUNCTION"
+              "evidence": "BROKE CONVEYOR 1 \u2014 peer process equipment, not child of line FUNCTION"
             },
             {
               "tag": "35-24L001",
-              "evidence": "Peer process equipment listed in dossier nearby, not part of 35-24-105 circuit"
+              "evidence": "Peer vessel visible in crop, different numeric base"
             },
             {
-              "tag": "35-24-094",
-              "evidence": "Parallel WAF-300 header line, separate line number, not a branch of 35-24-105"
+              "tag": "35-24-106",
+              "evidence": "WAF-500 line visible at bottom of crop, outside red box boundary"
             },
             {
-              "tag": "35-24-098",
-              "evidence": "Parallel WAF-300 header line, separate line number, not a branch of 35-24-105"
+              "tag": "35-24FV-593",
+              "evidence": "On line 35-24-090/106 circuit, outside red box"
             },
             {
-              "tag": "35-24-184",
-              "evidence": "WAF-200 line at d=60, separate parallel header, not a branch of 35-24-105"
+              "tag": "35-24KV-594",
+              "evidence": "On downstream line circuit, outside red box"
+            },
+            {
+              "tag": "35-24HV-583",
+              "evidence": "On downstream line circuit, outside red box"
+            },
+            {
+              "tag": "35-24HV-580",
+              "evidence": "On downstream line circuit, outside red box"
+            },
+            {
+              "tag": "35-24HV-654",
+              "evidence": "On downstream line circuit, outside red box"
             }
           ],
           "notes": [
-            "35-24-105 is a WAF-300-E10H2A process water line; treated as piping header FUNCTION",
-            "35-24-107 (WAF-100) and 35-24-108 (PP-100) are the two visible branches directly off 35-24-105 within the red crop boundary",
-            "35-24HV-591 sits on 35-24-108 branch; actuator circle with M visible = AV-M; filled triangles indicate NC",
-            "35-24HI-591 instrument bubble is associated with the HV-591 valve station but is an instrument tag on the same spool \u2014 omitted as separate row since it shares the 591 station identity with HV-591",
-            "Lines 35-24-094, 35-24-098, 35-24-184 are parallel headers visible in crop but are independent line FUNCTIONs"
+            "35-24-105 is a WAF-300 process water/shower line serving the broke system shower circuit",
+            "35-24HV-591 sits physically on line 35-24-108 (PP-100) which branches from 35-24-105",
+            "HI-591 is an indicator instrument associated with HV-591; not given separate FLOC row as it is part of the valve assembly",
+            "Lines 35-24-094, 35-24-098, 35-24-184, 35-24-107 are all WAF branches within the 35-24-105 circuit boundary"
           ],
-          "confidence": "high"
+          "confidence": "medium"
         },
         "model_id": "eu.anthropic.claude-sonnet-4-6",
         "region": "eu-west-2",
@@ -158,6 +187,24 @@
       },
       "refined_rows": [
         {
+          "equipment": "35-24-184",
+          "subequipment": "",
+          "mask": "",
+          "description": "35-24-184 WAF-200 BRANCH LN"
+        },
+        {
+          "equipment": "35-24-094",
+          "subequipment": "",
+          "mask": "",
+          "description": "35-24-094 WAF-300 BRANCH LN"
+        },
+        {
+          "equipment": "35-24-098",
+          "subequipment": "",
+          "mask": "",
+          "description": "35-24-098 WAF-300 BRANCH LN"
+        },
+        {
           "equipment": "35-24-107",
           "subequipment": "",
           "mask": "",
@@ -173,7 +220,7 @@
           "equipment": "",
           "subequipment": "35-24HV-591",
           "mask": "",
-          "description": "35-24HV-591 ISOL VLV AV-M NC"
+          "description": "35-24HV-591 ISOL VLV AV NC"
         },
         {
           "equipment": "35-24-105",

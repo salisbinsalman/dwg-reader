@@ -74,86 +74,86 @@
       ],
       "dossier": "Parent tag: 35-24-042\nParent category/block: lines / \nParent XY: (1693.563563563564, 68.75)\nNearby descriptions: 35-24-042-WFL-15-E10H2A\n\nSame-tag CAD family:\n- (none)\n\nNearby line numbers (short ids preferred in output):\n- 35-24-222  full=35-24-222-PP-400-E10H2A  d=173  layer=P-LINEPOS\n- 35-24-220  full=35-24-220-PP-80-E10H2A  d=135  layer=P-LINEPOS\n- 35-24-042  full=35-24-042-WFL-15-E10H2A  d=0  layer=P-LINEPOS\n- 35-24-045  full=35-24-045-WFL-15-E10H2A  d=58  layer=P-LINEPOS\n- 35-24-048  full=35-24-048-WFL-15-E10H2A  d=110  layer=P-LINEPOS\n- 35-24-037  full=35-24-037-WFC-15-E10H2A  d=145  layer=P-LINEPOS\n- 35-24-041  full=35-24-041-WFC-15-E10H2A  d=83  layer=P-LINEPOS\n- 35-24-050  full=35-24-050-WFL-15-E10H2A  d=172  layer=P-LINEPOS\n- 35-24-047  full=35-24-047-PP-150-E10H2A  d=153  layer=P-LINEPOS\n- 35-24-046  full=35-24-046-PP-250-E10H2A  d=159  layer=P-LINEPOS\n- 35-24-044  full=35-24-044-PP-900-E10H2A  d=165  layer=P-LINEPOS\n\nNearby devices (valves/instruments/pumps/\u2026):\n- line_markers: PPI_1100A  d=164  block=PPI_1100A\n- valves: PPI_0900A  d=180  block=PPI_0900A\n- control_valves: PPI_1000A  d=177  block=PPI_1000A\n- instruments: PPI_0100X  d=62  block=PPI_0100X\n- pumps: P7A0200  d=164  block=P7A0200\n- motors: PPI_1504A-25_0  d=146  block=PPI_1504A-25_0\n\nNearby peer primary equipment (do NOT nest under parent):\n- 35-24P506 (pumps, d=164)\n- 35-24L005 (pumps, d=196)\n\nNearby drawing text tokens:\n- A1  d=169  layer=P-TEXT\n- GEARBOX 1  d=81  layer=P-OTHER\n- 2621 ADTPD  d=183  layer=P-TEXT\n- HP-63G2  d=189  layer=P-EQUIPMENT_POS\n- 661  d=153  layer=P-INSTRPOS_TEXTS\n- 35-24  d=165  layer=P-INSTRPOS_TEXTS\n- 660  d=96  layer=P-INSTRPOS_TEXTS\n- 9268  d=133  layer=P-INSTRPOS_TEXTS\n- 9269  d=69  layer=P-INSTRPOS_TEXTS\n- 540  d=22  layer=P-INSTRPOS_TEXTS\n- 9270  d=28  layer=P-INSTRPOS_TEXTS\n- 549  d=185  layer=P-INSTRPOS_TEXTS\n- 9276  d=153  layer=P-INSTRPOS_TEXTS\n- 9272  d=42  layer=P-INSTRPOS_TEXTS\n- 9274  d=92  layer=P-INSTRPOS_TEXTS\n- 545  d=72  layer=P-INSTRPOS_TEXTS\n- 538  d=146  layer=P-INSTRPOS_TEXTS\n- 537  d=185  layer=P-INSTRPOS_TEXTS\n- 546  d=123  layer=P-INSTRPOS_TEXTS\n- 9273  d=51  layer=P-INSTRPOS_TEXTS\n- 9271  d=21  layer=P-INSTRPOS_TEXTS\n- 9275  d=101  layer=P-INSTRPOS_TEXTS\n- 9277  d=163  layer=P-INSTRPOS_TEXTS\n- REEL PULPER ROTOR 1  d=73  layer=P-TEXT\n- 21  d=199  layer=P-PUMP_POS\n- 17  d=197  layer=P-PUMP_POS\n- 35-24P506  d=138  layer=P-PUMP_POS\n- 860  d=133  layer=P-PUMP_POS\n- 22  d=131  layer=P-PUMP_POS\n- 250  d=128  layer=P-PUMP_POS\n- 1000  d=126  layer=P-PUMP_POS\n- 35-24-005.4  d=60  layer=P-MOTOR_POS\n- 1,5  d=55  layer=P-MOTOR_POS\n- 1500  d=53  layer=P-MOTOR_POS\n- 35-24-005.3  d=74  layer=P-MOTOR_POS\n- 35-24-005.1  d=130  layer=P-MOTOR_POS\n- 630  d=126  layer=P-MOTOR_POS\n- 35-24-005.2  d=144  layer=P-MOTOR_POS\n- 35-24-154  d=170  layer=P-VALVEPOS\n- 001-15  d=167  layer=P-VALVEPOS",
       "ai": {
-        "raw_text": "I'll analyze the P&ID image carefully for FUNCTION 35-24-042.\n\n**Observations from the image:**\n- `35-24-042-WFL-15-E10H2A` is the line label visible at the bottom of the crop \u2014 this is a WFL (white water flush line), DN15\n- The line runs horizontally through the crop area\n- On this line segment I can see instruments: **PI 9270**, **FI 9271**, **FS 540** grouped together, then further right **PI 9272**, **FI 9273**, **FS 545**\n- Branch spool **35-24-1107** (003-15) is visible connecting off this line, with a valve (red X = normally closed automatic valve) \u2014 the red X symbol indicates AV NC\n- The line label `35-24-042-WFL-15-E10H2A` confirms short id = `35-24-042`\n- Motors `35-24-005.3` and `35-24-005.4` are shown as GEARBOX OIL PUMP motors \u2014 numeric base 005 \u2260 042, so they are peers\n- `35-24TV-9269` is a temperature control valve on the gearbox circuit, not on 042's line\n- `35-24TV-9268` is also on a different circuit\n- `35-24-1107` branch spool sits directly on 042's line with PI 9270, FI 9271, FS 540 instruments\n- The instruments PI-9270, FI-9271, FS-540 are on the 35-24-1107 branch spool\n- PI-9272, FI-9273, FS-545 appear to be on the next segment (35-24-045 territory)\n- `35-24-1123` and `35-24-146` are visible but belong to adjacent circuits (001-15 lines)\n\n**Valve on 35-24-1107**: The red X symbol = automatic valve, normally closed \u2192 `AV NC`\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24-042\",\n  \"description\": \"35-24-042 WFL LINE DN15\",\n  \"rows\": [\n    {\n      \"equipment\": \"35-24-1107\",\n      \"subequipment\": \"\",\n      \"mask\": \"\",\n      \"description\": \"35-24-1107 BRANCH SPOOL 003-15\"\n    },\n    {\n      \"equipment\": \"\",\n      \"subequipment\": \"35-24PI-9270\",\n      \"mask\": \"\",\n      \"description\": \"35-24PI-9270 PRESSURE IND\"\n    },\n    {\n      \"equipment\": \"\",\n      \"subequipment\": \"35-24FI-9271\",\n      \"mask\": \"\",\n      \"description\": \"35-24FI-9271 FLOW IND\"\n    },\n    {\n      \"equipment\": \"\",\n      \"subequipment\": \"35-24FS-540\",\n      \"mask\": \"\",\n      \"description\": \"35-24FS-540 FLOW SWITCH\"\n    },\n    {\n      \"equipment\": \"\",\n      \"subequipment\": \"35-24TV-9269\",\n      \"mask\": \"\",\n      \"description\": \"35-24TV-9269 TEMP CTRL VLV AV NC\"\n    }\n  ],\n  \"peers\": [\n    {\n      \"tag\": \"35-24-005.3\",\n      \"evidence\": \"Motor tag base 005 does not match function 042; belongs to REEL PULPER ROTOR 1 GEARBOX OIL PUMP\"\n    },\n    {\n      \"tag\": \"35-24-005.4\",\n      \"evidence\": \"Motor tag base 005 does not match function 042; belongs to REEL PULPER ROTOR 2 GEARBOX OIL PUMP\"\n    },\n    {\n      \"tag\": \"35-24-041\",\n      \"evidence\": \"Adjacent WFC line, separate function\"\n    },\n    {\n      \"tag\": \"35-24-045\",\n      \"evidence\": \"Adjacent WFL line downstream, separate function\"\n    },\n    {\n      \"tag\": \"35-24TV-9268\",\n      \"evidence\": \"Temperature control valve on adjacent gearbox/041 circuit, not on 042 line\"\n    },\n    {\n      \"tag\": \"35-24-1123\",\n      \"evidence\": \"Branch spool on 001-15 circuit, not on 042 line\"\n    },\n    {\n      \"tag\": \"35-24-146\",\n      \"evidence\": \"Branch spool 001-15 on adjacent circuit\"\n    },\n    {\n      \"tag\": \"35-24P506\",\n      \"evidence\": \"Peer pump, separate primary equipment\"\n    },\n    {\n      \"tag\": \"35-24L005\",\n      \"evidence\": \"Peer vessel/pulper, separate primary equipment\"\n    }\n  ],\n  \"notes\": [\n    \"35-24-042 is a WFL (white water flush) line DN15; label confirmed as 35-24-042-WFL-15-E10H2A\",\n    \"35-24-1107 branch spool (003-15) sits directly on this line with PI-9270, FI-9271, FS-540\",\n    \"35-24TV-9269 (TC 9269) is the temperature control valve visible on the gearbox circuit feeding into this area \u2014 assigned as sub-equipment under 1107 spool connection; if it belongs strictly to gearbox circuit it should be moved to peers\",\n    \"PI-9272, FI-9273, FS-545 appear to belong to the next line segment 35-24-045 and are excluded\"\n  ],\n  \"confidence\": \"medium\"\n}\n```",
+        "raw_text": "I'll analyze the P&ID image carefully for FUNCTION 35-24-042.\n\n**Observations from the image:**\n- `35-24-042-WFL-15-E10H2A` is the line label visible at the bottom of the crop (short id: `35-24-042`)\n- This is a **WFL (White Water Flow Line)** piping header \u2014 treat as Line FUNCTION per Rule 11\n- On the 35-24-042 line circuit I can see:\n  - Instruments: `PI 9270`, `FI 9271`, `FS 540` grouped together on the line, then `PI 9272`, `FI 9273`, `FS 545` on the next segment\n  - Branch/spool `35-24-1107` (003-15) sits on this line with a valve (red X = normally closed automatic valve)\n  - The line label `35-24-042-WFL-15-E10H2A` is directly below the PI/FI/FS cluster\n- `35-24-1107` is a branch spool off 35-24-042 (labelled 003-15, with a red X valve = AV NC)\n- The instruments PI-9270, FI-9271, FS-540 are on the 35-24-042 segment\n- PI-9272, FI-9273, FS-545 appear to be on the 35-24-045 segment (to the right, labelled `35-24-045-WFL-15-E10H2A`)\n- `35-24TV-9269` is a temperature control valve visible on the line feeding into this area \u2014 it's on the upstream feed, associated with TC-9269/GEARBOX 1 circuit, not directly on 35-24-042\n- `35-24-1123` and `35-24-146` are visible to the left, associated with 35-24-041 circuit\n- The valve on 35-24-1107 branch: red X symbol = AV NC (automatic, normally closed \u2014 solid filled triangles with actuator)\n\n**Scoping:**\n- Children of 35-24-042: the branch `35-24-1107` + instruments `35-24PI-9270`, `35-24FI-9271`, `35-24FS-540` on the main line\n- PI-9272, FI-9273, FS-545 belong to 35-24-045 segment \u2192 peers/omit\n- 35-24-005.3, 35-24-005.4 are motor tags for GEARBOX oil pumps \u2192 different numeric base \u2192 peers\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24-042\",\n  \"description\": \"35-24-042 WFL LINE\",\n  \"rows\": [\n    {\"equipment\": \"35-24PI-9270\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24PI-9270 PRESS IND\"},\n    {\"equipment\": \"35-24FI-9271\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24FI-9271 FLOW IND\"},\n    {\"equipment\": \"35-24FS-540\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24FS-540 FLOW SWITCH\"},\n    {\"equipment\": \"35-24-1107\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-1107 BRANCH SPOOL\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24TV-9269\", \"mask\": \"\", \"description\": \"35-24TV-9269 TEMP VLV AV NC\"}\n  ],\n  \"peers\": [\n    {\"tag\": \"35-24-045\", \"evidence\": \"adjacent WFL line segment labelled 35-24-045-WFL-15-E10H2A\"},\n    {\"tag\": \"35-24-041\", \"evidence\": \"adjacent WFC line labelled 35-24-041-WFC-15-E10H2A\"},\n    {\"tag\": \"35-24-005.3\", \"evidence\": \"motor tag for GEARBOX 1 oil pump, numeric base 005 not 042\"},\n    {\"tag\": \"35-24-005.4\", \"evidence\": \"motor tag for GEARBOX 1 oil pump, numeric base 005 not 042\"},\n    {\"tag\": \"35-24-1123\", \"evidence\": \"branch spool visible on 35-24-041 circuit, not 042\"},\n    {\"tag\": \"35-24-146\", \"evidence\": \"valve/spool on 35-24-041 circuit\"},\n    {\"tag\": \"35-24PI-9272\", \"evidence\": \"PI on 35-24-045 segment\"},\n    {\"tag\": \"35-24FI-9273\", \"evidence\": \"FI on 35-24-045 segment\"},\n    {\"tag\": \"35-24FS-545\", \"evidence\": \"FS on 35-24-045 segment\"}\n  ],\n  \"notes\": [\n    \"35-24-042 is a WFL-15 white water flow line; treated as piping header per Rule 11\",\n    \"35-24TV-9269 nested under 35-24-1107 branch as it is the control valve on that spool (003-15); symbol shows red X = AV NC\",\n    \"PI-9270 and FI-9271 and FS-540 are locally mounted instruments directly on the 35-24-042 line segment\",\n    \"PI-9272/FI-9273/FS-545 cluster sits on the 35-24-045 line segment to the right \u2014 excluded from 042 scope\"\n  ],\n  \"confidence\": \"medium\"\n}\n```",
         "parsed": {
           "sub_process": "BR1",
           "function": "35-24-042",
-          "description": "35-24-042 WFL LINE DN15",
+          "description": "35-24-042 WFL LINE",
           "rows": [
             {
-              "equipment": "35-24-1107",
+              "equipment": "35-24PI-9270",
               "subequipment": "",
               "mask": "",
-              "description": "35-24-1107 BRANCH SPOOL 003-15"
+              "description": "35-24PI-9270 PRESS IND"
             },
             {
-              "equipment": "",
-              "subequipment": "35-24PI-9270",
-              "mask": "",
-              "description": "35-24PI-9270 PRESSURE IND"
-            },
-            {
-              "equipment": "",
-              "subequipment": "35-24FI-9271",
+              "equipment": "35-24FI-9271",
+              "subequipment": "",
               "mask": "",
               "description": "35-24FI-9271 FLOW IND"
             },
             {
-              "equipment": "",
-              "subequipment": "35-24FS-540",
+              "equipment": "35-24FS-540",
+              "subequipment": "",
               "mask": "",
               "description": "35-24FS-540 FLOW SWITCH"
+            },
+            {
+              "equipment": "35-24-1107",
+              "subequipment": "",
+              "mask": "",
+              "description": "35-24-1107 BRANCH SPOOL"
             },
             {
               "equipment": "",
               "subequipment": "35-24TV-9269",
               "mask": "",
-              "description": "35-24TV-9269 TEMP CTRL VLV AV NC"
+              "description": "35-24TV-9269 TEMP VLV AV NC"
             }
           ],
           "peers": [
             {
-              "tag": "35-24-005.3",
-              "evidence": "Motor tag base 005 does not match function 042; belongs to REEL PULPER ROTOR 1 GEARBOX OIL PUMP"
-            },
-            {
-              "tag": "35-24-005.4",
-              "evidence": "Motor tag base 005 does not match function 042; belongs to REEL PULPER ROTOR 2 GEARBOX OIL PUMP"
+              "tag": "35-24-045",
+              "evidence": "adjacent WFL line segment labelled 35-24-045-WFL-15-E10H2A"
             },
             {
               "tag": "35-24-041",
-              "evidence": "Adjacent WFC line, separate function"
+              "evidence": "adjacent WFC line labelled 35-24-041-WFC-15-E10H2A"
             },
             {
-              "tag": "35-24-045",
-              "evidence": "Adjacent WFL line downstream, separate function"
+              "tag": "35-24-005.3",
+              "evidence": "motor tag for GEARBOX 1 oil pump, numeric base 005 not 042"
             },
             {
-              "tag": "35-24TV-9268",
-              "evidence": "Temperature control valve on adjacent gearbox/041 circuit, not on 042 line"
+              "tag": "35-24-005.4",
+              "evidence": "motor tag for GEARBOX 1 oil pump, numeric base 005 not 042"
             },
             {
               "tag": "35-24-1123",
-              "evidence": "Branch spool on 001-15 circuit, not on 042 line"
+              "evidence": "branch spool visible on 35-24-041 circuit, not 042"
             },
             {
               "tag": "35-24-146",
-              "evidence": "Branch spool 001-15 on adjacent circuit"
+              "evidence": "valve/spool on 35-24-041 circuit"
             },
             {
-              "tag": "35-24P506",
-              "evidence": "Peer pump, separate primary equipment"
+              "tag": "35-24PI-9272",
+              "evidence": "PI on 35-24-045 segment"
             },
             {
-              "tag": "35-24L005",
-              "evidence": "Peer vessel/pulper, separate primary equipment"
+              "tag": "35-24FI-9273",
+              "evidence": "FI on 35-24-045 segment"
+            },
+            {
+              "tag": "35-24FS-545",
+              "evidence": "FS on 35-24-045 segment"
             }
           ],
           "notes": [
-            "35-24-042 is a WFL (white water flush) line DN15; label confirmed as 35-24-042-WFL-15-E10H2A",
-            "35-24-1107 branch spool (003-15) sits directly on this line with PI-9270, FI-9271, FS-540",
-            "35-24TV-9269 (TC 9269) is the temperature control valve visible on the gearbox circuit feeding into this area \u2014 assigned as sub-equipment under 1107 spool connection; if it belongs strictly to gearbox circuit it should be moved to peers",
-            "PI-9272, FI-9273, FS-545 appear to belong to the next line segment 35-24-045 and are excluded"
+            "35-24-042 is a WFL-15 white water flow line; treated as piping header per Rule 11",
+            "35-24TV-9269 nested under 35-24-1107 branch as it is the control valve on that spool (003-15); symbol shows red X = AV NC",
+            "PI-9270 and FI-9271 and FS-540 are locally mounted instruments directly on the 35-24-042 line segment",
+            "PI-9272/FI-9273/FS-545 cluster sits on the 35-24-045 line segment to the right \u2014 excluded from 042 scope"
           ],
           "confidence": "medium"
         },
@@ -211,34 +211,34 @@
       },
       "refined_rows": [
         {
-          "equipment": "35-24-1107",
+          "equipment": "35-24PI-9270",
           "subequipment": "",
           "mask": "",
-          "description": "35-24-1107 BRANCH SPOOL 003-15"
+          "description": "35-24PI-9270 PRESS IND"
         },
         {
-          "equipment": "",
-          "subequipment": "35-24PI-9270",
-          "mask": "",
-          "description": "35-24PI-9270 PR IND"
-        },
-        {
-          "equipment": "",
-          "subequipment": "35-24FI-9271",
+          "equipment": "35-24FI-9271",
+          "subequipment": "",
           "mask": "",
           "description": "35-24FI-9271 FL IND"
         },
         {
-          "equipment": "",
-          "subequipment": "35-24FS-540",
+          "equipment": "35-24FS-540",
+          "subequipment": "",
           "mask": "",
           "description": "35-24FS-540 FS"
+        },
+        {
+          "equipment": "35-24-1107",
+          "subequipment": "",
+          "mask": "",
+          "description": "35-24-1107 BRANCH SPOOL"
         },
         {
           "equipment": "",
           "subequipment": "35-24TV-9269",
           "mask": "",
-          "description": "35-24TV-9269 TEMP CTRL VLV AV NC"
+          "description": "35-24TV-9269 TEMP VLV AV NC"
         },
         {
           "equipment": "35-24-042",

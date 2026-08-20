@@ -53,7 +53,7 @@
       ],
       "dossier": "Parent tag: 35-24-194\nParent category/block: lines / \nParent XY: (178.5635635635635, 63.75)\nNearby descriptions: 35-24-194-WFL-15-E10H2A\n\nSame-tag CAD family:\n- (none)\n\nNearby line numbers (short ids preferred in output):\n- 35-25-117  full=35-25-117-WAB-32-E10H2A  d=100  layer=P-LINEPOS\n- 35-24-194  full=35-24-194-WFL-15-E10H2A  d=0  layer=P-LINEPOS\n- 35-24-195  full=35-24-195-WFL-15-E10H2A  d=62  layer=P-LINEPOS\n- 35-24-191  full=35-24-191-PP-250-E10H2A  d=188  layer=P-LINEPOS\n- 35-24-190  full=35-24-190-PP-200-E10H2A  d=173  layer=P-LINEPOS\n- 35-24-185  full=35-24-185-WAF-150-E10H2A  d=167  layer=P-LINEPOS\n- 35-24-215  full=35-24-215-WFC--E10H2A  d=89  layer=P-LINEPOS\n- 35-24-216  full=35-24-216-WFC--E10H2A  d=93  layer=P-LINEPOS\n\nNearby devices (valves/instruments/pumps/\u2026):\n- line_markers: PPI_1100A  d=94  block=PPI_1100A\n- valves: PPI_0900A  d=197  block=PPI_0900A\n- control_valves: PPI_1000A  d=199  block=PPI_1000A\n- instruments: PPI_0102B  d=186  block=PPI_0102B\n- pumps: P7A0200  d=186  block=P7A0200\n- motors: PPI_1504A-25_0  d=168  block=PPI_1504A-25_0\n- fittings: P7A1271  d=187  block=P7A1271\n\nNearby peer primary equipment (do NOT nest under parent):\n- 35-24P519 (pumps, d=186)\n\nNearby drawing text tokens:\n- 675  d=186  layer=P-INSTRPOS_TEXTS\n- 35-24  d=183  layer=P-INSTRPOS_TEXTS\n- 678  d=26  layer=P-INSTRPOS_TEXTS\n- 679  d=78  layer=P-INSTRPOS_TEXTS\n- 9334  d=31  layer=P-INSTRPOS_TEXTS\n- 9336  d=49  layer=P-INSTRPOS_TEXTS\n- 9335  d=25  layer=P-INSTRPOS_TEXTS\n- 9337  d=57  layer=P-INSTRPOS_TEXTS\n- 35-24P519  d=161  layer=P-PUMP_POS\n- 65  d=156  layer=P-PUMP_POS\n- 32  d=155  layer=P-PUMP_POS\n- 30  d=152  layer=P-PUMP_POS\n- 1500  d=150  layer=P-PUMP_POS\n- 35-24-009.1  d=166  layer=P-MOTOR_POS\n- 160  d=161  layer=P-MOTOR_POS\n- 35-24-198  d=193  layer=P-VALVEPOS\n- 003-50  d=188  layer=P-VALVEPOS\n- 35-24-199  d=198  layer=P-VALVEPOS\n- 003-15  d=193  layer=P-VALVEPOS\n- 35-24-221  d=180  layer=P-VALVEPOS\n- 35-24-195  d=17  layer=P-VALVEPOS\n- 35-24-197  d=165  layer=P-VALVEPOS\n- 001-80  d=160  layer=P-VALVEPOS\n- 355-250  d=196  layer=P-VALVEPOS\n- 35-24-218  d=71  layer=P-VALVEPOS\n- 35-24-194  d=190  layer=P-VALVEPOS\n- 350-200  d=186  layer=P-VALVEPOS\n- 35-24-193  d=190  layer=P-VALVEPOS\n- 101-150  d=191  layer=P-VALVEPOS\n- 35-25-117  d=100  layer=P-LINEPOS\n- 35-24-191  d=188  layer=P-LINEPOS\n- 35-24-190  d=173  layer=P-LINEPOS\n- 35-24-185  d=167  layer=P-LINEPOS\n- 35-24-215  d=89  layer=P-LINEPOS\n- 35-24-216  d=93  layer=P-LINEPOS\n- 35-24NV-675  d=175  layer=P-CVPOS\n- 35-24HV-676  d=195  layer=P-CVPOS\n- 80  d=198  layer=P-CVPOS",
       "ai": {
-        "raw_text": "I'll analyze the P&ID image carefully for FUNCTION 35-24-194.\n\n**Image analysis:**\n- 35-24-194-WFL-15-E10H2A is the main line (WFL = white water flush line, DN15)\n- On this line I can see: PI 9334, FI 9335, FS 678, and valve 35-24-195 (003-15)\n- The valve 35-24-195 appears as a bowtie with solid/filled triangles (NC) and has an actuator circle on top \u2192 AV NC\n- 35-24-218 is on the adjacent line 35-24-195-WFL-15-E10H2A (right side of crop, outside this function's boundary)\n- Instruments PI-9334, FI-9335, FS-678 are on the 35-24-194 line circuit\n- The delivery limit marker (V/C) sits between the two circuits \u2014 35-24-195 line and its valve 35-24-218 belong to the peer line\n\n**Children of 35-24-194:**\n- 35-24-195 is the valve tag on this line (valve position layer confirms it, d=17, very close)\n- Instruments: 35-24PI-9334 (PI circle), 35-24FI-9335 (FI circle), 35-24FS-678 (FS square)\n- These nest under the line as sub-equipment\n\n**Valve 35-24-195 symbol:** Looking at the image, the bowtie triangles appear solid/filled white = NC, with an actuator circle on top = AV. So: AV NC.\n\n**Peers:** 35-24-218 belongs to line 35-24-195 (the adjacent parallel line), not to 35-24-194.\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24-194\",\n  \"description\": \"35-24-194 WFL 15 FLUSH LINE\",\n  \"rows\": [\n    {\n      \"equipment\": \"35-24-194\",\n      \"subequipment\": \"\",\n      \"mask\": \"\",\n      \"description\": \"35-24-194 WFL DN15 LINE\"\n    },\n    {\n      \"equipment\": \"\",\n      \"subequipment\": \"35-24-195\",\n      \"mask\": \"\",\n      \"description\": \"35-24-195 VLV AV NC\"\n    },\n    {\n      \"equipment\": \"\",\n      \"subequipment\": \"35-24PI-9334\",\n      \"mask\": \"\",\n      \"description\": \"35-24PI-9334 PRESSURE INDICATOR\"\n    },\n    {\n      \"equipment\": \"\",\n      \"subequipment\": \"35-24FI-9335\",\n      \"mask\": \"\",\n      \"description\": \"35-24FI-9335 FLOW INDICATOR\"\n    },\n    {\n      \"equipment\": \"\",\n      \"subequipment\": \"35-24FS-678\",\n      \"mask\": \"\",\n      \"description\": \"35-24FS-678 FLOW SWITCH\"\n    }\n  ],\n  \"peers\": [\n    {\n      \"tag\": \"35-24-218\",\n      \"evidence\": \"Valve 35-24-218 sits on line 35-24-195-WFL-15-E10H2A, not on 35-24-194 circuit\"\n    },\n    {\n      \"tag\": \"35-24-195\",\n      \"evidence\": \"Line 35-24-195-WFL-15-E10H2A is a parallel peer flush line with its own instruments PI-9336, FI-9337, FS-679\"\n    },\n    {\n      \"tag\": \"35-24PI-9336\",\n      \"evidence\": \"PI 9336 is on the 35-24-195 line circuit, not 35-24-194\"\n    },\n    {\n      \"tag\": \"35-24FI-9337\",\n      \"evidence\": \"FI 9337 is on the 35-24-195 line circuit, not 35-24-194\"\n    },\n    {\n      \"tag\": \"35-24FS-679\",\n      \"evidence\": \"FS 679 is on the 35-24-195 line circuit, not 35-24-194\"\n    }\n  ],\n  \"notes\": [\n    \"35-24-194-WFL-15-E10H2A is a DN15 white water flush line\",\n    \"Valve tag 35-24-195 (003-15) is the isolation valve on this line with AV NC symbol\",\n    \"Instruments PI-9334, FI-9335, FS-678 confirmed on 35-24-194 circuit from image\",\n    \"Delivery limit V/C marker visible between the two parallel flush lines\"\n  ],\n  \"confidence\": \"high\"\n}\n```",
+        "raw_text": "I'll analyze the P&ID image carefully for FUNCTION 35-24-194.\n\n**Image analysis:**\n- 35-24-194-WFL-15-E10H2A is the main line (WFL = white water flush line, DN15)\n- On this line I can see: PI 9334, FI 9335, FS 678, and valve 35-24-195 (003-15)\n- The valve 35-24-195 appears as a bowtie with solid/filled triangles (NC) and has an actuator circle on top \u2192 AV NC\n- Instruments PI-9334, FI-9335 are locally mounted (plain circles per legend)\n- FS-678 is in a square box (control room instrument with DCS)\n- The right side shows 35-24-195-WFL-15-E10H2A with PI 9336, FI 9337, FS 679, and valve 35-24-218 (003-15) \u2014 these belong to line 35-24-195, not 35-24-194\n- 35-24-218 is on line 35-24-195 (peer line), so it's out of scope for 35-24-194\n\n**Valve 35-24-195 symbol check:** The bowtie shows filled/solid triangles with a circle actuator on top \u2192 AV NC\n\n**Instruments on 35-24-194:** PI-9334 (plain circle = locally mounted), FI-9335 (plain circle), FS-678 (square = DCS control room instrument)\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24-194\",\n  \"description\": \"35-24-194 WFL 15 FLUSH LINE\",\n  \"rows\": [\n    {\"equipment\": \"35-24-194\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-194 WFL 15 LINE\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24PI-9334\", \"mask\": \"\", \"description\": \"35-24PI-9334 PRESS IND\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24FI-9335\", \"mask\": \"\", \"description\": \"35-24FI-9335 FLOW IND\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24FS-678\", \"mask\": \"\", \"description\": \"35-24FS-678 FLOW SWITCH\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-195\", \"mask\": \"\", \"description\": \"35-24-195 VLV AV NC\"}\n  ],\n  \"peers\": [\n    {\"tag\": \"35-24-195\", \"evidence\": \"35-24-195-WFL-15-E10H2A is a separate parallel flush line visible on right side of crop; 35-24-218 and PI-9336/FI-9337/FS-679 belong to that peer line\"},\n    {\"tag\": \"35-24-218\", \"evidence\": \"Valve 003-15 on line 35-24-195, not on 35-24-194 circuit\"},\n    {\"tag\": \"35-24-215\", \"evidence\": \"35-24-215-WFC line runs below, separate header not part of 35-24-194 circuit\"},\n    {\"tag\": \"35-24-216\", \"evidence\": \"35-24-216-WFC line runs below, separate header\"},\n    {\"tag\": \"35-25-117\", \"evidence\": \"35-25-117-WAB-32 is a different sub-process line passing nearby\"}\n  ],\n  \"notes\": [\n    \"35-24-194-WFL-15-E10H2A: white water flush line DN15; instruments PI-9334, FI-9335 are locally mounted; FS-678 is DCS control room instrument\",\n    \"Valve tagged 35-24-195 (003-15) sits on line 35-24-194 per image; the line 35-24-195 is a parallel circuit on the right\",\n    \"Right-hand circuit (35-24-195 line with PI-9336, FI-9337, FS-679, valve 35-24-218) is a peer, not a child of 35-24-194\"\n  ],\n  \"confidence\": \"medium\"\n}\n```",
         "parsed": {
           "sub_process": "BR1",
           "function": "35-24-194",
@@ -63,62 +63,61 @@
               "equipment": "35-24-194",
               "subequipment": "",
               "mask": "",
-              "description": "35-24-194 WFL DN15 LINE"
-            },
-            {
-              "equipment": "",
-              "subequipment": "35-24-195",
-              "mask": "",
-              "description": "35-24-195 VLV AV NC"
+              "description": "35-24-194 WFL 15 LINE"
             },
             {
               "equipment": "",
               "subequipment": "35-24PI-9334",
               "mask": "",
-              "description": "35-24PI-9334 PRESSURE INDICATOR"
+              "description": "35-24PI-9334 PRESS IND"
             },
             {
               "equipment": "",
               "subequipment": "35-24FI-9335",
               "mask": "",
-              "description": "35-24FI-9335 FLOW INDICATOR"
+              "description": "35-24FI-9335 FLOW IND"
             },
             {
               "equipment": "",
               "subequipment": "35-24FS-678",
               "mask": "",
               "description": "35-24FS-678 FLOW SWITCH"
+            },
+            {
+              "equipment": "",
+              "subequipment": "35-24-195",
+              "mask": "",
+              "description": "35-24-195 VLV AV NC"
             }
           ],
           "peers": [
             {
-              "tag": "35-24-218",
-              "evidence": "Valve 35-24-218 sits on line 35-24-195-WFL-15-E10H2A, not on 35-24-194 circuit"
-            },
-            {
               "tag": "35-24-195",
-              "evidence": "Line 35-24-195-WFL-15-E10H2A is a parallel peer flush line with its own instruments PI-9336, FI-9337, FS-679"
+              "evidence": "35-24-195-WFL-15-E10H2A is a separate parallel flush line visible on right side of crop; 35-24-218 and PI-9336/FI-9337/FS-679 belong to that peer line"
             },
             {
-              "tag": "35-24PI-9336",
-              "evidence": "PI 9336 is on the 35-24-195 line circuit, not 35-24-194"
+              "tag": "35-24-218",
+              "evidence": "Valve 003-15 on line 35-24-195, not on 35-24-194 circuit"
             },
             {
-              "tag": "35-24FI-9337",
-              "evidence": "FI 9337 is on the 35-24-195 line circuit, not 35-24-194"
+              "tag": "35-24-215",
+              "evidence": "35-24-215-WFC line runs below, separate header not part of 35-24-194 circuit"
             },
             {
-              "tag": "35-24FS-679",
-              "evidence": "FS 679 is on the 35-24-195 line circuit, not 35-24-194"
+              "tag": "35-24-216",
+              "evidence": "35-24-216-WFC line runs below, separate header"
+            },
+            {
+              "tag": "35-25-117",
+              "evidence": "35-25-117-WAB-32 is a different sub-process line passing nearby"
             }
           ],
           "notes": [
-            "35-24-194-WFL-15-E10H2A is a DN15 white water flush line",
-            "Valve tag 35-24-195 (003-15) is the isolation valve on this line with AV NC symbol",
-            "Instruments PI-9334, FI-9335, FS-678 confirmed on 35-24-194 circuit from image",
-            "Delivery limit V/C marker visible between the two parallel flush lines"
+            "35-24-194-WFL-15-E10H2A: white water flush line DN15; instruments PI-9334, FI-9335 are locally mounted; FS-678 is DCS control room instrument",
+            "Valve tagged 35-24-195 (003-15) sits on line 35-24-194 per image; the line 35-24-195 is a parallel circuit on the right",
+            "Right-hand circuit (35-24-195 line with PI-9336, FI-9337, FS-679, valve 35-24-218) is a peer, not a child of 35-24-194"
           ],
-          "confidence": "high"
+          "confidence": "medium"
         },
         "model_id": "eu.anthropic.claude-sonnet-4-6",
         "region": "eu-west-2",
@@ -156,19 +155,19 @@
           "equipment": "35-24-194",
           "subequipment": "",
           "mask": "",
-          "description": "35-24-194 WFL DN15 LN"
+          "description": "35-24-194 WFL 15 LN"
         },
         {
           "equipment": "",
           "subequipment": "35-24PI-9334",
           "mask": "",
-          "description": "35-24PI-9334 PI"
+          "description": "35-24PI-9334 PRESS IND"
         },
         {
           "equipment": "",
           "subequipment": "35-24FI-9335",
           "mask": "",
-          "description": "35-24FI-9335 FI"
+          "description": "35-24FI-9335 FL IND"
         },
         {
           "equipment": "",

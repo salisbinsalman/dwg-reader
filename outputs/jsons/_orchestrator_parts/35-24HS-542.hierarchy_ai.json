@@ -57,7 +57,7 @@
       ],
       "dossier": "Parent tag: 35-24HS-542\nParent category/block: instruments / \nParent XY: (1803.343201076076, 402.541825)\nNearby descriptions: HS 542 (35-24)\n\nSame-tag CAD family:\n- (none)\n\nNearby line numbers (short ids preferred in output):\n- 35-24-223  full=35-24-223-PP-100-E10H2A  d=184  layer=P-LINEPOS\n- 35-24-222  full=35-24-222-PP-400-E10H2A  d=189  layer=P-LINEPOS\n- 35-24-051  full=35-24-051-PP-100-E10H2A  d=170  layer=P-LINEPOS\n- 35-24-049  full=35-24-049-PP-800-E10H2A  d=176  layer=P-LINEPOS\n- 35-24-043  full=35-24-043-PP-300-E10H2A  d=189  layer=P-LINEPOS\n- 35-24-044  full=35-24-044-PP-900-E10H2A  d=196  layer=P-LINEPOS\n\nNearby devices (valves/instruments/pumps/\u2026):\n- line_markers: PPI_1100A  d=197  block=PPI_1100A\n- valves: PPI_0900A  d=150  block=PPI_0900A\n- control_valves: PPI_1000A  d=148  block=PPI_1000A\n- instruments: PPI_0100X  d=161  block=PPI_0100X\n- pumps: PPI_0521A-25_0  d=189  block=PPI_0521A-25_0\n- fittings: P7A1220  d=127  block=P7A1220\n\nNearby peer primary equipment (do NOT nest under parent):\n- 35-24L005 (process_equipment, d=157)\n- 35-24L006 (process_equipment, d=116)\n- 35-24P507 (pumps, d=189)\n\nNearby drawing text tokens:\n- S3  d=124  layer=P-TEXT\n- S2  d=119  layer=P-TEXT\n- A1  d=183  layer=P-TEXT\n- S4  d=120  layer=P-TEXT\n- 2 bar  d=120  layer=P-TEXT\n- S1/ST1  d=99  layer=P-TEXT\n- 2621 ADTPD  d=176  layer=P-TEXT\n- 35-24  d=34  layer=P-INSTRPOS_TEXTS\n- SHOWER S1  d=55  layer=P-TEXT\n- 35-24L006  d=120  layer=P-EQUIPMENT_POS\n- BROKE CONVEYOR 3  d=127  layer=P-EQUIPMENT_POS\n- 35-24L005  d=157  layer=P-EQUIPMENT_POS\n- HP-63G2  d=171  layer=P-EQUIPMENT_POS\n- 541  d=79  layer=P-INSTRPOS_TEXTS\n- 548  d=155  layer=P-INSTRPOS_TEXTS\n- 544  d=76  layer=P-INSTRPOS_TEXTS\n- 543  d=76  layer=P-INSTRPOS_TEXTS\n- 542  d=4  layer=P-INSTRPOS_TEXTS\n- 552  d=45  layer=P-INSTRPOS_TEXTS\n- 555  d=43  layer=P-INSTRPOS_TEXTS\n- 653  d=94  layer=P-INSTRPOS_TEXTS\n- 652  d=92  layer=P-INSTRPOS_TEXTS\n- 534  d=136  layer=P-INSTRPOS_TEXTS\n- 696  d=137  layer=P-INSTRPOS_TEXTS\n- 35-24P520  d=199  layer=P-PUMP_POS\n- 17  d=194  layer=P-PUMP_POS\n- 35-24P507  d=195  layer=P-PUMP_POS\n- 20  d=199  layer=P-PUMP_POS\n- 35-24-1131  d=189  layer=P-VALVEPOS\n- 350-400  d=192  layer=P-VALVEPOS\n- 35-24-232  d=122  layer=P-VALVEPOS\n- 001-80  d=125  layer=P-VALVEPOS\n- 35-24-233  d=130  layer=P-VALVEPOS\n- 35-24-141  d=188  layer=P-VALVEPOS\n- 35-24-228  d=162  layer=P-VALVEPOS\n- 350-500  d=166  layer=P-VALVEPOS\n- 35-24-140  d=151  layer=P-VALVEPOS\n- 350-300  d=155  layer=P-VALVEPOS\n- 35-24-137  d=194  layer=P-VALVEPOS\n- 350-250  d=199  layer=P-VALVEPOS",
       "ai": {
-        "raw_text": "Looking at the P&ID image, I can see:\n\n- **35-24HS-542** is a Hand Switch (HS) instrument located on a LOCAL PANEL\n- Its label reads \"REEL PULPER START/STOP\"\n- It is a square-symbol instrument (local control panel instrument per legend)\n- No child lines, valves, or sub-instruments are nested under it \u2014 it is a standalone pushbutton/selector switch\n- Nearby instruments 35-24HI-552 and 35-24HI-555 are separate instruments on the same panel but are peers, not children of HS-542\n- 35-24KJ-543 (REEL PULPER START) and 35-24KJ-544 (REEL PULPER STOP) are visible but are separate instrument tags outside the red crop boundary / not children of HS-542\n- 35-24XS-541 (MCS SIGNAL) is also a peer instrument\n\nPer the rules: \"If 35-24HS-542 is an instrument (LC/PI/FV/XS/\u2026) and no labelled accessories sit on it, emit the FUNCTION header + description only \u2014 empty `rows` is correct.\"\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24HS-542\",\n  \"description\": \"35-24HS-542 REEL PLPR START/STOP HS\",\n  \"rows\": [],\n  \"peers\": [\n    {\"tag\": \"35-24HI-552\", \"evidence\": \"Separate HI instrument on same local panel, own tag number 552\"},\n    {\"tag\": \"35-24HI-555\", \"evidence\": \"Separate HI instrument on same local panel, own tag number 555\"},\n    {\"tag\": \"35-24KJ-543\", \"evidence\": \"Separate KJ instrument REEL PULPER START, own tag\"},\n    {\"tag\": \"35-24KJ-544\", \"evidence\": \"Separate KJ instrument REEL PULPER STOP, own tag\"},\n    {\"tag\": \"35-24XS-541\", \"evidence\": \"MCS SIGNAL instrument, separate tag on same panel area\"},\n    {\"tag\": \"35-24L005\", \"evidence\": \"Process equipment, peer major equipment not child of instrument\"},\n    {\"tag\": \"35-24L006\", \"evidence\": \"Process equipment BROKE CONVEYOR 3, peer major equipment\"},\n    {\"tag\": \"35-24P507\", \"evidence\": \"Pump, peer major equipment not child of instrument\"}\n  ],\n  \"notes\": [\n    \"35-24HS-542 is a local panel hand switch for REEL PULPER START/STOP; no piping, valves or sub-instruments nest under it\",\n    \"Symbol is square with horizontal line = local control panel instrument per legend\",\n    \"HI-552 and HI-555 share the same local panel but carry independent tag numbers\"\n  ],\n  \"confidence\": \"high\"\n}\n```",
+        "raw_text": "Looking at the P&ID image, I can see:\n\n- **35-24HS-542** is a Hand Switch (HS) instrument located on a LOCAL PANEL\n- Its label reads \"REEL PULPER START/STOP\"\n- It is a square-symbol instrument (local control panel instrument per legend)\n- No child lines, valves, or sub-instruments are nested under it \u2014 it is a standalone pushbutton/selector switch\n- Nearby instruments 35-24HI-552 and 35-24HI-555 are separate instruments on the same panel but are not children of HS-542\n- 35-24KJ-543 (REEL PULPER START) and 35-24KJ-544 (REEL PULPER STOP) are peer instruments visible outside the crop boundary\n- 35-24XS-541 is a peer MCS signal instrument\n\nSince HS-542 is a standalone instrument (hand switch) with no labelled accessories or sub-instruments attached to it, the `rows` array is correctly empty per the rules.\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24HS-542\",\n  \"description\": \"35-24HS-542 REEL PLPR START/STOP HS\",\n  \"rows\": [],\n  \"peers\": [\n    {\"tag\": \"35-24HI-552\", \"evidence\": \"Separate HI instrument on same local panel, own tag number 552\"},\n    {\"tag\": \"35-24HI-555\", \"evidence\": \"Separate HI instrument on same local panel, own tag number 555\"},\n    {\"tag\": \"35-24KJ-543\", \"evidence\": \"Peer KJ instrument REEL PULPER START, own tag\"},\n    {\"tag\": \"35-24KJ-544\", \"evidence\": \"Peer KJ instrument REEL PULPER STOP, own tag\"},\n    {\"tag\": \"35-24XS-541\", \"evidence\": \"Peer XS MCS SIGNAL instrument, own tag\"},\n    {\"tag\": \"35-24L005\", \"evidence\": \"Process equipment nearby, not child of instrument\"},\n    {\"tag\": \"35-24L006\", \"evidence\": \"Process equipment BROKE CONVEYOR 3, not child of instrument\"},\n    {\"tag\": \"35-24P507\", \"evidence\": \"Pump nearby, peer major equipment\"}\n  ],\n  \"notes\": [\n    \"35-24HS-542 is a local panel hand switch (START/STOP) for the Reel Pulper; no sub-instruments or valves nest under it\",\n    \"Square symbol with horizontal line = local control panel instrument per legend\",\n    \"HI-552 and HI-555 are co-located on the same panel but carry independent tag numbers\"\n  ],\n  \"confidence\": \"high\"\n}\n```",
         "parsed": {
           "sub_process": "BR1",
           "function": "35-24HS-542",
@@ -74,33 +74,33 @@
             },
             {
               "tag": "35-24KJ-543",
-              "evidence": "Separate KJ instrument REEL PULPER START, own tag"
+              "evidence": "Peer KJ instrument REEL PULPER START, own tag"
             },
             {
               "tag": "35-24KJ-544",
-              "evidence": "Separate KJ instrument REEL PULPER STOP, own tag"
+              "evidence": "Peer KJ instrument REEL PULPER STOP, own tag"
             },
             {
               "tag": "35-24XS-541",
-              "evidence": "MCS SIGNAL instrument, separate tag on same panel area"
+              "evidence": "Peer XS MCS SIGNAL instrument, own tag"
             },
             {
               "tag": "35-24L005",
-              "evidence": "Process equipment, peer major equipment not child of instrument"
+              "evidence": "Process equipment nearby, not child of instrument"
             },
             {
               "tag": "35-24L006",
-              "evidence": "Process equipment BROKE CONVEYOR 3, peer major equipment"
+              "evidence": "Process equipment BROKE CONVEYOR 3, not child of instrument"
             },
             {
               "tag": "35-24P507",
-              "evidence": "Pump, peer major equipment not child of instrument"
+              "evidence": "Pump nearby, peer major equipment"
             }
           ],
           "notes": [
-            "35-24HS-542 is a local panel hand switch for REEL PULPER START/STOP; no piping, valves or sub-instruments nest under it",
-            "Symbol is square with horizontal line = local control panel instrument per legend",
-            "HI-552 and HI-555 share the same local panel but carry independent tag numbers"
+            "35-24HS-542 is a local panel hand switch (START/STOP) for the Reel Pulper; no sub-instruments or valves nest under it",
+            "Square symbol with horizontal line = local control panel instrument per legend",
+            "HI-552 and HI-555 are co-located on the same panel but carry independent tag numbers"
           ],
           "confidence": "high"
         },

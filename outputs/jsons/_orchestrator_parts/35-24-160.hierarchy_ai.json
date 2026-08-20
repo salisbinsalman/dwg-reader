@@ -42,29 +42,29 @@
       ],
       "dossier": "Parent tag: 35-24-160\nParent category/block: lines / \nParent XY: (5142.5, 58.75)\nNearby descriptions: 35-24-160-WFL-15-E10H2A\n\nSame-tag CAD family:\n- (none)\n\nNearby line numbers (short ids preferred in output):\n- 35-24-160  full=35-24-160-WFL-15-E10H2A  d=0  layer=P-LINEPOS\n- 35-24-157  full=35-24-157-WFL-15-E10H2A  d=72  layer=P-LINEPOS\n- 35-24-153  full=35-24-153-WFL-15-E10H2A  d=172  layer=P-LINEPOS\n- 35-24-163  full=35-24-163-WFL-15-E10H2A  d=168  layer=P-LINEPOS\n\nNearby devices (valves/instruments/pumps/\u2026):\n- line_markers: PPI_1100A  d=168  block=PPI_1100A\n- valves: PPI_0900A  d=64  block=PPI_0900A\n- control_valves: PPI_1000A  d=178  block=PPI_1000A\n- instruments: PPI_1204A  d=190  block=PPI_1204A\n\nNearby peer primary equipment (do NOT nest under parent):\n- (none)\n\nNearby drawing text tokens:\n- 627  d=164  layer=P-INSTRPOS_TEXTS\n- 35-24  d=175  layer=P-INSTRPOS_TEXTS\n- 9318  d=197  layer=P-INSTRPOS_TEXTS\n- 635  d=30  layer=P-INSTRPOS_TEXTS\n- 9322  d=36  layer=P-INSTRPOS_TEXTS\n- 632  d=68  layer=P-INSTRPOS_TEXTS\n- 9320  d=99  layer=P-INSTRPOS_TEXTS\n- 634  d=187  layer=P-INSTRPOS_TEXTS\n- 9319  d=187  layer=P-INSTRPOS_TEXTS\n- 9321  d=89  layer=P-INSTRPOS_TEXTS\n- 9323  d=31  layer=P-INSTRPOS_TEXTS\n- 35-24-1134  d=170  layer=P-VALVEPOS\n- 003-15  d=167  layer=P-VALVEPOS\n- 35-24-022  d=71  layer=P-VALVEPOS\n- 35-24-020  d=21  layer=P-VALVEPOS\n- 35-24-160  d=0  layer=P-LINEPOS\n- 35-24-157  d=72  layer=P-LINEPOS\n- 35-24-153  d=172  layer=P-LINEPOS\n- 35-24-163  d=168  layer=P-LINEPOS\n- 35-24NV-634  d=181  layer=P-CVPOS\n- 65  d=175  layer=P-CVPOS",
       "ai": {
-        "raw_text": "Looking at the P&ID image, I can see:\n\n- **PARENT 35-24-160** is the line `35-24-160-WFL-15-E10H2A` (right side of the crop)\n- On this line: valve **35-24-020** (with \"003-15\" size label), and instruments **PI 9322**, **FI 9323**, **FS 635**\n- The left side shows line **35-24-157** with valve **35-24-022**, PI 9320, FI 9321, FS 632 \u2014 these are outside the red box (peer/neighbour circuit)\n\n**Valve 35-24-020 analysis**: The symbol shows a bowtie with both triangles appearing as outline/transparent (no fill visible), with no actuator circle on top \u2192 **HV** (hand valve). The \"003-15\" is the valve type/DN size label.\n\n**Instruments on 35-24-160**: PI-9322 (locally mounted pressure indicator), FI-9323 (flow indicator), FS-635 (flow switch with square = DCS control instrument).\n\nThese instruments and the valve all sit physically on line 35-24-160, so they nest as SUB-EQUIPMENT under it. Since 35-24-160 IS the FUNCTION (the line itself), the instruments/valve are direct children as EQUIPMENT or nested under the line spool. Following Example C pattern: one EQUIPMENT row for the line branch, then sub-equipment nested under it. Since 35-24-160 is the FUNCTION itself, I'll list the on-line items as EQUIPMENT directly.\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24-160\",\n  \"description\": \"35-24-160 WFL PROC LINE\",\n  \"rows\": [\n    {\"equipment\": \"35-24-020\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-020 VLV HV\"},\n    {\"equipment\": \"35-24PI-9322\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24PI-9322 PRESSURE INDICATOR\"},\n    {\"equipment\": \"35-24FI-9323\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24FI-9323 FLOW INDICATOR\"},\n    {\"equipment\": \"35-24FS-635\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24FS-635 FLOW SWITCH\"}\n  ],\n  \"peers\": [\n    {\"tag\": \"35-24-157\", \"evidence\": \"adjacent line left of crop boundary, labelled 35-24-157-WFL-15-E10H2A, outside red box\"},\n    {\"tag\": \"35-24-022\", \"evidence\": \"hand valve on line 35-24-157, not on 35-24-160 circuit\"},\n    {\"tag\": \"35-24PI-9320\", \"evidence\": \"PI on line 35-24-157, outside parent crop boundary\"},\n    {\"tag\": \"35-24FI-9321\", \"evidence\": \"FI on line 35-24-157, outside parent crop boundary\"},\n    {\"tag\": \"35-24FS-632\", \"evidence\": \"FS on line 35-24-157, outside parent crop boundary\"}\n  ],\n  \"notes\": [\n    \"35-24-020 valve symbol shows outline/transparent bowtie with no actuator \u2014 classified HV\",\n    \"003-15 is valve type/DN size annotation, not a tag\",\n    \"PI-9322 and FI-9323 are locally mounted instruments (plain circle per legend)\",\n    \"FS-635 has square symbol indicating DCS control room instrument\"\n  ],\n  \"confidence\": \"high\"\n}\n```",
+        "raw_text": "Looking at the P&ID image, I can see:\n\n- **PARENT 35-24-160** is the line `35-24-160-WFL-15-E10H2A` (right side of the crop)\n- On this line: valve **35-24-020** (with \"003-15\" size label), and instruments **PI 9322**, **FI 9323**, **FS 635**\n- The left side shows line **35-24-157** with valve **35-24-022**, PI 9320, FI 9321, FS 632 \u2014 these are outside the red box (peer/neighbour circuit)\n\n**Valve 35-24-020 analysis**: The symbol shows a bowtie with both triangles appearing as outline/transparent (no fill visible), with no actuator circle on top \u2192 **HV** (hand valve). The \"003-15\" is the valve type/DN size label.\n\n**Instruments on 35-24-160**: PI-9322 (locally mounted pressure indicator), FI-9323 (flow indicator), FS-635 (flow switch with square = DCS control instrument).\n\nThese instruments and the valve all sit physically on line 35-24-160, so they nest as SUB-EQUIPMENT under it. Since 35-24-160 IS the FUNCTION (the line itself), the instruments/valve are EQUIPMENT children directly, following Example C pattern where the line is the FUNCTION and its on-line devices are children.\n\nFollowing Example C: one EQUIPMENT branch (the line itself can have sub-items), but since 35-24-160 IS the function, its connected devices are EQUIPMENT rows with no further nesting needed unless there's a spool branch.\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24-160\",\n  \"description\": \"35-24-160 WFL LINE BR1\",\n  \"rows\": [\n    {\"equipment\": \"35-24-020\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-020 VLV HV 003-15\"},\n    {\"equipment\": \"35-24PI-9322\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24PI-9322 PRESS IND\"},\n    {\"equipment\": \"35-24FI-9323\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24FI-9323 FLOW IND\"},\n    {\"equipment\": \"35-24FS-635\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24FS-635 FLOW SWITCH\"}\n  ],\n  \"peers\": [\n    {\"tag\": \"35-24-157\", \"evidence\": \"Adjacent line 35-24-157-WFL-15-E10H2A visible left of crop boundary with own valve 35-24-022 and instruments PI-9320/FI-9321/FS-632; separate line number, not part of 35-24-160 circuit\"},\n    {\"tag\": \"35-24-022\", \"evidence\": \"Hand valve on line 35-24-157, not on 35-24-160\"},\n    {\"tag\": \"35-24PI-9320\", \"evidence\": \"Instrument on line 35-24-157\"},\n    {\"tag\": \"35-24FI-9321\", \"evidence\": \"Instrument on line 35-24-157\"},\n    {\"tag\": \"35-24FS-632\", \"evidence\": \"Flow switch on line 35-24-157\"}\n  ],\n  \"notes\": [\n    \"35-24-020 is a hand valve (outline bowtie, no actuator) sized 003-15 on line 35-24-160\",\n    \"PI-9322 and FI-9323 are locally mounted instruments on the 35-24-160 circuit\",\n    \"FS-635 is a DCS-connected flow switch on 35-24-160\",\n    \"Line 35-24-157 and its devices are a parallel/peer circuit shown left of the parent crop boundary\"\n  ],\n  \"confidence\": \"high\"\n}\n```",
         "parsed": {
           "sub_process": "BR1",
           "function": "35-24-160",
-          "description": "35-24-160 WFL PROC LINE",
+          "description": "35-24-160 WFL LINE BR1",
           "rows": [
             {
               "equipment": "35-24-020",
               "subequipment": "",
               "mask": "",
-              "description": "35-24-020 VLV HV"
+              "description": "35-24-020 VLV HV 003-15"
             },
             {
               "equipment": "35-24PI-9322",
               "subequipment": "",
               "mask": "",
-              "description": "35-24PI-9322 PRESSURE INDICATOR"
+              "description": "35-24PI-9322 PRESS IND"
             },
             {
               "equipment": "35-24FI-9323",
               "subequipment": "",
               "mask": "",
-              "description": "35-24FI-9323 FLOW INDICATOR"
+              "description": "35-24FI-9323 FLOW IND"
             },
             {
               "equipment": "35-24FS-635",
@@ -76,30 +76,30 @@
           "peers": [
             {
               "tag": "35-24-157",
-              "evidence": "adjacent line left of crop boundary, labelled 35-24-157-WFL-15-E10H2A, outside red box"
+              "evidence": "Adjacent line 35-24-157-WFL-15-E10H2A visible left of crop boundary with own valve 35-24-022 and instruments PI-9320/FI-9321/FS-632; separate line number, not part of 35-24-160 circuit"
             },
             {
               "tag": "35-24-022",
-              "evidence": "hand valve on line 35-24-157, not on 35-24-160 circuit"
+              "evidence": "Hand valve on line 35-24-157, not on 35-24-160"
             },
             {
               "tag": "35-24PI-9320",
-              "evidence": "PI on line 35-24-157, outside parent crop boundary"
+              "evidence": "Instrument on line 35-24-157"
             },
             {
               "tag": "35-24FI-9321",
-              "evidence": "FI on line 35-24-157, outside parent crop boundary"
+              "evidence": "Instrument on line 35-24-157"
             },
             {
               "tag": "35-24FS-632",
-              "evidence": "FS on line 35-24-157, outside parent crop boundary"
+              "evidence": "Flow switch on line 35-24-157"
             }
           ],
           "notes": [
-            "35-24-020 valve symbol shows outline/transparent bowtie with no actuator \u2014 classified HV",
-            "003-15 is valve type/DN size annotation, not a tag",
-            "PI-9322 and FI-9323 are locally mounted instruments (plain circle per legend)",
-            "FS-635 has square symbol indicating DCS control room instrument"
+            "35-24-020 is a hand valve (outline bowtie, no actuator) sized 003-15 on line 35-24-160",
+            "PI-9322 and FI-9323 are locally mounted instruments on the 35-24-160 circuit",
+            "FS-635 is a DCS-connected flow switch on 35-24-160",
+            "Line 35-24-157 and its devices are a parallel/peer circuit shown left of the parent crop boundary"
           ],
           "confidence": "high"
         },
@@ -128,19 +128,19 @@
           "equipment": "35-24-020",
           "subequipment": "",
           "mask": "",
-          "description": "35-24-020 VLV HV"
+          "description": "35-24-020 VLV HV 003-15"
         },
         {
           "equipment": "35-24PI-9322",
           "subequipment": "",
           "mask": "",
-          "description": "35-24PI-9322 PI"
+          "description": "35-24PI-9322 PRESS IND"
         },
         {
           "equipment": "35-24FI-9323",
           "subequipment": "",
           "mask": "",
-          "description": "35-24FI-9323 FI"
+          "description": "35-24FI-9323 FL IND"
         },
         {
           "equipment": "35-24FS-635",

@@ -63,29 +63,35 @@
       ],
       "dossier": "Parent tag: 35-24-068\nParent category/block: lines / \nParent XY: (2406.063563563564, 68.74999999999994)\nNearby descriptions: 35-24-068-WFL-15-E10H2A\n\nSame-tag CAD family:\n- (none)\n\nNearby line numbers (short ids preferred in output):\n- 35-24-219  full=35-24-219-WFL-15-E10H2A  d=41  layer=P-LINEPOS\n- 35-24-208  full=35-24-208-PP-100-E10H2A  d=196  layer=P-LINEPOS\n- 35-24-061  full=35-24-061-WFL-15-E10H2A  d=155  layer=P-LINEPOS\n- 35-24-073  full=35-24-073-WFC-15-E10H2A  d=112  layer=P-LINEPOS\n- 35-24-075  full=35-24-075-WFC-15-E10H2A  d=182  layer=P-LINEPOS\n- 35-24-063  full=35-24-063-WAF-250-E10H2A  d=156  layer=P-LINEPOS\n- 35-24-067  full=35-24-067-PP-150-E10H2A  d=146  layer=P-LINEPOS\n- 35-24-068  full=35-24-068-WFL-15-E10H2A  d=0  layer=P-LINEPOS\n- 35-24-066  full=35-24-066-PP-900-E10H2A  d=196  layer=P-LINEPOS\n\nNearby devices (valves/instruments/pumps/\u2026):\n- line_markers: PPI_1100A  d=195  block=PPI_1100A\n- valves: PPI_0900A  d=171  block=PPI_0900A\n- control_valves: PPI_1000A  d=166  block=PPI_1000A\n- instruments: PPI_1200A  d=38  block=PPI_1200A\n- pumps: PPI_0521A-25_0  d=199  block=PPI_0521A-25_0\n\nNearby peer primary equipment (do NOT nest under parent):\n- 35-24L406 (agitators, d=162)\n- 35-24P510 (pumps, d=199)\n\nNearby drawing text tokens:\n- GEARBOX 2  d=140  layer=P-OTHER\n- 35-24L406  d=159  layer=P-AGITATOR_POS\n- 659  d=139  layer=P-INSTRPOS_TEXTS\n- 35-24  d=135  layer=P-INSTRPOS_TEXTS\n- 9282  d=137  layer=P-INSTRPOS_TEXTS\n- 557  d=155  layer=P-INSTRPOS_TEXTS\n- 556  d=105  layer=P-INSTRPOS_TEXTS\n- 9278  d=137  layer=P-INSTRPOS_TEXTS\n- 9280  d=26  layer=P-INSTRPOS_TEXTS\n- 558  d=55  layer=P-INSTRPOS_TEXTS\n- 9279  d=127  layer=P-INSTRPOS_TEXTS\n- 9281  d=34  layer=P-INSTRPOS_TEXTS\n- 40 m\u00b3  d=188  layer=P-TANK_POS\n- 3 %  d=183  layer=P-TANK_POS\n- 695  d=36  layer=P-INSTRPOS_TEXTS\n- 9338  d=66  layer=P-INSTRPOS_TEXTS\n- 9339  d=57  layer=P-INSTRPOS_TEXTS\n- 35-24P510  d=193  layer=P-PUMP_POS\n- 1100  d=190  layer=P-PUMP_POS\n- 45  d=182  layer=P-PUMP_POS\n- 615  d=186  layer=P-PUMP_POS\n- 1000  d=179  layer=P-PUMP_POS\n- 35-24-1118  d=138  layer=P-VALVEPOS\n- 003-15  d=135  layer=P-VALVEPOS\n- 35-24-1115  d=79  layer=P-VALVEPOS\n- 101-250  d=76  layer=P-VALVEPOS\n- 35-24-126  d=175  layer=P-VALVEPOS\n- 003-50  d=169  layer=P-VALVEPOS\n- 35-24-123  d=167  layer=P-VALVEPOS\n- 001-80  d=162  layer=P-VALVEPOS\n- 35-24-225  d=38  layer=P-VALVEPOS\n- 35-24-1130  d=154  layer=P-VALVEPOS\n- 350-150  d=149  layer=P-VALVEPOS\n- 35-24-121  d=191  layer=P-VALVEPOS\n- 350-900  d=186  layer=P-VALVEPOS\n- 35-24-119  d=21  layer=P-VALVEPOS\n- 35-24-1092  d=93  layer=P-VALVEPOS\n- 001-15  d=94  layer=P-VALVEPOS\n- 35-24-117  d=127  layer=P-VALVEPOS\n- 35-24-1127  d=169  layer=P-VALVEPOS",
       "ai": {
-        "raw_text": "I'll analyze the P&ID image carefully for FUNCTION 35-24-068.\n\n**Observations from the image:**\n- `35-24-068-WFL-15-E10H2A` is clearly labeled as the parent line (WFL = white water flow line, DN15)\n- Inside the red box, the line 35-24-068 runs horizontally\n- Connected branch line: `35-24-219-WFL-15-E10H2A` (also visible, joining 35-24-068)\n- Valve `35-24-119` (003-15) sits on the line \u2014 looking at the symbol, it appears to be a normally closed valve (solid/filled triangles = NC)\n- Valve `35-24-225` (003-15) also on the line \u2014 similar NC appearance\n- Instruments on the circuit: `PI 9280`, `FI 9281`, `FS 558` grouped near 35-24-068; `PI 9338`, `FI 9339`, `FS 695` near 35-24-219\n- Valve `35-24-1115` (101-250) is on the left side \u2014 appears to be an automatic valve (AV-M symbol with circle+M)\n- `35-24-1092` (001-15) is outside the red box boundary, near delivery limit marker\n\n**Valve type analysis:**\n- `35-24-119`: bowtie with filled triangles \u2192 NC (hand valve NC)\n- `35-24-225`: bowtie with filled triangles \u2192 NC\n- `35-24-1115`: has actuator circle with M \u2192 AV-M\n\n**Structure:** 35-24-068 is a piping line FUNCTION. Branch 35-24-219 connects to it. Instruments nest under their respective lines.\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24-068\",\n  \"description\": \"35-24-068 WFL LINE DN15\",\n  \"rows\": [\n    {\"equipment\": \"35-24-068\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-068 WFL LINE DN15\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-119\", \"mask\": \"\", \"description\": \"35-24-119 ISOL VLV NC\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24PI-9280\", \"mask\": \"\", \"description\": \"35-24PI-9280 PRESSURE INDICATOR\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24FI-9281\", \"mask\": \"\", \"description\": \"35-24FI-9281 FLOW INDICATOR\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24FS-558\", \"mask\": \"\", \"description\": \"35-24FS-558 FLOW SWITCH\"},\n    {\"equipment\": \"35-24-219\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-219 WFL LINE DN15\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-225\", \"mask\": \"\", \"description\": \"35-24-225 ISOL VLV NC\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24PI-9338\", \"mask\": \"\", \"description\": \"35-24PI-9338 PRESSURE INDICATOR\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24FI-9339\", \"mask\": \"\", \"description\": \"35-24FI-9339 FLOW INDICATOR\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24FS-695\", \"mask\": \"\", \"description\": \"35-24FS-695 FLOW SWITCH\"},\n    {\"equipment\": \"35-24-1115\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-1115 VLV AV-M\"}\n  ],\n  \"peers\": [\n    {\"tag\": \"35-24L406\", \"evidence\": \"agitator visible nearby, different equipment class, peer primary equipment\"},\n    {\"tag\": \"35-24P510\", \"evidence\": \"pump visible nearby, different equipment class, peer primary equipment\"},\n    {\"tag\": \"35-24-1092\", \"evidence\": \"outside red box boundary, at delivery limit marker, belongs to adjacent circuit\"},\n    {\"tag\": \"35-24NV1-557\", \"evidence\": \"NC needle valve on separate circuit above, different numeric base\"},\n    {\"tag\": \"35-24NV2-557\", \"evidence\": \"needle valve on separate circuit above, different numeric base\"}\n  ],\n  \"notes\": [\n    \"35-24-068 is a WFL-15 (white water flow, DN15) piping line; treated as line FUNCTION per rule 11\",\n    \"35-24-219 is the closest branch line (d=41) visibly joining 35-24-068 within the red box\",\n    \"PI/FI/FS instrument triplets nested under their respective lines per P&ID grouping\",\n    \"35-24-1115 (101-250) has motor actuator circle (AV-M) symbol; listed as top-level EQUIPMENT on this circuit\",\n    \"35-24-119 and 35-24-225 both show filled-triangle (NC) bowtie symbols\",\n    \"35-24-1092 sits at the V/C delivery limit boundary outside the parent crop box\"\n  ],\n  \"confidence\": \"high\"\n}\n```",
+        "raw_text": "I'll analyze the P&ID image carefully for FUNCTION 35-24-068.\n\n**Observations from the image:**\n\n1. **35-24-068** is labeled `35-24-068-WFL-15-E10H2A` \u2014 a process line (WFL = white water flow line, DN15)\n2. Inside the red parent box, I can see:\n   - The main line **35-24-068** running horizontally\n   - Connected branch line **35-24-219** (35-24-219-WFL-15-E10H2A) \u2014 visible label in the box\n   - **35-24-225** valve (003-15) \u2014 hand valve symbol (outline bowtie, no actuator) on the line\n   - **35-24-119** valve (003-15) \u2014 appears to be NC (filled bowtie triangles) on the line\n   - **35-24-1115** valve (101-250) \u2014 at left edge, appears to be an automatic valve (X symbol = AV-M based on the red X marker)\n   - Instruments on the circuit: **PI 9338**, **FI 9339**, **FS 695**, **PI 9280**, **FI 9281**, **FS 558**\n\n3. **35-24-225**: symbol shows outline bowtie with no actuator \u2192 **HV**\n4. **35-24-119**: symbol shows filled/solid bowtie triangles \u2192 **NC**\n5. **35-24-1115**: has an X marker (AV-M style) \u2192 **AV-M**\n\nInstruments PI-9338, FI-9339, FS-695, PI-9280, FI-9281, FS-558 are on the 35-24-068 / 35-24-219 circuit.\n\n**Structure:** 35-24-068 is the header line. 35-24-219 is a branch spool. Instruments and valves nest under their respective lines.\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24-068\",\n  \"description\": \"35-24-068 WFL LINE BR1\",\n  \"rows\": [\n    {\"equipment\": \"35-24-068\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-068 WFL-15 HEADER LINE\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-119\", \"mask\": \"\", \"description\": \"35-24-119 VLV NC 003-15\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-1115\", \"mask\": \"\", \"description\": \"35-24-1115 VLV AV-M 101-250\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24PI-9280\", \"mask\": \"\", \"description\": \"35-24PI-9280 PRESS INDICATOR\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24FI-9281\", \"mask\": \"\", \"description\": \"35-24FI-9281 FLOW INDICATOR\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24FS-558\", \"mask\": \"\", \"description\": \"35-24FS-558 FLOW SWITCH\"},\n    {\"equipment\": \"35-24-219\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-219 WFL-15 BRANCH SPOOL\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-225\", \"mask\": \"\", \"description\": \"35-24-225 VLV HV 003-15\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24PI-9338\", \"mask\": \"\", \"description\": \"35-24PI-9338 PRESS INDICATOR\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24FI-9339\", \"mask\": \"\", \"description\": \"35-24FI-9339 FLOW INDICATOR\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24FS-695\", \"mask\": \"\", \"description\": \"35-24FS-695 FLOW SWITCH\"}\n  ],\n  \"peers\": [\n    {\"tag\": \"35-24L406\", \"evidence\": \"agitator visible nearby, different equipment class, peer primary equipment\"},\n    {\"tag\": \"35-24P510\", \"evidence\": \"pump visible nearby, different equipment class, peer primary equipment\"},\n    {\"tag\": \"35-24-1092\", \"evidence\": \"valve on adjacent line 001-15, outside parent box boundary\"},\n    {\"tag\": \"35-24NV1-557\", \"evidence\": \"needle valve on separate circuit 35-24NV1-557, outside parent box\"},\n    {\"tag\": \"35-24NV2-557\", \"evidence\": \"needle valve on separate circuit 35-24NV2-557, outside parent box\"}\n  ],\n  \"notes\": [\n    \"35-24-068 is a WFL-15 (white water flow, DN15) piping line treated as FUNCTION header\",\n    \"35-24-219 is the nearest branch spool (WFL-15) visibly labelled inside the parent box\",\n    \"35-24-225 hand valve (outline bowtie, no actuator) on branch 35-24-219\",\n    \"35-24-119 NC valve (solid filled bowtie) on main line 35-24-068\",\n    \"35-24-1115 AV-M valve (X/motor actuator symbol) at left of parent box on 35-24-068\",\n    \"Instruments PI-9338/FI-9339/FS-695 grouped with branch 35-24-219; PI-9280/FI-9281/FS-558 on main 35-24-068 segment\"\n  ],\n  \"confidence\": \"medium\"\n}\n```",
         "parsed": {
           "sub_process": "BR1",
           "function": "35-24-068",
-          "description": "35-24-068 WFL LINE DN15",
+          "description": "35-24-068 WFL LINE BR1",
           "rows": [
             {
               "equipment": "35-24-068",
               "subequipment": "",
               "mask": "",
-              "description": "35-24-068 WFL LINE DN15"
+              "description": "35-24-068 WFL-15 HEADER LINE"
             },
             {
               "equipment": "",
               "subequipment": "35-24-119",
               "mask": "",
-              "description": "35-24-119 ISOL VLV NC"
+              "description": "35-24-119 VLV NC 003-15"
+            },
+            {
+              "equipment": "",
+              "subequipment": "35-24-1115",
+              "mask": "",
+              "description": "35-24-1115 VLV AV-M 101-250"
             },
             {
               "equipment": "",
               "subequipment": "35-24PI-9280",
               "mask": "",
-              "description": "35-24PI-9280 PRESSURE INDICATOR"
+              "description": "35-24PI-9280 PRESS INDICATOR"
             },
             {
               "equipment": "",
@@ -103,19 +109,19 @@
               "equipment": "35-24-219",
               "subequipment": "",
               "mask": "",
-              "description": "35-24-219 WFL LINE DN15"
+              "description": "35-24-219 WFL-15 BRANCH SPOOL"
             },
             {
               "equipment": "",
               "subequipment": "35-24-225",
               "mask": "",
-              "description": "35-24-225 ISOL VLV NC"
+              "description": "35-24-225 VLV HV 003-15"
             },
             {
               "equipment": "",
               "subequipment": "35-24PI-9338",
               "mask": "",
-              "description": "35-24PI-9338 PRESSURE INDICATOR"
+              "description": "35-24PI-9338 PRESS INDICATOR"
             },
             {
               "equipment": "",
@@ -128,12 +134,6 @@
               "subequipment": "35-24FS-695",
               "mask": "",
               "description": "35-24FS-695 FLOW SWITCH"
-            },
-            {
-              "equipment": "35-24-1115",
-              "subequipment": "",
-              "mask": "",
-              "description": "35-24-1115 VLV AV-M"
             }
           ],
           "peers": [
@@ -147,26 +147,26 @@
             },
             {
               "tag": "35-24-1092",
-              "evidence": "outside red box boundary, at delivery limit marker, belongs to adjacent circuit"
+              "evidence": "valve on adjacent line 001-15, outside parent box boundary"
             },
             {
               "tag": "35-24NV1-557",
-              "evidence": "NC needle valve on separate circuit above, different numeric base"
+              "evidence": "needle valve on separate circuit 35-24NV1-557, outside parent box"
             },
             {
               "tag": "35-24NV2-557",
-              "evidence": "needle valve on separate circuit above, different numeric base"
+              "evidence": "needle valve on separate circuit 35-24NV2-557, outside parent box"
             }
           ],
           "notes": [
-            "35-24-068 is a WFL-15 (white water flow, DN15) piping line; treated as line FUNCTION per rule 11",
-            "35-24-219 is the closest branch line (d=41) visibly joining 35-24-068 within the red box",
-            "PI/FI/FS instrument triplets nested under their respective lines per P&ID grouping",
-            "35-24-1115 (101-250) has motor actuator circle (AV-M) symbol; listed as top-level EQUIPMENT on this circuit",
-            "35-24-119 and 35-24-225 both show filled-triangle (NC) bowtie symbols",
-            "35-24-1092 sits at the V/C delivery limit boundary outside the parent crop box"
+            "35-24-068 is a WFL-15 (white water flow, DN15) piping line treated as FUNCTION header",
+            "35-24-219 is the nearest branch spool (WFL-15) visibly labelled inside the parent box",
+            "35-24-225 hand valve (outline bowtie, no actuator) on branch 35-24-219",
+            "35-24-119 NC valve (solid filled bowtie) on main line 35-24-068",
+            "35-24-1115 AV-M valve (X/motor actuator symbol) at left of parent box on 35-24-068",
+            "Instruments PI-9338/FI-9339/FS-695 grouped with branch 35-24-219; PI-9280/FI-9281/FS-558 on main 35-24-068 segment"
           ],
-          "confidence": "high"
+          "confidence": "medium"
         },
         "model_id": "eu.anthropic.claude-sonnet-4-6",
         "region": "eu-west-2",
@@ -214,19 +214,25 @@
           "equipment": "35-24-068",
           "subequipment": "",
           "mask": "",
-          "description": "35-24-068 WFL LN DN15"
+          "description": "35-24-068 WFL-15 HEADER LN"
         },
         {
           "equipment": "",
           "subequipment": "35-24-119",
           "mask": "",
-          "description": "35-24-119 ISOL VLV NC"
+          "description": "35-24-119 VLV NC 003-15"
+        },
+        {
+          "equipment": "",
+          "subequipment": "35-24-1115",
+          "mask": "",
+          "description": "35-24-1115 VLV AV-M 101-250"
         },
         {
           "equipment": "",
           "subequipment": "35-24PI-9280",
           "mask": "",
-          "description": "35-24PI-9280 PI"
+          "description": "35-24PI-9280 PRESS IND"
         },
         {
           "equipment": "",
@@ -244,19 +250,19 @@
           "equipment": "35-24-219",
           "subequipment": "",
           "mask": "",
-          "description": "35-24-219 WFL LN DN15"
+          "description": "35-24-219 WFL-15 BRANCH SPOOL"
         },
         {
           "equipment": "",
           "subequipment": "35-24-225",
           "mask": "",
-          "description": "35-24-225 ISOL VLV NC"
+          "description": "35-24-225 VLV HV 003-15"
         },
         {
           "equipment": "",
           "subequipment": "35-24PI-9338",
           "mask": "",
-          "description": "35-24PI-9338 PI"
+          "description": "35-24PI-9338 PRESS IND"
         },
         {
           "equipment": "",
@@ -269,12 +275,6 @@
           "subequipment": "35-24FS-695",
           "mask": "",
           "description": "35-24FS-695 FS"
-        },
-        {
-          "equipment": "35-24-1115",
-          "subequipment": "",
-          "mask": "",
-          "description": "35-24-1115 VLV AV-M"
         }
       ]
     }

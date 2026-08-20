@@ -47,7 +47,7 @@
       ],
       "dossier": "Parent tag: 35-24XS-692\nParent category/block: instruments / \nParent XY: (138.3388138138138, 458.5875)\nNearby descriptions: XS 692 (35-24)\n\nSame-tag CAD family:\n- (none)\n\nNearby line numbers (short ids preferred in output):\n- 35-24-186  full=35-24-186-WAF-100-E10H2A  d=171  layer=P-LINEPOS\n- 35-24-193  full=35-24-193-PP-100-E10H2A  d=172  layer=P-LINEPOS\n- 35-24-192  full=35-24-192-PP-200-E10H2A  d=157  layer=P-LINEPOS\n\nNearby devices (valves/instruments/pumps/\u2026):\n- line_markers: PPI_1100A  d=158  block=PPI_1100A\n- valves: PPI_0900A  d=189  block=PPI_0900A\n- control_valves: PPI_1000A  d=197  block=PPI_1000A\n- instruments: PPI_1204A  d=192  block=PPI_1204A\n\nNearby peer primary equipment (do NOT nest under parent):\n- 35-24L009 (process_equipment, d=195)\n\nNearby drawing text tokens:\n- 141 BDTPD  d=176  layer=P-TEXT\n- 674  d=195  layer=P-INSTRPOS_TEXTS\n- 35-24  d=191  layer=P-INSTRPOS_TEXTS\n- 35-24L009  d=160  layer=P-EQUIPMENT_POS\n- SHOWER S1  d=139  layer=P-TEXT\n- 682  d=74  layer=P-INSTRPOS_TEXTS\n- 683  d=19  layer=P-INSTRPOS_TEXTS\n- 684  d=34  layer=P-INSTRPOS_TEXTS\n- 685  d=49  layer=P-INSTRPOS_TEXTS\n- 692  d=4  layer=P-INSTRPOS_TEXTS\n- 35-24-199  d=199  layer=P-VALVEPOS\n- 35-24-220  d=185  layer=P-VALVEPOS\n- 001-100  d=190  layer=P-VALVEPOS\n- 35-24-186  d=171  layer=P-LINEPOS\n- 35-24-193  d=172  layer=P-LINEPOS\n- 35-24-192  d=157  layer=P-LINEPOS",
       "ai": {
-        "raw_text": "Looking at the P&ID image, I can see that 35-24XS-692 is an instrument (XS = position switch / status signal) labeled \"MCS SIGNAL\" on the drawing. It appears within a local panel box alongside other instruments (ES-683, KJ-684, KJ-685) that are all part of the Broke Roll Pulper control group.\n\nKey observations:\n1. **35-24XS-692** is an MCS SIGNAL instrument \u2014 a status/position switch\n2. It sits in a panel/box with ES-683 (Emergency Stop), KJ-684 (Start), KJ-685 (Stop) \u2014 these are peer instruments in the same panel, not children of XS-692\n3. The nearby HS-682 (Start/Stop) and HI-676 (Shower S1) are on the local panel side\n4. 35-24L009 is the Broke Roll Pulper vessel \u2014 a peer piece of major equipment\n5. XS-692 is purely an instrument tag with no sub-instruments or lines hanging off it\n6. The instrument symbol shown is a square with a diamond (MCS control instrument per legend)\n\nSince XS-692 is a standalone instrument (MCS signal switch) with no labelled accessories, valves, or sub-lines directly attached to it, the correct output is the FUNCTION header + description only, with empty rows.\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24XS-692\",\n  \"description\": \"35-24XS-692 BROK ROLL PLPR MCS SIG\",\n  \"rows\": [],\n  \"peers\": [\n    {\n      \"tag\": \"35-24ES-683\",\n      \"evidence\": \"Peer instrument in same panel \u2014 BROK ROLL PLPR EMERGENCY STOP, own tag suffix 683\"\n    },\n    {\n      \"tag\": \"35-24KJ-684\",\n      \"evidence\": \"Peer instrument in same panel \u2014 BROKE ROLL PULPER START, own tag suffix 684\"\n    },\n    {\n      \"tag\": \"35-24KJ-685\",\n      \"evidence\": \"Peer instrument in same panel \u2014 BROKE ROLL PULPER STOP, own tag suffix 685\"\n    },\n    {\n      \"tag\": \"35-24HS-682\",\n      \"evidence\": \"Local panel instrument \u2014 BROKE ROLL PULPER START/STOP, own tag suffix 682\"\n    },\n    {\n      \"tag\": \"35-24HI-676\",\n      \"evidence\": \"Local panel instrument \u2014 BROKE ROLL PULPER SHOWER S1, own tag suffix 676\"\n    },\n    {\n      \"tag\": \"35-24L009\",\n      \"evidence\": \"Major process equipment \u2014 BROKE ROLL PULPER vessel, peer not child\"\n    },\n    {\n      \"tag\": \"35-24XV-681\",\n      \"evidence\": \"Automatic valve visible on adjacent line, own tag suffix 681, not part of XS-692 circuit\"\n    },\n    {\n      \"tag\": \"35-24-192\",\n      \"evidence\": \"Nearby process line PP-200, not directly subordinate to this instrument\"\n    },\n    {\n      \"tag\": \"35-24-193\",\n      \"evidence\": \"Nearby process line PP-100, not directly subordinate to this instrument\"\n    },\n    {\n      \"tag\": \"35-24-186\",\n      \"evidence\": \"Nearby process line WAF-100, not directly subordinate to this instrument\"\n    }\n  ],\n  \"notes\": [\n    \"35-24XS-692 is a standalone MCS SIGNAL status instrument (position switch) within the Broke Roll Pulper local panel group.\",\n    \"No valves, sub-lines, or accessories are directly tagged under XS-692; rows left empty per rule for instrument FUNCTIONs with no labelled accessories.\",\n    \"ES-683, KJ-684, KJ-685 share the same panel box but carry their own tag suffixes \u2014 they are peers, not children.\"\n  ],\n  \"confidence\": \"high\"\n}\n```",
+        "raw_text": "Looking at the P&ID image, I can see that 35-24XS-692 is an instrument (XS = position switch / status signal) labeled \"MCS SIGNAL\" in the local panel box. It's a standalone instrument with no child instruments, valves, or lines directly attached to it as subordinates.\n\nThe image shows a local panel containing:\n- 35-24XS-692 (MCS SIGNAL) \u2014 the parent\n- 35-24ES-683 (BROK ROLL PULPER EMERGENCY STOP)\n- 35-24KJ-684 (BROKE ROLL PULPER START)\n- 35-24KJ-685 (BROKE ROLL PULPER STOP)\n\nThese are peer instruments within the same local panel, not children of XS-692.\n\nAlso visible nearby:\n- 35-24HS-682 (BROKE ROLL PULPER START/STOP) \u2014 local panel instrument\n- 35-24HI-676 (BROKE ROLL PULPER SHOWER S1)\n- 35-24L009 (BROKE ROLL PULPER vessel) \u2014 peer process equipment\n- 35-24XV-681 \u2014 valve on line 35-24-192\n\nPer the rules: XS-692 is an instrument with no labelled accessories sitting on it \u2192 emit FUNCTION header + description only, empty rows.\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24XS-692\",\n  \"description\": \"35-24XS-692 BROK ROLL PLPR MCS SIG\",\n  \"rows\": [],\n  \"peers\": [\n    {\n      \"tag\": \"35-24ES-683\",\n      \"evidence\": \"Peer instrument in same local panel \u2014 BROK ROLL PULPER EMERGENCY STOP, not a child of XS-692\"\n    },\n    {\n      \"tag\": \"35-24KJ-684\",\n      \"evidence\": \"Peer instrument in same local panel \u2014 BROKE ROLL PULPER START, not a child of XS-692\"\n    },\n    {\n      \"tag\": \"35-24KJ-685\",\n      \"evidence\": \"Peer instrument in same local panel \u2014 BROKE ROLL PULPER STOP, not a child of XS-692\"\n    },\n    {\n      \"tag\": \"35-24HS-682\",\n      \"evidence\": \"Peer local panel instrument \u2014 BROKE ROLL PULPER START/STOP\"\n    },\n    {\n      \"tag\": \"35-24HI-676\",\n      \"evidence\": \"Peer local panel instrument \u2014 BROKE ROLL PULPER SHOWER S1\"\n    },\n    {\n      \"tag\": \"35-24L009\",\n      \"evidence\": \"Peer process equipment \u2014 BROKE ROLL PULPER vessel, different equipment category\"\n    },\n    {\n      \"tag\": \"35-24XV-681\",\n      \"evidence\": \"Peer automatic valve on line 35-24-192, not subordinate to XS-692\"\n    },\n    {\n      \"tag\": \"35-24-192\",\n      \"evidence\": \"Nearby process line PP-200, belongs to 35-24L009 circuit not XS-692\"\n    },\n    {\n      \"tag\": \"35-24-193\",\n      \"evidence\": \"Nearby process line PP-100, belongs to 35-24L009 circuit not XS-692\"\n    },\n    {\n      \"tag\": \"35-24-186\",\n      \"evidence\": \"Nearby process line WAF-100, belongs to 35-24L009 circuit not XS-692\"\n    }\n  ],\n  \"notes\": [\n    \"35-24XS-692 is a status/position switch instrument (MCS SIGNAL) with no child instruments, valves or lines directly subordinate to it.\",\n    \"All other instruments visible in the local panel (ES-683, KJ-684, KJ-685, HS-682, HI-676) are peers within the same panel grouping.\",\n    \"35-24L009 BROKE ROLL PULPER is the associated process equipment but is a peer, not a child of this instrument tag.\"\n  ],\n  \"confidence\": \"high\"\n}\n```",
         "parsed": {
           "sub_process": "BR1",
           "function": "35-24XS-692",
@@ -56,49 +56,49 @@
           "peers": [
             {
               "tag": "35-24ES-683",
-              "evidence": "Peer instrument in same panel \u2014 BROK ROLL PLPR EMERGENCY STOP, own tag suffix 683"
+              "evidence": "Peer instrument in same local panel \u2014 BROK ROLL PULPER EMERGENCY STOP, not a child of XS-692"
             },
             {
               "tag": "35-24KJ-684",
-              "evidence": "Peer instrument in same panel \u2014 BROKE ROLL PULPER START, own tag suffix 684"
+              "evidence": "Peer instrument in same local panel \u2014 BROKE ROLL PULPER START, not a child of XS-692"
             },
             {
               "tag": "35-24KJ-685",
-              "evidence": "Peer instrument in same panel \u2014 BROKE ROLL PULPER STOP, own tag suffix 685"
+              "evidence": "Peer instrument in same local panel \u2014 BROKE ROLL PULPER STOP, not a child of XS-692"
             },
             {
               "tag": "35-24HS-682",
-              "evidence": "Local panel instrument \u2014 BROKE ROLL PULPER START/STOP, own tag suffix 682"
+              "evidence": "Peer local panel instrument \u2014 BROKE ROLL PULPER START/STOP"
             },
             {
               "tag": "35-24HI-676",
-              "evidence": "Local panel instrument \u2014 BROKE ROLL PULPER SHOWER S1, own tag suffix 676"
+              "evidence": "Peer local panel instrument \u2014 BROKE ROLL PULPER SHOWER S1"
             },
             {
               "tag": "35-24L009",
-              "evidence": "Major process equipment \u2014 BROKE ROLL PULPER vessel, peer not child"
+              "evidence": "Peer process equipment \u2014 BROKE ROLL PULPER vessel, different equipment category"
             },
             {
               "tag": "35-24XV-681",
-              "evidence": "Automatic valve visible on adjacent line, own tag suffix 681, not part of XS-692 circuit"
+              "evidence": "Peer automatic valve on line 35-24-192, not subordinate to XS-692"
             },
             {
               "tag": "35-24-192",
-              "evidence": "Nearby process line PP-200, not directly subordinate to this instrument"
+              "evidence": "Nearby process line PP-200, belongs to 35-24L009 circuit not XS-692"
             },
             {
               "tag": "35-24-193",
-              "evidence": "Nearby process line PP-100, not directly subordinate to this instrument"
+              "evidence": "Nearby process line PP-100, belongs to 35-24L009 circuit not XS-692"
             },
             {
               "tag": "35-24-186",
-              "evidence": "Nearby process line WAF-100, not directly subordinate to this instrument"
+              "evidence": "Nearby process line WAF-100, belongs to 35-24L009 circuit not XS-692"
             }
           ],
           "notes": [
-            "35-24XS-692 is a standalone MCS SIGNAL status instrument (position switch) within the Broke Roll Pulper local panel group.",
-            "No valves, sub-lines, or accessories are directly tagged under XS-692; rows left empty per rule for instrument FUNCTIONs with no labelled accessories.",
-            "ES-683, KJ-684, KJ-685 share the same panel box but carry their own tag suffixes \u2014 they are peers, not children."
+            "35-24XS-692 is a status/position switch instrument (MCS SIGNAL) with no child instruments, valves or lines directly subordinate to it.",
+            "All other instruments visible in the local panel (ES-683, KJ-684, KJ-685, HS-682, HI-676) are peers within the same panel grouping.",
+            "35-24L009 BROKE ROLL PULPER is the associated process equipment but is a peer, not a child of this instrument tag."
           ],
           "confidence": "high"
         },

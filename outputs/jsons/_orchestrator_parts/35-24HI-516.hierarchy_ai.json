@@ -45,7 +45,7 @@
       ],
       "dossier": "Parent tag: 35-24HI-516\nParent category/block: instruments / \nParent XY: (806.3071881881882, 438.541625)\nNearby descriptions: HI 516 (35-24)\n\nSame-tag CAD family:\n- (none)\n\nNearby line numbers (short ids preferred in output):\n- 35-24-013  full=35-24-013-PP-600-E10H2A  d=185  layer=P-LINEPOS\n\nNearby devices (valves/instruments/pumps/\u2026):\n- line_markers: PPI_1100A  d=187  block=PPI_1100A\n- valves: PPI_0900A  d=121  block=PPI_0900A\n- instruments: PPI_1205A  d=54  block=PPI_1205A\n\nNearby peer primary equipment (do NOT nest under parent):\n- (none)\n\nNearby drawing text tokens:\n- 2 bar  d=115  layer=P-TEXT\n- 1 bar  d=174  layer=P-TEXT\n- S2  d=127  layer=P-TEXT\n- S6  d=147  layer=P-TEXT\n- S1  d=105  layer=P-TEXT\n- S5  d=141  layer=P-TEXT\n- S3  d=180  layer=P-TEXT\n- 35-24  d=15  layer=P-INSTRPOS_TEXTS\n- SHOWERS S1 & S2  d=12  layer=P-TEXT\n- SHOWER S3  d=29  layer=P-TEXT\n- 503  d=49  layer=P-INSTRPOS_TEXTS\n- 516  d=4  layer=P-INSTRPOS_TEXTS\n- 511  d=139  layer=P-INSTRPOS_TEXTS\n- 510  d=137  layer=P-INSTRPOS_TEXTS\n- 509  d=57  layer=P-INSTRPOS_TEXTS\n- 508  d=136  layer=P-INSTRPOS_TEXTS\n- 691  d=137  layer=P-INSTRPOS_TEXTS\n- 501  d=27  layer=P-INSTRPOS_TEXTS\n- 35-24-180  d=198  layer=P-VALVEPOS\n- 350-200  d=200  layer=P-VALVEPOS\n- 35-24-178  d=161  layer=P-VALVEPOS\n- 001-50  d=162  layer=P-VALVEPOS\n- 35-24-1094  d=175  layer=P-VALVEPOS\n- 35-24-173  d=97  layer=P-VALVEPOS\n- 101-125  d=102  layer=P-VALVEPOS\n- 35-24-172  d=120  layer=P-VALVEPOS\n- 35-24-013  d=185  layer=P-LINEPOS",
       "ai": {
-        "raw_text": "Looking at the P&ID image, I can see that 35-24HI-516 is a **Hand Indicator (HI)** instrument \u2014 specifically a local panel instrument showing \"HI 516\" with tag \"35-24\" prefix. It appears in the local panel area alongside an HS (Hand Switch) above it, labeled for \"WINDER PULPER SHOWERS S1 & S2\".\n\n**Analysis:**\n- `35-24HI-516` is an instrument (HI = Hand Indicator / local indicator) on the local panel\n- It is paired with an HS instrument above it (visible in the image as \"35-24HS\" above \"HI 516\")\n- The description text \"SHOWERS S1 & S2\" and \"35-24\" confirm this is the shower control indicator\n- Per Rule 12/the worked examples: if 35-24HI-516 is an instrument with no labelled accessories sitting on it, emit the FUNCTION header + description only \u2014 empty `rows` is correct\n- The nearby HS instrument (the hand switch above HI-516) would be a peer instrument at the same level, not a child\n- The nearby instruments 35-24HI-501, 35-24HI-503, 35-24HS-509 are peer instruments on the same panel\n- Line 35-24-013 is nearby but belongs to the piping circuit, not a child of this instrument\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24HI-516\",\n  \"description\": \"35-24HI-516 WNDR PLPR SHW S1 S2 IND\",\n  \"rows\": [],\n  \"peers\": [\n    {\n      \"tag\": \"35-24HS-516\",\n      \"evidence\": \"HS instrument symbol visible directly above HI-516 on local panel, same numeric base \u2014 peer hand switch for showers S1 & S2\"\n    },\n    {\n      \"tag\": \"35-24HI-501\",\n      \"evidence\": \"Peer HI instrument on same local panel, labelled WINDER PULPER SHOWER S3\"\n    },\n    {\n      \"tag\": \"35-24HS-501\",\n      \"evidence\": \"HS symbol above HI-501 on same local panel, peer hand switch for shower S3\"\n    },\n    {\n      \"tag\": \"35-24HI-503\",\n      \"evidence\": \"Peer HI instrument on same local panel, labelled WINDER PULPER SHOWER S5 AND S6\"\n    },\n    {\n      \"tag\": \"35-24HS-503\",\n      \"evidence\": \"HS symbol above HI-503 on same local panel, peer hand switch for showers S5 & S6\"\n    },\n    {\n      \"tag\": \"35-24HS-509\",\n      \"evidence\": \"Peer HS instrument on same local panel, labelled WINDER PULPER START/STOP\"\n    },\n    {\n      \"tag\": \"35-24-013\",\n      \"evidence\": \"Nearby piping line \u2014 belongs to shower circuit piping, not a child of this indicator instrument\"\n    }\n  ],\n  \"notes\": [\n    \"35-24HI-516 is a local panel hand indicator for Winder Pulper Showers S1 & S2; no sub-instruments or valves are directly tagged as children of this instrument on the P&ID\",\n    \"The HS symbol above HI-516 likely carries tag 35-24HS-516 but is a peer instrument, not a child\",\n    \"Description truncated to 40 chars: '35-24HI-516 WNDR PLPR SHW S1 S2 IND'\"\n  ],\n  \"confidence\": \"high\"\n}\n```",
+        "raw_text": "Looking at the P&ID image, I can see that **35-24HI-516** is a local panel instrument (HI = Hand Indicator) shown inside a local panel box. It appears as a square-within-square symbol (local control panel instrument per legend) labeled \"HI 516\" with \"35-24\" prefix.\n\nThe instrument is associated with **WINDER PULPER SHOWERS S1 & S2** based on the nearby text \"WINDER PULPER SHOWERS S1 & S2\" and the HS above it (35-24HS-516 paired with 35-24HI-516).\n\nThis is a **pure instrument tag** (Hand Indicator on a local panel). Per the rules: *\"If 35-24HI-516 is an instrument (LC/PI/FV/XS/\u2026) and no labelled accessories sit on it, emit the FUNCTION header + description only \u2014 empty `rows` is correct.\"*\n\nNo child tags are labelled as accessories of HI-516 itself. The nearby instruments (HI-501, HI-503, HS-509) are peer instruments for different shower groups. The valve tags (35-24-172, 35-24-173, 35-24-178, 35-24-1094) belong to the piping circuit below, not to this instrument function.\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24HI-516\",\n  \"description\": \"35-24HI-516 WNDR PLPR SHW S1 S2 IND\",\n  \"rows\": [],\n  \"peers\": [\n    {\n      \"tag\": \"35-24HI-501\",\n      \"evidence\": \"Peer local panel HI instrument for Winder Pulper Shower S3, same panel, different numeric base\"\n    },\n    {\n      \"tag\": \"35-24HI-503\",\n      \"evidence\": \"Peer local panel HI instrument for Winder Pulper Showers S5 & S6, same panel, different numeric base\"\n    },\n    {\n      \"tag\": \"35-24HS-509\",\n      \"evidence\": \"Peer HS instrument for Winder Pulper Start/Stop, same local panel, different numeric base\"\n    },\n    {\n      \"tag\": \"35-24-173\",\n      \"evidence\": \"Piping line tag on shower circuit below, not a child of this HI instrument\"\n    },\n    {\n      \"tag\": \"35-24-172\",\n      \"evidence\": \"Piping line tag on shower circuit below, not a child of this HI instrument\"\n    },\n    {\n      \"tag\": \"35-24-178\",\n      \"evidence\": \"Piping line tag visible in crop, belongs to separate valve/line circuit\"\n    },\n    {\n      \"tag\": \"35-24-1094\",\n      \"evidence\": \"Piping line tag visible in crop, belongs to separate valve/line circuit\"\n    }\n  ],\n  \"notes\": [\n    \"35-24HI-516 is a local control panel Hand Indicator instrument associated with Winder Pulper Showers S1 & S2\",\n    \"No child accessories are labelled under this instrument tag; rows left empty per instrument-only rule\",\n    \"Paired HS above (35-24HS-516) is the hand switch for the same shower group \u2014 would be a separate FUNCTION tag\"\n  ],\n  \"confidence\": \"high\"\n}\n```",
         "parsed": {
           "sub_process": "BR1",
           "function": "35-24HI-516",
@@ -53,38 +53,38 @@
           "rows": [],
           "peers": [
             {
-              "tag": "35-24HS-516",
-              "evidence": "HS instrument symbol visible directly above HI-516 on local panel, same numeric base \u2014 peer hand switch for showers S1 & S2"
-            },
-            {
               "tag": "35-24HI-501",
-              "evidence": "Peer HI instrument on same local panel, labelled WINDER PULPER SHOWER S3"
-            },
-            {
-              "tag": "35-24HS-501",
-              "evidence": "HS symbol above HI-501 on same local panel, peer hand switch for shower S3"
+              "evidence": "Peer local panel HI instrument for Winder Pulper Shower S3, same panel, different numeric base"
             },
             {
               "tag": "35-24HI-503",
-              "evidence": "Peer HI instrument on same local panel, labelled WINDER PULPER SHOWER S5 AND S6"
-            },
-            {
-              "tag": "35-24HS-503",
-              "evidence": "HS symbol above HI-503 on same local panel, peer hand switch for showers S5 & S6"
+              "evidence": "Peer local panel HI instrument for Winder Pulper Showers S5 & S6, same panel, different numeric base"
             },
             {
               "tag": "35-24HS-509",
-              "evidence": "Peer HS instrument on same local panel, labelled WINDER PULPER START/STOP"
+              "evidence": "Peer HS instrument for Winder Pulper Start/Stop, same local panel, different numeric base"
             },
             {
-              "tag": "35-24-013",
-              "evidence": "Nearby piping line \u2014 belongs to shower circuit piping, not a child of this indicator instrument"
+              "tag": "35-24-173",
+              "evidence": "Piping line tag on shower circuit below, not a child of this HI instrument"
+            },
+            {
+              "tag": "35-24-172",
+              "evidence": "Piping line tag on shower circuit below, not a child of this HI instrument"
+            },
+            {
+              "tag": "35-24-178",
+              "evidence": "Piping line tag visible in crop, belongs to separate valve/line circuit"
+            },
+            {
+              "tag": "35-24-1094",
+              "evidence": "Piping line tag visible in crop, belongs to separate valve/line circuit"
             }
           ],
           "notes": [
-            "35-24HI-516 is a local panel hand indicator for Winder Pulper Showers S1 & S2; no sub-instruments or valves are directly tagged as children of this instrument on the P&ID",
-            "The HS symbol above HI-516 likely carries tag 35-24HS-516 but is a peer instrument, not a child",
-            "Description truncated to 40 chars: '35-24HI-516 WNDR PLPR SHW S1 S2 IND'"
+            "35-24HI-516 is a local control panel Hand Indicator instrument associated with Winder Pulper Showers S1 & S2",
+            "No child accessories are labelled under this instrument tag; rows left empty per instrument-only rule",
+            "Paired HS above (35-24HS-516) is the hand switch for the same shower group \u2014 would be a separate FUNCTION tag"
           ],
           "confidence": "high"
         },

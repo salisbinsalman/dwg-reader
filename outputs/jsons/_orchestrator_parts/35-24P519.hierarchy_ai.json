@@ -63,7 +63,7 @@
       ],
       "dossier": "Parent tag: 35-24P519\nParent category/block: pumps / PPI_0521A-25_0\nParent XY: (152.5, 227.5)\nNearby descriptions: 141 BDTPD; BROKE ROLL PULPER\n\nSame-tag CAD family:\n- pumps @ (177.5,250.0) block=P7A0200 nearby=35-24P519; 35-24L009; 35-24\n- pumps @ (152.5,227.5) block=PPI_0521A-25_0 nearby=35-24P519; 35-24\n- motors @ (217.5,227.5) block=PPI_1504A-25_0 nearby=35-24P519; 35-24L009\n- valves @ (195.0,227.5) block=PPI_0900A nearby=35-24P519; 35-24L009\n- valves @ (122.5,245.0) block=PPI_0900A nearby=35-24P519; 35-24; 35-24\n- valves @ (167.5,260.0) block=PPI_0900A nearby=35-24P519; 35-24L009; 35-24\n- valves @ (192.5,242.5) block=PPI_0900A nearby=35-24P519; 35-24L009\n- control_valves @ (133.75,257.5) block=PPI_1000A nearby=35-24P519; 35-24; 35-24\n- control_valves @ (88.75,257.5) block=PPI_1000A nearby=35-24; 35-24; 35-24P519\n- instruments @ (147.5,247.5) block=PPI_0102B nearby=35-24P519; 35-24; 35-24L009\n- instruments @ (105.0,270.0) block=PPI_1204A nearby=35-24; 35-24; 35-24P519\n\nNearby line numbers (short ids preferred in output):\n- 35-24-214  full=35-24-214-PP-100-E10H2A  d=169  layer=P-LINEPOS\n- 35-24-213  full=35-24-213-WAF-20-E10H2A  d=170  layer=P-LINEPOS\n- 35-24-187  full=35-24-187-WAF-100-E10H2A  d=159  layer=P-LINEPOS\n- 35-24-188  full=35-24-188-WAF-80-E10H2A  d=140  layer=P-LINEPOS\n- 35-24-194  full=35-24-194-WFL-15-E10H2A  d=172  layer=P-LINEPOS\n- 35-24-195  full=35-24-195-WFL-15-E10H2A  d=189  layer=P-LINEPOS\n- 35-24-193  full=35-24-193-PP-100-E10H2A  d=55  layer=P-LINEPOS\n- 35-24-192  full=35-24-192-PP-200-E10H2A  d=115  layer=P-LINEPOS\n- 35-24-191  full=35-24-191-PP-250-E10H2A  d=29  layer=P-LINEPOS\n- 35-24-190  full=35-24-190-PP-200-E10H2A  d=101  layer=P-LINEPOS\n- 35-24-189  full=35-24-189-PP-300-E10H2A  d=138  layer=P-LINEPOS\n\nNearby devices (valves/instruments/pumps/\u2026):\n- line_markers: PPI_1100A  d=138  block=PPI_1100A\n- valves: PPI_0900A  d=118  block=PPI_0900A\n- control_valves: PPI_1000A  d=35  block=PPI_1000A\n- instruments: PPI_0102B  d=18  block=PPI_0102B\n- pumps: P7A0200  d=22  block=P7A0200\n- motors: PPI_1504A-25_0  d=57  block=PPI_1504A-25_0\n- fittings: P7A1271  d=122  block=P7A1271\n\nNearby peer primary equipment (do NOT nest under parent):\n- 35-24L009 (process_equipment, d=160)\n\nNearby drawing text tokens:\n- 141 BDTPD  d=71  layer=P-TEXT\n- 674  d=66  layer=P-INSTRPOS_TEXTS\n- 35-24  d=78  layer=P-INSTRPOS_TEXTS\n- 675  d=164  layer=P-INSTRPOS_TEXTS\n- 678  d=151  layer=P-INSTRPOS_TEXTS\n- 679  d=174  layer=P-INSTRPOS_TEXTS\n- 9334  d=148  layer=P-INSTRPOS_TEXTS\n- 9336  d=160  layer=P-INSTRPOS_TEXTS\n- 35-24L009  d=91  layer=P-EQUIPMENT_POS\n- 681  d=101  layer=P-INSTRPOS_TEXTS\n- 9335  d=148  layer=P-INSTRPOS_TEXTS\n- 9337  d=164  layer=P-INSTRPOS_TEXTS\n- 676  d=191  layer=P-INSTRPOS_TEXTS\n- 684  d=191  layer=P-INSTRPOS_TEXTS\n- 685  d=176  layer=P-INSTRPOS_TEXTS\n- 35-24P519  d=12  layer=P-PUMP_POS\n- 65  d=17  layer=P-PUMP_POS\n- 32  d=18  layer=P-PUMP_POS\n- 30  d=22  layer=P-PUMP_POS\n- 1500  d=22  layer=P-PUMP_POS\n- 35-24-009.1  d=62  layer=P-MOTOR_POS\n- 160  d=64  layer=P-MOTOR_POS\n- 35-24-222  d=150  layer=P-VALVEPOS\n- 003-20  d=147  layer=P-VALVEPOS\n- 35-24-223  d=148  layer=P-VALVEPOS\n- 35-24-198  d=46  layer=P-VALVEPOS\n- 003-50  d=43  layer=P-VALVEPOS\n- 35-24-199  d=26  layer=P-VALVEPOS\n- 003-15  d=21  layer=P-VALVEPOS\n- 35-24-221  d=27  layer=P-VALVEPOS\n- 35-24-195  d=158  layer=P-VALVEPOS\n- 35-24-197  d=28  layer=P-VALVEPOS\n- 001-80  d=32  layer=P-VALVEPOS\n- 35-24-196  d=61  layer=P-VALVEPOS\n- 355-250  d=60  layer=P-VALVEPOS\n- 35-24-220  d=85  layer=P-VALVEPOS\n- 001-100  d=83  layer=P-VALVEPOS\n- 35-24-218  d=179  layer=P-VALVEPOS\n- 35-24-194  d=112  layer=P-VALVEPOS\n- 350-200  d=113  layer=P-VALVEPOS",
       "ai": {
-        "raw_text": "I'll analyze the P&ID image systematically, identifying the pump 35-24P519 and its associated equipment.\n\n**Observations from the image:**\n\n1. **35-24P519** is a pump (pump data box visible: 65/32, 30/1500)\n2. **35-24-009.1** is the motor (motor tag box: 160/1500) \u2014 matches numeric base rule (519 \u2260 009, so this is a peer motor... wait, checking: the motor tag is `35-24-009.1` which belongs to `35-24L009` circuit, not P519. The pump data box shows P519 with its own specs. The motor block at (217.5,227.5) is nearby but `35-24-009.1` label belongs to L009 peer.)\n3. **Suction line**: 35-24-191 (PP-250) \u2014 closest suction line to pump\n4. **Discharge line**: 35-24-193 (PP-100) \u2014 discharge going left\n5. **35-24-192** (PP-200) \u2014 visible at top, part of circuit\n6. **Valves on lines**: 35-24-197 (001-80 HV), 35-24-198 (003-50), 35-24-199 (003-15), 35-24-196 (355-250), 35-24-221 (003-50), 35-24-220 (001-100)\n7. **Control valves**: 35-24LV1-674, 35-24LV2-674 on suction/discharge\n8. **LC instrument**: 35-24LC-674 (the LC 674 box)\n9. **35-24-009.1** motor \u2014 the motor tag shown near pump belongs to L009 system \u2192 peer\n\n**Valve type analysis:**\n- 35-24-197 (001-80): outline bowtie, no actuator \u2192 HV\n- 35-24-198 (003-50): filled bowtie \u2192 NC\n- 35-24-199 (003-15): appears to be AV (circle actuator visible)\n- 35-24-196 (355-250): outline bowtie \u2192 HV  \n- 35-24-221 (003-50): filled bowtie \u2192 NC\n- 35-24-220 (001-100): outline bowtie \u2192 HV\n- 35-24LV1-674: control valve AV\n- 35-24LV2-674: control valve AV\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24P519\",\n  \"description\": \"35-24P519 BROKE ROLL PULPER PMP\",\n  \"rows\": [\n    {\"equipment\": \"35-24-009.1\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-009.1 PMP MTR 160KW 1500RPM\"},\n    {\"equipment\": \"35-24-191\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-191 SUCT LINE PP-250\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-196\", \"mask\": \"\", \"description\": \"35-24-196 ISOL VLV HV\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-221\", \"mask\": \"\", \"description\": \"35-24-221 ISOL VLV NC\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-197\", \"mask\": \"\", \"description\": \"35-24-197 ISOL VLV HV\"},\n    {\"equipment\": \"35-24-193\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-193 DIS LINE PP-100\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-199\", \"mask\": \"\", \"description\": \"35-24-199 ISOL VLV AV\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-198\", \"mask\": \"\", \"description\": \"35-24-198 ISOL VLV NC\"},\n    {\"equipment\": \"35-24-192\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-192 LINE PP-200\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-220\", \"mask\": \"\", \"description\": \"35-24-220 ISOL VLV HV\"},\n    {\"equipment\": \"35-24LV1-674\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24LV1-674 LVL CTRL VLV AV\"},\n    {\"equipment\": \"35-24LV2-674\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24LV2-674 LVL CTRL VLV AV\"}\n  ],\n  \"peers\": [\n    {\"tag\": \"35-24L009\", \"evidence\": \"Broke Roll Pulper vessel \u2014 peer primary equipment, not child of pump\"},\n    {\"tag\": \"35-24-009.1\", \"evidence\": \"Motor tag numeric base 009 matches L009, not P519 \u2014 belongs to pulper circuit\"},\n    {\"tag\": \"35-24XV-681\", \"evidence\": \"XS/XV instrument tagged to separate 35-24 circuit left of crop boundary\"},\n    {\"tag\": \"35-24NV-675\", \"evidence\": \"Instrument tag visible in dossier but not clearly attached to P519 circuit\"},\n    {\"tag\": \"35-24HV-676\", \"evidence\": \"Instrument tag in dossier, not confirmed on P519 lines\"},\n    {\"tag\": \"35-24KV-677\", \"evidence\": \"Instrument tag in dossier, not confirmed on P519 lines\"}\n  ],\n  \"notes\": [\n    \"Motor tag 35-24-009.1 shown near pump on image but numeric base 009 aligns with peer vessel 35-24L009 per rule 9 \u2014 placed in peers\",\n    \"35-24LV1-674 and 35-24LV2-674 are level control valves on suction/recirculation lines serving P519\",\n    \"35-24-220 (001-100) is isolation valve on discharge line 35-24-193 toward L009\",\n    \"Valve fill assessment: white-filled bowties = NC; outline bowties = HV; circle-actuated = AV\"\n  ],\n  \"confidence\": \"medium\"\n}\n```",
+        "raw_text": "I'll analyze the P&ID image systematically, identifying the pump 35-24P519 and its associated equipment.\n\n**Observations from Image 1:**\n- 35-24P519 is a pump (pump data box visible: 65/32, 30/1500)\n- Motor: 35-24-009.1 (160 kW / 1500 rpm) \u2014 matches numeric base rule \u2713\n- Suction line: 35-24-191-PP-250 (visible entering pump suction)\n- Discharge line: 35-24-193-PP-100 (visible leaving pump discharge)\n- Also visible: 35-24-192-PP-200 (feed line to suction area)\n- Control valves on circuit: 35-24LV1-674 (150mm), 35-24LV2-674 (80mm) \u2014 level control valves\n- LC instrument: 35-24LC-674 (the LC 674 box visible)\n- Valves on lines:\n  - 35-24-199 (003-15) on discharge \u2014 small bowtie, appears NC (filled triangles)\n  - 35-24-221 (003-50) on discharge \u2014 NC\n  - 35-24-197 (001-80) on discharge \u2014 hand valve (outline)\n  - 35-24-198 (003-50) on suction \u2014 NC\n  - 35-24-196 (355-250) near discharge to pulper \u2014 AV-M (has M circle)\n  - 35-24-220 (001-100) near pulper \u2014 hand valve\n- 35-24L009 = BROKE ROLL PULPER \u2014 peer equipment\n- 35-24XV-681 visible at left edge \u2014 belongs to adjacent system (35-24 prefix but XS instrument nearby)\n\n**Valve type analysis:**\n- 35-24LV1-674: control valve (AV, level controlled)\n- 35-24LV2-674: control valve (AV, level controlled)\n- 35-24-199: filled triangles = NC\n- 35-24-221: filled triangles = NC\n- 35-24-197: outline triangles = HV\n- 35-24-198: filled triangles = NC\n- 35-24-196: has M actuator circle = AV-M\n- 35-24-220: outline triangles = HV\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24P519\",\n  \"description\": \"35-24P519 BROKE ROLL PULPER PMP\",\n  \"rows\": [\n    {\"equipment\": \"35-24-009.1\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-009.1 MTR 160KW 1500RPM\"},\n    {\"equipment\": \"35-24-191\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-191 SUCT LINE PP-250\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-198\", \"mask\": \"\", \"description\": \"35-24-198 VLV NC\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24LV2-674\", \"mask\": \"\", \"description\": \"35-24LV2-674 LVL CTRL VLV AV\"},\n    {\"equipment\": \"35-24-193\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-193 DIS LINE PP-100\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-199\", \"mask\": \"\", \"description\": \"35-24-199 VLV NC\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-197\", \"mask\": \"\", \"description\": \"35-24-197 VLV HV\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-221\", \"mask\": \"\", \"description\": \"35-24-221 VLV NC\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-196\", \"mask\": \"\", \"description\": \"35-24-196 VLV AV-M\"},\n    {\"equipment\": \"35-24-192\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-192 FEED LINE PP-200\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24LV1-674\", \"mask\": \"\", \"description\": \"35-24LV1-674 LVL CTRL VLV AV\"},\n    {\"equipment\": \"35-24LC-674\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24LC-674 LVL CTRL INST\"},\n    {\"equipment\": \"35-24-220\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-220 ISOL VLV HV\"}\n  ],\n  \"peers\": [\n    {\"tag\": \"35-24L009\", \"evidence\": \"BROKE ROLL PULPER \u2014 peer process equipment, not child of pump\"},\n    {\"tag\": \"35-24XV-681\", \"evidence\": \"XS/XV instrument at left crop edge, belongs to adjacent circuit\"},\n    {\"tag\": \"35-24-220\", \"evidence\": \"valve 001-100 sits on line to 35-24L009 pulper, boundary valve \u2014 reassigned as peer boundary\"}\n  ],\n  \"notes\": [\n    \"35-24-220 (001-100) is on the pulper inlet side; treated as boundary/peer rather than pump child\",\n    \"35-24LC-674 drives both LV1-674 and LV2-674 level control valves on suction/feed lines\",\n    \"Motor tag 35-24-009.1 confirmed by P-MOTOR_POS layer text and 160kW/1500rpm data box\"\n  ],\n  \"confidence\": \"high\"\n}\n```",
         "parsed": {
           "sub_process": "BR1",
           "function": "35-24P519",
@@ -73,7 +73,7 @@
               "equipment": "35-24-009.1",
               "subequipment": "",
               "mask": "",
-              "description": "35-24-009.1 PMP MTR 160KW 1500RPM"
+              "description": "35-24-009.1 MTR 160KW 1500RPM"
             },
             {
               "equipment": "35-24-191",
@@ -83,21 +83,15 @@
             },
             {
               "equipment": "",
-              "subequipment": "35-24-196",
+              "subequipment": "35-24-198",
               "mask": "",
-              "description": "35-24-196 ISOL VLV HV"
+              "description": "35-24-198 VLV NC"
             },
             {
               "equipment": "",
-              "subequipment": "35-24-221",
+              "subequipment": "35-24LV2-674",
               "mask": "",
-              "description": "35-24-221 ISOL VLV NC"
-            },
-            {
-              "equipment": "",
-              "subequipment": "35-24-197",
-              "mask": "",
-              "description": "35-24-197 ISOL VLV HV"
+              "description": "35-24LV2-674 LVL CTRL VLV AV"
             },
             {
               "equipment": "35-24-193",
@@ -109,72 +103,71 @@
               "equipment": "",
               "subequipment": "35-24-199",
               "mask": "",
-              "description": "35-24-199 ISOL VLV AV"
+              "description": "35-24-199 VLV NC"
             },
             {
               "equipment": "",
-              "subequipment": "35-24-198",
+              "subequipment": "35-24-197",
               "mask": "",
-              "description": "35-24-198 ISOL VLV NC"
+              "description": "35-24-197 VLV HV"
+            },
+            {
+              "equipment": "",
+              "subequipment": "35-24-221",
+              "mask": "",
+              "description": "35-24-221 VLV NC"
+            },
+            {
+              "equipment": "",
+              "subequipment": "35-24-196",
+              "mask": "",
+              "description": "35-24-196 VLV AV-M"
             },
             {
               "equipment": "35-24-192",
               "subequipment": "",
               "mask": "",
-              "description": "35-24-192 LINE PP-200"
+              "description": "35-24-192 FEED LINE PP-200"
             },
             {
               "equipment": "",
-              "subequipment": "35-24-220",
-              "mask": "",
-              "description": "35-24-220 ISOL VLV HV"
-            },
-            {
-              "equipment": "35-24LV1-674",
-              "subequipment": "",
+              "subequipment": "35-24LV1-674",
               "mask": "",
               "description": "35-24LV1-674 LVL CTRL VLV AV"
             },
             {
-              "equipment": "35-24LV2-674",
+              "equipment": "35-24LC-674",
               "subequipment": "",
               "mask": "",
-              "description": "35-24LV2-674 LVL CTRL VLV AV"
+              "description": "35-24LC-674 LVL CTRL INST"
+            },
+            {
+              "equipment": "35-24-220",
+              "subequipment": "",
+              "mask": "",
+              "description": "35-24-220 ISOL VLV HV"
             }
           ],
           "peers": [
             {
               "tag": "35-24L009",
-              "evidence": "Broke Roll Pulper vessel \u2014 peer primary equipment, not child of pump"
-            },
-            {
-              "tag": "35-24-009.1",
-              "evidence": "Motor tag numeric base 009 matches L009, not P519 \u2014 belongs to pulper circuit"
+              "evidence": "BROKE ROLL PULPER \u2014 peer process equipment, not child of pump"
             },
             {
               "tag": "35-24XV-681",
-              "evidence": "XS/XV instrument tagged to separate 35-24 circuit left of crop boundary"
+              "evidence": "XS/XV instrument at left crop edge, belongs to adjacent circuit"
             },
             {
-              "tag": "35-24NV-675",
-              "evidence": "Instrument tag visible in dossier but not clearly attached to P519 circuit"
-            },
-            {
-              "tag": "35-24HV-676",
-              "evidence": "Instrument tag in dossier, not confirmed on P519 lines"
-            },
-            {
-              "tag": "35-24KV-677",
-              "evidence": "Instrument tag in dossier, not confirmed on P519 lines"
+              "tag": "35-24-220",
+              "evidence": "valve 001-100 sits on line to 35-24L009 pulper, boundary valve \u2014 reassigned as peer boundary"
             }
           ],
           "notes": [
-            "Motor tag 35-24-009.1 shown near pump on image but numeric base 009 aligns with peer vessel 35-24L009 per rule 9 \u2014 placed in peers",
-            "35-24LV1-674 and 35-24LV2-674 are level control valves on suction/recirculation lines serving P519",
-            "35-24-220 (001-100) is isolation valve on discharge line 35-24-193 toward L009",
-            "Valve fill assessment: white-filled bowties = NC; outline bowties = HV; circle-actuated = AV"
+            "35-24-220 (001-100) is on the pulper inlet side; treated as boundary/peer rather than pump child",
+            "35-24LC-674 drives both LV1-674 and LV2-674 level control valves on suction/feed lines",
+            "Motor tag 35-24-009.1 confirmed by P-MOTOR_POS layer text and 160kW/1500rpm data box"
           ],
-          "confidence": "medium"
+          "confidence": "high"
         },
         "model_id": "eu.anthropic.claude-sonnet-4-6",
         "region": "eu-west-2",
@@ -226,21 +219,15 @@
         },
         {
           "equipment": "",
-          "subequipment": "35-24-196",
+          "subequipment": "35-24-198",
           "mask": "",
-          "description": "35-24-196 ISOL VLV HV"
+          "description": "35-24-198 VLV NC"
         },
         {
           "equipment": "",
-          "subequipment": "35-24-221",
+          "subequipment": "35-24LV2-674",
           "mask": "",
-          "description": "35-24-221 ISOL VLV NC"
-        },
-        {
-          "equipment": "",
-          "subequipment": "35-24-197",
-          "mask": "",
-          "description": "35-24-197 ISOL VLV HV"
+          "description": "35-24LV2-674 LVL CTRL VLV AV"
         },
         {
           "equipment": "35-24-193",
@@ -252,37 +239,43 @@
           "equipment": "",
           "subequipment": "35-24-199",
           "mask": "",
-          "description": "35-24-199 ISOL VLV AV"
+          "description": "35-24-199 VLV NC"
         },
         {
           "equipment": "",
-          "subequipment": "35-24-198",
+          "subequipment": "35-24-197",
           "mask": "",
-          "description": "35-24-198 ISOL VLV NC"
+          "description": "35-24-197 VLV HV"
+        },
+        {
+          "equipment": "",
+          "subequipment": "35-24-221",
+          "mask": "",
+          "description": "35-24-221 VLV NC"
+        },
+        {
+          "equipment": "",
+          "subequipment": "35-24-196",
+          "mask": "",
+          "description": "35-24-196 VLV AV-M"
         },
         {
           "equipment": "35-24-192",
           "subequipment": "",
           "mask": "",
-          "description": "35-24-192 LN PP-200"
+          "description": "35-24-192 FD LN PP-200"
         },
         {
           "equipment": "",
-          "subequipment": "35-24-220",
-          "mask": "",
-          "description": "35-24-220 ISOL VLV HV"
-        },
-        {
-          "equipment": "35-24LV1-674",
-          "subequipment": "",
+          "subequipment": "35-24LV1-674",
           "mask": "",
           "description": "35-24LV1-674 LVL CTRL VLV AV"
         },
         {
-          "equipment": "35-24LV2-674",
+          "equipment": "35-24LC-674",
           "subequipment": "",
           "mask": "",
-          "description": "35-24LV2-674 LVL CTRL VLV AV"
+          "description": "35-24LC-674 LVL CTRL INST"
         },
         {
           "equipment": "35-24P519.1",

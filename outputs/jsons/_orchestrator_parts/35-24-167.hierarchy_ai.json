@@ -40,35 +40,29 @@
       ],
       "dossier": "Parent tag: 35-24-167\nParent category/block: lines / \nParent XY: (5442.5, 58.75)\nNearby descriptions: 35-24-167-WFL-15-E10H2A\n\nSame-tag CAD family:\n- (none)\n\nNearby line numbers (short ids preferred in output):\n- 35-24-167  full=35-24-167-WFL-15-E10H2A  d=0  layer=P-LINEPOS\n- 35-24-171  full=35-24-171-WFL-15-E10H2A  d=145  layer=P-LINEPOS\n- 35-24-183  full=35-24-183-WAF-100-E10H2A  d=164  layer=P-LINEPOS\n- 35-24-163  full=35-24-163-WFL-15-E10H2A  d=132  layer=P-LINEPOS\n\nNearby devices (valves/instruments/pumps/\u2026):\n- line_markers: PPI_1100A  d=133  block=PPI_1100A\n- valves: PPI_0900A  d=23  block=PPI_0900A\n- instruments: PPI_1200A  d=37  block=PPI_1200A\n\nNearby peer primary equipment (do NOT nest under parent):\n- (none)\n\nNearby drawing text tokens:\n- 35-24  d=199  layer=P-INSTRPOS_TEXTS\n- 647  d=158  layer=P-INSTRPOS_TEXTS\n- 9326  d=126  layer=P-INSTRPOS_TEXTS\n- 643  d=30  layer=P-INSTRPOS_TEXTS\n- 9324  d=36  layer=P-INSTRPOS_TEXTS\n- 9325  d=31  layer=P-INSTRPOS_TEXTS\n- 9327  d=136  layer=P-INSTRPOS_TEXTS\n- 35-24-014  d=21  layer=P-VALVEPOS\n- 003-15  d=17  layer=P-VALVEPOS\n- 35-24-012  d=153  layer=P-VALVEPOS\n- 35-24-167  d=0  layer=P-LINEPOS\n- 35-24-171  d=145  layer=P-LINEPOS\n- 35-24-183  d=164  layer=P-LINEPOS\n- 35-24-163  d=132  layer=P-LINEPOS",
       "ai": {
-        "raw_text": "I'll analyze the P&ID crop carefully.\n\n**Observations from Image 1:**\n- Line `35-24-167-WFL-15-E10H2A` is the main horizontal line (green) at the bottom of the crop\n- On this line, there's a valve `35-24-014` with tag `003-15` below it \u2014 the valve symbol shows a bowtie with what appears to be a filled/solid white triangles (normally closed) and no actuator circle \u2192 `NC`\n- Instruments on the line: `PI 9324`, `FI 9325`, `FS 643` \u2014 these are on the `35-24` branch/spool feeding into line 167\n- The `35-24` label with PI/FI/FS instruments appears to be a branch spool connecting to line 167\n- `FS 643` is in a square box (control room instrument with DCS)\n- The valve `35-24-014` sits on line 167 with both triangles appearing solid/filled white \u2192 `NC`\n- The `003-15` below the valve tag is the DN size reference for the hand valve\n\n**Structure:**\n- FUNCTION = `35-24-167` (process line)\n- EQUIPMENT = branch spool (the `35-24` labeled branch with instruments)\n- SUB-EQUIPMENT under that branch = instruments PI-9324, FI-9325, FS-643, and valve 35-24-014\n\nThe valve `35-24-014` sits on line 167 itself. The instruments PI 9324, FI 9325, FS 643 are on the branch labeled `35-24` connecting to 167.\n\nThe valve symbol shows filled (white) triangles with no actuator \u2192 `NC`.\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24-167\",\n  \"description\": \"35-24-167 PROC LINE WFL DN15\",\n  \"rows\": [\n    {\"equipment\": \"35-24-014\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-014 VLV NC\"},\n    {\"equipment\": \"35-24\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24 BRANCH SPOOL\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24PI-9324\", \"mask\": \"\", \"description\": \"35-24PI-9324 PRESSURE INDICATOR\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24FI-9325\", \"mask\": \"\", \"description\": \"35-24FI-9325 FLOW INDICATOR\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24FS-643\", \"mask\": \"\", \"description\": \"35-24FS-643 FLOW SWITCH\"}\n  ],\n  \"peers\": [\n    {\"tag\": \"35-24-163\", \"evidence\": \"parallel line same spec, separate FUNCTION numeric base\"},\n    {\"tag\": \"35-24-171\", \"evidence\": \"parallel line visible right of crop, separate FUNCTION\"},\n    {\"tag\": \"35-24-183\", \"evidence\": \"WAF-100 line above, different sub-process numeric base\"}\n  ],\n  \"notes\": [\n    \"Valve 35-24-014 (003-15 = DN15) sits directly on line 35-24-167; both bowtie triangles appear solid/filled \u2192 NC\",\n    \"Instruments PI-9324, FI-9325, FS-643 are on the 35-24 branch spool feeding line 167\",\n    \"FS-643 shown in square box = control room instrument with DCS control per legend\",\n    \"35-24-171 circuit to the right is a peer with identical layout (PI-9326, FI-9327, FS-647, 35-24-012)\"\n  ],\n  \"confidence\": \"high\"\n}\n```",
+        "raw_text": "I'll analyze the P&ID crop carefully.\n\n**Observations from Image 1:**\n- Line `35-24-167-WFL-15-E10H2A` is the parent line (horizontal green line at bottom of crop)\n- On this line, there's a vertical branch going up with instruments: PI 9324, FI 9325, FS 643\n- Valve `35-24-014` is visible on the branch (with tag `003-15` indicating DN size)\n- The valve symbol for `35-24-014` shows a bowtie with what appears to be a solid/filled body (NC) and has an actuator circle on top \u2192 **AV NC** (automatic valve, normally closed)\n- Instruments PI 9324, FI 9325 are locally mounted (circles) on the branch\n- FS 643 appears as a square instrument (control room type)\n- The branch connects upward (delivery limit marker visible)\n\n**Tag construction:**\n- PI instrument: `35-24PI-9324`\n- FI instrument: `35-24FI-9325`  \n- FS instrument: `35-24FS-643`\n- Valve: `35-24-014` (hand valve tag format from P-VALVEPOS layer)\n\n**Valve 35-24-014 symbol:** Looking at the image, the bowtie has solid/filled triangles (white-filled = NC) and there's a circle actuator on top \u2192 `AV NC`\n\n**Peer lines:** 35-24-163, 35-24-171, 35-24-183 are neighbouring lines, not children.\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24-167\",\n  \"description\": \"35-24-167 BROKE PROC LINE WFL-15\",\n  \"rows\": [\n    {\"equipment\": \"35-24-014\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-014 VLV AV NC\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24PI-9324\", \"mask\": \"\", \"description\": \"35-24PI-9324 PRESS IND\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24FI-9325\", \"mask\": \"\", \"description\": \"35-24FI-9325 FLOW IND\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24FS-643\", \"mask\": \"\", \"description\": \"35-24FS-643 FLOW SWITCH\"}\n  ],\n  \"peers\": [\n    {\"tag\": \"35-24-163\", \"evidence\": \"neighbouring line 35-24-163-WFL-15-E10H2A, separate circuit to left\"},\n    {\"tag\": \"35-24-171\", \"evidence\": \"neighbouring line 35-24-171-WFL-15-E10H2A, separate circuit to right\"},\n    {\"tag\": \"35-24-183\", \"evidence\": \"neighbouring line 35-24-183-WAF-100-E10H2A, different flow media/size\"}\n  ],\n  \"notes\": [\n    \"35-24-014 valve symbol shows filled bowtie triangles (NC) with actuator circle (AV); tagged AV NC\",\n    \"PI 9324 and FI 9325 are locally mounted instruments on the branch off 35-24-167\",\n    \"FS 643 is a square-symbol instrument (DCS/control room) on the same branch\",\n    \"003-15 is the valve type/DN descriptor for 35-24-014, not a separate tag\",\n    \"Instruments nested under 35-24-014 as they sit on the same branch spool\"\n  ],\n  \"confidence\": \"high\"\n}\n```",
         "parsed": {
           "sub_process": "BR1",
           "function": "35-24-167",
-          "description": "35-24-167 PROC LINE WFL DN15",
+          "description": "35-24-167 BROKE PROC LINE WFL-15",
           "rows": [
             {
               "equipment": "35-24-014",
               "subequipment": "",
               "mask": "",
-              "description": "35-24-014 VLV NC"
-            },
-            {
-              "equipment": "35-24",
-              "subequipment": "",
-              "mask": "",
-              "description": "35-24 BRANCH SPOOL"
+              "description": "35-24-014 VLV AV NC"
             },
             {
               "equipment": "",
               "subequipment": "35-24PI-9324",
               "mask": "",
-              "description": "35-24PI-9324 PRESSURE INDICATOR"
+              "description": "35-24PI-9324 PRESS IND"
             },
             {
               "equipment": "",
               "subequipment": "35-24FI-9325",
               "mask": "",
-              "description": "35-24FI-9325 FLOW INDICATOR"
+              "description": "35-24FI-9325 FLOW IND"
             },
             {
               "equipment": "",
@@ -80,22 +74,23 @@
           "peers": [
             {
               "tag": "35-24-163",
-              "evidence": "parallel line same spec, separate FUNCTION numeric base"
+              "evidence": "neighbouring line 35-24-163-WFL-15-E10H2A, separate circuit to left"
             },
             {
               "tag": "35-24-171",
-              "evidence": "parallel line visible right of crop, separate FUNCTION"
+              "evidence": "neighbouring line 35-24-171-WFL-15-E10H2A, separate circuit to right"
             },
             {
               "tag": "35-24-183",
-              "evidence": "WAF-100 line above, different sub-process numeric base"
+              "evidence": "neighbouring line 35-24-183-WAF-100-E10H2A, different flow media/size"
             }
           ],
           "notes": [
-            "Valve 35-24-014 (003-15 = DN15) sits directly on line 35-24-167; both bowtie triangles appear solid/filled \u2192 NC",
-            "Instruments PI-9324, FI-9325, FS-643 are on the 35-24 branch spool feeding line 167",
-            "FS-643 shown in square box = control room instrument with DCS control per legend",
-            "35-24-171 circuit to the right is a peer with identical layout (PI-9326, FI-9327, FS-647, 35-24-012)"
+            "35-24-014 valve symbol shows filled bowtie triangles (NC) with actuator circle (AV); tagged AV NC",
+            "PI 9324 and FI 9325 are locally mounted instruments on the branch off 35-24-167",
+            "FS 643 is a square-symbol instrument (DCS/control room) on the same branch",
+            "003-15 is the valve type/DN descriptor for 35-24-014, not a separate tag",
+            "Instruments nested under 35-24-014 as they sit on the same branch spool"
           ],
           "confidence": "high"
         },
@@ -122,25 +117,19 @@
           "equipment": "35-24-014",
           "subequipment": "",
           "mask": "",
-          "description": "35-24-014 VLV NC"
-        },
-        {
-          "equipment": "35-24",
-          "subequipment": "",
-          "mask": "",
-          "description": "35-24 BRANCH SPOOL"
+          "description": "35-24-014 VLV AV NC"
         },
         {
           "equipment": "",
           "subequipment": "35-24PI-9324",
           "mask": "",
-          "description": "35-24PI-9324 PI"
+          "description": "35-24PI-9324 PRESS IND"
         },
         {
           "equipment": "",
           "subequipment": "35-24FI-9325",
           "mask": "",
-          "description": "35-24FI-9325 FI"
+          "description": "35-24FI-9325 FL IND"
         },
         {
           "equipment": "",

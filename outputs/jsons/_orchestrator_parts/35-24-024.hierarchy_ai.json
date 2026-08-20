@@ -67,7 +67,7 @@
       ],
       "dossier": "Parent tag: 35-24-024\nParent category/block: lines / \nParent XY: (1188.563563563564, 68.75)\nNearby descriptions: 35-24-024-WFL-15-E10H2A\n\nSame-tag CAD family:\n- (none)\n\nNearby line numbers (short ids preferred in output):\n- 35-24-030  full=35-24-030-WAF-250-E10H2A  d=199  layer=P-LINEPOS\n- 35-24-024  full=35-24-024-WFL-15-E10H2A  d=0  layer=P-LINEPOS\n- 35-24-026  full=35-24-026-WFL-15-E10H2A  d=58  layer=P-LINEPOS\n- 35-24-020  full=35-24-020-WFC-15-E10H2A  d=160  layer=P-LINEPOS\n- 35-24-022  full=35-24-022-WFC-15-E10H2A  d=58  layer=P-LINEPOS\n- 35-24-028  full=35-24-028-WFL-15-E10H2A  d=108  layer=P-LINEPOS\n- 35-24-027  full=35-24-027-PP-250-E10H2A  d=163  layer=P-LINEPOS\n- 35-24-025  full=35-24-025-PP-600-E10H2A  d=183  layer=P-LINEPOS\n\nNearby devices (valves/instruments/pumps/\u2026):\n- line_markers: PPI_1100A  d=181  block=PPI_1100A\n- valves: PPI_0900A  d=122  block=PPI_0900A\n- control_valves: PPI_1000A  d=174  block=PPI_1000A\n- instruments: PPI_1200A  d=44  block=PPI_1200A\n- pumps: P7A0200  d=182  block=P7A0200\n- motors: PPI_1504A-25_0  d=158  block=PPI_1504A-25_0\n- fittings: P7A1214  d=171  block=P7A1214\n\nNearby peer primary equipment (do NOT nest under parent):\n- 35-24P508 (pumps, d=182)\n\nNearby drawing text tokens:\n- GEARBOX 1  d=97  layer=P-OTHER\n- 9260  d=152  layer=P-INSTRPOS_TEXTS\n- 35-24  d=163  layer=P-INSTRPOS_TEXTS\n- 9261  d=86  layer=P-INSTRPOS_TEXTS\n- 521  d=22  layer=P-INSTRPOS_TEXTS\n- 9263  d=21  layer=P-INSTRPOS_TEXTS\n- 9262  d=27  layer=P-INSTRPOS_TEXTS\n- 519  d=163  layer=P-INSTRPOS_TEXTS\n- 527  d=121  layer=P-INSTRPOS_TEXTS\n- 525  d=72  layer=P-INSTRPOS_TEXTS\n- 9265  d=50  layer=P-INSTRPOS_TEXTS\n- 9267  d=99  layer=P-INSTRPOS_TEXTS\n- 9266  d=90  layer=P-INSTRPOS_TEXTS\n- 9264  d=41  layer=P-INSTRPOS_TEXTS\n- SLABBING PULPER ROTOR 1  d=111  layer=P-TEXT\n- 35-24P508  d=162  layer=P-PUMP_POS\n- 300  d=158  layer=P-PUMP_POS\n- 28  d=155  layer=P-PUMP_POS\n- 110  d=153  layer=P-PUMP_POS\n- 1000  d=150  layer=P-PUMP_POS\n- 35-24-007.4  d=116  layer=P-MOTOR_POS\n- 1,5  d=112  layer=P-MOTOR_POS\n- 1500  d=104  layer=P-MOTOR_POS\n- 35-24-007.3  d=127  layer=P-MOTOR_POS\n- 35-24-007.1  d=141  layer=P-MOTOR_POS\n- 200  d=136  layer=P-MOTOR_POS\n- 35-24-007.2  d=155  layer=P-MOTOR_POS\n- 35-24-170  d=190  layer=P-VALVEPOS\n- 001-15  d=187  layer=P-VALVEPOS\n- 35-24-169  d=155  layer=P-VALVEPOS\n- 35-24-168  d=123  layer=P-VALVEPOS\n- 35-24-216  d=189  layer=P-VALVEPOS\n- 001-80  d=184  layer=P-VALVEPOS\n- 003-50  d=196  layer=P-VALVEPOS\n- 35-24-165  d=59  layer=P-VALVEPOS\n- 35-24-164  d=199  layer=P-VALVEPOS\n- 003-15  d=194  layer=P-VALVEPOS\n- 35-24-227  d=193  layer=P-VALVEPOS\n- 350-300  d=188  layer=P-VALVEPOS\n- 35-24-1106  d=175  layer=P-VALVEPOS",
       "ai": {
-        "raw_text": "I'll analyze the P&ID image carefully for FUNCTION 35-24-024.\n\n**Observations from the image:**\n- 35-24-024 is labeled `35-24-024-WFL-15-E10H2A` \u2014 a process line (WFL = white water flush line, DN15)\n- The red box (parent boundary) shows the circuit for 35-24-024\n- On the 35-24-024 line I can see: PI 9262, FI 9263, FS 521, then PI 9264, FI 9265, FS 525, then PI 9266, FI 9267 (and more cut off)\n- Valve 35-24-163 (003-15) sits on the line with a downward branch \u2014 appears to be a drain/isolation valve (NC symbol \u2014 filled triangles)\n- Valve 35-24-159 (003-15) similarly on the line with NC symbol and red X (normally closed)\n- Valve 35-24-165 (001-15) is visible at the inlet \u2014 appears hand valve (outline triangles)\n- 35-24TV-9261 is a temperature control valve with TC 9261 actuator \u2014 on the inlet feed to this circuit\n- 35-24-022 is a neighboring line (peer/upstream)\n- 35-24-026 is downstream peer line\n- Motors 35-24-007.3 and 35-24-007.4 are for Slabbing Pulper Rotors \u2014 different numeric base, peers\n\n**Valve type analysis:**\n- 35-24-165: outline bowtie, no actuator \u2192 HV\n- 35-24-163: filled (white) triangles, no actuator circle \u2192 NC\n- 35-24-159: filled triangles + red X \u2192 NC\n- 35-24TV-9261: circle with TC on top of bowtie \u2192 AV (automatic, temperature controlled)\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24-024\",\n  \"description\": \"35-24-024 WFL LINE DN15\",\n  \"rows\": [\n    {\"equipment\": \"35-24TV-9261\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24TV-9261 TEMP CTRL VLV AV\"},\n    {\"equipment\": \"35-24-165\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-165 ISOL VLV HV\"},\n    {\"equipment\": \"35-24-163\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-163 ISOL VLV NC\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24PI-9262\", \"mask\": \"\", \"description\": \"35-24PI-9262 PRESSURE IND\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24FI-9263\", \"mask\": \"\", \"description\": \"35-24FI-9263 FLOW IND\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24FS-521\", \"mask\": \"\", \"description\": \"35-24FS-521 FLOW SWITCH\"},\n    {\"equipment\": \"35-24-159\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-159 ISOL VLV NC\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24PI-9264\", \"mask\": \"\", \"description\": \"35-24PI-9264 PRESSURE IND\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24FI-9265\", \"mask\": \"\", \"description\": \"35-24FI-9265 FLOW IND\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24FS-525\", \"mask\": \"\", \"description\": \"35-24FS-525 FLOW SWITCH\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24PI-9266\", \"mask\": \"\", \"description\": \"35-24PI-9266 PRESSURE IND\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24FI-9267\", \"mask\": \"\", \"description\": \"35-24FI-9267 FLOW IND\"}\n  ],\n  \"peers\": [\n    {\"tag\": \"35-24-022\", \"evidence\": \"upstream WFC line, separate line number, peer circuit\"},\n    {\"tag\": \"35-24-026\", \"evidence\": \"downstream WFL line, separate line number, peer circuit\"},\n    {\"tag\": \"35-24-007.3\", \"evidence\": \"motor for Slabbing Pulper Rotor 1, numeric base 007 not 024\"},\n    {\"tag\": \"35-24-007.4\", \"evidence\": \"motor for Slabbing Pulper Rotor 2, numeric base 007 not 024\"},\n    {\"tag\": \"35-24P508\", \"evidence\": \"peer pump, separate major equipment\"},\n    {\"tag\": \"35-24-168\", \"evidence\": \"valve on upstream/adjacent line 35-24-022 circuit\"}\n  ],\n  \"notes\": [\n    \"35-24-024-WFL-15-E10H2A is a flush water line DN15 feeding multiple lubrication/flush points on the slabbing pulper gearbox circuit\",\n    \"Instruments PI-9262/FI-9263/FS-521 and PI-9264/FI-9265/FS-525 and PI-9266/FI-9267 are nested under their respective branch sections of line 35-24-024\",\n    \"35-24TV-9261 is a temperature control valve on the inlet to this line circuit\",\n    \"FS-521 and FS-525 appear as square-symbol instruments (DCS control room type per legend)\"\n  ],\n  \"confidence\": \"medium\"\n}\n```",
+        "raw_text": "I'll analyze the P&ID image carefully for FUNCTION 35-24-024.\n\n**Observations from the image:**\n- 35-24-024 is labeled `35-24-024-WFL-15-E10H2A` \u2014 a process line (WFL = white water flow line, DN15)\n- The red box (parent boundary) shows the circuit for 35-24-024\n- On the 35-24-024 line I can see: PI 9262, FI 9263, FS 521, and valve 35-24-163 (003-15)\n- PI 9264, FI 9265, FS 525, and valve 35-24-159 (003-15) appear on 35-24-026 (adjacent line, outside scope)\n- 35-24TV-9261 is a temperature control valve on the GEARBOX 1 circuit (35-24 prefix, TC 9261 actuator) \u2014 visible on the line feeding into the 35-24-024 circuit\n- 35-24-165 (001-15) is a hand valve visible on the line entering the 35-24-024 circuit\n- The instruments PI-9262, FI-9263, FS-521 sit on the 35-24-024 line\n- 35-24-163 is a drain valve (003-15) below the 35-24-024 line \u2014 symbol shows NC (filled triangles)\n\n**Valve type analysis:**\n- 35-24-165: outline/transparent bowtie with red X = automatic valve (AV, normally closed indicated by X mark)\n- 35-24-163: downward branch with drain symbol = DRN NC (filled triangles, drain branch)\n- 35-24TV-9261: has TC actuator circle = AV (automatic, temperature controlled)\n\n**Scope boundary:** 35-24-022 is a peer line (WFC). 35-24-026 is a peer line. 35-24-007.3/.4 are peer motors (different numeric base).\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24-024\",\n  \"description\": \"35-24-024 WFL LINE DN15\",\n  \"rows\": [\n    {\"equipment\": \"35-24TV-9261\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24TV-9261 TEMP CTRL VLV AV\"},\n    {\"equipment\": \"35-24-165\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-165 ISOL VLV NC\"},\n    {\"equipment\": \"35-24PI-9262\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24PI-9262 PRESSURE IND\"},\n    {\"equipment\": \"35-24FI-9263\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24FI-9263 FLOW IND\"},\n    {\"equipment\": \"35-24FS-521\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24FS-521 FLOW SWITCH\"},\n    {\"equipment\": \"35-24-163\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-163 DRN VLV DRN NC\"}\n  ],\n  \"peers\": [\n    {\"tag\": \"35-24-022\", \"evidence\": \"WFC-15 peer line, separate numeric base\"},\n    {\"tag\": \"35-24-026\", \"evidence\": \"WFL-15 peer line, carries PI-9264/FI-9265/FS-525/35-24-159\"},\n    {\"tag\": \"35-24-007.3\", \"evidence\": \"Motor tag numeric base 007, not 024\"},\n    {\"tag\": \"35-24-007.4\", \"evidence\": \"Motor tag numeric base 007, not 024\"},\n    {\"tag\": \"35-24P508\", \"evidence\": \"Peer pump, separate major equipment\"},\n    {\"tag\": \"35-24-168\", \"evidence\": \"Valve on adjacent line outside 35-24-024 circuit\"}\n  ],\n  \"notes\": [\n    \"35-24-024-WFL-15-E10H2A is a DN15 white water flow line in the gearbox lubrication/cooling circuit\",\n    \"35-24TV-9261 is a temperature control valve (TC 9261) feeding into the 35-24-024 circuit at GEARBOX 1\",\n    \"35-24-165 (001-15) is the isolation valve on the 35-24-024 branch, symbol shows NC with red X mark\",\n    \"PI-9262 and FI-9263 are inline instruments on 35-24-024; FS-521 is a flow switch\",\n    \"35-24-163 (003-15) is a drain valve below the 35-24-024 line with NC filled bowtie and drain branch\"\n  ],\n  \"confidence\": \"medium\"\n}\n```",
         "parsed": {
           "sub_process": "BR1",
           "function": "35-24-024",
@@ -83,100 +83,65 @@
               "equipment": "35-24-165",
               "subequipment": "",
               "mask": "",
-              "description": "35-24-165 ISOL VLV HV"
+              "description": "35-24-165 ISOL VLV NC"
+            },
+            {
+              "equipment": "35-24PI-9262",
+              "subequipment": "",
+              "mask": "",
+              "description": "35-24PI-9262 PRESSURE IND"
+            },
+            {
+              "equipment": "35-24FI-9263",
+              "subequipment": "",
+              "mask": "",
+              "description": "35-24FI-9263 FLOW IND"
+            },
+            {
+              "equipment": "35-24FS-521",
+              "subequipment": "",
+              "mask": "",
+              "description": "35-24FS-521 FLOW SWITCH"
             },
             {
               "equipment": "35-24-163",
               "subequipment": "",
               "mask": "",
-              "description": "35-24-163 ISOL VLV NC"
-            },
-            {
-              "equipment": "",
-              "subequipment": "35-24PI-9262",
-              "mask": "",
-              "description": "35-24PI-9262 PRESSURE IND"
-            },
-            {
-              "equipment": "",
-              "subequipment": "35-24FI-9263",
-              "mask": "",
-              "description": "35-24FI-9263 FLOW IND"
-            },
-            {
-              "equipment": "",
-              "subequipment": "35-24FS-521",
-              "mask": "",
-              "description": "35-24FS-521 FLOW SWITCH"
-            },
-            {
-              "equipment": "35-24-159",
-              "subequipment": "",
-              "mask": "",
-              "description": "35-24-159 ISOL VLV NC"
-            },
-            {
-              "equipment": "",
-              "subequipment": "35-24PI-9264",
-              "mask": "",
-              "description": "35-24PI-9264 PRESSURE IND"
-            },
-            {
-              "equipment": "",
-              "subequipment": "35-24FI-9265",
-              "mask": "",
-              "description": "35-24FI-9265 FLOW IND"
-            },
-            {
-              "equipment": "",
-              "subequipment": "35-24FS-525",
-              "mask": "",
-              "description": "35-24FS-525 FLOW SWITCH"
-            },
-            {
-              "equipment": "",
-              "subequipment": "35-24PI-9266",
-              "mask": "",
-              "description": "35-24PI-9266 PRESSURE IND"
-            },
-            {
-              "equipment": "",
-              "subequipment": "35-24FI-9267",
-              "mask": "",
-              "description": "35-24FI-9267 FLOW IND"
+              "description": "35-24-163 DRN VLV DRN NC"
             }
           ],
           "peers": [
             {
               "tag": "35-24-022",
-              "evidence": "upstream WFC line, separate line number, peer circuit"
+              "evidence": "WFC-15 peer line, separate numeric base"
             },
             {
               "tag": "35-24-026",
-              "evidence": "downstream WFL line, separate line number, peer circuit"
+              "evidence": "WFL-15 peer line, carries PI-9264/FI-9265/FS-525/35-24-159"
             },
             {
               "tag": "35-24-007.3",
-              "evidence": "motor for Slabbing Pulper Rotor 1, numeric base 007 not 024"
+              "evidence": "Motor tag numeric base 007, not 024"
             },
             {
               "tag": "35-24-007.4",
-              "evidence": "motor for Slabbing Pulper Rotor 2, numeric base 007 not 024"
+              "evidence": "Motor tag numeric base 007, not 024"
             },
             {
               "tag": "35-24P508",
-              "evidence": "peer pump, separate major equipment"
+              "evidence": "Peer pump, separate major equipment"
             },
             {
               "tag": "35-24-168",
-              "evidence": "valve on upstream/adjacent line 35-24-022 circuit"
+              "evidence": "Valve on adjacent line outside 35-24-024 circuit"
             }
           ],
           "notes": [
-            "35-24-024-WFL-15-E10H2A is a flush water line DN15 feeding multiple lubrication/flush points on the slabbing pulper gearbox circuit",
-            "Instruments PI-9262/FI-9263/FS-521 and PI-9264/FI-9265/FS-525 and PI-9266/FI-9267 are nested under their respective branch sections of line 35-24-024",
-            "35-24TV-9261 is a temperature control valve on the inlet to this line circuit",
-            "FS-521 and FS-525 appear as square-symbol instruments (DCS control room type per legend)"
+            "35-24-024-WFL-15-E10H2A is a DN15 white water flow line in the gearbox lubrication/cooling circuit",
+            "35-24TV-9261 is a temperature control valve (TC 9261) feeding into the 35-24-024 circuit at GEARBOX 1",
+            "35-24-165 (001-15) is the isolation valve on the 35-24-024 branch, symbol shows NC with red X mark",
+            "PI-9262 and FI-9263 are inline instruments on 35-24-024; FS-521 is a flow switch",
+            "35-24-163 (003-15) is a drain valve below the 35-24-024 line with NC filled bowtie and drain branch"
           ],
           "confidence": "medium"
         },
@@ -236,73 +201,43 @@
           "equipment": "35-24-165",
           "subequipment": "",
           "mask": "",
-          "description": "35-24-165 ISOL VLV HV"
+          "description": "35-24-165 ISOL VLV NC"
+        },
+        {
+          "equipment": "35-24PI-9262",
+          "subequipment": "",
+          "mask": "",
+          "description": "35-24PI-9262 PR IND"
+        },
+        {
+          "equipment": "35-24FI-9263",
+          "subequipment": "",
+          "mask": "",
+          "description": "35-24FI-9263 FL IND"
+        },
+        {
+          "equipment": "35-24FS-521",
+          "subequipment": "",
+          "mask": "",
+          "description": "35-24FS-521 FS"
         },
         {
           "equipment": "35-24-163",
           "subequipment": "",
           "mask": "",
-          "description": "35-24-163 ISOL VLV NC"
-        },
-        {
-          "equipment": "",
-          "subequipment": "35-24PI-9262",
-          "mask": "",
-          "description": "35-24PI-9262 PR IND"
-        },
-        {
-          "equipment": "",
-          "subequipment": "35-24FI-9263",
-          "mask": "",
-          "description": "35-24FI-9263 FL IND"
-        },
-        {
-          "equipment": "",
-          "subequipment": "35-24FS-521",
-          "mask": "",
-          "description": "35-24FS-521 FS"
-        },
-        {
-          "equipment": "35-24-159",
-          "subequipment": "",
-          "mask": "",
-          "description": "35-24-159 ISOL VLV NC"
-        },
-        {
-          "equipment": "",
-          "subequipment": "35-24PI-9264",
-          "mask": "",
-          "description": "35-24PI-9264 PR IND"
-        },
-        {
-          "equipment": "",
-          "subequipment": "35-24FI-9265",
-          "mask": "",
-          "description": "35-24FI-9265 FL IND"
-        },
-        {
-          "equipment": "",
-          "subequipment": "35-24FS-525",
-          "mask": "",
-          "description": "35-24FS-525 FS"
-        },
-        {
-          "equipment": "",
-          "subequipment": "35-24PI-9266",
-          "mask": "",
-          "description": "35-24PI-9266 PR IND"
-        },
-        {
-          "equipment": "",
-          "subequipment": "35-24FI-9267",
-          "mask": "",
-          "description": "35-24FI-9267 FL IND"
+          "description": "35-24-163 DRN VLV DRN NC"
         },
         {
           "equipment": "35-24-024",
           "subequipment": "",
           "mask": "",
           "description": "35-24-024"
+        },
+        {
+          "equipment": "35-24-159",
+          "subequipment": "",
+          "mask": "",
+          "description": "35-24-159"
         }
       ]
     }

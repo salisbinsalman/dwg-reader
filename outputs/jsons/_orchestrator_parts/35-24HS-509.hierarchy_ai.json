@@ -48,7 +48,7 @@
       ],
       "dossier": "Parent tag: 35-24HS-509\nParent category/block: instruments / \nParent XY: (750.8432010760761, 433.541625)\nNearby descriptions: HS 509 (35-24)\n\nSame-tag CAD family:\n- (none)\n\nNearby line numbers (short ids preferred in output):\n- 35-24-013  full=35-24-013-PP-600-E10H2A  d=179  layer=P-LINEPOS\n\nNearby devices (valves/instruments/pumps/\u2026):\n- line_markers: PPI_1100A  d=180  block=PPI_1100A\n- valves: PPI_0900A  d=133  block=PPI_0900A\n- instruments: PPI_1205A  d=2  block=PPI_1205A\n\nNearby peer primary equipment (do NOT nest under parent):\n- 35-24L008 (process_equipment, d=164)\n\nNearby drawing text tokens:\n- A1  d=188  layer=P-TEXT\n- A2  d=179  layer=P-TEXT\n- 2 bar  d=109  layer=P-TEXT\n- 1 bar  d=150  layer=P-TEXT\n- S2  d=116  layer=P-TEXT\n- S6  d=121  layer=P-TEXT\n- S1  d=102  layer=P-TEXT\n- S5  d=114  layer=P-TEXT\n- S3  d=136  layer=P-TEXT\n- 800 BDTPD  d=184  layer=P-TEXT\n- 35-24  d=44  layer=P-INSTRPOS_TEXTS\n- SHOWERS S1 & S2  d=67  layer=P-TEXT\n- SHOWER S3  d=70  layer=P-TEXT\n- 35-24L008  d=164  layer=P-EQUIPMENT_POS\n- HP-33G2  d=177  layer=P-EQUIPMENT_POS\n- 503  d=105  layer=P-INSTRPOS_TEXTS\n- 516  d=55  layer=P-INSTRPOS_TEXTS\n- 511  d=85  layer=P-INSTRPOS_TEXTS\n- 510  d=81  layer=P-INSTRPOS_TEXTS\n- 509  d=4  layer=P-INSTRPOS_TEXTS\n- 508  d=80  layer=P-INSTRPOS_TEXTS\n- 691  d=82  layer=P-INSTRPOS_TEXTS\n- 501  d=59  layer=P-INSTRPOS_TEXTS\n- 35-24-180  d=155  layer=P-VALVEPOS\n- 350-200  d=158  layer=P-VALVEPOS\n- 35-24-178  d=120  layer=P-VALVEPOS\n- 001-50  d=123  layer=P-VALVEPOS\n- 35-24-1094  d=137  layer=P-VALVEPOS\n- 35-24-173  d=109  layer=P-VALVEPOS\n- 101-125  d=114  layer=P-VALVEPOS\n- 35-24-172  d=128  layer=P-VALVEPOS\n- 35-24-013  d=179  layer=P-LINEPOS",
       "ai": {
-        "raw_text": "Looking at the P&ID image, I can see that **35-24HS-509** is an instrument (Hand Switch / selector switch) located on a **LOCAL PANEL**, labeled \"WINDER PULPER START/STOP\". It is a locally-mounted panel instrument with the bubble showing \"HS 509\" under area code \"35-24\".\n\n**Analysis:**\n- `35-24HS-509` is a hand switch instrument (HS = Hand Switch) on a local panel\n- It is described as \"WINDER PULPER START/STOP\"\n- Per the rules: *\"If 35-24HS-509 is an instrument (LC/PI/FV/XS/\u2026) and no labelled accessories sit on it, emit the FUNCTION header + description only \u2014 empty `rows` is correct.\"*\n- No child instruments, valves, or lines are directly attached to this HS instrument tag\n- The nearby instruments (HS/HI for showers 516, 503, 501) are separate instruments on their own circuits, not children of HS-509\n- `35-24L008` (Winder Pulper vessel) is a peer major equipment\n- Other instruments (XS-691, ES-508, KJ-510, KJ-511) are peers on the same local panel area but not children of HS-509\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24HS-509\",\n  \"description\": \"35-24HS-509 WNDR PLPR START/STOP HS\",\n  \"rows\": [],\n  \"peers\": [\n    {\n      \"tag\": \"35-24L008\",\n      \"evidence\": \"Peer major process equipment (Winder Pulper vessel HP-33G2), visible at d=164, not a child of an instrument FUNCTION\"\n    },\n    {\n      \"tag\": \"35-24XS-691\",\n      \"evidence\": \"Separate MCS SIGNAL instrument on same local panel area, own tag base 691\"\n    },\n    {\n      \"tag\": \"35-24ES-508\",\n      \"evidence\": \"Winder Area Emergency Stop instrument, own tag base 508, peer on panel\"\n    },\n    {\n      \"tag\": \"35-24KJ-510\",\n      \"evidence\": \"Winder Pulper Start pushbutton, own tag base 510, peer on panel\"\n    },\n    {\n      \"tag\": \"35-24KJ-511\",\n      \"evidence\": \"Winder Pulper Stop pushbutton, own tag base 511, peer on panel\"\n    }\n  ],\n  \"notes\": [\n    \"35-24HS-509 is a hand switch instrument on a local panel for Winder Pulper Start/Stop control; no piping lines or valve accessories are directly attached to this instrument tag\",\n    \"Shower instruments (HS/HI-516, HS/HI-503, HS/HI-501) are separate instrument loops for shower circuits S1-S6, not children of HS-509\"\n  ],\n  \"confidence\": \"high\"\n}\n```",
+        "raw_text": "Looking at the P&ID image, I can see that **35-24HS-509** is an instrument (Hand Switch / selector switch) located on a **LOCAL PANEL**, labeled \"WINDER PULPER START/STOP\". It is a locally-mounted panel instrument with the bubble showing \"HS 509\" under area code \"35-24\".\n\n**Analysis:**\n- `35-24HS-509` is a **hand switch instrument** (HS = Hand Switch) on a local panel\n- Its function is \"WINDER PULPER START/STOP\"\n- Per the rules: *\"If 35-24HS-509 is an instrument (LC/PI/FV/XS/\u2026) and no labelled accessories sit on it, emit the FUNCTION header + description only \u2014 empty `rows` is correct.\"*\n- The instrument symbol shows it as a local control panel instrument (square with horizontal line through circle)\n- No child tags are directly attached to this instrument tag itself\n- Nearby instruments (35-24HS-516, 35-24HI-516, 35-24HS-503, 35-24HI-503, 35-24HI-501) are **peer instruments** for showers S1-S6, not children of HS-509\n- 35-24L008 is a peer vessel (Winder Pulper)\n- The valve/line tags (35-24-173, 35-24-172, 35-24-178, 35-24-1094, 35-24-180) belong to the piping circuit of the pulper, not to this instrument\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24HS-509\",\n  \"description\": \"35-24HS-509 WNDR PLPR START/STOP HS\",\n  \"rows\": [],\n  \"peers\": [\n    {\"tag\": \"35-24L008\", \"evidence\": \"Winder Pulper vessel \u2014 peer process equipment, not a child of an HS instrument\"},\n    {\"tag\": \"35-24XS-691\", \"evidence\": \"MCS Signal instrument visible nearby, separate function\"},\n    {\"tag\": \"35-24ES-508\", \"evidence\": \"Winder Area Emergency Stop instrument, separate function\"},\n    {\"tag\": \"35-24KJ-510\", \"evidence\": \"Winder Pulper Start instrument, separate function\"},\n    {\"tag\": \"35-24KJ-511\", \"evidence\": \"Winder Pulper Stop instrument, separate function\"},\n    {\"tag\": \"35-24-173\", \"evidence\": \"Piping line on shower S1/S2 circuit, belongs to pulper piping not HS-509\"},\n    {\"tag\": \"35-24-172\", \"evidence\": \"Piping line on shower circuit, belongs to pulper piping not HS-509\"},\n    {\"tag\": \"35-24-178\", \"evidence\": \"Piping line on shower S3 circuit, belongs to pulper piping not HS-509\"},\n    {\"tag\": \"35-24-1094\", \"evidence\": \"Piping spool on pulper circuit, not a child of HS-509\"},\n    {\"tag\": \"35-24-180\", \"evidence\": \"Piping line on pulper circuit, not a child of HS-509\"},\n    {\"tag\": \"35-24-013\", \"evidence\": \"Nearby process line, belongs to pulper piping circuit not HS-509\"}\n  ],\n  \"notes\": [\n    \"35-24HS-509 is a hand switch (start/stop) on a local panel for the Winder Pulper \u2014 instrument only, no child tags\",\n    \"Symbol confirms local control panel instrument per legend\",\n    \"Empty rows is correct per rules for standalone instrument with no labelled accessories\"\n  ],\n  \"confidence\": \"high\"\n}\n```",
         "parsed": {
           "sub_process": "BR1",
           "function": "35-24HS-509",
@@ -57,28 +57,53 @@
           "peers": [
             {
               "tag": "35-24L008",
-              "evidence": "Peer major process equipment (Winder Pulper vessel HP-33G2), visible at d=164, not a child of an instrument FUNCTION"
+              "evidence": "Winder Pulper vessel \u2014 peer process equipment, not a child of an HS instrument"
             },
             {
               "tag": "35-24XS-691",
-              "evidence": "Separate MCS SIGNAL instrument on same local panel area, own tag base 691"
+              "evidence": "MCS Signal instrument visible nearby, separate function"
             },
             {
               "tag": "35-24ES-508",
-              "evidence": "Winder Area Emergency Stop instrument, own tag base 508, peer on panel"
+              "evidence": "Winder Area Emergency Stop instrument, separate function"
             },
             {
               "tag": "35-24KJ-510",
-              "evidence": "Winder Pulper Start pushbutton, own tag base 510, peer on panel"
+              "evidence": "Winder Pulper Start instrument, separate function"
             },
             {
               "tag": "35-24KJ-511",
-              "evidence": "Winder Pulper Stop pushbutton, own tag base 511, peer on panel"
+              "evidence": "Winder Pulper Stop instrument, separate function"
+            },
+            {
+              "tag": "35-24-173",
+              "evidence": "Piping line on shower S1/S2 circuit, belongs to pulper piping not HS-509"
+            },
+            {
+              "tag": "35-24-172",
+              "evidence": "Piping line on shower circuit, belongs to pulper piping not HS-509"
+            },
+            {
+              "tag": "35-24-178",
+              "evidence": "Piping line on shower S3 circuit, belongs to pulper piping not HS-509"
+            },
+            {
+              "tag": "35-24-1094",
+              "evidence": "Piping spool on pulper circuit, not a child of HS-509"
+            },
+            {
+              "tag": "35-24-180",
+              "evidence": "Piping line on pulper circuit, not a child of HS-509"
+            },
+            {
+              "tag": "35-24-013",
+              "evidence": "Nearby process line, belongs to pulper piping circuit not HS-509"
             }
           ],
           "notes": [
-            "35-24HS-509 is a hand switch instrument on a local panel for Winder Pulper Start/Stop control; no piping lines or valve accessories are directly attached to this instrument tag",
-            "Shower instruments (HS/HI-516, HS/HI-503, HS/HI-501) are separate instrument loops for shower circuits S1-S6, not children of HS-509"
+            "35-24HS-509 is a hand switch (start/stop) on a local panel for the Winder Pulper \u2014 instrument only, no child tags",
+            "Symbol confirms local control panel instrument per legend",
+            "Empty rows is correct per rules for standalone instrument with no labelled accessories"
           ],
           "confidence": "high"
         },

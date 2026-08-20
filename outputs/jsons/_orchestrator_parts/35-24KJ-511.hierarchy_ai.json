@@ -53,37 +53,30 @@
       ],
       "dossier": "Parent tag: 35-24KJ-511\nParent category/block: instruments / \nParent XY: (671.106995995996, 411.0593503503504)\nNearby descriptions: KJ 511 (35-24)\n\nSame-tag CAD family:\n- (none)\n\nNearby line numbers (short ids preferred in output):\n- 35-24-007  full=35-24-007-PP-200-E10H2A  d=141  layer=P-LINEPOS\n- 35-24-002  full=35-24-002-PP-500-E10H2A  d=184  layer=P-LINEPOS\n- 35-24-013  full=35-24-013-PP-600-E10H2A  d=185  layer=P-LINEPOS\n- 35-24-009  full=35-24-009-PP-600-E10H2A  d=160  layer=P-LINEPOS\n\nNearby devices (valves/instruments/pumps/\u2026):\n- line_markers: PPI_1100A  d=162  block=PPI_1100A\n- valves: PPI_0900A  d=199  block=PPI_0900A\n- control_valves: PPI_1000A  d=178  block=PPI_1000A\n- instruments: PPI_1205A  d=84  block=PPI_1205A\n- pumps: P7A0200  d=166  block=P7A0200\n- motors: PPI_1504A-25_0  d=179  block=PPI_1504A-25_0\n\nNearby peer primary equipment (do NOT nest under parent):\n- 35-24L008 (process_equipment, d=114)\n- 35-24P509 (pumps, d=166)\n\nNearby drawing text tokens:\n- A1  d=163  layer=P-TEXT\n- A2  d=153  layer=P-TEXT\n- 2 bar  d=134  layer=P-TEXT\n- 1 bar  d=135  layer=P-TEXT\n- S2  d=132  layer=P-TEXT\n- S6  d=112  layer=P-TEXT\n- S1  d=134  layer=P-TEXT\n- S5  d=106  layer=P-TEXT\n- S3  d=81  layer=P-TEXT\n- 800 BDTPD  d=138  layer=P-TEXT\n- 35-24  d=125  layer=P-INSTRPOS_TEXTS\n- SHOWERS S1 & S2  d=150  layer=P-TEXT\n- SHOWER S3  d=146  layer=P-TEXT\n- 35-24L008  d=117  layer=P-EQUIPMENT_POS\n- HP-33G2  d=130  layer=P-EQUIPMENT_POS\n- 503  d=186  layer=P-INSTRPOS_TEXTS\n- 516  d=136  layer=P-INSTRPOS_TEXTS\n- 511  d=4  layer=P-INSTRPOS_TEXTS\n- 510  d=11  layer=P-INSTRPOS_TEXTS\n- 509  d=81  layer=P-INSTRPOS_TEXTS\n- 508  d=26  layer=P-INSTRPOS_TEXTS\n- 513  d=184  layer=P-INSTRPOS_TEXTS\n- 691  d=41  layer=P-INSTRPOS_TEXTS\n- 501  d=134  layer=P-INSTRPOS_TEXTS\n- 35-24P509  d=194  layer=P-PUMP_POS\n- 300  d=200  layer=P-PUMP_POS\n- 28  d=196  layer=P-PUMP_POS\n- 35-24-008.1  d=198  layer=P-MOTOR_POS\n- 35-24-008.2  d=183  layer=P-MOTOR_POS\n- 200  d=188  layer=P-MOTOR_POS\n- 1500  d=189  layer=P-MOTOR_POS\n- 35-24-184  d=172  layer=P-VALVEPOS\n- 003-15  d=175  layer=P-VALVEPOS\n- 35-24-1088  d=184  layer=P-VALVEPOS\n- 003-50  d=188  layer=P-VALVEPOS\n- 35-24-226  d=152  layer=P-VALVEPOS\n- 350-300  d=157  layer=P-VALVEPOS\n- 35-24-180  d=101  layer=P-VALVEPOS\n- 350-200  d=106  layer=P-VALVEPOS\n- 35-24-181  d=167  layer=P-VALVEPOS",
       "ai": {
-        "raw_text": "Looking at the P&ID image, I can see that **35-24KJ-511** is an instrument tag (KJ = pushbutton/control station type) labeled \"WINDER PULPER STOP\" \u2014 it's a control/pushbutton instrument, not a vessel, pump, or piping header.\n\nFrom the image:\n- The parent box shows a local panel/MCS signal group containing:\n  - `35-24 XS 691` \u2014 MCS SIGNAL\n  - `35-24 ES 508` \u2014 WINDER AREA EMERGENCY STOP\n  - `35-24 KJ 510` \u2014 WINDER PULPER START\n  - `35-24 KJ 511` \u2014 WINDER PULPER STOP \u2190 **this is our FUNCTION**\n\nPer the rules: *\"If 35-24KJ-511 is an instrument (LC/PI/FV/XS/\u2026) and no labelled accessories sit on it, emit the FUNCTION header + description only \u2014 empty `rows` is correct.\"*\n\nKJ-511 is a pushbutton stop instrument. No sub-instruments, valves, or lines are directly attached to it. The nearby peer equipment (35-24L008, 35-24P509) are clearly separate major equipment items.\n\nThe description follows CMMS style: tag + abbreviated noun phrase, max 40 chars, uppercase.\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24KJ-511\",\n  \"description\": \"35-24KJ-511 WNDR PLPR STOP PUSHBTN\",\n  \"rows\": [],\n  \"peers\": [\n    {\n      \"tag\": \"35-24KJ-510\",\n      \"evidence\": \"Sibling pushbutton WINDER PULPER START on same local panel; separate instrument tag\"\n    },\n    {\n      \"tag\": \"35-24XS-691\",\n      \"evidence\": \"MCS SIGNAL instrument on same local panel; different instrument type/number\"\n    },\n    {\n      \"tag\": \"35-24ES-508\",\n      \"evidence\": \"WINDER AREA EMERGENCY STOP on same local panel; separate instrument tag\"\n    },\n    {\n      \"tag\": \"35-24L008\",\n      \"evidence\": \"Peer process equipment WINDER PULPER vessel; different equipment category and numeric base\"\n    },\n    {\n      \"tag\": \"35-24P509\",\n      \"evidence\": \"Peer pump adjacent to winder pulper; different equipment category and numeric base\"\n    }\n  ],\n  \"notes\": [\n    \"35-24KJ-511 is a pushbutton stop instrument (KJ type) for the Winder Pulper; no child lines, valves or sub-instruments are directly attached to this tag on the P&ID\",\n    \"Local panel group also contains KJ-510 (START), ES-508 (E-STOP), XS-691 (MCS SIGNAL) \u2014 all siblings, not children\"\n  ],\n  \"confidence\": \"high\"\n}\n```",
+        "raw_text": "Looking at the P&ID image, I can see that **35-24KJ-511** is an instrument tag (KJ = pushbutton/control station type) labeled \"WINDER PULPER STOP\" \u2014 it's a control/pushbutton instrument, not a vessel, pump, or piping header.\n\nFrom the image:\n- The parent box shows a local panel area with instruments: XS-691, ES-508, KJ-510, and **KJ-511**\n- KJ-511 is labeled \"WINDER PULPER STOP\"\n- It is a standalone instrument (MCS-controlled pushbutton based on the diamond-in-square symbol style)\n- No accessories, valves, or sub-instruments are visibly attached to KJ-511 itself\n\nPer the rules: *\"If 35-24KJ-511 is an instrument (LC/PI/FV/XS/\u2026) and no labelled accessories sit on it, emit the FUNCTION header + description only \u2014 empty `rows` is correct.\"*\n\nThe nearby peer equipment (35-24L008, 35-24P509) are clearly separate major equipment and go to peers.\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24KJ-511\",\n  \"description\": \"35-24KJ-511 WNDR PLPR STOP\",\n  \"rows\": [],\n  \"peers\": [\n    {\n      \"tag\": \"35-24L008\",\n      \"evidence\": \"Peer vessel (Winder Pulper HP-33G2) visible in crop, different equipment class, not a child of KJ instrument\"\n    },\n    {\n      \"tag\": \"35-24P509\",\n      \"evidence\": \"Peer pump visible in crop, separate major equipment, not a child of KJ instrument\"\n    },\n    {\n      \"tag\": \"35-24KJ-510\",\n      \"evidence\": \"Sibling KJ instrument (Winder Pulper Start) on same local panel, same numeric base but separate tag\"\n    }\n  ],\n  \"notes\": [\n    \"35-24KJ-511 is a pushbutton/control station instrument labelled WINDER PULPER STOP on the local panel\",\n    \"No sub-instruments, valves, or accessories are attached to KJ-511 itself \u2014 rows intentionally empty\",\n    \"KJ-510 (START) is a sibling instrument on the same panel, not a child\"\n  ],\n  \"confidence\": \"high\"\n}\n```",
         "parsed": {
           "sub_process": "BR1",
           "function": "35-24KJ-511",
-          "description": "35-24KJ-511 WNDR PLPR STOP PUSHBTN",
+          "description": "35-24KJ-511 WNDR PLPR STOP",
           "rows": [],
           "peers": [
             {
-              "tag": "35-24KJ-510",
-              "evidence": "Sibling pushbutton WINDER PULPER START on same local panel; separate instrument tag"
-            },
-            {
-              "tag": "35-24XS-691",
-              "evidence": "MCS SIGNAL instrument on same local panel; different instrument type/number"
-            },
-            {
-              "tag": "35-24ES-508",
-              "evidence": "WINDER AREA EMERGENCY STOP on same local panel; separate instrument tag"
-            },
-            {
               "tag": "35-24L008",
-              "evidence": "Peer process equipment WINDER PULPER vessel; different equipment category and numeric base"
+              "evidence": "Peer vessel (Winder Pulper HP-33G2) visible in crop, different equipment class, not a child of KJ instrument"
             },
             {
               "tag": "35-24P509",
-              "evidence": "Peer pump adjacent to winder pulper; different equipment category and numeric base"
+              "evidence": "Peer pump visible in crop, separate major equipment, not a child of KJ instrument"
+            },
+            {
+              "tag": "35-24KJ-510",
+              "evidence": "Sibling KJ instrument (Winder Pulper Start) on same local panel, same numeric base but separate tag"
             }
           ],
           "notes": [
-            "35-24KJ-511 is a pushbutton stop instrument (KJ type) for the Winder Pulper; no child lines, valves or sub-instruments are directly attached to this tag on the P&ID",
-            "Local panel group also contains KJ-510 (START), ES-508 (E-STOP), XS-691 (MCS SIGNAL) \u2014 all siblings, not children"
+            "35-24KJ-511 is a pushbutton/control station instrument labelled WINDER PULPER STOP on the local panel",
+            "No sub-instruments, valves, or accessories are attached to KJ-511 itself \u2014 rows intentionally empty",
+            "KJ-510 (START) is a sibling instrument on the same panel, not a child"
           ],
           "confidence": "high"
         },

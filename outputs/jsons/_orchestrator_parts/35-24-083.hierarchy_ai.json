@@ -73,7 +73,7 @@
       ],
       "dossier": "Parent tag: 35-24-083\nParent category/block: lines / \nParent XY: (2851.25, 192.5)\nNearby descriptions: 35-24-083-WAF-300-E10H2A\n\nSame-tag CAD family:\n- (none)\n\nNearby line numbers (short ids preferred in output):\n- 35-24-221  full=35-24-221-PP-80-E10H2A  d=173  layer=P-LINEPOS\n- 35-24-209  full=35-24-209-PP-100-E10H2A  d=166  layer=P-LINEPOS\n- 35-24-083  full=35-24-083-WAF-300-E10H2A  d=0  layer=P-LINEPOS\n- 35-24-084  full=35-24-084-WAF-100-E10H2A  d=22  layer=P-LINEPOS\n- 35-24-086  full=35-24-086-WAF-100-E10H2A  d=45  layer=P-LINEPOS\n- 35-24-088  full=35-24-088-WAF-300-E10H2A  d=68  layer=P-LINEPOS\n- 35-24-089  full=35-24-089-WAF-300-E10H2A  d=90  layer=P-LINEPOS\n- 35-24-079  full=35-24-079-WFL-15-E10H2A  d=166  layer=P-LINEPOS\n- 35-24-080  full=35-24-080-WFL-15-E10H2A  d=138  layer=P-LINEPOS\n- 35-24-091  full=35-24-091-WAB-20-E10H2A  d=168  layer=P-LINEPOS\n- 35-24-082  full=35-24-082-PP-800-E10H2A  d=73  layer=P-LINEPOS\n- 35-24-081  full=35-24-081-PP-250-E10H2A  d=70  layer=P-LINEPOS\n- 35-24-077  full=35-24-077-PP-250-E10H2A  d=197  layer=P-LINEPOS\n- 35-24-078  full=35-24-078-PP-900-E10H2A  d=168  layer=P-LINEPOS\n- 35-24-087  full=35-24-087-WAF-500-E10H2A  d=119  layer=P-LINEPOS\n\nNearby devices (valves/instruments/pumps/\u2026):\n- line_markers: PPI_1100A  d=120  block=PPI_1100A\n- valves: PPI_0900A  d=145  block=PPI_0900A\n- control_valves: PPI_1000A  d=52  block=PPI_1000A\n- instruments: PPI_0100X  d=87  block=PPI_0100X\n- pumps: P7A0200  d=174  block=P7A0200\n- motors: PPI_1504A-25_0  d=125  block=PPI_1504A-25_0\n- fittings: P7A1214  d=36  block=P7A1214\n\nNearby peer primary equipment (do NOT nest under parent):\n- 35-24L003 (process_equipment, d=165)\n- 35-24L004 (process_equipment, d=118)\n\nNearby drawing text tokens:\n- S1  d=137  layer=P-TEXT\n- S2  d=148  layer=P-TEXT\n- A1  d=122  layer=P-TEXT\n- 1 bar  d=123  layer=P-TEXT\n- 2621 ADTPD  d=154  layer=P-TEXT\n- 35-24  d=71  layer=P-INSTRPOS_TEXTS\n- 35-24L003  d=159  layer=P-EQUIPMENT_POS\n- HP-63G2  d=157  layer=P-EQUIPMENT_POS\n- 35-24L004  d=113  layer=P-EQUIPMENT_POS\n- BROKE CONVEYOR 2  d=107  layer=P-EQUIPMENT_POS\n- 651  d=60  layer=P-INSTRPOS_TEXTS\n- 567  d=190  layer=P-INSTRPOS_TEXTS\n- 9286  d=168  layer=P-INSTRPOS_TEXTS\n- 9288  d=132  layer=P-INSTRPOS_TEXTS\n- 570  d=24  layer=P-INSTRPOS_TEXTS\n- 568  d=144  layer=P-INSTRPOS_TEXTS\n- 573  d=40  layer=P-INSTRPOS_TEXTS\n- 569  d=116  layer=P-INSTRPOS_TEXTS\n- 9289  d=127  layer=P-INSTRPOS_TEXTS\n- 9287  d=160  layer=P-INSTRPOS_TEXTS\n- SIZE PRESS PULPER ROTOR 1  d=177  layer=P-TEXT\n- 575  d=84  layer=P-INSTRPOS_TEXTS\n- 572  d=24  layer=P-INSTRPOS_TEXTS\n- 35-24P505  d=195  layer=P-PUMP_POS\n- 860  d=196  layer=P-PUMP_POS\n- 17  d=183  layer=P-PUMP_POS\n- 200  d=196  layer=P-PUMP_POS\n- 1000  d=184  layer=P-PUMP_POS\n- 1500  d=195  layer=P-MOTOR_POS\n- 35-24-003.2  d=125  layer=P-MOTOR_POS\n- 630  d=123  layer=P-MOTOR_POS\n- 35-24-003.1  d=120  layer=P-MOTOR_POS\n- 35-24-110  d=192  layer=P-VALVEPOS\n- 001-80  d=189  layer=P-VALVEPOS\n- 35-24-109  d=199  layer=P-VALVEPOS\n- 003-15  d=200  layer=P-VALVEPOS\n- 35-24-108  d=164  layer=P-VALVEPOS\n- 003-50  d=160  layer=P-VALVEPOS\n- 35-24-107  d=132  layer=P-VALVEPOS\n- 35-24-230  d=137  layer=P-VALVEPOS",
       "ai": {
-        "raw_text": "I'll analyze the P&ID image carefully for FUNCTION 35-24-083 (WAF-300 line).\n\n**Observations from the image:**\n- 35-24-083-WAF-300-E10H2A is the main header line (300mm white water/broke water line)\n- Connected branches visible: 35-24-084 (WAF-100), 35-24-086 (WAF-100), 35-24-088 (WAF-300), 35-24-089 (WAF-300)\n- On 35-24-083 circuit: 35-24FV-570 (control valve, FC instrument 570 shown with actuator circle = AV), 35-24HV-572 (hand valve with HS/HI instruments)\n- On 35-24-084: 35-24KV-573 (KS instrument), 35-24HV-651 (with HS/HI)\n- 35-24FV-570: has FC/DCS control circle on top \u2192 AV type. Symbol shows filled triangles \u2192 NC\n- 35-24HV-572: outline bowtie, no actuator \u2192 HV\n- 35-24KV-573: has circle actuator \u2192 AV\n- 35-24HV-651: outline bowtie, no actuator \u2192 HV\n- Instruments 35-24HI-572, 35-24HS-572, 35-24HI-651, 35-24HS-651, 35-24KS-573 visible\n- 35-24-103 (003-50) is a valve/branch on 35-24-088 circuit\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24-083\",\n  \"description\": \"35-24-083 WAF 300 HEADER LINE\",\n  \"rows\": [\n    {\"equipment\": \"35-24FV-570\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24FV-570 FLOW CTRL VLV AV NC\"},\n    {\"equipment\": \"35-24-084\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-084 WAF 100 BRANCH\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24HV-572\", \"mask\": \"\", \"description\": \"35-24HV-572 ISOL VLV HV\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24HI-572\", \"mask\": \"\", \"description\": \"35-24HI-572 HAND INDICATOR\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24HS-572\", \"mask\": \"\", \"description\": \"35-24HS-572 HAND SWITCH\"},\n    {\"equipment\": \"35-24-086\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-086 WAF 100 BRANCH\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24KV-573\", \"mask\": \"\", \"description\": \"35-24KV-573 CTRL VLV AV\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24KS-573\", \"mask\": \"\", \"description\": \"35-24KS-573 SPEED SWITCH\"},\n    {\"equipment\": \"35-24-088\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-088 WAF 300 BRANCH\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24HV-651\", \"mask\": \"\", \"description\": \"35-24HV-651 ISOL VLV HV\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24HI-651\", \"mask\": \"\", \"description\": \"35-24HI-651 HAND INDICATOR\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24HS-651\", \"mask\": \"\", \"description\": \"35-24HS-651 HAND SWITCH\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-103\", \"mask\": \"\", \"description\": \"35-24-103 VLV 003-50\"},\n    {\"equipment\": \"35-24-089\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-089 WAF 300 BRANCH\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24HV-575\", \"mask\": \"\", \"description\": \"35-24HV-575 ISOL VLV HV\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24HI-575\", \"mask\": \"\", \"description\": \"35-24HI-575 HAND INDICATOR\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24HS-575\", \"mask\": \"\", \"description\": \"35-24HS-575 HAND SWITCH\"}\n  ],\n  \"peers\": [\n    {\"tag\": \"35-24L003\", \"evidence\": \"peer process equipment visible in crop, not child of line\"},\n    {\"tag\": \"35-24L004\", \"evidence\": \"BROKE CONVEYOR 2 peer vessel, not child of line\"},\n    {\"tag\": \"35-24-081\", \"evidence\": \"PP-250 separate line, different numeric base\"},\n    {\"tag\": \"35-24-082\", \"evidence\": \"PP-800 separate line, different numeric base\"},\n    {\"tag\": \"35-24-105\", \"evidence\": \"visible in crop but different numeric base, separate circuit\"}\n  ],\n  \"notes\": [\n    \"35-24-083 is WAF-300 white water header; branches 084/086/088/089 are direct offtakes\",\n    \"35-24FV-570 sits on the main 083 header feed (FC 570 DCS control circle = AV, filled triangles = NC)\",\n    \"35-24HV-572/651/575 are outline bowtie hand valves on respective branches\",\n    \"35-24KV-573 has actuator circle = AV on 086 branch\",\n    \"35-24-103 (003-50) is a valve fitting on 088 branch per P-VALVEPOS layer\"\n  ],\n  \"confidence\": \"high\"\n}\n```",
+        "raw_text": "I'll analyze the P&ID image carefully for FUNCTION 35-24-083 (WAF-300 line).\n\n**Observations from the image:**\n- 35-24-083-WAF-300-E10H2A is the main header line (300mm white water/broke water line)\n- Connected branches visible: 35-24-084 (WAF-100), 35-24-086 (WAF-100), 35-24-088 (WAF-300), 35-24-089 (WAF-300)\n- On 35-24-083 circuit: FC/35-24FV-570 (control valve with actuator circle = AV), instrument 35-24HI-572 with HS-572\n- On 35-24-084: 35-24HV-572 (hand valve - outline bowtie, no actuator = HV), instrument HI-572/HS-572\n- On 35-24-086: 35-24KV-573 (KS-573 instrument), valve shown\n- On 35-24-088: 35-24HV-651 (hand valve), HI-651/HS-651\n- On 35-24-089: 35-24HV-575 (hand valve), HI-575/HS-575\n- 35-24FV-570 on main line 083 - has actuator circle = AV\n- Valves 35-24HV-572, 35-24HV-651, 35-24HV-575 show outline bowtie = HV\n- 35-24KV-573 shows outline bowtie = HV type\n- 35-24-103 visible (003-50 valve tag)\n\n**Valve symbol analysis:**\n- 35-24FV-570: circle actuator on top = AV\n- 35-24HV-572: outline bowtie, no actuator = HV\n- 35-24KV-573: outline bowtie = HV\n- 35-24HV-651: outline bowtie = HV  \n- 35-24HV-575: outline bowtie = HV\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24-083\",\n  \"description\": \"35-24-083 WAF 300 HEADER LINE\",\n  \"rows\": [\n    {\"equipment\": \"35-24FV-570\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24FV-570 FLOW CTRL VLV AV\"},\n    {\"equipment\": \"35-24-084\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-084 WAF 100 BRANCH\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24HV-572\", \"mask\": \"\", \"description\": \"35-24HV-572 ISOL VLV HV\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24HI-572\", \"mask\": \"\", \"description\": \"35-24HI-572 HAND INDICATOR\"},\n    {\"equipment\": \"35-24-086\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-086 WAF 100 BRANCH\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24KV-573\", \"mask\": \"\", \"description\": \"35-24KV-573 ISOL VLV HV\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24KS-573\", \"mask\": \"\", \"description\": \"35-24KS-573 SPEED SWITCH\"},\n    {\"equipment\": \"35-24-088\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-088 WAF 300 BRANCH\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24HV-651\", \"mask\": \"\", \"description\": \"35-24HV-651 ISOL VLV HV\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24HI-651\", \"mask\": \"\", \"description\": \"35-24HI-651 HAND INDICATOR\"},\n    {\"equipment\": \"35-24-089\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-089 WAF 300 BRANCH\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24HV-575\", \"mask\": \"\", \"description\": \"35-24HV-575 ISOL VLV HV\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24HI-575\", \"mask\": \"\", \"description\": \"35-24HI-575 HAND INDICATOR\"},\n    {\"equipment\": \"35-24-103\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-103 BRANCH 003-50\"}\n  ],\n  \"peers\": [\n    {\"tag\": \"35-24L003\", \"evidence\": \"peer process equipment visible in crop, not child of line\"},\n    {\"tag\": \"35-24L004\", \"evidence\": \"BROKE CONVEYOR 2 peer vessel, not child of line\"},\n    {\"tag\": \"35-24-081\", \"evidence\": \"PP-250 separate line, peer not branch of 083\"},\n    {\"tag\": \"35-24-082\", \"evidence\": \"PP-800 separate line, peer not branch of 083\"},\n    {\"tag\": \"35-24-003.1\", \"evidence\": \"motor tag numeric base 003 does not match 083\"},\n    {\"tag\": \"35-24-003.2\", \"evidence\": \"motor tag numeric base 003 does not match 083\"}\n  ],\n  \"notes\": [\n    \"35-24-083 is WAF-300 white water header; branches 084/086/088/089 are WAF sub-lines feeding individual positions\",\n    \"35-24FV-570 is flow control valve on main 083 header with AV actuator (circle on bowtie)\",\n    \"HV-572/651/575 and KV-573 are outline bowtie hand valves on respective branches\",\n    \"35-24-103 (003-50) is a valve/branch visible on the 088 circuit\"\n  ],\n  \"confidence\": \"high\"\n}\n```",
         "parsed": {
           "sub_process": "BR1",
           "function": "35-24-083",
@@ -83,7 +83,7 @@
               "equipment": "35-24FV-570",
               "subequipment": "",
               "mask": "",
-              "description": "35-24FV-570 FLOW CTRL VLV AV NC"
+              "description": "35-24FV-570 FLOW CTRL VLV AV"
             },
             {
               "equipment": "35-24-084",
@@ -104,12 +104,6 @@
               "description": "35-24HI-572 HAND INDICATOR"
             },
             {
-              "equipment": "",
-              "subequipment": "35-24HS-572",
-              "mask": "",
-              "description": "35-24HS-572 HAND SWITCH"
-            },
-            {
               "equipment": "35-24-086",
               "subequipment": "",
               "mask": "",
@@ -119,7 +113,7 @@
               "equipment": "",
               "subequipment": "35-24KV-573",
               "mask": "",
-              "description": "35-24KV-573 CTRL VLV AV"
+              "description": "35-24KV-573 ISOL VLV HV"
             },
             {
               "equipment": "",
@@ -146,18 +140,6 @@
               "description": "35-24HI-651 HAND INDICATOR"
             },
             {
-              "equipment": "",
-              "subequipment": "35-24HS-651",
-              "mask": "",
-              "description": "35-24HS-651 HAND SWITCH"
-            },
-            {
-              "equipment": "",
-              "subequipment": "35-24-103",
-              "mask": "",
-              "description": "35-24-103 VLV 003-50"
-            },
-            {
               "equipment": "35-24-089",
               "subequipment": "",
               "mask": "",
@@ -176,10 +158,10 @@
               "description": "35-24HI-575 HAND INDICATOR"
             },
             {
-              "equipment": "",
-              "subequipment": "35-24HS-575",
+              "equipment": "35-24-103",
+              "subequipment": "",
               "mask": "",
-              "description": "35-24HS-575 HAND SWITCH"
+              "description": "35-24-103 BRANCH 003-50"
             }
           ],
           "peers": [
@@ -193,23 +175,26 @@
             },
             {
               "tag": "35-24-081",
-              "evidence": "PP-250 separate line, different numeric base"
+              "evidence": "PP-250 separate line, peer not branch of 083"
             },
             {
               "tag": "35-24-082",
-              "evidence": "PP-800 separate line, different numeric base"
+              "evidence": "PP-800 separate line, peer not branch of 083"
             },
             {
-              "tag": "35-24-105",
-              "evidence": "visible in crop but different numeric base, separate circuit"
+              "tag": "35-24-003.1",
+              "evidence": "motor tag numeric base 003 does not match 083"
+            },
+            {
+              "tag": "35-24-003.2",
+              "evidence": "motor tag numeric base 003 does not match 083"
             }
           ],
           "notes": [
-            "35-24-083 is WAF-300 white water header; branches 084/086/088/089 are direct offtakes",
-            "35-24FV-570 sits on the main 083 header feed (FC 570 DCS control circle = AV, filled triangles = NC)",
-            "35-24HV-572/651/575 are outline bowtie hand valves on respective branches",
-            "35-24KV-573 has actuator circle = AV on 086 branch",
-            "35-24-103 (003-50) is a valve fitting on 088 branch per P-VALVEPOS layer"
+            "35-24-083 is WAF-300 white water header; branches 084/086/088/089 are WAF sub-lines feeding individual positions",
+            "35-24FV-570 is flow control valve on main 083 header with AV actuator (circle on bowtie)",
+            "HV-572/651/575 and KV-573 are outline bowtie hand valves on respective branches",
+            "35-24-103 (003-50) is a valve/branch visible on the 088 circuit"
           ],
           "confidence": "high"
         },
@@ -269,7 +254,7 @@
           "equipment": "35-24FV-570",
           "subequipment": "",
           "mask": "",
-          "description": "35-24FV-570 FL CTRL VLV AV NC"
+          "description": "35-24FV-570 FL CTRL VLV AV"
         },
         {
           "equipment": "35-24-084",
@@ -293,7 +278,7 @@
           "equipment": "",
           "subequipment": "35-24KV-573",
           "mask": "",
-          "description": "35-24KV-573 CTRL VLV AV"
+          "description": "35-24KV-573 ISOL VLV HV"
         },
         {
           "equipment": "",
@@ -314,12 +299,6 @@
           "description": "35-24HV-651 ISOL VLV HV"
         },
         {
-          "equipment": "",
-          "subequipment": "35-24-103",
-          "mask": "",
-          "description": "35-24-103 VLV 003-50"
-        },
-        {
           "equipment": "35-24-089",
           "subequipment": "",
           "mask": "",
@@ -332,22 +311,16 @@
           "description": "35-24HV-575 ISOL VLV HV"
         },
         {
+          "equipment": "35-24-103",
+          "subequipment": "",
+          "mask": "",
+          "description": "35-24-103 BRANCH 003-50"
+        },
+        {
           "equipment": "35-24-083",
           "subequipment": "",
           "mask": "",
           "description": "35-24-083"
-        },
-        {
-          "equipment": "35-24-003.1",
-          "subequipment": "",
-          "mask": "",
-          "description": "35-24-003.1"
-        },
-        {
-          "equipment": "35-24-003.2",
-          "subequipment": "",
-          "mask": "",
-          "description": "35-24-003.2"
         }
       ]
     }

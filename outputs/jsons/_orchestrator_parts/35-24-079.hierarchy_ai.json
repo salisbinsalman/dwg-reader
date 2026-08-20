@@ -72,80 +72,79 @@
       ],
       "dossier": "Parent tag: 35-24-079\nParent category/block: lines / \nParent XY: (2741.063563563564, 68.75)\nNearby descriptions: 35-24-079-WFL-15-E10H2A\n\nSame-tag CAD family:\n- (none)\n\nNearby line numbers (short ids preferred in output):\n- 35-24-221  full=35-24-221-PP-80-E10H2A  d=157  layer=P-LINEPOS\n- 35-24-083  full=35-24-083-WAF-300-E10H2A  d=166  layer=P-LINEPOS\n- 35-24-084  full=35-24-084-WAF-100-E10H2A  d=181  layer=P-LINEPOS\n- 35-24-086  full=35-24-086-WAF-100-E10H2A  d=198  layer=P-LINEPOS\n- 35-24-076  full=35-24-076-WFL-15-E10H2A  d=60  layer=P-LINEPOS\n- 35-24-079  full=35-24-079-WFL-15-E10H2A  d=0  layer=P-LINEPOS\n- 35-24-075  full=35-24-075-WFC-15-E10H2A  d=153  layer=P-LINEPOS\n- 35-24-080  full=35-24-080-WFL-15-E10H2A  d=50  layer=P-LINEPOS\n- 35-24-082  full=35-24-082-PP-800-E10H2A  d=194  layer=P-LINEPOS\n- 35-24-081  full=35-24-081-PP-250-E10H2A  d=151  layer=P-LINEPOS\n- 35-24-078  full=35-24-078-PP-900-E10H2A  d=191  layer=P-LINEPOS\n- 35-24-087  full=35-24-087-WAF-500-E10H2A  d=170  layer=P-LINEPOS\n\nNearby devices (valves/instruments/pumps/\u2026):\n- line_markers: PPI_1100A  d=170  block=PPI_1100A\n- valves: PPI_0900A  d=195  block=PPI_0900A\n- control_valves: PPI_1000A  d=163  block=PPI_1000A\n- instruments: PPI_0100X  d=193  block=PPI_0100X\n- pumps: P7A0200  d=191  block=P7A0200\n- motors: PPI_1504A-25_0  d=142  block=PPI_1504A-25_0\n- fittings: P7A1214  d=137  block=P7A1214\n\nNearby peer primary equipment (do NOT nest under parent):\n- 35-24L003 (pumps, d=191)\n- 35-24P505 (pumps, d=180)\n\nNearby drawing text tokens:\n- A1  d=185  layer=P-TEXT\n- GEARBOX 1  d=145  layer=P-OTHER\n- 2621 ADTPD  d=193  layer=P-TEXT\n- 35-24  d=164  layer=P-INSTRPOS_TEXTS\n- HP-63G2  d=200  layer=P-EQUIPMENT_POS\n- 658  d=160  layer=P-INSTRPOS_TEXTS\n- 651  d=196  layer=P-INSTRPOS_TEXTS\n- 9283  d=137  layer=P-INSTRPOS_TEXTS\n- 567  d=51  layer=P-INSTRPOS_TEXTS\n- 9284  d=82  layer=P-INSTRPOS_TEXTS\n- 561  d=195  layer=P-INSTRPOS_TEXTS\n- 9286  d=27  layer=P-INSTRPOS_TEXTS\n- 9288  d=35  layer=P-INSTRPOS_TEXTS\n- 570  d=142  layer=P-INSTRPOS_TEXTS\n- 568  d=22  layer=P-INSTRPOS_TEXTS\n- 573  d=177  layer=P-INSTRPOS_TEXTS\n- 569  d=65  layer=P-INSTRPOS_TEXTS\n- 9289  d=44  layer=P-INSTRPOS_TEXTS\n- 9287  d=21  layer=P-INSTRPOS_TEXTS\n- 9285  d=73  layer=P-INSTRPOS_TEXTS\n- SIZE PRESS PULPER ROTOR 1  d=110  layer=P-TEXT\n- 572  d=160  layer=P-INSTRPOS_TEXTS\n- 35-24P505  d=174  layer=P-PUMP_POS\n- 860  d=170  layer=P-PUMP_POS\n- 17  d=164  layer=P-PUMP_POS\n- 200  d=166  layer=P-PUMP_POS\n- 1000  d=160  layer=P-PUMP_POS\n- 35-24-003.4  d=116  layer=P-MOTOR_POS\n- 1,5  d=113  layer=P-MOTOR_POS\n- 1500  d=104  layer=P-MOTOR_POS\n- 35-24-003.3  d=126  layer=P-MOTOR_POS\n- 35-24-003.2  d=153  layer=P-MOTOR_POS\n- 630  d=148  layer=P-MOTOR_POS\n- 35-24-003.1  d=138  layer=P-MOTOR_POS\n- 35-24-1127  d=178  layer=P-VALVEPOS\n- 001-15  d=174  layer=P-VALVEPOS\n- 35-24-112  d=110  layer=P-VALVEPOS\n- 35-24-110  d=190  layer=P-VALVEPOS\n- 001-80  d=185  layer=P-VALVEPOS\n- 35-24-109  d=54  layer=P-VALVEPOS",
       "ai": {
-        "raw_text": "I'll analyze the P&ID image carefully for FUNCTION 35-24-079.\n\n**Image analysis:**\n- The red box clearly shows PARENT 35-24-079, labeled `35-24-079-WFL-15-E10H2A` \u2014 this is a **water flow line (WFL, DN15)**\n- The crop shows three parallel flow measurement stations within the box\n- The middle station is labeled `35-24-079-WFL-15-E10H2A` \u2014 this is the line itself\n- On the 35-24-079 circuit I can see: PI 9288, FI 9289, FS 569, and valve 35-24-104 (003-15)\n- The left station shows 35-24-076 with PI 9284, FI 9285, FS 567, valve 35-24-109\n- The right-middle station shows 35-24-079 with PI 9288, FI 9289, FS 569, valve 35-24-104\n\n**Instruments on 35-24-079 circuit:**\n- 35-24PI-9288 (locally mounted PI)\n- 35-24FI-9289 (locally mounted FI)\n- 35-24FS-569 (flow switch, square symbol = DCS)\n- 35-24-104 valve (hand valve, outline bowtie, no actuator \u2192 HV)\n\n**Peers:** 35-24-076 and 35-24-080 are sibling WFL lines; 35-24L003, 35-24P505 are peer equipment.\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24-079\",\n  \"description\": \"35-24-079 WFL 15 FLOW LINE\",\n  \"rows\": [\n    {\"equipment\": \"35-24-104\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-104 ISOL VLV HV\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24PI-9288\", \"mask\": \"\", \"description\": \"35-24PI-9288 PRESS IND\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24FI-9289\", \"mask\": \"\", \"description\": \"35-24FI-9289 FLOW IND\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24FS-569\", \"mask\": \"\", \"description\": \"35-24FS-569 FLOW SWITCH\"}\n  ],\n  \"peers\": [\n    {\"tag\": \"35-24-076\", \"evidence\": \"sibling WFL-15 line with own instruments PI-9284/FI-9285/FS-567 and valve 35-24-109\"},\n    {\"tag\": \"35-24-080\", \"evidence\": \"sibling WFL-15 line visible in crop, own circuit\"},\n    {\"tag\": \"35-24-109\", \"evidence\": \"valve 003-15 on 35-24-076 circuit, not 35-24-079\"},\n    {\"tag\": \"35-24-106\", \"evidence\": \"valve 003-15 on adjacent WFL line circuit, not 35-24-079\"},\n    {\"tag\": \"35-24L003\", \"evidence\": \"peer primary equipment, pump/vessel class\"},\n    {\"tag\": \"35-24P505\", \"evidence\": \"peer pump, different numeric base\"},\n    {\"tag\": \"35-24TV-9283\", \"evidence\": \"temperature valve on separate circuit outside red box\"},\n    {\"tag\": \"35-24FV-570\", \"evidence\": \"flow control valve on production line, separate circuit\"},\n    {\"tag\": \"35-24-112\", \"evidence\": \"valve on separate line 001-15 outside 35-24-079 circuit\"}\n  ],\n  \"notes\": [\n    \"35-24-079 is a WFL-15 (water flow, DN15) piping line; three parallel stations visible in crop\",\n    \"Middle station confirmed as 35-24-079 by full label 35-24-079-WFL-15-E10H2A\",\n    \"35-24-104 valve symbol shows outline/transparent bowtie with no actuator circle \u2014 classified HV\",\n    \"Instruments PI-9288, FI-9289, FS-569 are locally mounted on the 35-24-079 spool\"\n  ],\n  \"confidence\": \"high\"\n}\n```",
+        "raw_text": "I'll analyze the P&ID image carefully for FUNCTION 35-24-079.\n\n**Image analysis:**\n- The red box clearly shows PARENT 35-24-079, labeled `35-24-079-WFL-15-E10H2A` \u2014 this is a **water flow line (WFL), DN15**\n- The crop shows three parallel flow measurement circuits within the box, each with PI + FI + FS instruments\n- The middle circuit is labeled `35-24-079-WFL-15-E10H2A` with instruments PI-9286, FI-9287, FS-568\n- Below the middle circuit is valve `35-24-106` (003-15)\n- Left circuit: `35-24-076-WFL-15-E10H2A` with PI-9284, FI-9285, FS-567, valve `35-24-109` (003-15)\n- Right circuit: `35-24-080-WFL-15-E10H2A` with PI-9288, FI-9289, FS-569, valve `35-24-104` (003-15)\n\n**Scope for 35-24-079:** Only the middle circuit belongs to this FUNCTION. The left (076) and right (080) circuits are peer lines.\n\n**Valve 35-24-106:** Symbol shows outline/transparent bowtie triangles with no actuator circle \u2192 `HV`\n\n**Instruments on 35-24-079 circuit:** PI-9286 (locally mounted), FI-9287 (locally mounted), FS-568 (locally mounted square = flow switch/indicator)\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24-079\",\n  \"description\": \"35-24-079 WFL LINE DN15\",\n  \"rows\": [\n    {\"equipment\": \"35-24-106\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-106 ISOL VLV HV\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24PI-9286\", \"mask\": \"\", \"description\": \"35-24PI-9286 PRESSURE IND\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24FI-9287\", \"mask\": \"\", \"description\": \"35-24FI-9287 FLOW IND\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24FS-568\", \"mask\": \"\", \"description\": \"35-24FS-568 FLOW SWITCH\"}\n  ],\n  \"peers\": [\n    {\"tag\": \"35-24-076\", \"evidence\": \"separate WFL-15 line left circuit, own label 35-24-076-WFL-15-E10H2A\"},\n    {\"tag\": \"35-24-080\", \"evidence\": \"separate WFL-15 line right circuit, own label 35-24-080-WFL-15-E10H2A\"},\n    {\"tag\": \"35-24-109\", \"evidence\": \"isolation valve on 35-24-076 circuit, not 079\"},\n    {\"tag\": \"35-24-104\", \"evidence\": \"isolation valve on 35-24-080 circuit, not 079\"},\n    {\"tag\": \"35-24L003\", \"evidence\": \"peer pump/vessel, different numeric base\"},\n    {\"tag\": \"35-24P505\", \"evidence\": \"peer pump, different numeric base\"},\n    {\"tag\": \"35-24FV-570\", \"evidence\": \"control valve on separate production line, outside 079 circuit\"},\n    {\"tag\": \"35-24TV-9283\", \"evidence\": \"temperature valve outside 079 boundary\"},\n    {\"tag\": \"35-24-112\", \"evidence\": \"valve on 001-15 line, outside 079 circuit\"}\n  ],\n  \"notes\": [\n    \"35-24-079 is a WFL (water flow) line DN15; the red crop boundary encloses three parallel circuits (076, 079, 080) but only the middle one labelled 35-24-079-WFL-15-E10H2A belongs to this FUNCTION\",\n    \"Valve 35-24-106 (003-15) sits directly below the 079 line label with outline bowtie = HV\",\n    \"PI-9286, FI-9287, FS-568 are the three instruments on the 079 circuit, nested as SUB-EQUIPMENT under the line\"\n  ],\n  \"confidence\": \"high\"\n}\n```",
         "parsed": {
           "sub_process": "BR1",
           "function": "35-24-079",
-          "description": "35-24-079 WFL 15 FLOW LINE",
+          "description": "35-24-079 WFL LINE DN15",
           "rows": [
             {
-              "equipment": "35-24-104",
+              "equipment": "35-24-106",
               "subequipment": "",
               "mask": "",
-              "description": "35-24-104 ISOL VLV HV"
+              "description": "35-24-106 ISOL VLV HV"
             },
             {
               "equipment": "",
-              "subequipment": "35-24PI-9288",
+              "subequipment": "35-24PI-9286",
               "mask": "",
-              "description": "35-24PI-9288 PRESS IND"
+              "description": "35-24PI-9286 PRESSURE IND"
             },
             {
               "equipment": "",
-              "subequipment": "35-24FI-9289",
+              "subequipment": "35-24FI-9287",
               "mask": "",
-              "description": "35-24FI-9289 FLOW IND"
+              "description": "35-24FI-9287 FLOW IND"
             },
             {
               "equipment": "",
-              "subequipment": "35-24FS-569",
+              "subequipment": "35-24FS-568",
               "mask": "",
-              "description": "35-24FS-569 FLOW SWITCH"
+              "description": "35-24FS-568 FLOW SWITCH"
             }
           ],
           "peers": [
             {
               "tag": "35-24-076",
-              "evidence": "sibling WFL-15 line with own instruments PI-9284/FI-9285/FS-567 and valve 35-24-109"
+              "evidence": "separate WFL-15 line left circuit, own label 35-24-076-WFL-15-E10H2A"
             },
             {
               "tag": "35-24-080",
-              "evidence": "sibling WFL-15 line visible in crop, own circuit"
+              "evidence": "separate WFL-15 line right circuit, own label 35-24-080-WFL-15-E10H2A"
             },
             {
               "tag": "35-24-109",
-              "evidence": "valve 003-15 on 35-24-076 circuit, not 35-24-079"
+              "evidence": "isolation valve on 35-24-076 circuit, not 079"
             },
             {
-              "tag": "35-24-106",
-              "evidence": "valve 003-15 on adjacent WFL line circuit, not 35-24-079"
+              "tag": "35-24-104",
+              "evidence": "isolation valve on 35-24-080 circuit, not 079"
             },
             {
               "tag": "35-24L003",
-              "evidence": "peer primary equipment, pump/vessel class"
+              "evidence": "peer pump/vessel, different numeric base"
             },
             {
               "tag": "35-24P505",
               "evidence": "peer pump, different numeric base"
             },
             {
-              "tag": "35-24TV-9283",
-              "evidence": "temperature valve on separate circuit outside red box"
+              "tag": "35-24FV-570",
+              "evidence": "control valve on separate production line, outside 079 circuit"
             },
             {
-              "tag": "35-24FV-570",
-              "evidence": "flow control valve on production line, separate circuit"
+              "tag": "35-24TV-9283",
+              "evidence": "temperature valve outside 079 boundary"
             },
             {
               "tag": "35-24-112",
-              "evidence": "valve on separate line 001-15 outside 35-24-079 circuit"
+              "evidence": "valve on 001-15 line, outside 079 circuit"
             }
           ],
           "notes": [
-            "35-24-079 is a WFL-15 (water flow, DN15) piping line; three parallel stations visible in crop",
-            "Middle station confirmed as 35-24-079 by full label 35-24-079-WFL-15-E10H2A",
-            "35-24-104 valve symbol shows outline/transparent bowtie with no actuator circle \u2014 classified HV",
-            "Instruments PI-9288, FI-9289, FS-569 are locally mounted on the 35-24-079 spool"
+            "35-24-079 is a WFL (water flow) line DN15; the red crop boundary encloses three parallel circuits (076, 079, 080) but only the middle one labelled 35-24-079-WFL-15-E10H2A belongs to this FUNCTION",
+            "Valve 35-24-106 (003-15) sits directly below the 079 line label with outline bowtie = HV",
+            "PI-9286, FI-9287, FS-568 are the three instruments on the 079 circuit, nested as SUB-EQUIPMENT under the line"
           ],
           "confidence": "high"
         },
@@ -201,28 +200,28 @@
       },
       "refined_rows": [
         {
-          "equipment": "35-24-104",
+          "equipment": "35-24-106",
           "subequipment": "",
           "mask": "",
-          "description": "35-24-104 ISOL VLV HV"
+          "description": "35-24-106 ISOL VLV HV"
         },
         {
           "equipment": "",
-          "subequipment": "35-24PI-9288",
+          "subequipment": "35-24PI-9286",
           "mask": "",
-          "description": "35-24PI-9288 PRESS IND"
+          "description": "35-24PI-9286 PR IND"
         },
         {
           "equipment": "",
-          "subequipment": "35-24FI-9289",
+          "subequipment": "35-24FI-9287",
           "mask": "",
-          "description": "35-24FI-9289 FL IND"
+          "description": "35-24FI-9287 FL IND"
         },
         {
           "equipment": "",
-          "subequipment": "35-24FS-569",
+          "subequipment": "35-24FS-568",
           "mask": "",
-          "description": "35-24FS-569 FS"
+          "description": "35-24FS-568 FS"
         },
         {
           "equipment": "35-24-079",

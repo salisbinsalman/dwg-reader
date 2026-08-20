@@ -74,17 +74,29 @@
       ],
       "dossier": "Parent tag: 35-24-063\nParent category/block: lines / \nParent XY: (2277.35985985986, 156.2499999999999)\nNearby descriptions: 35-24-063-WAF-250-E10H2A\n\nSame-tag CAD family:\n- (none)\n\nNearby line numbers (short ids preferred in output):\n- 35-24-219  full=35-24-219-WFL-15-E10H2A  d=124  layer=P-LINEPOS\n- 35-24-207  full=35-24-207-PP-100-E10H2A  d=175  layer=P-LINEPOS\n- 35-24-062  full=35-24-062-PP-250-E10H2A  d=115  layer=P-LINEPOS\n- 35-24-065  full=35-24-065-PP-300-E10H2A  d=126  layer=P-LINEPOS\n- 35-24-035  full=35-24-035-WAF-350-E10H2A  d=179  layer=P-LINEPOS\n- 35-24-061  full=35-24-061-WFL-15-E10H2A  d=91  layer=P-LINEPOS\n- 35-24-058  full=35-24-058-WAB-15-E10H2A  d=179  layer=P-LINEPOS\n- 35-24-063  full=35-24-063-WAF-250-E10H2A  d=0  layer=P-LINEPOS\n- 35-24-067  full=35-24-067-PP-150-E10H2A  d=103  layer=P-LINEPOS\n- 35-24-060  full=35-24-060-PP-800-E10H2A  d=194  layer=P-LINEPOS\n- 35-24-068  full=35-24-068-WFL-15-E10H2A  d=156  layer=P-LINEPOS\n- 35-24-066  full=35-24-066-PP-900-E10H2A  d=110  layer=P-LINEPOS\n\nNearby devices (valves/instruments/pumps/\u2026):\n- line_markers: PPI_1100A  d=109  block=PPI_1100A\n- valves: PPI_0900A  d=97  block=PPI_0900A\n- control_valves: PPI_1000A  d=187  block=PPI_1000A\n- instruments: PPI_0100X  d=170  block=PPI_0100X\n- pumps: P7A0200  d=100  block=P7A0200\n\nNearby peer primary equipment (do NOT nest under parent):\n- 35-24T603 (tanks, d=187)\n- 35-24L406 (agitators, d=161)\n- 35-24P510 (pumps, d=100)\n- 35-24P511 (pumps, d=120)\n\nNearby drawing text tokens:\n- 35-24  d=199  layer=P-INSTRPOS_TEXTS\n- 35-24L406  d=164  layer=P-AGITATOR_POS\n- 557  d=42  layer=P-INSTRPOS_TEXTS\n- 556  d=74  layer=P-INSTRPOS_TEXTS\n- 9278  d=70  layer=P-INSTRPOS_TEXTS\n- 9280  d=163  layer=P-INSTRPOS_TEXTS\n- 558  d=194  layer=P-INSTRPOS_TEXTS\n- 9279  d=69  layer=P-INSTRPOS_TEXTS\n- 9281  d=172  layer=P-INSTRPOS_TEXTS\n- 668  d=140  layer=P-INSTRPOS_TEXTS\n- 652  d=187  layer=P-INSTRPOS_TEXTS\n- 35-24T603  d=189  layer=P-TANK_POS\n- 40 m\u00b3  d=174  layer=P-TANK_POS\n- 3 %  d=171  layer=P-TANK_POS\n- 695  d=120  layer=P-INSTRPOS_TEXTS\n- 9338  d=95  layer=P-INSTRPOS_TEXTS\n- 9339  d=102  layer=P-INSTRPOS_TEXTS\n- 35-24P511  d=158  layer=P-PUMP_POS\n- 60  d=153  layer=P-PUMP_POS\n- 45  d=159  layer=P-PUMP_POS\n- 1500  d=154  layer=P-PUMP_POS\n- 35-24P510  d=71  layer=P-PUMP_POS\n- 1100  d=65  layer=P-PUMP_POS\n- 615  d=61  layer=P-PUMP_POS\n- 1000  d=64  layer=P-PUMP_POS\n- 35-24-132  d=179  layer=P-VALVEPOS\n- 003-20  d=174  layer=P-VALVEPOS\n- 35-24-133  d=172  layer=P-VALVEPOS\n- 003-15  d=167  layer=P-VALVEPOS\n- 35-24-205  d=115  layer=P-VALVEPOS\n- 003-50  d=109  layer=P-VALVEPOS\n- 35-24-131  d=93  layer=P-VALVEPOS\n- 001-80  d=87  layer=P-VALVEPOS\n- 35-24-1118  d=78  layer=P-VALVEPOS\n- 35-24-130  d=123  layer=P-VALVEPOS\n- 35-24-129  d=105  layer=P-VALVEPOS\n- 35-24-1115  d=97  layer=P-VALVEPOS\n- 101-250  d=102  layer=P-VALVEPOS\n- 35-24-126  d=93  layer=P-VALVEPOS\n- 35-24-1099  d=128  layer=P-VALVEPOS",
       "ai": {
-        "raw_text": "I'll analyze the P&ID image carefully, focusing on what's within and directly connected to the 35-24-063 circuit (WAF-250 line).\n\n**Observations from the image:**\n\n1. **35-24-063** is a WAF-250 line (White Water/Approach Flow, DN250) - a piping header FUNCTION\n2. The line label `35-24-063-WAF-250-E10H2A` is clearly shown in the crop\n3. **Connected branches visible on 35-24-063's circuit:**\n   - **35-24-061** (WFL-15) - connects at bottom left with instruments PI-9278, FI-9279, FS-556\n   - **35-24-219** (WFL-15) - connects at bottom right with instruments PI-9338, FI-9339, FS-695\n   - **35-24-1118** (003-15) - valve on 35-24-061 branch, NC symbol (solid filled triangles)\n   - **35-24-1115** (101-250) - valve on 35-24-219 branch, NC symbol\n   - **35-24NV1-557** (200) - NV instrument on the line, with NC bubble shown\n   - **35-24NV2-557** (65) - NV instrument on the line\n\n4. **Valve symbols:**\n   - 35-24-1118: solid filled bowtie = NC\n   - 35-24-1115: solid filled bowtie = NC\n   - 35-24NV1-557: has NC bubble explicitly shown in drawing\n   - 35-24NV2-557: outline bowtie = HV\n\n5. **Peers:** 35-24P510, 35-24P511, 35-24T603, 35-24L406 are nearby major equipment\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24-063\",\n  \"description\": \"35-24-063 WAF-250 BROKE LINE\",\n  \"rows\": [\n    {\"equipment\": \"35-24-061\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-061 WFL-15 BRANCH LINE\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-1118\", \"mask\": \"\", \"description\": \"35-24-1118 VLV NC\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24PI-9278\", \"mask\": \"\", \"description\": \"35-24PI-9278 PRESSURE INDICATOR\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24FI-9279\", \"mask\": \"\", \"description\": \"35-24FI-9279 FLOW INDICATOR\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24FS-556\", \"mask\": \"\", \"description\": \"35-24FS-556 FLOW SWITCH\"},\n    {\"equipment\": \"35-24-219\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-219 WFL-15 BRANCH LINE\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-1115\", \"mask\": \"\", \"description\": \"35-24-1115 VLV NC\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24PI-9338\", \"mask\": \"\", \"description\": \"35-24PI-9338 PRESSURE INDICATOR\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24FI-9339\", \"mask\": \"\", \"description\": \"35-24FI-9339 FLOW INDICATOR\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24FS-695\", \"mask\": \"\", \"description\": \"35-24FS-695 FLOW SWITCH\"},\n    {\"equipment\": \"35-24NV1-557\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24NV1-557 CTRL VLV NC AV\"},\n    {\"equipment\": \"35-24NV2-557\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24NV2-557 VLV HV\"}\n  ],\n  \"peers\": [\n    {\"tag\": \"35-24P510\", \"evidence\": \"peer pump adjacent to 35-24-063, own tag/data block visible\"},\n    {\"tag\": \"35-24P511\", \"evidence\": \"peer pump adjacent, own tag/data block visible\"},\n    {\"tag\": \"35-24T603\", \"evidence\": \"peer tank, own tag visible on drawing\"},\n    {\"tag\": \"35-24L406\", \"evidence\": \"peer agitator, own tag visible on drawing\"},\n    {\"tag\": \"35-24LV1-559\", \"evidence\": \"control valve on 35-24-062/065 circuit, not on 35-24-063\"},\n    {\"tag\": \"35-24-062\", \"evidence\": \"PP-250 line, separate line number, peer piping header\"},\n    {\"tag\": \"35-24-065\", \"evidence\": \"PP-300 line, separate line number, peer piping header\"},\n    {\"tag\": \"35-24-131\", \"evidence\": \"valve on 35-24-062 circuit, not on 35-24-063\"},\n    {\"tag\": \"35-24-205\", \"evidence\": \"valve on 35-24-062 circuit, not on 35-24-063\"},\n    {\"tag\": \"35-24-129\", \"evidence\": \"valve on 35-24-065/066 circuit, not on 35-24-063\"},\n    {\"tag\": \"35-24XV-668\", \"evidence\": \"XS/XV on separate circuit top-left, not on 35-24-063\"}\n  ],\n  \"notes\": [\n    \"35-24-063 is WAF-250 (White Water Approach Flow DN250) piping header\",\n    \"Two WFL-15 branch takeoffs visible: 35-24-061 (left) and 35-24-219 (right), each with PI/FI/FS instruments\",\n    \"35-24NV1-557 has explicit NC bubble shown in drawing; 35-24NV2-557 appears as outline HV\",\n    \"35-24-1118 and 35-24-1115 are isolation valves on the WFL branches with solid-filled NC symbols\",\n    \"PI/FI/FS instrument loop numbers (9278/9279/556 and 9338/9339/695) nested under their respective branch lines\"\n  ],\n  \"confidence\": \"high\"\n}\n```",
+        "raw_text": "I'll analyze the P&ID image carefully, focusing on what's within and directly connected to the 35-24-063 circuit (WAF-250 line).\n\n**Observations from the image:**\n\n1. **35-24-063** is a WAF-250 line (White Water/Approach Flow, DN250). The label `35-24-063-WAF-250-E10H2A` is clearly shown in the crop.\n\n2. **Connected lines visible within the 35-24-063 circuit boundary (red box):**\n   - **35-24-061** (WFL-15) \u2014 bottom left, with valve 35-24-1118 on it, plus instruments PI-9278, FI-9279, FS-556\n   - **35-24-219** (WFL-15) \u2014 bottom right, with valve 35-24-1115 on it, plus instruments PI-9338, FI-9339, FS-695\n\n3. **Valves on these lines:**\n   - **35-24-1118** on 35-24-061: symbol shows filled/solid triangles \u2192 NC\n   - **35-24-1115** on 35-24-219: symbol shows outline triangles \u2192 HV\n\n4. **Instruments on 35-24-061:** PI-9278 (locally mounted), FI-9279 (locally mounted), FS-556 (square = DCS control)\n   - **Instruments on 35-24-219:** PI-9338, FI-9339, FS-695\n\n5. **35-24NV1-557 and 35-24NV2-557** \u2014 these are control valves (NC box visible, circle actuator) on the 35-24-063 main line itself. NV1-557 has \"NC\" label with circle = AV NC. NV2-557 appears outline = AV.\n\n6. **Peers:** 35-24P510, 35-24P511, 35-24T603, 35-24L406 are clearly peer equipment.\n\n7. **35-24-131, 35-24-205, 35-24-129** etc. are on neighbouring lines (35-24-062, 35-24-065) outside the 063 circuit.\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24-063\",\n  \"description\": \"35-24-063 WAF 250 BROKE LINE\",\n  \"rows\": [\n    {\"equipment\": \"35-24NV1-557\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24NV1-557 CTRL VLV AV NC\"},\n    {\"equipment\": \"35-24NV2-557\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24NV2-557 CTRL VLV AV\"},\n    {\"equipment\": \"35-24-061\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-061 WFL 15 LINE\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-1118\", \"mask\": \"\", \"description\": \"35-24-1118 VLV NC\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24PI-9278\", \"mask\": \"\", \"description\": \"35-24PI-9278 PRESS IND\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24FI-9279\", \"mask\": \"\", \"description\": \"35-24FI-9279 FLOW IND\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24FS-556\", \"mask\": \"\", \"description\": \"35-24FS-556 FLOW SWITCH\"},\n    {\"equipment\": \"35-24-219\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-219 WFL 15 LINE\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24-1115\", \"mask\": \"\", \"description\": \"35-24-1115 VLV HV\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24PI-9338\", \"mask\": \"\", \"description\": \"35-24PI-9338 PRESS IND\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24FI-9339\", \"mask\": \"\", \"description\": \"35-24FI-9339 FLOW IND\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24FS-695\", \"mask\": \"\", \"description\": \"35-24FS-695 FLOW SWITCH\"}\n  ],\n  \"peers\": [\n    {\"tag\": \"35-24P510\", \"evidence\": \"peer pump adjacent to 063 circuit, own tag block\"},\n    {\"tag\": \"35-24P511\", \"evidence\": \"peer pump adjacent to 063 circuit, own tag block\"},\n    {\"tag\": \"35-24T603\", \"evidence\": \"peer tank, own tag block\"},\n    {\"tag\": \"35-24L406\", \"evidence\": \"peer agitator, own tag block\"},\n    {\"tag\": \"35-24-062\", \"evidence\": \"separate PP-250 line on neighbouring circuit\"},\n    {\"tag\": \"35-24-065\", \"evidence\": \"separate PP-300 line on neighbouring circuit\"},\n    {\"tag\": \"35-24-131\", \"evidence\": \"valve on 35-24-062 circuit, not 063\"},\n    {\"tag\": \"35-24-205\", \"evidence\": \"valve on neighbouring line, not 063 circuit\"},\n    {\"tag\": \"35-24-129\", \"evidence\": \"valve on 35-24-065 circuit\"},\n    {\"tag\": \"35-24LV1-559\", \"evidence\": \"level control valve on separate circuit\"},\n    {\"tag\": \"35-24LV2-559\", \"evidence\": \"level control valve on separate circuit\"},\n    {\"tag\": \"35-24XV-668\", \"evidence\": \"XS valve top-left, belongs to separate circuit\"},\n    {\"tag\": \"35-24HV-652\", \"evidence\": \"HV on separate neighbouring circuit\"}\n  ],\n  \"notes\": [\n    \"35-24-063 is a WAF-250 (white water approach flow) piping header; NV1/NV2-557 are on-line control valves within the red boundary\",\n    \"35-24-061 and 35-24-219 are WFL-15 branch/offtake lines clearly within the 063 circuit boundary with their respective instruments and valves nested\",\n    \"PI/FI instrument tags constructed as 35-24PI-9278 etc. per CMMS convention from drawing text tokens 9278/9279/9338/9339\",\n    \"FS-556 and FS-695 are flow switches (square DCS symbol) on the respective branch lines\"\n  ],\n  \"confidence\": \"high\"\n}\n```",
         "parsed": {
           "sub_process": "BR1",
           "function": "35-24-063",
-          "description": "35-24-063 WAF-250 BROKE LINE",
+          "description": "35-24-063 WAF 250 BROKE LINE",
           "rows": [
+            {
+              "equipment": "35-24NV1-557",
+              "subequipment": "",
+              "mask": "",
+              "description": "35-24NV1-557 CTRL VLV AV NC"
+            },
+            {
+              "equipment": "35-24NV2-557",
+              "subequipment": "",
+              "mask": "",
+              "description": "35-24NV2-557 CTRL VLV AV"
+            },
             {
               "equipment": "35-24-061",
               "subequipment": "",
               "mask": "",
-              "description": "35-24-061 WFL-15 BRANCH LINE"
+              "description": "35-24-061 WFL 15 LINE"
             },
             {
               "equipment": "",
@@ -96,13 +108,13 @@
               "equipment": "",
               "subequipment": "35-24PI-9278",
               "mask": "",
-              "description": "35-24PI-9278 PRESSURE INDICATOR"
+              "description": "35-24PI-9278 PRESS IND"
             },
             {
               "equipment": "",
               "subequipment": "35-24FI-9279",
               "mask": "",
-              "description": "35-24FI-9279 FLOW INDICATOR"
+              "description": "35-24FI-9279 FLOW IND"
             },
             {
               "equipment": "",
@@ -114,97 +126,92 @@
               "equipment": "35-24-219",
               "subequipment": "",
               "mask": "",
-              "description": "35-24-219 WFL-15 BRANCH LINE"
+              "description": "35-24-219 WFL 15 LINE"
             },
             {
               "equipment": "",
               "subequipment": "35-24-1115",
               "mask": "",
-              "description": "35-24-1115 VLV NC"
+              "description": "35-24-1115 VLV HV"
             },
             {
               "equipment": "",
               "subequipment": "35-24PI-9338",
               "mask": "",
-              "description": "35-24PI-9338 PRESSURE INDICATOR"
+              "description": "35-24PI-9338 PRESS IND"
             },
             {
               "equipment": "",
               "subequipment": "35-24FI-9339",
               "mask": "",
-              "description": "35-24FI-9339 FLOW INDICATOR"
+              "description": "35-24FI-9339 FLOW IND"
             },
             {
               "equipment": "",
               "subequipment": "35-24FS-695",
               "mask": "",
               "description": "35-24FS-695 FLOW SWITCH"
-            },
-            {
-              "equipment": "35-24NV1-557",
-              "subequipment": "",
-              "mask": "",
-              "description": "35-24NV1-557 CTRL VLV NC AV"
-            },
-            {
-              "equipment": "35-24NV2-557",
-              "subequipment": "",
-              "mask": "",
-              "description": "35-24NV2-557 VLV HV"
             }
           ],
           "peers": [
             {
               "tag": "35-24P510",
-              "evidence": "peer pump adjacent to 35-24-063, own tag/data block visible"
+              "evidence": "peer pump adjacent to 063 circuit, own tag block"
             },
             {
               "tag": "35-24P511",
-              "evidence": "peer pump adjacent, own tag/data block visible"
+              "evidence": "peer pump adjacent to 063 circuit, own tag block"
             },
             {
               "tag": "35-24T603",
-              "evidence": "peer tank, own tag visible on drawing"
+              "evidence": "peer tank, own tag block"
             },
             {
               "tag": "35-24L406",
-              "evidence": "peer agitator, own tag visible on drawing"
-            },
-            {
-              "tag": "35-24LV1-559",
-              "evidence": "control valve on 35-24-062/065 circuit, not on 35-24-063"
+              "evidence": "peer agitator, own tag block"
             },
             {
               "tag": "35-24-062",
-              "evidence": "PP-250 line, separate line number, peer piping header"
+              "evidence": "separate PP-250 line on neighbouring circuit"
             },
             {
               "tag": "35-24-065",
-              "evidence": "PP-300 line, separate line number, peer piping header"
+              "evidence": "separate PP-300 line on neighbouring circuit"
             },
             {
               "tag": "35-24-131",
-              "evidence": "valve on 35-24-062 circuit, not on 35-24-063"
+              "evidence": "valve on 35-24-062 circuit, not 063"
             },
             {
               "tag": "35-24-205",
-              "evidence": "valve on 35-24-062 circuit, not on 35-24-063"
+              "evidence": "valve on neighbouring line, not 063 circuit"
             },
             {
               "tag": "35-24-129",
-              "evidence": "valve on 35-24-065/066 circuit, not on 35-24-063"
+              "evidence": "valve on 35-24-065 circuit"
+            },
+            {
+              "tag": "35-24LV1-559",
+              "evidence": "level control valve on separate circuit"
+            },
+            {
+              "tag": "35-24LV2-559",
+              "evidence": "level control valve on separate circuit"
             },
             {
               "tag": "35-24XV-668",
-              "evidence": "XS/XV on separate circuit top-left, not on 35-24-063"
+              "evidence": "XS valve top-left, belongs to separate circuit"
+            },
+            {
+              "tag": "35-24HV-652",
+              "evidence": "HV on separate neighbouring circuit"
             }
           ],
           "notes": [
-            "35-24-063 is WAF-250 (White Water Approach Flow DN250) piping header",
-            "Two WFL-15 branch takeoffs visible: 35-24-061 (left) and 35-24-219 (right), each with PI/FI/FS instruments",
-            "35-24NV1-557 has explicit NC bubble shown in drawing; 35-24NV2-557 appears as outline HV",
-            "35-24-1118 and 35-24-1115 are isolation valves on the WFL branches with solid-filled NC symbols",
-            "PI/FI/FS instrument loop numbers (9278/9279/556 and 9338/9339/695) nested under their respective branch lines"
+            "35-24-063 is a WAF-250 (white water approach flow) piping header; NV1/NV2-557 are on-line control valves within the red boundary",
+            "35-24-061 and 35-24-219 are WFL-15 branch/offtake lines clearly within the 063 circuit boundary with their respective instruments and valves nested",
+            "PI/FI instrument tags constructed as 35-24PI-9278 etc. per CMMS convention from drawing text tokens 9278/9279/9338/9339",
+            "FS-556 and FS-695 are flow switches (square DCS symbol) on the respective branch lines"
           ],
           "confidence": "high"
         },
@@ -262,10 +269,22 @@
       },
       "refined_rows": [
         {
+          "equipment": "35-24NV1-557",
+          "subequipment": "",
+          "mask": "",
+          "description": "35-24NV1-557 CTRL VLV AV NC"
+        },
+        {
+          "equipment": "35-24NV2-557",
+          "subequipment": "",
+          "mask": "",
+          "description": "35-24NV2-557 CTRL VLV AV"
+        },
+        {
           "equipment": "35-24-061",
           "subequipment": "",
           "mask": "",
-          "description": "35-24-061 WFL-15 BRANCH LN"
+          "description": "35-24-061 WFL 15 LN"
         },
         {
           "equipment": "",
@@ -277,13 +296,13 @@
           "equipment": "",
           "subequipment": "35-24PI-9278",
           "mask": "",
-          "description": "35-24PI-9278 PI"
+          "description": "35-24PI-9278 PRESS IND"
         },
         {
           "equipment": "",
           "subequipment": "35-24FI-9279",
           "mask": "",
-          "description": "35-24FI-9279 FI"
+          "description": "35-24FI-9279 FL IND"
         },
         {
           "equipment": "",
@@ -295,43 +314,31 @@
           "equipment": "35-24-219",
           "subequipment": "",
           "mask": "",
-          "description": "35-24-219 WFL-15 BRANCH LN"
+          "description": "35-24-219 WFL 15 LN"
         },
         {
           "equipment": "",
           "subequipment": "35-24-1115",
           "mask": "",
-          "description": "35-24-1115 VLV NC"
+          "description": "35-24-1115 VLV HV"
         },
         {
           "equipment": "",
           "subequipment": "35-24PI-9338",
           "mask": "",
-          "description": "35-24PI-9338 PI"
+          "description": "35-24PI-9338 PRESS IND"
         },
         {
           "equipment": "",
           "subequipment": "35-24FI-9339",
           "mask": "",
-          "description": "35-24FI-9339 FI"
+          "description": "35-24FI-9339 FL IND"
         },
         {
           "equipment": "",
           "subequipment": "35-24FS-695",
           "mask": "",
           "description": "35-24FS-695 FS"
-        },
-        {
-          "equipment": "35-24NV1-557",
-          "subequipment": "",
-          "mask": "",
-          "description": "35-24NV1-557 CTRL VLV NC AV"
-        },
-        {
-          "equipment": "35-24NV2-557",
-          "subequipment": "",
-          "mask": "",
-          "description": "35-24NV2-557 VLV HV"
         },
         {
           "equipment": "35-24-063",

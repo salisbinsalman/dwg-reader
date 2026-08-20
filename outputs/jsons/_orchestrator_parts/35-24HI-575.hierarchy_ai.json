@@ -74,17 +74,23 @@
       ],
       "dossier": "Parent tag: 35-24HI-575\nParent category/block: instruments / \nParent XY: (2933.807140473807, 176.0416666666667)\nNearby descriptions: HI 575 (35-24)\n\nSame-tag CAD family:\n- (none)\n\nNearby line numbers (short ids preferred in output):\n- 35-24-209  full=35-24-209-PP-100-E10H2A  d=93  layer=P-LINEPOS\n- 35-24-090  full=35-24-090-WFC-15-E10H2A  d=185  layer=P-LINEPOS\n- 35-24-083  full=35-24-083-WAF-300-E10H2A  d=84  layer=P-LINEPOS\n- 35-24-084  full=35-24-084-WAF-100-E10H2A  d=62  layer=P-LINEPOS\n- 35-24-086  full=35-24-086-WAF-100-E10H2A  d=41  layer=P-LINEPOS\n- 35-24-088  full=35-24-088-WAF-300-E10H2A  d=22  layer=P-LINEPOS\n- 35-24-089  full=35-24-089-WAF-300-E10H2A  d=18  layer=P-LINEPOS\n- 35-24-080  full=35-24-080-WFL-15-E10H2A  d=179  layer=P-LINEPOS\n- 35-24-091  full=35-24-091-WAB-20-E10H2A  d=97  layer=P-LINEPOS\n- 35-24-082  full=35-24-082-PP-800-E10H2A  d=147  layer=P-LINEPOS\n- 35-24-081  full=35-24-081-PP-250-E10H2A  d=154  layer=P-LINEPOS\n- 35-24-087  full=35-24-087-WAF-500-E10H2A  d=91  layer=P-LINEPOS\n\nNearby devices (valves/instruments/pumps/\u2026):\n- line_markers: PPI_1100A  d=92  block=PPI_1100A\n- valves: PPI_0900A  d=101  block=PPI_0900A\n- control_valves: PPI_1000A  d=58  block=PPI_1000A\n- instruments: PPI_0100X  d=163  block=PPI_0100X\n- pumps: GEARBOXOILPUMP  d=180  block=None\n- motors: PPI_1504A-25_0  d=149  block=PPI_1504A-25_0\n- fittings: P7A1214  d=91  block=P7A1214\n\nNearby peer primary equipment (do NOT nest under parent):\n- 35-24L004 (process_equipment, d=171)\n\nNearby drawing text tokens:\n- 1 bar  d=196  layer=P-TEXT\n- GEARBOX 2  d=175  layer=P-OTHER\n- 35-24  d=17  layer=P-INSTRPOS_TEXTS\n- 35-24L004  d=164  layer=P-EQUIPMENT_POS\n- BROKE CONVEYOR 2  d=162  layer=P-EQUIPMENT_POS\n- 651  d=26  layer=P-INSTRPOS_TEXTS\n- 9290  d=182  layer=P-INSTRPOS_TEXTS\n- 9288  d=185  layer=P-INSTRPOS_TEXTS\n- 570  d=96  layer=P-INSTRPOS_TEXTS\n- 573  d=48  layer=P-INSTRPOS_TEXTS\n- 569  d=158  layer=P-INSTRPOS_TEXTS\n- 9289  d=177  layer=P-INSTRPOS_TEXTS\n- PRESS PULPER ROTOR 1  d=180  layer=P-TEXT\n- 670  d=163  layer=P-INSTRPOS_TEXTS\n- 575  d=4  layer=P-INSTRPOS_TEXTS\n- 572  d=71  layer=P-INSTRPOS_TEXTS\n- 35-24-001.4  d=157  layer=P-MOTOR_POS\n- 1,5  d=159  layer=P-MOTOR_POS\n- 1500  d=170  layer=P-MOTOR_POS\n- 35-24-001.3  d=154  layer=P-MOTOR_POS\n- 35-24-105  d=147  layer=P-VALVEPOS\n- 350-250  d=144  layer=P-VALVEPOS\n- 35-24-104  d=167  layer=P-VALVEPOS\n- 003-15  d=168  layer=P-VALVEPOS\n- 35-24-103  d=65  layer=P-VALVEPOS\n- 003-50  d=66  layer=P-VALVEPOS\n- 35-24-1119  d=100  layer=P-VALVEPOS\n- 101-500  d=105  layer=P-VALVEPOS\n- 35-24-099  d=120  layer=P-VALVEPOS\n- 003-20  d=119  layer=P-VALVEPOS\n- 35-24-098  d=126  layer=P-VALVEPOS\n- 35-24-234  d=198  layer=P-VALVEPOS\n- 350-500  d=198  layer=P-VALVEPOS\n- 35-24-209  d=93  layer=P-LINEPOS\n- 35-24-090  d=185  layer=P-LINEPOS\n- 35-24-083  d=84  layer=P-LINEPOS\n- 35-24-084  d=62  layer=P-LINEPOS\n- 35-24-086  d=41  layer=P-LINEPOS\n- 35-24-088  d=22  layer=P-LINEPOS\n- 35-24-089  d=18  layer=P-LINEPOS",
       "ai": {
-        "raw_text": "Looking at the P&ID image, I can see:\n\n- **35-24HI-575** is a High Indicator instrument (square box with \"HI 575\" label, locally mounted instrument symbol)\n- It sits on line **35-24-089** (WAF-300)\n- Above it is **35-24HS-575** (the HS instrument with filled circle = DCS control)\n- To its right is valve **35-24HV-575** (labeled \"250\") on the same line 35-24-089\n- The HI-575 / HS-575 / HV-575 triplet is clearly on line 35-24-089\n\nLooking at **35-24HV-575**: The symbol shows a bowtie with a small circle actuator on top (automatic valve). The triangles appear to be outline/transparent (hand valve style) but there IS a circle actuator \u2014 so this is `AV`. No M visible in the circle.\n\nThe instrument 35-24HI-575 is the FUNCTION (parent). Its associated line is 35-24-089, and the valve 35-24HV-575 sits on that line as a child.\n\nPeers visible in crop: 35-24HI-572, 35-24HV-572, 35-24KS-573, 35-24KV-573, 35-24HI-651, 35-24HV-651 \u2014 these belong to different instrument triplets on different lines.\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24HI-575\",\n  \"description\": \"35-24HI-575 HIGH INDICATOR\",\n  \"rows\": [\n    {\n      \"equipment\": \"35-24-089\",\n      \"subequipment\": \"\",\n      \"mask\": \"\",\n      \"description\": \"35-24-089 WAF-300 LINE\"\n    },\n    {\n      \"equipment\": \"\",\n      \"subequipment\": \"35-24HV-575\",\n      \"mask\": \"\",\n      \"description\": \"35-24HV-575 ISOL VLV AV\"\n    }\n  ],\n  \"peers\": [\n    {\n      \"tag\": \"35-24HI-572\",\n      \"evidence\": \"separate HI instrument on line 35-24-084, different numeric base\"\n    },\n    {\n      \"tag\": \"35-24HV-572\",\n      \"evidence\": \"valve paired with HI-572 on line 35-24-084, not 35-24-089\"\n    },\n    {\n      \"tag\": \"35-24KS-573\",\n      \"evidence\": \"speed switch on line 35-24-086, different instrument triplet\"\n    },\n    {\n      \"tag\": \"35-24KV-573\",\n      \"evidence\": \"valve paired with KS-573 on line 35-24-086\"\n    },\n    {\n      \"tag\": \"35-24HI-651\",\n      \"evidence\": \"separate HI instrument on line 35-24-088, different numeric base\"\n    },\n    {\n      \"tag\": \"35-24HV-651\",\n      \"evidence\": \"valve paired with HI-651 on line 35-24-088, not 35-24-089\"\n    },\n    {\n      \"tag\": \"35-24L004\",\n      \"evidence\": \"peer process equipment BROKE CONVEYOR 2, not child of instrument\"\n    },\n    {\n      \"tag\": \"35-24-103\",\n      \"evidence\": \"valve/line on separate branch 003-50, not on 35-24-089 circuit\"\n    },\n    {\n      \"tag\": \"35-24-1119\",\n      \"evidence\": \"separate line 101-500 downstream, different circuit\"\n    }\n  ],\n  \"notes\": [\n    \"35-24HI-575 is a locally mounted high indicator instrument on line 35-24-089 (WAF-300-E10H2A)\",\n    \"35-24HV-575 (DN250) is the automatic isolation valve on the same line, nested as SUB-EQUIPMENT\",\n    \"HS-575 selector switch visible above HI-575 but no separate tag confirmed in candidate list \u2014 omitted\",\n    \"35-24-088 and 35-24-086 lines carry peer instrument triplets, excluded from this FUNCTION scope\"\n  ],\n  \"confidence\": \"high\"\n}\n```",
+        "raw_text": "Looking at the P&ID image, I can see:\n\n- **35-24HI-575** is a High Indicator instrument (square box with \"HI 575\" label, locally mounted instrument symbol)\n- It sits on line **35-24-089** (WAF-300)\n- Above it is **35-24HS-575** (the HS instrument with filled circle = DCS control)\n- To its right is valve **35-24HV-575** (labeled \"250\") on the same line 35-24-089\n- The HI-575 instrument is part of a group of similar instrument triplets (HI+HS+HV) on parallel WAF lines\n\nLooking at **35-24HV-575**: The symbol shows a bowtie with a circle actuator on top (automatic valve). The bowtie triangles appear to be outline/transparent (hand valve style) but with a circle actuator \u2014 this makes it `AV`. No M in the circle, so `AV` not `AV-M`.\n\nSince **35-24HI-575** is a standalone indicator instrument with no labelled accessories of its own (the HS and HV are peer instruments/valves on the same line, not children of the HI), the FUNCTION row gets a description and the rows reflect what's directly associated.\n\nThe HI instrument sits on line 35-24-089. The HS-575 and HV-575 are co-located on the same line segment. Per the pattern, instruments/valves nest under their line.\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24HI-575\",\n  \"description\": \"35-24HI-575 HIGH IND INSTR\",\n  \"rows\": [\n    {\"equipment\": \"35-24-089\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-089 WAF-300 LINE\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24HS-575\", \"mask\": \"\", \"description\": \"35-24HS-575 HIGH SW\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24HV-575\", \"mask\": \"\", \"description\": \"35-24HV-575 ISOL VLV AV\"}\n  ],\n  \"peers\": [\n    {\"tag\": \"35-24HI-572\", \"evidence\": \"similar HI instrument on adjacent line 35-24-084, same circuit but separate function\"},\n    {\"tag\": \"35-24HS-572\", \"evidence\": \"HS on line 35-24-084, peer instrument group\"},\n    {\"tag\": \"35-24HV-572\", \"evidence\": \"HV on line 35-24-084, peer valve\"},\n    {\"tag\": \"35-24KS-573\", \"evidence\": \"KS instrument on line 35-24-086, separate function\"},\n    {\"tag\": \"35-24KV-573\", \"evidence\": \"KV valve on line 35-24-086, separate function\"},\n    {\"tag\": \"35-24HI-651\", \"evidence\": \"HI instrument on line 35-24-088, separate function\"},\n    {\"tag\": \"35-24HS-651\", \"evidence\": \"HS on line 35-24-088, peer instrument group\"},\n    {\"tag\": \"35-24HV-651\", \"evidence\": \"HV on line 35-24-088, peer valve\"},\n    {\"tag\": \"35-24L004\", \"evidence\": \"process equipment BROKE CONVEYOR 2, peer major equipment\"},\n    {\"tag\": \"35-24-103\", \"evidence\": \"valve/line 003-50 visible in crop but belongs to different circuit\"},\n    {\"tag\": \"35-24-1119\", \"evidence\": \"line 101-500 visible at bottom of crop, different circuit\"}\n  ],\n  \"notes\": [\n    \"35-24HI-575 is a locally mounted high indicator on WAF-300 line 35-24-089\",\n    \"35-24HS-575 (DCS high switch) and 35-24HV-575 (automatic isolation valve DN250) are co-located on same line segment\",\n    \"35-24HV-575 symbol shows circle actuator (AV) with outline bowtie triangles\"\n  ],\n  \"confidence\": \"high\"\n}\n```",
         "parsed": {
           "sub_process": "BR1",
           "function": "35-24HI-575",
-          "description": "35-24HI-575 HIGH INDICATOR",
+          "description": "35-24HI-575 HIGH IND INSTR",
           "rows": [
             {
               "equipment": "35-24-089",
               "subequipment": "",
               "mask": "",
               "description": "35-24-089 WAF-300 LINE"
+            },
+            {
+              "equipment": "",
+              "subequipment": "35-24HS-575",
+              "mask": "",
+              "description": "35-24HS-575 HIGH SW"
             },
             {
               "equipment": "",
@@ -96,46 +102,53 @@
           "peers": [
             {
               "tag": "35-24HI-572",
-              "evidence": "separate HI instrument on line 35-24-084, different numeric base"
+              "evidence": "similar HI instrument on adjacent line 35-24-084, same circuit but separate function"
+            },
+            {
+              "tag": "35-24HS-572",
+              "evidence": "HS on line 35-24-084, peer instrument group"
             },
             {
               "tag": "35-24HV-572",
-              "evidence": "valve paired with HI-572 on line 35-24-084, not 35-24-089"
+              "evidence": "HV on line 35-24-084, peer valve"
             },
             {
               "tag": "35-24KS-573",
-              "evidence": "speed switch on line 35-24-086, different instrument triplet"
+              "evidence": "KS instrument on line 35-24-086, separate function"
             },
             {
               "tag": "35-24KV-573",
-              "evidence": "valve paired with KS-573 on line 35-24-086"
+              "evidence": "KV valve on line 35-24-086, separate function"
             },
             {
               "tag": "35-24HI-651",
-              "evidence": "separate HI instrument on line 35-24-088, different numeric base"
+              "evidence": "HI instrument on line 35-24-088, separate function"
+            },
+            {
+              "tag": "35-24HS-651",
+              "evidence": "HS on line 35-24-088, peer instrument group"
             },
             {
               "tag": "35-24HV-651",
-              "evidence": "valve paired with HI-651 on line 35-24-088, not 35-24-089"
+              "evidence": "HV on line 35-24-088, peer valve"
             },
             {
               "tag": "35-24L004",
-              "evidence": "peer process equipment BROKE CONVEYOR 2, not child of instrument"
+              "evidence": "process equipment BROKE CONVEYOR 2, peer major equipment"
             },
             {
               "tag": "35-24-103",
-              "evidence": "valve/line on separate branch 003-50, not on 35-24-089 circuit"
+              "evidence": "valve/line 003-50 visible in crop but belongs to different circuit"
             },
             {
               "tag": "35-24-1119",
-              "evidence": "separate line 101-500 downstream, different circuit"
+              "evidence": "line 101-500 visible at bottom of crop, different circuit"
             }
           ],
           "notes": [
-            "35-24HI-575 is a locally mounted high indicator instrument on line 35-24-089 (WAF-300-E10H2A)",
-            "35-24HV-575 (DN250) is the automatic isolation valve on the same line, nested as SUB-EQUIPMENT",
-            "HS-575 selector switch visible above HI-575 but no separate tag confirmed in candidate list \u2014 omitted",
-            "35-24-088 and 35-24-086 lines carry peer instrument triplets, excluded from this FUNCTION scope"
+            "35-24HI-575 is a locally mounted high indicator on WAF-300 line 35-24-089",
+            "35-24HS-575 (DCS high switch) and 35-24HV-575 (automatic isolation valve DN250) are co-located on same line segment",
+            "35-24HV-575 symbol shows circle actuator (AV) with outline bowtie triangles"
           ],
           "confidence": "high"
         },

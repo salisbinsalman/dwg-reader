@@ -45,7 +45,7 @@
       ],
       "dossier": "Parent tag: 35-24HS-552\nParent category/block: instruments / \nParent XY: (1845.770232732733, 433.8073000000001)\nNearby descriptions: HS 552 (35-24)\n\nSame-tag CAD family:\n- (none)\n\nNearby line numbers (short ids preferred in output):\n- 35-24-051  full=35-24-051-PP-100-E10H2A  d=180  layer=P-LINEPOS\n- 35-24-049  full=35-24-049-PP-800-E10H2A  d=188  layer=P-LINEPOS\n\nNearby devices (valves/instruments/pumps/\u2026):\n- line_markers: PPI_1100A  d=189  block=PPI_1100A\n- valves: PPI_0900A  d=197  block=PPI_0900A\n- control_valves: PPI_1000A  d=167  block=PPI_1000A\n- instruments: PPI_1205A  d=52  block=PPI_1205A\n- fittings: P7A1220  d=174  block=P7A1220\n\nNearby peer primary equipment (do NOT nest under parent):\n- 35-24L006 (process_equipment, d=149)\n\nNearby drawing text tokens:\n- S3  d=169  layer=P-TEXT\n- S2  d=158  layer=P-TEXT\n- S4  d=169  layer=P-TEXT\n- 2 bar  d=161  layer=P-TEXT\n- S1/ST1  d=138  layer=P-TEXT\n- 35-24  d=23  layer=P-INSTRPOS_TEXTS\n- SHOWER S1  d=39  layer=P-TEXT\n- 35-24L006  d=152  layer=P-EQUIPMENT_POS\n- BROKE CONVEYOR 3  d=160  layer=P-EQUIPMENT_POS\n- 541  d=118  layer=P-INSTRPOS_TEXTS\n- 548  d=169  layer=P-INSTRPOS_TEXTS\n- 544  d=124  layer=P-INSTRPOS_TEXTS\n- 543  d=120  layer=P-INSTRPOS_TEXTS\n- 542  d=56  layer=P-INSTRPOS_TEXTS\n- 552  d=14  layer=P-INSTRPOS_TEXTS\n- 555  d=37  layer=P-INSTRPOS_TEXTS\n- 653  d=52  layer=P-INSTRPOS_TEXTS\n- 652  d=62  layer=P-INSTRPOS_TEXTS\n- 534  d=93  layer=P-INSTRPOS_TEXTS\n- 696  d=189  layer=P-INSTRPOS_TEXTS\n- 35-24-232  d=173  layer=P-VALVEPOS\n- 001-80  d=176  layer=P-VALVEPOS\n- 35-24-233  d=181  layer=P-VALVEPOS\n- 35-24-140  d=199  layer=P-VALVEPOS\n- 35-24-051  d=180  layer=P-LINEPOS\n- 35-24-049  d=188  layer=P-LINEPOS\n- 35-24HV-548  d=165  layer=P-CVPOS\n- 80  d=171  layer=P-CVPOS",
       "ai": {
-        "raw_text": "Looking at the P&ID image, I can see that 35-24HS-552 is a hand switch (HS) instrument shown inside a LOCAL PANEL box. It appears as an HS circle with \"552\" and \"35-24\" labels, paired with a HI (Hand Indicator) instrument labeled \"HI 552\". The description visible on the drawing is \"REEL PULPER TAIL SHOWER ST\" (Start).\n\nThe local panel contains several paired HS/HI instruments:\n- HS 552 / HI 552 \u2014 REEL PULPER TAIL SHOWER ST (this is our parent)\n- HS 542 / HI 555 \u2014 REEL PULPER START/STOP\n- HS 653 / HI 653 \u2014 REEL PULPER SHOWER S2\n- HS 652 / HI 652 \u2014 REEL PULPER SHOWER S4\n- HS 534 / HI 534 \u2014 REEL PULPER SHOWER S3\n\nThe 35-24HS-552 is a standalone instrument (hand switch) on the local panel. Per the rules: \"If 35-24HS-552 is an instrument (LC/PI/FV/XS/\u2026) and no labelled accessories sit on it, emit the FUNCTION header + description only \u2014 empty `rows` is correct.\"\n\nThe nearby HI-552 instrument (35-24HI-552) is a companion indicator that could be considered a child, but it shares the same numeric base. Looking at the dossier, the instrument number 552 appears in P-INSTRPOS_TEXTS at d=14 (very close), and 542 at d=56. The HI 552 is clearly paired with HS 552 on the same panel position.\n\nThe peer equipment includes 35-24L006 (BROKE CONVEYOR 3), 35-24HV-548, and the other HS/HI pairs which belong to different numeric bases.\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24HS-552\",\n  \"description\": \"35-24HS-552 REEL PLPR TAIL SHW START\",\n  \"rows\": [\n    {\"equipment\": \"35-24HI-552\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24HI-552 REEL PLPR TAIL SHW IND\"}\n  ],\n  \"peers\": [\n    {\"tag\": \"35-24L006\", \"evidence\": \"BROKE CONVEYOR 3 \u2014 peer process equipment, different function base\"},\n    {\"tag\": \"35-24HV-548\", \"evidence\": \"control valve on separate circuit, different numeric base\"},\n    {\"tag\": \"35-24HS-542\", \"evidence\": \"separate HS instrument, numeric base 542 not 552\"},\n    {\"tag\": \"35-24HI-555\", \"evidence\": \"HI indicator paired with HS-542, numeric base 555\"},\n    {\"tag\": \"35-24HS-653\", \"evidence\": \"shower S2 hand switch, numeric base 653\"},\n    {\"tag\": \"35-24HI-653\", \"evidence\": \"shower S2 indicator, numeric base 653\"},\n    {\"tag\": \"35-24HS-652\", \"evidence\": \"shower S4 hand switch, numeric base 652\"},\n    {\"tag\": \"35-24HI-652\", \"evidence\": \"shower S4 indicator, numeric base 652\"},\n    {\"tag\": \"35-24HS-534\", \"evidence\": \"shower S3 hand switch, numeric base 534\"},\n    {\"tag\": \"35-24HI-534\", \"evidence\": \"shower S3 indicator, numeric base 534\"}\n  ],\n  \"notes\": [\n    \"35-24HS-552 is a local panel hand switch for REEL PULPER TAIL SHOWER START, paired with indicator 35-24HI-552\",\n    \"Local panel contains multiple HS/HI pairs for reel pulper shower controls; only 552-base instruments are children\",\n    \"Nearby lines 35-24-051 and 35-24-049 are process lines in the vicinity but not directly subordinate to this instrument tag\"\n  ],\n  \"confidence\": \"high\"\n}\n```",
+        "raw_text": "Looking at the P&ID image, I can see that 35-24HS-552 is a hand switch (HS) instrument shown inside a LOCAL PANEL box. It appears as an HS circle with \"552\" and \"35-24\" labels, paired with a HI (Hand Indicator) instrument labeled \"HI 552\". The description visible is \"REEL PULPER TAIL SHOWER ST\" (Start).\n\nThe local panel contains several paired HS/HI instruments:\n- HS 552 / HI 552 \u2014 REEL PULPER TAIL SHOWER ST (this is our parent)\n- HS 542 / HI 555 \u2014 REEL PULPER START/STOP\n- HS 653 / HI 653 \u2014 REEL PULPER SHOWER S2\n- HS 534 / HI 534 \u2014 REEL PULPER SHOWER S3\n- HS 652 / HI 652 \u2014 REEL PULPER SHOWER S4\n\nThe HS-552 is an instrument (hand switch) \u2014 it is the FUNCTION itself. The paired HI-552 indicator is a direct accessory/companion instrument on the same local panel position. Per the rules, if it's an instrument with no labelled accessories sitting on it as children, emit FUNCTION header + description only. However, the HI-552 is a companion indicator that is clearly paired with HS-552 in the same panel bubble grouping.\n\nThe nearby instruments 35-24HI-552 is the paired indicator. Looking at the dossier, instrument tag 542 (35-24HS-542) is nearby but that's a peer (different numeric base). The HI-552 shares the same numeric base (552) and is directly paired.\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24HS-552\",\n  \"description\": \"35-24HS-552 REEL PLPR TAIL SHW START\",\n  \"rows\": [\n    {\n      \"equipment\": \"35-24HI-552\",\n      \"subequipment\": \"\",\n      \"mask\": \"\",\n      \"description\": \"35-24HI-552 REEL PLPR TAIL SHW IND\"\n    }\n  ],\n  \"peers\": [\n    {\n      \"tag\": \"35-24HS-542\",\n      \"evidence\": \"Separate HS instrument in same local panel \u2014 different numeric base 542, labelled REEL PULPER START/STOP\"\n    },\n    {\n      \"tag\": \"35-24HI-555\",\n      \"evidence\": \"HI indicator paired with HS-542, numeric base 555 does not match 552\"\n    },\n    {\n      \"tag\": \"35-24HS-653\",\n      \"evidence\": \"Separate HS instrument in same local panel \u2014 numeric base 653, SHOWER S2\"\n    },\n    {\n      \"tag\": \"35-24HI-653\",\n      \"evidence\": \"HI indicator paired with HS-653, different numeric base\"\n    },\n    {\n      \"tag\": \"35-24HS-534\",\n      \"evidence\": \"Separate HS instrument in same local panel \u2014 numeric base 534, SHOWER S3\"\n    },\n    {\n      \"tag\": \"35-24HI-534\",\n      \"evidence\": \"HI indicator paired with HS-534, different numeric base\"\n    },\n    {\n      \"tag\": \"35-24HS-652\",\n      \"evidence\": \"Separate HS instrument in same local panel \u2014 numeric base 652, SHOWER S4\"\n    },\n    {\n      \"tag\": \"35-24HI-652\",\n      \"evidence\": \"HI indicator paired with HS-652, different numeric base\"\n    },\n    {\n      \"tag\": \"35-24L006\",\n      \"evidence\": \"Nearby process equipment BROKE CONVEYOR 3 \u2014 peer major equipment, not child of instrument\"\n    },\n    {\n      \"tag\": \"35-24HV-548\",\n      \"evidence\": \"Control valve on nearby line, belongs to shower S1 circuit not HS-552 directly\"\n    }\n  ],\n  \"notes\": [\n    \"35-24HS-552 is a local panel hand switch for REEL PULPER TAIL SHOWER START, shown inside LOCAL PANEL box on P&ID\",\n    \"35-24HI-552 is the paired hand indicator sharing numeric base 552, nested as equipment child\",\n    \"All other HS/HI pairs in the same local panel have different numeric bases and are treated as peers\"\n  ],\n  \"confidence\": \"high\"\n}\n```",
         "parsed": {
           "sub_process": "BR1",
           "function": "35-24HS-552",
@@ -60,50 +60,50 @@
           ],
           "peers": [
             {
-              "tag": "35-24L006",
-              "evidence": "BROKE CONVEYOR 3 \u2014 peer process equipment, different function base"
-            },
-            {
-              "tag": "35-24HV-548",
-              "evidence": "control valve on separate circuit, different numeric base"
-            },
-            {
               "tag": "35-24HS-542",
-              "evidence": "separate HS instrument, numeric base 542 not 552"
+              "evidence": "Separate HS instrument in same local panel \u2014 different numeric base 542, labelled REEL PULPER START/STOP"
             },
             {
               "tag": "35-24HI-555",
-              "evidence": "HI indicator paired with HS-542, numeric base 555"
+              "evidence": "HI indicator paired with HS-542, numeric base 555 does not match 552"
             },
             {
               "tag": "35-24HS-653",
-              "evidence": "shower S2 hand switch, numeric base 653"
+              "evidence": "Separate HS instrument in same local panel \u2014 numeric base 653, SHOWER S2"
             },
             {
               "tag": "35-24HI-653",
-              "evidence": "shower S2 indicator, numeric base 653"
-            },
-            {
-              "tag": "35-24HS-652",
-              "evidence": "shower S4 hand switch, numeric base 652"
-            },
-            {
-              "tag": "35-24HI-652",
-              "evidence": "shower S4 indicator, numeric base 652"
+              "evidence": "HI indicator paired with HS-653, different numeric base"
             },
             {
               "tag": "35-24HS-534",
-              "evidence": "shower S3 hand switch, numeric base 534"
+              "evidence": "Separate HS instrument in same local panel \u2014 numeric base 534, SHOWER S3"
             },
             {
               "tag": "35-24HI-534",
-              "evidence": "shower S3 indicator, numeric base 534"
+              "evidence": "HI indicator paired with HS-534, different numeric base"
+            },
+            {
+              "tag": "35-24HS-652",
+              "evidence": "Separate HS instrument in same local panel \u2014 numeric base 652, SHOWER S4"
+            },
+            {
+              "tag": "35-24HI-652",
+              "evidence": "HI indicator paired with HS-652, different numeric base"
+            },
+            {
+              "tag": "35-24L006",
+              "evidence": "Nearby process equipment BROKE CONVEYOR 3 \u2014 peer major equipment, not child of instrument"
+            },
+            {
+              "tag": "35-24HV-548",
+              "evidence": "Control valve on nearby line, belongs to shower S1 circuit not HS-552 directly"
             }
           ],
           "notes": [
-            "35-24HS-552 is a local panel hand switch for REEL PULPER TAIL SHOWER START, paired with indicator 35-24HI-552",
-            "Local panel contains multiple HS/HI pairs for reel pulper shower controls; only 552-base instruments are children",
-            "Nearby lines 35-24-051 and 35-24-049 are process lines in the vicinity but not directly subordinate to this instrument tag"
+            "35-24HS-552 is a local panel hand switch for REEL PULPER TAIL SHOWER START, shown inside LOCAL PANEL box on P&ID",
+            "35-24HI-552 is the paired hand indicator sharing numeric base 552, nested as equipment child",
+            "All other HS/HI pairs in the same local panel have different numeric bases and are treated as peers"
           ],
           "confidence": "high"
         },

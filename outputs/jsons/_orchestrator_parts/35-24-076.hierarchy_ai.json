@@ -70,29 +70,29 @@
       ],
       "dossier": "Parent tag: 35-24-076\nParent category/block: lines / \nParent XY: (2681.063563563564, 68.75)\nNearby descriptions: 35-24-076-WFL-15-E10H2A\n\nSame-tag CAD family:\n- (none)\n\nNearby line numbers (short ids preferred in output):\n- 35-24-221  full=35-24-221-PP-80-E10H2A  d=145  layer=P-LINEPOS\n- 35-24-076  full=35-24-076-WFL-15-E10H2A  d=0  layer=P-LINEPOS\n- 35-24-079  full=35-24-079-WFL-15-E10H2A  d=60  layer=P-LINEPOS\n- 35-24-073  full=35-24-073-WFC-15-E10H2A  d=163  layer=P-LINEPOS\n- 35-24-075  full=35-24-075-WFC-15-E10H2A  d=93  layer=P-LINEPOS\n- 35-24-080  full=35-24-080-WFL-15-E10H2A  d=110  layer=P-LINEPOS\n- 35-24-081  full=35-24-081-PP-250-E10H2A  d=178  layer=P-LINEPOS\n- 35-24-078  full=35-24-078-PP-900-E10H2A  d=186  layer=P-LINEPOS\n\nNearby devices (valves/instruments/pumps/\u2026):\n- line_markers: PPI_1100A  d=184  block=PPI_1100A\n- valves: PPI_0900A  d=198  block=PPI_0900A\n- control_valves: PPI_1000A  d=163  block=PPI_1000A\n- instruments: PPI_0100X  d=65  block=PPI_0100X\n- pumps: P7A0200  d=184  block=P7A0200\n- motors: PPI_1504A-25_0  d=149  block=PPI_1504A-25_0\n- fittings: P7A1214  d=186  block=P7A1214\n\nNearby peer primary equipment (do NOT nest under parent):\n- 35-24L003 (pumps, d=184)\n- 35-24P505 (pumps, d=159)\n\nNearby drawing text tokens:\n- A1  d=196  layer=P-TEXT\n- GEARBOX 1  d=94  layer=P-OTHER\n- 2621 ADTPD  d=194  layer=P-TEXT\n- HP-63G2  d=200  layer=P-EQUIPMENT_POS\n- 658  d=110  layer=P-INSTRPOS_TEXTS\n- 35-24  d=123  layer=P-INSTRPOS_TEXTS\n- 659  d=175  layer=P-INSTRPOS_TEXTS\n- 9282  d=153  layer=P-INSTRPOS_TEXTS\n- 9283  d=82  layer=P-INSTRPOS_TEXTS\n- 567  d=22  layer=P-INSTRPOS_TEXTS\n- 9284  d=27  layer=P-INSTRPOS_TEXTS\n- 561  d=165  layer=P-INSTRPOS_TEXTS\n- 9286  d=44  layer=P-INSTRPOS_TEXTS\n- 9288  d=92  layer=P-INSTRPOS_TEXTS\n- 570  d=188  layer=P-INSTRPOS_TEXTS\n- 568  d=74  layer=P-INSTRPOS_TEXTS\n- 569  d=123  layer=P-INSTRPOS_TEXTS\n- 9289  d=101  layer=P-INSTRPOS_TEXTS\n- 9287  d=53  layer=P-INSTRPOS_TEXTS\n- 9285  d=21  layer=P-INSTRPOS_TEXTS\n- SIZE PRESS PULPER ROTOR 1  d=90  layer=P-TEXT\n- 35-24P505  d=154  layer=P-PUMP_POS\n- 860  d=150  layer=P-PUMP_POS\n- 17  d=148  layer=P-PUMP_POS\n- 200  d=145  layer=P-PUMP_POS\n- 1000  d=143  layer=P-PUMP_POS\n- 35-24-003.4  d=80  layer=P-MOTOR_POS\n- 1,5  d=76  layer=P-MOTOR_POS\n- 1500  d=72  layer=P-MOTOR_POS\n- 35-24-003.3  d=95  layer=P-MOTOR_POS\n- 35-24-003.2  d=160  layer=P-MOTOR_POS\n- 630  d=155  layer=P-MOTOR_POS\n- 35-24-003.1  d=147  layer=P-MOTOR_POS\n- 35-24-1092  d=191  layer=P-VALVEPOS\n- 001-15  d=188  layer=P-VALVEPOS\n- 35-24-117  d=156  layer=P-VALVEPOS\n- 35-24-1127  d=121  layer=P-VALVEPOS\n- 35-24-113  d=182  layer=P-VALVEPOS\n- 003-50  d=177  layer=P-VALVEPOS\n- 35-24-112  d=56  layer=P-VALVEPOS",
       "ai": {
-        "raw_text": "I'll analyze the P&ID image carefully for FUNCTION 35-24-076.\n\n**Observations from the image:**\n- `35-24-076` is labeled as `35-24-076-WFL-15-E10H2A` \u2014 a process line (WFL = white water flow line, DN15)\n- The line label appears at the bottom: `35-24-076-WFL-15-E10H2A`\n- On this line I can see instruments: `PI 9284`, `FI 9285`, `FS 567` (flow switch) \u2014 these sit on the 35-24-076 circuit\n- Valve `35-24-109` (003-15) is visible below the instruments on this line \u2014 it's a hand valve (outline bowtie, no actuator)\n- The line runs between the gearbox area and connects to the circuit shown\n\n**Instruments on 35-24-076:**\n- `35-24PI-9284` \u2014 pressure indicator\n- `35-24FI-9285` \u2014 flow indicator  \n- `35-24FS-567` \u2014 flow switch (FS block visible)\n\n**Valve on 35-24-076:**\n- `35-24-109` (003-15) \u2014 hand valve (outline bowtie, no actuator circle) \u2192 `HV`\n\n**Peers (not children):**\n- `35-24TV-9283` \u2014 on the gearbox/112 circuit, not 076\n- `35-24-112` \u2014 separate line\n- `35-24-079` \u2014 separate line (next segment)\n- `35-24-075` \u2014 separate line\n- `35-24L003`, `35-24P505` \u2014 peer equipment\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24-076\",\n  \"description\": \"35-24-076 WFL LINE 15 GEARBOX OIL\",\n  \"rows\": [\n    {\n      \"equipment\": \"35-24-109\",\n      \"subequipment\": \"\",\n      \"mask\": \"\",\n      \"description\": \"35-24-109 VLV HV\"\n    },\n    {\n      \"equipment\": \"\",\n      \"subequipment\": \"35-24PI-9284\",\n      \"mask\": \"\",\n      \"description\": \"35-24PI-9284 PRESSURE INDICATOR\"\n    },\n    {\n      \"equipment\": \"\",\n      \"subequipment\": \"35-24FI-9285\",\n      \"mask\": \"\",\n      \"description\": \"35-24FI-9285 FLOW INDICATOR\"\n    },\n    {\n      \"equipment\": \"\",\n      \"subequipment\": \"35-24FS-567\",\n      \"mask\": \"\",\n      \"description\": \"35-24FS-567 FLOW SWITCH\"\n    }\n  ],\n  \"peers\": [\n    {\n      \"tag\": \"35-24-079\",\n      \"evidence\": \"Separate WFL line segment, own label 35-24-079-WFL-15-E10H2A\"\n    },\n    {\n      \"tag\": \"35-24-075\",\n      \"evidence\": \"Separate WFC line, own label 35-24-075-WFC-15-E10H2A\"\n    },\n    {\n      \"tag\": \"35-24TV-9283\",\n      \"evidence\": \"Temperature control valve on 35-24-112 circuit, not on 076\"\n    },\n    {\n      \"tag\": \"35-24-112\",\n      \"evidence\": \"Separate line 001-15, own label and valve tag\"\n    },\n    {\n      \"tag\": \"35-24L003\",\n      \"evidence\": \"Peer pump/vessel, different numeric base\"\n    },\n    {\n      \"tag\": \"35-24P505\",\n      \"evidence\": \"Peer pump, different numeric base\"\n    },\n    {\n      \"tag\": \"35-24-003.3\",\n      \"evidence\": \"Motor for Size Press Pulper Rotor 1, numeric base 003 not 076\"\n    },\n    {\n      \"tag\": \"35-24-003.4\",\n      \"evidence\": \"Motor for Size Press Pulper Rotor 2, numeric base 003 not 076\"\n    }\n  ],\n  \"notes\": [\n    \"35-24-076 is a WFL-15 (white water flow line DN15) serving the gearbox lubrication/cooling circuit\",\n    \"PI-9284, FI-9285 and FS-567 are co-located on the 076 line segment per image layout\",\n    \"35-24-109 (003-15) is the isolation hand valve on this line \u2014 outline bowtie, no actuator\"\n  ],\n  \"confidence\": \"medium\"\n}\n```",
+        "raw_text": "I'll analyze the P&ID image carefully for FUNCTION 35-24-076.\n\n**Observations from the image:**\n- `35-24-076` is labeled as `35-24-076-WFL-15-E10H2A` \u2014 a process line (WFL = white water flow line, DN15)\n- The line label appears at the bottom: `35-24-076-WFL-15-E10H2A`\n- On this line I can see instruments: `PI 9284`, `FI 9285`, `FS 567` (flow switch) \u2014 these sit on the 35-24-076 circuit\n- There's a valve `35-24-109` (003-15) on this line \u2014 appears to be a hand valve (outline bowtie, no actuator)\n- The line runs between the gearbox area and connects to the circuit shown\n\n**Line circuit analysis:**\n- `35-24-076-WFL-15-E10H2A` is the parent line\n- Instruments on it: `35-24PI-9284`, `35-24FI-9285`, `35-24FS-567`\n- Valve on it: `35-24-109` (003-15) \u2014 outline bowtie = HV\n\n**Valve 35-24-109:** The symbol shows an outline/transparent bowtie with no actuator circle \u2192 `HV`\n\n**Peers:** `35-24-079` is a separate line (visible adjacent), `35-24-075` is another line, `35-24-112` belongs to a different circuit, `35-24TV-9283` is on the gearbox/112 circuit.\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24-076\",\n  \"description\": \"35-24-076 WFL 15 GEARBOX OIL FLOW LINE\",\n  \"rows\": [\n    {\"equipment\": \"35-24-109\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-109 ISOL VLV HV\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24PI-9284\", \"mask\": \"\", \"description\": \"35-24PI-9284 PRESS IND\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24FI-9285\", \"mask\": \"\", \"description\": \"35-24FI-9285 FLOW IND\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24FS-567\", \"mask\": \"\", \"description\": \"35-24FS-567 FLOW SWITCH\"}\n  ],\n  \"peers\": [\n    {\"tag\": \"35-24-079\", \"evidence\": \"separate WFL line 35-24-079-WFL-15-E10H2A visible adjacent\"},\n    {\"tag\": \"35-24-075\", \"evidence\": \"separate WFC line 35-24-075-WFC-15-E10H2A, different circuit\"},\n    {\"tag\": \"35-24-112\", \"evidence\": \"valve 35-24-112 sits on different circuit near TC-9283/TV-9283\"},\n    {\"tag\": \"35-24TV-9283\", \"evidence\": \"temperature control valve on gearbox oil temp circuit, not on 076 line\"},\n    {\"tag\": \"35-24-1127\", \"evidence\": \"valve on adjacent line, not part of 076 circuit\"},\n    {\"tag\": \"35-24L003\", \"evidence\": \"peer pump/vessel, different function\"},\n    {\"tag\": \"35-24P505\", \"evidence\": \"peer pump, different function\"},\n    {\"tag\": \"35-24-003.3\", \"evidence\": \"motor tag numeric base 003, not 076\"},\n    {\"tag\": \"35-24-003.4\", \"evidence\": \"motor tag numeric base 003, not 076\"}\n  ],\n  \"notes\": [\n    \"35-24-076 is a WFL-15 (white water flow, DN15) line serving gearbox lubrication/cooling circuit\",\n    \"PI-9284, FI-9285, FS-567 are the three instruments visible on the 076 line segment\",\n    \"35-24-109 (003-15) is the isolation valve on this line \u2014 outline bowtie, no actuator = HV\",\n    \"35-24-079 is a parallel WFL line with its own instrument set (PI-9286, FI-9287, FS-568)\"\n  ],\n  \"confidence\": \"medium\"\n}\n```",
         "parsed": {
           "sub_process": "BR1",
           "function": "35-24-076",
-          "description": "35-24-076 WFL LINE 15 GEARBOX OIL",
+          "description": "35-24-076 WFL 15 GEARBOX OIL FLOW LINE",
           "rows": [
             {
               "equipment": "35-24-109",
               "subequipment": "",
               "mask": "",
-              "description": "35-24-109 VLV HV"
+              "description": "35-24-109 ISOL VLV HV"
             },
             {
               "equipment": "",
               "subequipment": "35-24PI-9284",
               "mask": "",
-              "description": "35-24PI-9284 PRESSURE INDICATOR"
+              "description": "35-24PI-9284 PRESS IND"
             },
             {
               "equipment": "",
               "subequipment": "35-24FI-9285",
               "mask": "",
-              "description": "35-24FI-9285 FLOW INDICATOR"
+              "description": "35-24FI-9285 FLOW IND"
             },
             {
               "equipment": "",
@@ -104,41 +104,46 @@
           "peers": [
             {
               "tag": "35-24-079",
-              "evidence": "Separate WFL line segment, own label 35-24-079-WFL-15-E10H2A"
+              "evidence": "separate WFL line 35-24-079-WFL-15-E10H2A visible adjacent"
             },
             {
               "tag": "35-24-075",
-              "evidence": "Separate WFC line, own label 35-24-075-WFC-15-E10H2A"
-            },
-            {
-              "tag": "35-24TV-9283",
-              "evidence": "Temperature control valve on 35-24-112 circuit, not on 076"
+              "evidence": "separate WFC line 35-24-075-WFC-15-E10H2A, different circuit"
             },
             {
               "tag": "35-24-112",
-              "evidence": "Separate line 001-15, own label and valve tag"
+              "evidence": "valve 35-24-112 sits on different circuit near TC-9283/TV-9283"
+            },
+            {
+              "tag": "35-24TV-9283",
+              "evidence": "temperature control valve on gearbox oil temp circuit, not on 076 line"
+            },
+            {
+              "tag": "35-24-1127",
+              "evidence": "valve on adjacent line, not part of 076 circuit"
             },
             {
               "tag": "35-24L003",
-              "evidence": "Peer pump/vessel, different numeric base"
+              "evidence": "peer pump/vessel, different function"
             },
             {
               "tag": "35-24P505",
-              "evidence": "Peer pump, different numeric base"
+              "evidence": "peer pump, different function"
             },
             {
               "tag": "35-24-003.3",
-              "evidence": "Motor for Size Press Pulper Rotor 1, numeric base 003 not 076"
+              "evidence": "motor tag numeric base 003, not 076"
             },
             {
               "tag": "35-24-003.4",
-              "evidence": "Motor for Size Press Pulper Rotor 2, numeric base 003 not 076"
+              "evidence": "motor tag numeric base 003, not 076"
             }
           ],
           "notes": [
-            "35-24-076 is a WFL-15 (white water flow line DN15) serving the gearbox lubrication/cooling circuit",
-            "PI-9284, FI-9285 and FS-567 are co-located on the 076 line segment per image layout",
-            "35-24-109 (003-15) is the isolation hand valve on this line \u2014 outline bowtie, no actuator"
+            "35-24-076 is a WFL-15 (white water flow, DN15) line serving gearbox lubrication/cooling circuit",
+            "PI-9284, FI-9285, FS-567 are the three instruments visible on the 076 line segment",
+            "35-24-109 (003-15) is the isolation valve on this line \u2014 outline bowtie, no actuator = HV",
+            "35-24-079 is a parallel WFL line with its own instrument set (PI-9286, FI-9287, FS-568)"
           ],
           "confidence": "medium"
         },
@@ -195,19 +200,19 @@
           "equipment": "35-24-109",
           "subequipment": "",
           "mask": "",
-          "description": "35-24-109 VLV HV"
+          "description": "35-24-109 ISOL VLV HV"
         },
         {
           "equipment": "",
           "subequipment": "35-24PI-9284",
           "mask": "",
-          "description": "35-24PI-9284 PI"
+          "description": "35-24PI-9284 PRESS IND"
         },
         {
           "equipment": "",
           "subequipment": "35-24FI-9285",
           "mask": "",
-          "description": "35-24FI-9285 FI"
+          "description": "35-24FI-9285 FL IND"
         },
         {
           "equipment": "",

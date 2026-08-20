@@ -39,60 +39,44 @@
       ],
       "dossier": "Parent tag: 35-24-163\nParent category/block: lines / \nParent XY: (5310.0, 58.75)\nNearby descriptions: 35-24-163-WFL-15-E10H2A\n\nSame-tag CAD family:\n- (none)\n\nNearby line numbers (short ids preferred in output):\n- 35-24-160  full=35-24-160-WFL-15-E10H2A  d=168  layer=P-LINEPOS\n- 35-24-164  full=35-24-164-WAF-65-E10H2A  d=184  layer=P-LINEPOS\n- 35-24-167  full=35-24-167-WFL-15-E10H2A  d=132  layer=P-LINEPOS\n- 35-24-183  full=35-24-183-WAF-100-E10H2A  d=164  layer=P-LINEPOS\n- 35-24-163  full=35-24-163-WFL-15-E10H2A  d=0  layer=P-LINEPOS\n\nNearby devices (valves/instruments/pumps/\u2026):\n- line_markers: PPI_1100A  d=1  block=PPI_1100A\n- valves: PPI_0900A  d=147  block=PPI_0900A\n- instruments: PPI_1200A  d=117  block=PPI_1200A\n\nNearby peer primary equipment (do NOT nest under parent):\n- (none)\n\nNearby drawing text tokens:\n- 635  d=159  layer=P-INSTRPOS_TEXTS\n- 35-24  d=171  layer=P-INSTRPOS_TEXTS\n- 9322  d=192  layer=P-INSTRPOS_TEXTS\n- 643  d=146  layer=P-INSTRPOS_TEXTS\n- 9324  d=114  layer=P-INSTRPOS_TEXTS\n- 9323  d=182  layer=P-INSTRPOS_TEXTS\n- 9325  d=124  layer=P-INSTRPOS_TEXTS\n- 35-24-020  d=163  layer=P-VALVEPOS\n- 003-15  d=161  layer=P-VALVEPOS\n- 35-24-014  d=141  layer=P-VALVEPOS\n- 35-24-160  d=168  layer=P-LINEPOS\n- 35-24-164  d=184  layer=P-LINEPOS\n- 35-24-167  d=132  layer=P-LINEPOS\n- 35-24-183  d=164  layer=P-LINEPOS\n- 35-24-163  d=0  layer=P-LINEPOS\n- 80  d=198  layer=P-CVPOS",
       "ai": {
-        "raw_text": "I'll analyze the P&ID crop carefully.\n\n**Observations from the image:**\n- `35-24-163` is labeled as `35-24-163-WFL-15-E10H2A` \u2014 a process line (WFL = white water / filtrate, DN15)\n- It's a piping header (NNN format \u2192 Rule 11 applies)\n- The red bounding box shows the line segment with no instruments or valves directly on it within the crop\n- Nearby instruments visible: PI 9324, FI 9325, FS 643 \u2014 these appear to be on line `35-24-167` (to the right), not on 35-24-163\n- FS 635 is on the left side near `35-24-020` / `003-15`\n- The valve `35-24-014` with `003-15` and instruments PI 9324, FI 9325, FS 643 are clearly on the `35-24-167` circuit (right side)\n- No instruments or valves are visibly attached directly to the `35-24-163` segment within the crop boundary\n\n**Peers:**\n- `35-24-160`, `35-24-164`, `35-24-167`, `35-24-183` \u2014 neighbouring lines, not children\n- `35-24-020`, `35-24-014` \u2014 valves on other lines\n- PI 9324, FI 9325, FS 643, FS 635 \u2014 instruments on neighbouring circuits\n\n**Description:** `35-24-163 WFL LINE DN15` \u2014 fits within 40 chars, UPPERCASE, CMMS style.\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24-163\",\n  \"description\": \"35-24-163 WFL LINE DN15\",\n  \"rows\": [],\n  \"peers\": [\n    {\"tag\": \"35-24-160\", \"evidence\": \"neighbouring WFL-15 line, separate circuit\"},\n    {\"tag\": \"35-24-164\", \"evidence\": \"neighbouring WAF-65 line, separate circuit\"},\n    {\"tag\": \"35-24-167\", \"evidence\": \"neighbouring WFL-15 line to the right, carries PI-9324/FI-9325/FS-643\"},\n    {\"tag\": \"35-24-183\", \"evidence\": \"neighbouring WAF-100 line, separate circuit\"},\n    {\"tag\": \"35-24-020\", \"evidence\": \"valve on 003-15 circuit, not on 35-24-163\"},\n    {\"tag\": \"35-24-014\", \"evidence\": \"valve on 35-24-167 circuit, not on 35-24-163\"},\n    {\"tag\": \"35-24PI-9324\", \"evidence\": \"pressure instrument visible on 35-24-167 circuit\"},\n    {\"tag\": \"35-24FI-9325\", \"evidence\": \"flow instrument visible on 35-24-167 circuit\"},\n    {\"tag\": \"35-24FS-643\", \"evidence\": \"flow switch visible on 35-24-167 circuit\"},\n    {\"tag\": \"35-24FS-635\", \"evidence\": \"flow switch visible near 35-24-020, different circuit\"}\n  ],\n  \"notes\": [\n    \"35-24-163 is a DN15 WFL (white water filtrate) process line with no instruments or valves directly attached within the visible crop boundary.\",\n    \"All nearby instruments (PI-9324, FI-9325, FS-643) and valve 35-24-014 are on the 35-24-167 circuit to the right.\",\n    \"rows left empty \u2014 no defensible children within scope boundary.\"\n  ],\n  \"confidence\": \"high\"\n}\n```",
+        "raw_text": "I'll analyze the P&ID crop carefully.\n\n**Observations from the image:**\n- `35-24-163` is labeled as `35-24-163-WFL-15-E10H2A` \u2014 a process line (WFL = white water / flow line, DN15)\n- The parent box shows it as a piping line segment\n- Nearby instruments visible on the right side: `PI 9324`, `FI 9325`, `FS 643` \u2014 these appear to be on line `35-24-167` (to the right)\n- `FS 635` on the left appears to be on `35-24-160` or `35-24-020`\n- The line `35-24-163` itself appears as a short spool/branch connecting between the horizontal headers\n- No instruments are clearly sitting directly on `35-24-163` within the crop boundary\n- `35-24-014` with a hand valve (outline bowtie, no actuator) is visible on `35-24-167`'s circuit\n- The dossier notes `PPI_1100A` at d=1 (a line marker block), `PPI_0900A` at d=147 (valve block), `PPI_1200A` at d=117 (instrument block)\n\n**Line FUNCTION rule applies**: `35-24-163` is a `35-24-NNN` format \u2192 piping header. No vessels/pumps as children.\n\n**Scope**: The instruments `PI 9324`, `FI 9325`, `FS 643` are on `35-24-167` (visible label to the right). `35-24-014` valve is also on `35-24-167`. These are peers/neighbours, not children of `35-24-163`.\n\nThe line `35-24-163` appears to be a short 15mm WFL spool with no directly attached instruments or valves clearly labelled as belonging to it in the crop. The dossier's nearby devices are at distances 117-147, suggesting they belong to adjacent lines.\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24-163\",\n  \"description\": \"35-24-163 WFL 15 PROC LINE\",\n  \"rows\": [],\n  \"peers\": [\n    {\"tag\": \"35-24-160\", \"evidence\": \"Adjacent WFL-15 line visible left of crop, separate line number\"},\n    {\"tag\": \"35-24-164\", \"evidence\": \"Adjacent WAF-65 line in dossier, separate line number\"},\n    {\"tag\": \"35-24-167\", \"evidence\": \"Adjacent WFL-15 line visible right of crop with PI-9324/FI-9325/FS-643 instruments\"},\n    {\"tag\": \"35-24-183\", \"evidence\": \"Adjacent WAF-100 line in dossier, separate line number\"},\n    {\"tag\": \"35-24-014\", \"evidence\": \"Hand valve visible on 35-24-167 circuit, not on 35-24-163\"},\n    {\"tag\": \"35-24-020\", \"evidence\": \"Valve tag visible on left side of crop, belongs to separate line circuit\"}\n  ],\n  \"notes\": [\n    \"35-24-163 is a DN15 WFL spool with no directly attached instruments or valves confirmed within its circuit boundary\",\n    \"PI-9324, FI-9325, FS-643 are on 35-24-167 circuit to the right\",\n    \"FS-635 is on 35-24-020/35-24-160 circuit to the left\"\n  ],\n  \"confidence\": \"medium\"\n}\n```",
         "parsed": {
           "sub_process": "BR1",
           "function": "35-24-163",
-          "description": "35-24-163 WFL LINE DN15",
+          "description": "35-24-163 WFL 15 PROC LINE",
           "rows": [],
           "peers": [
             {
               "tag": "35-24-160",
-              "evidence": "neighbouring WFL-15 line, separate circuit"
+              "evidence": "Adjacent WFL-15 line visible left of crop, separate line number"
             },
             {
               "tag": "35-24-164",
-              "evidence": "neighbouring WAF-65 line, separate circuit"
+              "evidence": "Adjacent WAF-65 line in dossier, separate line number"
             },
             {
               "tag": "35-24-167",
-              "evidence": "neighbouring WFL-15 line to the right, carries PI-9324/FI-9325/FS-643"
+              "evidence": "Adjacent WFL-15 line visible right of crop with PI-9324/FI-9325/FS-643 instruments"
             },
             {
               "tag": "35-24-183",
-              "evidence": "neighbouring WAF-100 line, separate circuit"
-            },
-            {
-              "tag": "35-24-020",
-              "evidence": "valve on 003-15 circuit, not on 35-24-163"
+              "evidence": "Adjacent WAF-100 line in dossier, separate line number"
             },
             {
               "tag": "35-24-014",
-              "evidence": "valve on 35-24-167 circuit, not on 35-24-163"
+              "evidence": "Hand valve visible on 35-24-167 circuit, not on 35-24-163"
             },
             {
-              "tag": "35-24PI-9324",
-              "evidence": "pressure instrument visible on 35-24-167 circuit"
-            },
-            {
-              "tag": "35-24FI-9325",
-              "evidence": "flow instrument visible on 35-24-167 circuit"
-            },
-            {
-              "tag": "35-24FS-643",
-              "evidence": "flow switch visible on 35-24-167 circuit"
-            },
-            {
-              "tag": "35-24FS-635",
-              "evidence": "flow switch visible near 35-24-020, different circuit"
+              "tag": "35-24-020",
+              "evidence": "Valve tag visible on left side of crop, belongs to separate line circuit"
             }
           ],
           "notes": [
-            "35-24-163 is a DN15 WFL (white water filtrate) process line with no instruments or valves directly attached within the visible crop boundary.",
-            "All nearby instruments (PI-9324, FI-9325, FS-643) and valve 35-24-014 are on the 35-24-167 circuit to the right.",
-            "rows left empty \u2014 no defensible children within scope boundary."
+            "35-24-163 is a DN15 WFL spool with no directly attached instruments or valves confirmed within its circuit boundary",
+            "PI-9324, FI-9325, FS-643 are on 35-24-167 circuit to the right",
+            "FS-635 is on 35-24-020/35-24-160 circuit to the left"
           ],
-          "confidence": "high"
+          "confidence": "medium"
         },
         "model_id": "eu.anthropic.claude-sonnet-4-6",
         "region": "eu-west-2",

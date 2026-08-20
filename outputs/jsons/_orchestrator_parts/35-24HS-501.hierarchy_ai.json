@@ -72,17 +72,17 @@
       ],
       "dossier": "Parent tag: 35-24HS-501\nParent category/block: instruments / \nParent XY: (915.7702327327328, 211.3075)\nNearby descriptions: HS 501 (35-24)\n\nSame-tag CAD family:\n- (none)\n\nNearby line numbers (short ids preferred in output):\n- 35-24-205  full=35-24-205-PP-100-E10H2A  d=52  layer=P-LINEPOS\n- 35-24-006  full=35-24-006-WAF-200-E10H2A  d=34  layer=P-LINEPOS\n- 35-24-004  full=35-24-004-WAF-80-E10H2A  d=34  layer=P-LINEPOS\n- 35-24-015  full=35-24-015-WAF-125-E10H2A  d=135  layer=P-LINEPOS\n- 35-24-016  full=35-24-016-WAF-250-E10H2A  d=74  layer=P-LINEPOS\n- 35-24-018  full=35-24-018-WAF-100-E10H2A  d=52  layer=P-LINEPOS\n- 35-24-020  full=35-24-020-WFC-15-E10H2A  d=181  layer=P-LINEPOS\n- 35-24-011  full=35-24-011-PP-250-E10H2A  d=184  layer=P-LINEPOS\n- 35-24-017  full=35-24-017-WAF-300-E10H2A  d=107  layer=P-LINEPOS\n- 35-24-021  full=35-24-021-WAB-20-E10H2A  d=58  layer=P-LINEPOS\n- 35-24-019  full=35-24-019-PP-500-E10H2A  d=162  layer=P-LINEPOS\n- 35-24-013  full=35-24-013-PP-600-E10H2A  d=150  layer=P-LINEPOS\n\nNearby devices (valves/instruments/pumps/\u2026):\n- line_markers: PPI_1100A  d=150  block=PPI_1100A\n- valves: PPI_0900A  d=191  block=PPI_0900A\n- control_valves: PPI_1000A  d=111  block=PPI_1000A\n- instruments: PPI_1204A  d=183  block=PPI_1204A\n- motors: PPI_1504A-25_0  d=188  block=PPI_1504A-25_0\n- fittings: P7A1214  d=136  block=P7A1214\n\nNearby peer primary equipment (do NOT nest under parent):\n- (none)\n\nNearby drawing text tokens:\n- 2 bar  d=181  layer=P-TEXT\n- S2  d=185  layer=P-TEXT\n- S1  d=182  layer=P-TEXT\n- GEARBOX 2  d=151  layer=P-OTHER\n- 35-24  d=88  layer=P-INSTRPOS_TEXTS\n- 9260  d=163  layer=P-INSTRPOS_TEXTS\n- 518  d=180  layer=P-INSTRPOS_TEXTS\n- 503  d=31  layer=P-INSTRPOS_TEXTS\n- 516  d=79  layer=P-INSTRPOS_TEXTS\n- 504  d=110  layer=P-INSTRPOS_TEXTS\n- 512  d=187  layer=P-INSTRPOS_TEXTS\n- 666  d=122  layer=P-INSTRPOS_TEXTS\n- 517  d=55  layer=P-INSTRPOS_TEXTS\n- 501  d=14  layer=P-INSTRPOS_TEXTS\n- 35-24-007.4  d=198  layer=P-MOTOR_POS\n- 1,5  d=200  layer=P-MOTOR_POS\n- 35-24-007.3  d=193  layer=P-MOTOR_POS\n- 35-24-1100  d=175  layer=P-VALVEPOS\n- 350-250  d=173  layer=P-VALVEPOS\n- 35-24-175  d=195  layer=P-VALVEPOS\n- 003-15  d=197  layer=P-VALVEPOS\n- 35-24-174  d=147  layer=P-VALVEPOS\n- 003-50  d=147  layer=P-VALVEPOS\n- 35-24-173  d=169  layer=P-VALVEPOS\n- 101-125  d=164  layer=P-VALVEPOS\n- 35-24-172  d=152  layer=P-VALVEPOS\n- 35-24-171  d=140  layer=P-VALVEPOS\n- 101-300  d=145  layer=P-VALVEPOS\n- 35-24-166  d=89  layer=P-VALVEPOS\n- 003-20  d=87  layer=P-VALVEPOS\n- 35-24-167  d=82  layer=P-VALVEPOS\n- 35-24-170  d=143  layer=P-VALVEPOS\n- 001-15  d=148  layer=P-VALVEPOS\n- 35-24-169  d=166  layer=P-VALVEPOS\n- 35-24-168  d=187  layer=P-VALVEPOS\n- 35-24-216  d=172  layer=P-VALVEPOS\n- 001-80  d=174  layer=P-VALVEPOS\n- 35-24-1095  d=175  layer=P-VALVEPOS\n- 35-24-205  d=52  layer=P-LINEPOS\n- 35-24-006  d=34  layer=P-LINEPOS",
       "ai": {
-        "raw_text": "Looking at the P&ID image, I can see:\n\n- **35-24HS-501** is a Hand Switch (HS) instrument with a local indicator **35-24HI-501** paired beneath it\n- It sits on line **35-24-006** (WAF-200) \u2014 the valve **35-24HV-501** (DN150) is directly below the HS-501/HI-501 pair\n- The red bounding box groups: HS-501, HI-501, HV-501 together with peers HS-503/HI-503/HV-503, KS-517/HV-517, HS-516/HI-516/HV-516, NV-504\n\n**Valve symbol analysis for 35-24HV-501:**\n- The bowtie symbol shows outline/transparent triangles (no fill) with a small circle actuator on top \u2192 **AV** (automatic valve)\n\n**35-24HI-501**: local indicator instrument, square symbol = local control panel instrument\n\nThe HS-501 is an instrument (hand switch). Its direct associates are HI-501 (indicator paired with it) and HV-501 (the valve it controls on line 35-24-006).\n\nThe other HS/HI/HV/KV/NV instruments in the crop belong to their own function tags and are peers.\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24HS-501\",\n  \"description\": \"35-24HS-501 HS BROKE DILUTION VLV CTRL\",\n  \"rows\": [\n    {\"equipment\": \"35-24HI-501\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24HI-501 LOCAL INDICATOR\"},\n    {\"equipment\": \"35-24-006\", \"subequipment\": \"\", \"mask\": \"\", \"description\": \"35-24-006 WAF-200 LINE\"},\n    {\"equipment\": \"\", \"subequipment\": \"35-24HV-501\", \"mask\": \"\", \"description\": \"35-24HV-501 ISOL VLV AV\"}\n  ],\n  \"peers\": [\n    {\"tag\": \"35-24HS-503\", \"evidence\": \"separate HS instrument with own HI-503 and HV-503 on line 35-24-004\"},\n    {\"tag\": \"35-24HI-503\", \"evidence\": \"indicator paired with HS-503, not HS-501\"},\n    {\"tag\": \"35-24HV-503\", \"evidence\": \"valve controlled by HS-503 on line 35-24-004\"},\n    {\"tag\": \"35-24KV-517\", \"evidence\": \"separate KV instrument with own KS-517 on line 35-24-018\"},\n    {\"tag\": \"35-24HS-516\", \"evidence\": \"separate HS instrument with own HI-516 and HV-516 on line 35-24-016\"},\n    {\"tag\": \"35-24HI-516\", \"evidence\": \"indicator paired with HS-516\"},\n    {\"tag\": \"35-24HV-516\", \"evidence\": \"valve controlled by HS-516 on line 35-24-016\"},\n    {\"tag\": \"35-24NV-504\", \"evidence\": \"NC valve on separate line, own function tag NV-504\"},\n    {\"tag\": \"35-24XV-666\", \"evidence\": \"XV valve outside crop boundary, different numeric base\"},\n    {\"tag\": \"35-24-166\", \"evidence\": \"hand valve on separate circuit outside HS-501 scope\"},\n    {\"tag\": \"35-24-167\", \"evidence\": \"hand valve on separate circuit outside HS-501 scope\"}\n  ],\n  \"notes\": [\n    \"35-24HS-501 is a hand switch instrument controlling 35-24HV-501 on line 35-24-006-WAF-200\",\n    \"35-24HI-501 is the paired local indicator co-located with HS-501\",\n    \"HV-501 symbol shows outline bowtie with circle actuator top = AV (automatic valve)\"\n  ],\n  \"confidence\": \"high\"\n}\n```",
+        "raw_text": "Looking at the P&ID image, I can see:\n\n- **35-24HS-501** is a Hand Switch (HS) instrument with a local indicator **35-24HI-501** paired beneath it\n- It sits on line **35-24-006** (WAF-200) \u2014 the valve **35-24HV-501** (DN150) is directly below the HS-501/HI-501 pair\n- The red bounding box groups: HS-501, HI-501, HV-501 together with peers HS-503/HI-503/HV-503, KS-517/HV-517, HS-516/HI-516/HV-516, NV-504\n- **35-24HV-501**: The symbol shows a bowtie with a circle actuator on top (automatic valve, AV style) \u2014 it has an open circle actuator, outline triangles \u2192 this is an AV (automatic valve). Looking carefully, the triangles appear outline/transparent with a circle on top = AV.\n- **35-24HI-501**: local indicator instrument paired with HS-501\n\nThe HS-501 is the hand switch that controls HV-501. HI-501 is the hand indicator co-located. These are the direct children. The connected line is 35-24-006.\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24HS-501\",\n  \"description\": \"35-24HS-501 HAND SWITCH\",\n  \"rows\": [\n    {\n      \"equipment\": \"35-24HI-501\",\n      \"subequipment\": \"\",\n      \"mask\": \"\",\n      \"description\": \"35-24HI-501 HAND INDICATOR\"\n    },\n    {\n      \"equipment\": \"35-24-006\",\n      \"subequipment\": \"\",\n      \"mask\": \"\",\n      \"description\": \"35-24-006 WAF-200 LINE\"\n    },\n    {\n      \"equipment\": \"\",\n      \"subequipment\": \"35-24HV-501\",\n      \"mask\": \"\",\n      \"description\": \"35-24HV-501 ISOL VLV AV\"\n    }\n  ],\n  \"peers\": [\n    {\n      \"tag\": \"35-24HV-503\",\n      \"evidence\": \"Separate HS-503/HI-503/HV-503 triplet on adjacent line 35-24-004, own numeric base 503\"\n    },\n    {\n      \"tag\": \"35-24HS-503\",\n      \"evidence\": \"Peer hand switch on adjacent valve station, numeric base 503\"\n    },\n    {\n      \"tag\": \"35-24HI-503\",\n      \"evidence\": \"Peer hand indicator paired with HS-503, numeric base 503\"\n    },\n    {\n      \"tag\": \"35-24KV-517\",\n      \"evidence\": \"Separate KS-517/HV-517 station on line 35-24-018, numeric base 517\"\n    },\n    {\n      \"tag\": \"35-24KS-517\",\n      \"evidence\": \"Peer key switch on adjacent valve station, numeric base 517\"\n    },\n    {\n      \"tag\": \"35-24HV-516\",\n      \"evidence\": \"Peer valve on line 35-24-016, numeric base 516\"\n    },\n    {\n      \"tag\": \"35-24HS-516\",\n      \"evidence\": \"Peer hand switch on adjacent valve station, numeric base 516\"\n    },\n    {\n      \"tag\": \"35-24HI-516\",\n      \"evidence\": \"Peer hand indicator paired with HS-516, numeric base 516\"\n    },\n    {\n      \"tag\": \"35-24NV-504\",\n      \"evidence\": \"Separate NC valve on own line, numeric base 504, outside HS-501 scope\"\n    },\n    {\n      \"tag\": \"35-24XV-666\",\n      \"evidence\": \"XV-666 visible top-right, different numeric base and separate circuit\"\n    }\n  ],\n  \"notes\": [\n    \"35-24HS-501 is a hand switch instrument controlling 35-24HV-501 on line 35-24-006 (WAF-200 DN150)\",\n    \"35-24HI-501 is the co-located hand indicator paired with HS-501\",\n    \"35-24HV-501 symbol shows open-circle actuator on outline bowtie = AV (automatic valve)\",\n    \"All other HS/HI/HV/KS/KV/NV triplets in the red box share the same panel but have different numeric bases \u2014 treated as peers\"\n  ],\n  \"confidence\": \"high\"\n}\n```",
         "parsed": {
           "sub_process": "BR1",
           "function": "35-24HS-501",
-          "description": "35-24HS-501 HS BROKE DILUTION VLV CTRL",
+          "description": "35-24HS-501 HAND SWITCH",
           "rows": [
             {
               "equipment": "35-24HI-501",
               "subequipment": "",
               "mask": "",
-              "description": "35-24HI-501 LOCAL INDICATOR"
+              "description": "35-24HI-501 HAND INDICATOR"
             },
             {
               "equipment": "35-24-006",
@@ -99,54 +99,51 @@
           ],
           "peers": [
             {
+              "tag": "35-24HV-503",
+              "evidence": "Separate HS-503/HI-503/HV-503 triplet on adjacent line 35-24-004, own numeric base 503"
+            },
+            {
               "tag": "35-24HS-503",
-              "evidence": "separate HS instrument with own HI-503 and HV-503 on line 35-24-004"
+              "evidence": "Peer hand switch on adjacent valve station, numeric base 503"
             },
             {
               "tag": "35-24HI-503",
-              "evidence": "indicator paired with HS-503, not HS-501"
-            },
-            {
-              "tag": "35-24HV-503",
-              "evidence": "valve controlled by HS-503 on line 35-24-004"
+              "evidence": "Peer hand indicator paired with HS-503, numeric base 503"
             },
             {
               "tag": "35-24KV-517",
-              "evidence": "separate KV instrument with own KS-517 on line 35-24-018"
+              "evidence": "Separate KS-517/HV-517 station on line 35-24-018, numeric base 517"
             },
             {
-              "tag": "35-24HS-516",
-              "evidence": "separate HS instrument with own HI-516 and HV-516 on line 35-24-016"
-            },
-            {
-              "tag": "35-24HI-516",
-              "evidence": "indicator paired with HS-516"
+              "tag": "35-24KS-517",
+              "evidence": "Peer key switch on adjacent valve station, numeric base 517"
             },
             {
               "tag": "35-24HV-516",
-              "evidence": "valve controlled by HS-516 on line 35-24-016"
+              "evidence": "Peer valve on line 35-24-016, numeric base 516"
+            },
+            {
+              "tag": "35-24HS-516",
+              "evidence": "Peer hand switch on adjacent valve station, numeric base 516"
+            },
+            {
+              "tag": "35-24HI-516",
+              "evidence": "Peer hand indicator paired with HS-516, numeric base 516"
             },
             {
               "tag": "35-24NV-504",
-              "evidence": "NC valve on separate line, own function tag NV-504"
+              "evidence": "Separate NC valve on own line, numeric base 504, outside HS-501 scope"
             },
             {
               "tag": "35-24XV-666",
-              "evidence": "XV valve outside crop boundary, different numeric base"
-            },
-            {
-              "tag": "35-24-166",
-              "evidence": "hand valve on separate circuit outside HS-501 scope"
-            },
-            {
-              "tag": "35-24-167",
-              "evidence": "hand valve on separate circuit outside HS-501 scope"
+              "evidence": "XV-666 visible top-right, different numeric base and separate circuit"
             }
           ],
           "notes": [
-            "35-24HS-501 is a hand switch instrument controlling 35-24HV-501 on line 35-24-006-WAF-200",
-            "35-24HI-501 is the paired local indicator co-located with HS-501",
-            "HV-501 symbol shows outline bowtie with circle actuator top = AV (automatic valve)"
+            "35-24HS-501 is a hand switch instrument controlling 35-24HV-501 on line 35-24-006 (WAF-200 DN150)",
+            "35-24HI-501 is the co-located hand indicator paired with HS-501",
+            "35-24HV-501 symbol shows open-circle actuator on outline bowtie = AV (automatic valve)",
+            "All other HS/HI/HV/KS/KV/NV triplets in the red box share the same panel but have different numeric bases \u2014 treated as peers"
           ],
           "confidence": "high"
         },

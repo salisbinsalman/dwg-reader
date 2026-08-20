@@ -69,60 +69,56 @@
       ],
       "dossier": "Parent tag: 35-24HS-583\nParent category/block: instruments / \nParent XY: (3543.270232732733, 183.8073)\nNearby descriptions: HS 583 (35-24)\n\nSame-tag CAD family:\n- (none)\n\nNearby line numbers (short ids preferred in output):\n- 35-24-114  full=35-24-114-WFC-15-E10H2A  d=196  layer=P-LINEPOS\n- 35-24-184  full=35-24-184-WAF-200-E10H2A  d=177  layer=P-LINEPOS\n- 35-24-094  full=35-24-094-WAF-300-E10H2A  d=168  layer=P-LINEPOS\n- 35-24-098  full=35-24-098-WAF-300-E10H2A  d=154  layer=P-LINEPOS\n- 35-24-105  full=35-24-105-WAF-300-E10H2A  d=128  layer=P-LINEPOS\n- 35-24-107  full=35-24-107-WAF-100-E10H2A  d=137  layer=P-LINEPOS\n- 35-24-110  full=35-24-110-WAF-100-E10H2A  d=136  layer=P-LINEPOS\n- 35-24-112  full=35-24-112-WAF-400-E10H2A  d=156  layer=P-LINEPOS\n- 35-24-115  full=35-24-115-WAF-250-E10H2A  d=178  layer=P-LINEPOS\n- 35-24-104  full=35-24-104-WFL-15-E10H2A  d=187  layer=P-LINEPOS\n- 35-24-109  full=35-24-109-WAF-500-E10H2A  d=105  layer=P-LINEPOS\n- 35-24-106  full=35-24-106-WAF-500-E10H2A  d=119  layer=P-LINEPOS\n- 35-24-108  full=35-24-108-PP-100-E10H2A  d=133  layer=P-LINEPOS\n- 35-24-113  full=35-24-113-PP-800-E10H2A  d=185  layer=P-LINEPOS\n\nNearby devices (valves/instruments/pumps/\u2026):\n- line_markers: PPI_1100A  d=185  block=PPI_1100A\n- valves: PPI_0900A  d=142  block=PPI_0900A\n- control_valves: PPI_1000A  d=47  block=PPI_1000A\n- instruments: PPI_0100X  d=173  block=PPI_0100X\n- pumps: PPI_0521A-25_0  d=147  block=PPI_0521A-25_0\n- fittings: P7A1214  d=184  block=P7A1214\n\nNearby peer primary equipment (do NOT nest under parent):\n- 35-24P504 (pumps, d=147)\n\nNearby drawing text tokens:\n- GEARBOX 2  d=185  layer=P-OTHER\n- 35-24-114  d=196  layer=P-LINEPOS\n- 35-24  d=11  layer=P-INSTRPOS_TEXTS\n- 587  d=128  layer=P-INSTRPOS_TEXTS\n- 580  d=29  layer=P-INSTRPOS_TEXTS\n- 595  d=148  layer=P-INSTRPOS_TEXTS\n- 9300  d=193  layer=P-INSTRPOS_TEXTS\n- 591  d=145  layer=P-INSTRPOS_TEXTS\n- 597  d=168  layer=P-INSTRPOS_TEXTS\n- 9298  d=193  layer=P-INSTRPOS_TEXTS\n- 593  d=53  layer=P-INSTRPOS_TEXTS\n- 598  d=190  layer=P-INSTRPOS_TEXTS\n- 583  d=14  layer=P-INSTRPOS_TEXTS\n- 594  d=30  layer=P-INSTRPOS_TEXTS\n- 592  d=166  layer=P-INSTRPOS_TEXTS\n- 9299  d=185  layer=P-INSTRPOS_TEXTS\n- 654  d=52  layer=P-INSTRPOS_TEXTS\n- 35-24P504  d=141  layer=P-PUMP_POS\n- 20  d=141  layer=P-PUMP_POS\n- 10  d=128  layer=P-PUMP_POS\n- 4  d=139  layer=P-PUMP_POS\n- 1500  d=129  layer=P-PUMP_POS\n- 35-24-1124  d=175  layer=P-VALVEPOS\n- 003-15  d=176  layer=P-VALVEPOS\n- 35-24-086  d=145  layer=P-VALVEPOS\n- 101-500  d=148  layer=P-VALVEPOS\n- 35-24-090  d=99  layer=P-VALVEPOS\n- 003-50  d=99  layer=P-VALVEPOS\n- 35-24-085  d=169  layer=P-VALVEPOS\n- 35-24-084  d=137  layer=P-VALVEPOS\n- 35-24-184  d=177  layer=P-LINEPOS\n- 35-24-094  d=168  layer=P-LINEPOS\n- 35-24-098  d=154  layer=P-LINEPOS\n- 35-24-105  d=128  layer=P-LINEPOS\n- 35-24-107  d=137  layer=P-LINEPOS\n- 35-24-110  d=136  layer=P-LINEPOS\n- 35-24-112  d=156  layer=P-LINEPOS\n- 35-24-115  d=178  layer=P-LINEPOS\n- 35-24-104  d=187  layer=P-LINEPOS\n- 35-24-109  d=105  layer=P-LINEPOS",
       "ai": {
-        "raw_text": "Looking at the P&ID image, I can see the parent 35-24HS-583 is a hand switch (HS) instrument with an associated HI (Hand Indicator) instrument at position 583. The crop shows a panel/station with multiple HS/HI pairs: 583, 580, and 654, along with associated control valves (35-24HV-583, 35-24HV-580, 35-24HV-654) and other instruments (35-24FV-593, 35-24KV-594, 35-24KS-594).\n\nThe HS-583 is an instrument tag \u2014 it's a hand switch. Looking at the image, 35-24HS-583 appears as a standalone instrument (HS in a circle with HI-583 below it). The associated valve on the same circuit is 35-24HV-583 on a 250mm line.\n\nThe valves visible in the crop: 35-24HV-583 has an automatic actuator (circle on top of bowtie) \u2014 it's an AV type. The bowtie symbols appear to have actuator circles with no M visible, so AV (not AV-M). The triangles appear solid/filled = NC.\n\n35-24HS-583 is an instrument (hand switch). Per the rules, if it's an instrument with no labelled accessories sitting on it as children, emit FUNCTION header + description only with empty rows \u2014 but the HV-583 valve is clearly associated with this HS.\n\nLooking carefully: HS-583 and HI-583 are paired instruments. The associated valve 35-24HV-583 sits on the same circuit. The HS is the selector/switch for HV-583.\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24HS-583\",\n  \"description\": \"35-24HS-583 HAND SWITCH\",\n  \"rows\": [\n    {\n      \"equipment\": \"35-24HI-583\",\n      \"subequipment\": \"\",\n      \"mask\": \"\",\n      \"description\": \"35-24HI-583 HAND INDICATOR\"\n    },\n    {\n      \"equipment\": \"35-24HV-583\",\n      \"subequipment\": \"\",\n      \"mask\": \"\",\n      \"description\": \"35-24HV-583 ISOL VLV AV NC\"\n    }\n  ],\n  \"peers\": [\n    {\n      \"tag\": \"35-24FV-593\",\n      \"evidence\": \"Separate flow control valve with FC-593 controller; own instrument loop, not part of HS-583 circuit\"\n    },\n    {\n      \"tag\": \"35-24KV-594\",\n      \"evidence\": \"Speed control valve with KS-594; separate instrument loop\"\n    },\n    {\n      \"tag\": \"35-24KS-594\",\n      \"evidence\": \"Speed switch associated with KV-594, not HS-583\"\n    },\n    {\n      \"tag\": \"35-24HV-580\",\n      \"evidence\": \"Separate HS-580/HI-580 hand switch circuit; peer instrument station\"\n    },\n    {\n      \"tag\": \"35-24HV-654\",\n      \"evidence\": \"Separate HS-654/HI-654 hand switch circuit; peer instrument station\"\n    },\n    {\n      \"tag\": \"35-24-090\",\n      \"evidence\": \"Hand valve 003-50 on separate branch; not part of HS-583 instrument circuit\"\n    },\n    {\n      \"tag\": \"35-24P504\",\n      \"evidence\": \"Peer pump; major equipment not nested under instrument function\"\n    }\n  ],\n  \"notes\": [\n    \"35-24HS-583 is a hand switch instrument; 35-24HI-583 is the paired hand indicator on the same instrument station\",\n    \"35-24HV-583 is the associated automatic valve (AV NC) controlled by HS-583 on DN250 line\",\n    \"Valve symbols show circle actuator (AV) with solid-filled triangles (NC) \u2014 no M visible so not AV-M\",\n    \"35-24HV-580 and 35-24HV-654 are peer instrument stations with their own HS/HI pairs\"\n  ],\n  \"confidence\": \"high\"\n}\n```",
+        "raw_text": "I'll analyze the P&ID image carefully for the parent tag 35-24HS-583.\n\n**Observations from Image 1:**\n- 35-24HS-583 is a hand switch (HS) instrument with an associated HI-583 indicator, both labeled \"35-24\"\n- The HS-583 sits above HI-583 in a circle (locally mounted instrument style)\n- Connected to valve 35-24HV-583 (DN250) on the main header line\n- The crop shows a row of similar instrument+valve pairs: FV-593, KV-594, HV-583, HV-580, HV-654\n- 35-24HV-583 has an actuator circle on top (automatic valve), bowtie appears with white-filled triangles = NC\n- The valve symbols on the header line all appear to be automatic valves (circle actuator on top), with solid/filled triangles = NC (AV NC)\n- 35-24-090 (003-50) is a hand valve visible at left with check valve symbol (one filled triangle) = CHK\n- 35-24FV-593 has an FC (flow controller) above it\n- 35-24KV-594 has KS-594 above it\n- The main header line appears to be part of the broke system distribution\n\n**Key determination:** 35-24HS-583 is an instrument (hand switch). As per rules, if it's an instrument with no labelled accessories sitting on it directly, emit FUNCTION header + description. However, HI-583 is clearly paired with HS-583 as its indicator, so I'll include it. The associated valve 35-24HV-583 is directly controlled by HS-583.\n\n```json\n{\n  \"sub_process\": \"BR1\",\n  \"function\": \"35-24HS-583\",\n  \"description\": \"35-24HS-583 HAND SW BROKE DIST\",\n  \"rows\": [\n    {\n      \"equipment\": \"35-24HI-583\",\n      \"subequipment\": \"\",\n      \"mask\": \"\",\n      \"description\": \"35-24HI-583 HAND IND\"\n    },\n    {\n      \"equipment\": \"35-24HV-583\",\n      \"subequipment\": \"\",\n      \"mask\": \"\",\n      \"description\": \"35-24HV-583 AUTO VLV AV NC\"\n    }\n  ],\n  \"peers\": [\n    {\n      \"tag\": \"35-24FV-593\",\n      \"evidence\": \"Separate control valve with FC-593 controller, own instrument loop, peer on same header\"\n    },\n    {\n      \"tag\": \"35-24KV-594\",\n      \"evidence\": \"Separate valve with KS-594, own instrument loop, peer on same header\"\n    },\n    {\n      \"tag\": \"35-24HV-580\",\n      \"evidence\": \"Separate HS-580/HI-580 instrument+valve pair, own tag base 580, peer on same header\"\n    },\n    {\n      \"tag\": \"35-24HV-654\",\n      \"evidence\": \"Separate HS-654/HI-654 instrument+valve pair, own tag base 654, peer on same header\"\n    },\n    {\n      \"tag\": \"35-24-090\",\n      \"evidence\": \"Hand valve 003-50 on separate branch, not part of HS-583 circuit\"\n    },\n    {\n      \"tag\": \"35-24P504\",\n      \"evidence\": \"Peer pump, major equipment, not a child of instrument function\"\n    }\n  ],\n  \"notes\": [\n    \"35-24HS-583 is a hand switch instrument paired with indicator HI-583; together they command valve 35-24HV-583 (DN250) on the broke distribution header\",\n    \"HV-583 actuator circle visible on top of bowtie with solid white-filled triangles = AV NC\",\n    \"Neighbouring valve/instrument pairs (FV-593, KV-594, HV-580, HV-654) are peer instruments on the same header, not children of HS-583\",\n    \"No pipe line short-id is directly owned by HS-583 as a FUNCTION \u2014 it is an instrument node\"\n  ],\n  \"confidence\": \"high\"\n}\n```",
         "parsed": {
           "sub_process": "BR1",
           "function": "35-24HS-583",
-          "description": "35-24HS-583 HAND SWITCH",
+          "description": "35-24HS-583 HAND SW BROKE DIST",
           "rows": [
             {
               "equipment": "35-24HI-583",
               "subequipment": "",
               "mask": "",
-              "description": "35-24HI-583 HAND INDICATOR"
+              "description": "35-24HI-583 HAND IND"
             },
             {
               "equipment": "35-24HV-583",
               "subequipment": "",
               "mask": "",
-              "description": "35-24HV-583 ISOL VLV AV NC"
+              "description": "35-24HV-583 AUTO VLV AV NC"
             }
           ],
           "peers": [
             {
               "tag": "35-24FV-593",
-              "evidence": "Separate flow control valve with FC-593 controller; own instrument loop, not part of HS-583 circuit"
+              "evidence": "Separate control valve with FC-593 controller, own instrument loop, peer on same header"
             },
             {
               "tag": "35-24KV-594",
-              "evidence": "Speed control valve with KS-594; separate instrument loop"
-            },
-            {
-              "tag": "35-24KS-594",
-              "evidence": "Speed switch associated with KV-594, not HS-583"
+              "evidence": "Separate valve with KS-594, own instrument loop, peer on same header"
             },
             {
               "tag": "35-24HV-580",
-              "evidence": "Separate HS-580/HI-580 hand switch circuit; peer instrument station"
+              "evidence": "Separate HS-580/HI-580 instrument+valve pair, own tag base 580, peer on same header"
             },
             {
               "tag": "35-24HV-654",
-              "evidence": "Separate HS-654/HI-654 hand switch circuit; peer instrument station"
+              "evidence": "Separate HS-654/HI-654 instrument+valve pair, own tag base 654, peer on same header"
             },
             {
               "tag": "35-24-090",
-              "evidence": "Hand valve 003-50 on separate branch; not part of HS-583 instrument circuit"
+              "evidence": "Hand valve 003-50 on separate branch, not part of HS-583 circuit"
             },
             {
               "tag": "35-24P504",
-              "evidence": "Peer pump; major equipment not nested under instrument function"
+              "evidence": "Peer pump, major equipment, not a child of instrument function"
             }
           ],
           "notes": [
-            "35-24HS-583 is a hand switch instrument; 35-24HI-583 is the paired hand indicator on the same instrument station",
-            "35-24HV-583 is the associated automatic valve (AV NC) controlled by HS-583 on DN250 line",
-            "Valve symbols show circle actuator (AV) with solid-filled triangles (NC) \u2014 no M visible so not AV-M",
-            "35-24HV-580 and 35-24HV-654 are peer instrument stations with their own HS/HI pairs"
+            "35-24HS-583 is a hand switch instrument paired with indicator HI-583; together they command valve 35-24HV-583 (DN250) on the broke distribution header",
+            "HV-583 actuator circle visible on top of bowtie with solid white-filled triangles = AV NC",
+            "Neighbouring valve/instrument pairs (FV-593, KV-594, HV-580, HV-654) are peer instruments on the same header, not children of HS-583",
+            "No pipe line short-id is directly owned by HS-583 as a FUNCTION \u2014 it is an instrument node"
           ],
           "confidence": "high"
         },
@@ -178,7 +174,7 @@
           "equipment": "35-24HV-583",
           "subequipment": "",
           "mask": "",
-          "description": "35-24HV-583 ISOL VLV AV NC"
+          "description": "35-24HV-583 A VLV AV NC"
         }
       ]
     }
