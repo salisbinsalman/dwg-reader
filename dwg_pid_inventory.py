@@ -30,6 +30,7 @@ PROXIMITY_TOL = 12.0
 
 # Strict layer ownership for insert classification.
 LAYER_TO_CATEGORY = {
+    # SML standard layers
     "P-TANK_POS": ("tanks", "tank_symbol"),
     "P-PUMP_POS": ("pumps", "pump_symbol"),
     "P-PUMPS": ("pumps", "pump_symbol"),
@@ -53,7 +54,23 @@ LAYER_TO_CATEGORY = {
     "P-OTHER": ("other_inserts", "other"),
     "P-MARKBALL": ("other_inserts", "mark_ball"),
     "P-LINEPOS": ("line_markers", "line_annotation_block"),
+    # Valmet/GOR standard layers (Italian engineering, "1-* GOR" naming convention)
+    "1-VALVE TEXT GOR": ("valves", "valve_symbol"),
+    "1-TAG AND INSTRUMENTS GOR": ("instruments", "instrument_symbol"),
+    "1-EQUIPMENT GOR": ("process_equipment", "equipment_symbol"),
+    "Revison 03": ("line_markers", "gor_pipe_id"),  # GOR Pipeno pipe-number blocks (typo is in the actual drawing)
 }
+
+# Layers that carry pipe/process line geometry in Valmet/GOR drawings.
+GOR_PIPE_LAYERS = {
+    "1-AIR GOR",
+    "1-WATER GOR",
+    "1-BACKPRESSURE GOR",
+}
+
+# Instrument tag pattern for GOR drawings: starts with 3 digits + letters + optional digits.
+# Matches e.g. "168TC1", "168TT1", "168TA1", "168HC", "168P-410", "168P-410-M1".
+GOR_INSTR_TAG_RE = re.compile(r"^\s*\d{3}[A-Z]{1,4}[\d\-]*[A-Z]?\d*\s*$", re.I)
 
 LINE_NUMBER_RE = re.compile(
     r"^(?P<plant_area>\d{2}-\d{2})-(?P<line_seq>\d{3}(?:/\d+)?)(?:-(?P<line_type>[A-Z]+))?(?:-(?P<size>\d*))?-(?P<pipe_class>[A-Z0-9]+)$"
@@ -206,24 +223,34 @@ def extract_from_inserts(structural: Dict[str, Any]) -> Dict[str, List[Dict[str,
             continue
         comp_type, sub_type, confidence = classified
         attrs = group_attributes(ins.get("attributes", []))
+        block_name = ins.get("name") or ""
+
+        # GOR valve tag block stores the real tag and valve type in attributes.
+        extra: Dict[str, Any] = {
+            "xscale": ins.get("xscale"),
+            "yscale": ins.get("yscale"),
+            "attributes_json": json.dumps(json_safe(attrs), ensure_ascii=True),
+        }
+        if block_name == "TAG VALVOLA" and attrs.get("TAG_VALVOLA"):
+            tag = attrs["TAG_VALVOLA"].strip()
+            extra["valve_type"] = attrs.get("TIPO_VALVOLA", "").strip() or None
+        else:
+            tag = block_name
+
         buckets[comp_type].append(
             base_component(
                 comp_type,
-                tag=ins.get("name"),
+                tag=tag,
                 sub_type=sub_type,
                 handle=ins.get("handle"),
                 layer=ins.get("layer"),
-                block_name=ins.get("name"),
+                block_name=block_name,
                 insert=ins.get("insert"),
                 rotation=ins.get("rotation"),
                 attrs=attrs,
                 source="insert",
                 confidence=confidence,
-                extra={
-                    "xscale": ins.get("xscale"),
-                    "yscale": ins.get("yscale"),
-                    "attributes_json": json.dumps(json_safe(attrs), ensure_ascii=True),
-                },
+                extra=extra,
             )
         )
     return buckets
@@ -278,6 +305,82 @@ def extract_text_labels(structural: Dict[str, Any]) -> Dict[str, List[Dict[str, 
             )
         )
     return buckets
+
+
+def extract_gor_instrument_texts(structural: Dict[str, Any]) -> List[Dict[str, Any]]:
+    """Extract GOR instrument tags from TEXT entities on the GOR instruments layer.
+
+    GOR drawings don't embed instrument tags in block attributes; instead, each
+    instrument is labelled by a nearby TEXT entity (e.g. "168TC1", "168P-410").
+    This supplements the LOOPDCS-block records with the actual tag strings.
+    """
+    rows: List[Dict[str, Any]] = []
+    seen: Set[str] = set()
+    for t in structural.get("text_entities", []):
+        if t.get("layer") != "1-TAG AND INSTRUMENTS GOR":
+            continue
+        text = (t.get("text") or "").strip()
+        if not text:
+            continue
+        # Skip pure loop numbers (3-4 digits with no letters) and short words.
+        if re.match(r"^\d{3,4}$", text) or len(text) < 4:
+            continue
+        if not GOR_INSTR_TAG_RE.match(text):
+            continue
+        key = text.upper()
+        if key in seen:
+            continue
+        seen.add(key)
+        rows.append(
+            base_component(
+                "instruments",
+                tag=text,
+                sub_type="gor_instrument_tag",
+                handle=t.get("handle"),
+                layer=t.get("layer"),
+                insert=t.get("position"),
+                source="text_label",
+                confidence="high",
+            )
+        )
+    return rows
+
+
+def extract_gor_valve_texts(structural: Dict[str, Any]) -> List[Dict[str, Any]]:
+    """Extract GOR Code 03/13 valve tags from TEXT entities on 1-VALVE TEXT GOR.
+
+    In Code 03/13 drawings valves are labelled as plain TEXT entities (e.g. "162KV3-575",
+    "162V-001") rather than TAG VALVOLA INSERT blocks used in Code 14.
+    """
+    rows: List[Dict[str, Any]] = []
+    seen: Set[str] = set()
+    for t in structural.get("text_entities", []):
+        if t.get("layer") != "1-VALVE TEXT GOR":
+            continue
+        text = (t.get("text") or "").strip()
+        if not text or len(text) < 4:
+            continue
+        if re.match(r"^\d{3,4}$", text):
+            continue
+        if not GOR_INSTR_TAG_RE.match(text):
+            continue
+        key = text.upper()
+        if key in seen:
+            continue
+        seen.add(key)
+        rows.append(
+            base_component(
+                "valves",
+                tag=text,
+                sub_type="gor_valve_tag",
+                handle=t.get("handle"),
+                layer=t.get("layer"),
+                insert=t.get("position"),
+                source="text_label",
+                confidence="high",
+            )
+        )
+    return rows
 
 
 def extract_lines(structural: Dict[str, Any]) -> List[Dict[str, Any]]:
@@ -398,6 +501,7 @@ def entity_endpoints(entity: Dict[str, Any]) -> List[Tuple[float, float]]:
 def extract_pipe_segments(structural: Dict[str, Any]) -> List[Dict[str, Any]]:
     rows: List[Dict[str, Any]] = []
     pipe_layers = {
+        # SML standard pipe layers
         "P-FITTINGS",
         "P-LINEPOS",
         "P-EQUIPMENTS",
@@ -409,7 +513,7 @@ def extract_pipe_segments(structural: Dict[str, Any]) -> List[Dict[str, Any]]:
         "P-REJECT",
         "P-AIR",
         "P-MASS1",
-    }
+    } | GOR_PIPE_LAYERS
     for e in structural.get("entities", []):
         if e.get("type") not in ("LINE", "LWPOLYLINE", "POLYLINE"):
             continue
@@ -943,12 +1047,137 @@ def build_functions(
     return rows
 
 
+_GOR_LAYERS = {"1-VALVE TEXT GOR", "1-TAG AND INSTRUMENTS GOR", "1-EQUIPMENT GOR"}
+_WU_RE = re.compile(r"^WU\d+$", re.I)
+
+
+def _is_gor_structural(structural: Dict[str, Any]) -> bool:
+    return any(ins.get("layer") in _GOR_LAYERS for ins in structural.get("inserts", []))
+
+
+_GOR_PREFIX_RE = re.compile(r"^(\d{3})[A-Z]", re.I)
+
+
+def _detect_gor_unit_id(structural: Dict[str, Any]) -> Optional[str]:
+    # First: explicit WU-format function label (Code 14)
+    for t in structural.get("text_entities", []):
+        if t.get("layer") not in ("1-AIR GOR", "1-TAG AND INSTRUMENTS GOR", "1-FLOW TEXT GOR"):
+            continue
+        text = (t.get("text") or "").strip()
+        if _WU_RE.match(text):
+            return text.upper()
+    # Fallback: derive function ID from dominant 3-digit tag prefix (Code 03/13)
+    # e.g. "162KV3-575" → "162", "162V-001" → "162"
+    prefix_count: Dict[str, int] = {}
+    for t in structural.get("text_entities", []):
+        if t.get("layer") not in ("1-VALVE TEXT GOR", "1-TAG AND INSTRUMENTS GOR"):
+            continue
+        text = (t.get("text") or "").strip()
+        m = _GOR_PREFIX_RE.match(text)
+        if m:
+            p = m.group(1)
+            prefix_count[p] = prefix_count.get(p, 0) + 1
+    if prefix_count:
+        return max(prefix_count, key=lambda k: prefix_count[k])
+    return None
+
+
+def extract_gor_pipe_ids(structural: Dict[str, Any]) -> List[Dict[str, Any]]:
+    """Extract pipe IDs from GOR Pipeno INSERT blocks (PIPEID + PIPEDATA attributes)."""
+    rows: List[Dict[str, Any]] = []
+    seen: Set[str] = set()
+    for ins in structural.get("inserts", []):
+        if ins.get("name") != "Pipeno":
+            continue
+        attrs = group_attributes(ins.get("attributes", []))
+        pipe_id = (attrs.get("PIPEID") or "").strip()
+        pipe_data = (attrs.get("PIPEDATA") or "").strip()
+        if not pipe_id:
+            continue
+        key = pipe_id.upper()
+        if key in seen:
+            continue
+        seen.add(key)
+        # PIPEDATA: "65-W38-VE10H2A" → size=65, pipe_class=W38-VE10H2A
+        size_str = ""
+        pipe_class = pipe_data
+        if pipe_data:
+            first, *rest = pipe_data.split("-", 1)
+            if first.isdigit():
+                size_str = first
+                pipe_class = rest[0] if rest else ""
+        x, y, z = xyz(ins.get("insert"))
+        rows.append({
+            "component_type": "lines",
+            "line_number": pipe_id,
+            "plant_area": None,
+            "line_sequence": None,
+            "line_type": "GOR_PIPE",
+            "nominal_size": size_str or None,
+            "pipe_class": pipe_class or None,
+            "parsed": True,
+            "handle": ins.get("handle"),
+            "layer": ins.get("layer"),
+            "x": x,
+            "y": y,
+            "z": z,
+            "position": fmt_point(ins.get("insert")),
+            "source": "gor_pipe_id",
+            "confidence": "high",
+        })
+    return rows
+
+
+def build_gor_functions(
+    inventory: Dict[str, List[Dict[str, Any]]],
+    structural: Dict[str, Any],
+) -> List[Dict[str, Any]]:
+    """Emit a FUNCTION row for each GOR ventil unit (e.g. WU12) found in the drawing."""
+    if not _is_gor_structural(structural):
+        return []
+    unit_id = _detect_gor_unit_id(structural)
+    if not unit_id:
+        return []
+    x: Optional[float] = None
+    y: Optional[float] = None
+    for cat in ("valves", "instruments", "process_equipment"):
+        for item in inventory.get(cat) or []:
+            if item.get("x") is not None and item.get("y") is not None:
+                x, y = float(item["x"]), float(item["y"])
+                break
+        if x is not None:
+            break
+    # Count all valves (inserts for Code 14, text_label for Code 03/13)
+    valve_count = sum(1 for v in (inventory.get("valves") or []) if v.get("tag") and str(v.get("tag")).upper() != "TAG VALVOLA")
+    return [{
+        "function": unit_id,
+        "kind": "equipment",
+        "category": "process_equipment",
+        "block_name": "",
+        "handle": "",
+        "layer": "1-AIR GOR",
+        "x": x or 0.0,
+        "y": y or 0.0,
+        "z": 0.0,
+        "description": f"{unit_id} VENTIL UNIT ({valve_count} VLV)",
+        "nearby_tags": unit_id,
+        "confidence": "high",
+        "source": "cad",
+    }]
+
+
 def build_inventory(structural: Dict[str, Any]) -> Dict[str, List[Dict[str, Any]]]:
     inserts = extract_from_inserts(structural)
     labels = extract_text_labels(structural)
+    gor_instr = extract_gor_instrument_texts(structural)
+    gor_valves = extract_gor_valve_texts(structural)
     buckets = merge_buckets(inserts, labels)
+    if gor_instr:
+        buckets["instruments"] = buckets.get("instruments", []) + gor_instr
+    if gor_valves:
+        buckets["valves"] = buckets.get("valves", []) + gor_valves
 
-    lines = extract_lines(structural)
+    lines = extract_lines(structural) + extract_gor_pipe_ids(structural)
     interconnections = extract_interconnections(structural)
     masks = extract_masks(structural)
     pipe_segments = extract_pipe_segments(structural)
@@ -997,6 +1226,8 @@ def build_inventory(structural: Dict[str, Any]) -> Dict[str, List[Dict[str, Any]
         "primary_components": primary_components,
     }
     inventory["functions"] = build_functions(inventory, structural)
+    if not inventory["functions"]:
+        inventory["functions"] = build_gor_functions(inventory, structural)
     return inventory
 
 
@@ -1007,15 +1238,15 @@ def validate_inventory(structural: Dict[str, Any], inventory: Dict[str, List[Dic
         "pumps": ["P-PUMP_POS", "P-PUMPS"],
         "motors": ["P-MOTOR_POS"],
         "agitators": ["P-AGITATOR_POS"],
-        "valves": ["P-VALVEPOS"],
+        "valves": ["P-VALVEPOS", "1-VALVE TEXT GOR"],
         "control_valves": ["P-CVPOS"],
-        "process_equipment": ["P-EQUIPMENT_POS", "P-EQUIPMENTS"],
-        "instruments": ["P-INSTRU", "P-INSTRPOS"],
+        "process_equipment": ["P-EQUIPMENT_POS", "P-EQUIPMENTS", "1-EQUIPMENT GOR"],
+        "instruments": ["P-INSTRU", "P-INSTRPOS", "1-TAG AND INSTRUMENTS GOR"],
         "fittings": ["P-FITTINGS"],
         "terminals": ["P-PTERMINAL_POS"],
         "symbols": ["P-SYMB"],
         "ventilation": ["P-VENTS", "P-FAN_POS"],
-        "line_markers": ["P-LINEPOS"],
+        "line_markers": ["P-LINEPOS", "Revison 03"],
         "revisions": ["P-REVISIONS"],
         "delivery_limits": ["P-DELIVERY_LIMIT"],
         "sheet_graphics": ["P-A-SHEET", "T-A-SHEET"],
@@ -1056,6 +1287,13 @@ def validate_inventory(structural: Dict[str, Any], inventory: Dict[str, List[Dic
         for t in structural.get("text_entities", [])
         if t.get("layer") == "P-LINEPOS" and (t.get("text") or "").strip()
     }
+    # GOR: Pipeno INSERT blocks carry PIPEID attribute (not text entities)
+    for _ins in structural.get("inserts", []):
+        if _ins.get("name") == "Pipeno":
+            _attrs = group_attributes(_ins.get("attributes", []))
+            _pid = (_attrs.get("PIPEID") or "").strip().upper()
+            if _pid:
+                line_gt.add(_pid)
     line_inv = {r.get("line_number") for r in inventory.get("lines", [])}
     lines_ok = line_gt == line_inv
     all_pass = all_pass and lines_ok
@@ -1088,7 +1326,8 @@ def validate_inventory(structural: Dict[str, Any], inventory: Dict[str, List[Dic
     # Instrument pollution check: instruments must only come from instru layers
     bad_instr = [
         r for r in inventory.get("instruments", [])
-        if r.get("source") == "insert" and r.get("layer") not in ("P-INSTRU", "P-INSTRPOS")
+        if r.get("source") == "insert"
+        and r.get("layer") not in ("P-INSTRU", "P-INSTRPOS", "1-TAG AND INSTRUMENTS GOR")
     ]
     valve_fp = [
         r for r in inventory.get("valves", [])

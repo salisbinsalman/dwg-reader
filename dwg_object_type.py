@@ -80,6 +80,11 @@ def classify_equipment(
         prefix = m.group(1).upper()
         if prefix in prefix_rules:
             return _resolve(prefix_rules[prefix])
+        # L401–L499 = Agitator per SML PS-21 / Valmet PM3 number-series convention
+        if prefix == "L":
+            num_m = re.search(r"(\d+)$", tag)
+            if num_m and 401 <= int(num_m.group(1)) <= 499:
+                return _resolve("2001")
 
     # 3. Description keyword rules (ordered — first match wins)
     desc_upper = eqktx.upper()

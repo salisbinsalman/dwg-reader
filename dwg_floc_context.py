@@ -19,6 +19,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Mapping, Optional
 
 DEFAULT_ABBREV_JSON = Path("inputs/sml_abbreviations.json")
+FLOC_MAP_PATH = Path("inputs/floc_context_map.json")
 
 # Locked Broke System / Shotton PM3 defaults (SML + GT MASK).
 DEFAULT_FLOC_CONTEXT: Dict[str, str] = {
@@ -62,6 +63,28 @@ def merge_floc_context(base: Optional[Mapping[str, str]] = None, **overrides: st
         if v is not None and str(v).strip():
             out[k] = str(v).strip()
     return out
+
+
+def load_floc_context_for_input(
+    input_path: "Path",
+    map_path: Optional["Path"] = None,
+) -> Dict[str, str]:
+    """Return merged FLOC context for a given DWG input path.
+
+    Looks up the DWG stem (filename without extension) in floc_context_map.json.
+    Falls back to DEFAULT_FLOC_CONTEXT when no entry matches.
+    """
+    stem = Path(str(input_path)).stem
+    mp = map_path if map_path is not None else FLOC_MAP_PATH
+    if Path(mp).exists():
+        try:
+            raw: Dict = json.loads(Path(mp).read_text(encoding="utf-8"))
+            ctx_override = raw.get(stem)
+            if ctx_override and isinstance(ctx_override, dict):
+                return merge_floc_context(ctx_override)
+        except Exception:
+            pass
+    return merge_floc_context(None)
 
 
 def build_tplnr(*parts: str, max_len: int = 30) -> str:
@@ -187,8 +210,12 @@ def normalize_pltxt(text: str, max_len: int = 40) -> str:
     return abbreviate_pltxt(text, max_len=max_len)
 
 
-# Pure numeric P&ID line tags: 35-24-095 (not 35-24-001.1, 35-24LC-576, …)
-_LINE_EQUIPMENT_TAG_RE = re.compile(r"^35-24-\d+$", re.I)
+# Pure numeric P&ID line tags.
+# SML PS-21 / Valmet PM3: 35-24-095  (generalised to any NN-NN-NNN area code)
+# Valmet Tissue:          168L-522    (\d+L-\d+ — L in position-3 with trailing dash)
+_LINE_EQUIPMENT_TAG_RE = re.compile(
+    r"^(?:\d{2}-\d{2}-\d+|\d+L-\d+)$", re.I
+)
 _VALVE_ON_LINE_RE = re.compile(
     r"\b(VLV|VALVE|HV|FV|LV|XV|CV|PV|BV|TV|NC|NO|DRN|AV)\b",
     re.I,
@@ -272,8 +299,11 @@ _VALVE_LETTER_PREFIXES: frozenset[str] = frozenset(
     {"HV", "FV", "LV", "XV", "CV", "PV", "BV", "TV", "KV", "AV"}
 )
 
-# Matches the embedded letter block in tags like 35-24HV-548, 35-24LV2-576.
-_VALVE_EMBEDDED_RE = re.compile(r"^35-\d{2}-?([A-Z]+)\d*-?\d", re.I)
+# Matches the embedded letter block in tags like 35-24HV-548, 36-45FV-015.
+_VALVE_EMBEDDED_RE = re.compile(r"^(\d{2}-\d{2})-?([A-Z]+)\d*-?\d", re.I)
+
+# Shotton pump tags: 36-45P502, 55-30P501, 35-23P501.
+_PUMP_TAG_RE = re.compile(r"^\d{2}-\d{2}P\d{3}$", re.I)
 
 # Tag prefixes that unambiguously indicate an automatic / control valve.
 _AUTO_VALVE_PREFIXES: frozenset[str] = frozenset({"FV", "XV", "CV", "AV"})
@@ -331,14 +361,31 @@ _VALVE_TYPE_ONLY_RE = re.compile(
 _ATTACHMENT_TOKENS = ("FLS", "DRN", "SMP", "CHK", "PRV", "SV")
 ALLOWED_VALVE_TOKENS = {
     "HV", "NC", "NO", "CHK", "PRV", "SV", "FLS", "SMP", "DRN", "AV", "AV-M",
+    # GOR/Valmet valve type codes
+    "BF", "LWE", "ST", "FL", "IT", "VX",
 }
+
+
+def is_pump_tag(tag: str) -> bool:
+    """True for primary-equipment pump tags like 36-45P502."""
+    t = re.sub(r"\s+", "", str(tag or "").strip()).upper()
+    return bool(_PUMP_TAG_RE.match(t))
+
+
+def is_pump_equipment(tag: str, eqktx: str = "") -> bool:
+    """True when the row is a pump (never export/classify as a valve)."""
+    if is_pump_tag(tag):
+        return True
+    desc = str(eqktx or "").upper()
+    t = re.sub(r"\s+", "", str(tag or "").strip()).upper()
+    return bool(re.search(r"\bPMP\b", desc) and re.search(r"P\d{3}", t))
 
 
 def is_valve_tag(tag: str) -> bool:
     """True for tags with an embedded valve-type letter block: 35-24HV-548, 35-24FV-570."""
     t = re.sub(r"\s+", "", str(tag or "").strip()).upper()
     m = _VALVE_EMBEDDED_RE.match(t)
-    return bool(m) and m.group(1).upper() in _VALVE_LETTER_PREFIXES
+    return bool(m) and m.group(2).upper() in _VALVE_LETTER_PREFIXES
 
 
 def strip_valve_prefix(tag: str) -> str:
@@ -356,7 +403,7 @@ def strip_valve_prefix(tag: str) -> str:
         area, pos_digit, number = m.group(1), m.group(2), m.group(3)
         return f"{area}-{pos_digit}-{number}" if pos_digit else f"{area}-{number}"
 
-    return re.sub(r"^(35-\d{2})-?[A-Z]+(\d*)-?(\d+.*)$", _rebuild, t, flags=re.I)
+    return re.sub(r"^(\d{2}-\d{2})-?[A-Z]+(\d*)-?(\d+.*)$", _rebuild, t, flags=re.I)
 
 
 def infer_valve_type(tag: str, eqktx: str) -> str:
@@ -387,7 +434,7 @@ def infer_valve_type(tag: str, eqktx: str) -> str:
         return " ".join(qualifiers)
 
     m = _VALVE_EMBEDDED_RE.match(tag_u)
-    if m and m.group(1).upper() in _AUTO_VALVE_PREFIXES:
+    if m and m.group(2).upper() in _AUTO_VALVE_PREFIXES:
         return "AV"
 
     return "HV"
@@ -444,7 +491,7 @@ def apply_sop_valve_type(raw: str) -> str:
         tokens = [t for t in tokens if t not in {"NC", "NO", "HV"}]
         if "AV-M" in tokens:
             tokens = [t for t in tokens if t != "AV"]
-    order = ("AV-M", "AV", "DRN", "NC", "NO", "FLS", "SMP", "CHK", "PRV", "SV", "HV")
+    order = ("AV-M", "AV", "DRN", "NC", "NO", "FLS", "SMP", "CHK", "PRV", "SV", "BF", "LWE", "ST", "FL", "IT", "VX", "HV")
     return " ".join(t for t in order if t in tokens)
 
 
@@ -516,12 +563,16 @@ def is_valve_equipment(tag: str, eqktx: str) -> bool:
     Description-based VLV detection only applies to plain numeric line tags
     (35-24-NNN) that carry no instrument-type prefix of their own.
     """
+    if is_pump_equipment(tag, eqktx):
+        return False
     if is_valve_tag(tag):
         return True
     t = re.sub(r"\s+", "", str(tag or "").strip()).upper()
-    if _VALVE_EMBEDDED_RE.match(t):
+    m = _VALVE_EMBEDDED_RE.match(t)
+    if m:
         # Has a letter-group prefix but it's not a valve prefix → instrument, not valve.
-        return False
+        if m.group(2).upper() not in _VALVE_LETTER_PREFIXES:
+            return False
     desc = str(eqktx or "")
     # VLV / VALVE is the primary signal.
     if _VLV_DESC_RE.search(desc):

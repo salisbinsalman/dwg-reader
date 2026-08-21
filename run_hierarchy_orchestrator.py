@@ -3,7 +3,7 @@
 Orchestrate hierarchy building over inventory FUNCTIONs, one by one.
 
 Flow:
-  1. Load tags from pid_inventory.json ``functions`` (all kinds by default)
+  1. Load tags from pid_inventory.json ``functions`` (equipment+line by default)
   2. Take the first ``--limit`` tags (default 10; 0 = all)
   3. For each tag: run viewer+Bedrock hierarchy, then compare to GT
      - EQUIPMENT: hits / misses (in GT, not in ours) / extras
@@ -24,6 +24,8 @@ import sys
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
+import re
+
 from dwg_pure_dump import find_json, json_path, logs_dir, safe_name, write_json
 from eval_hierarchy_gt import (
     GT_COLUMNS,
@@ -40,11 +42,387 @@ if "DESCRIPTION" not in HIERARCHY_COLUMNS:
 if "MASK" not in HIERARCHY_COLUMNS:
     HIERARCHY_COLUMNS = HIERARCHY_COLUMNS + ["MASK"]
 
+_GOR_FN_RE = re.compile(r"^WU\d+$", re.I)
+_TAG_SUFFIX_RE = re.compile(r"(\d+)$")
 
-def load_inventory_functions(path: Path, kinds: Optional[List[str]] = None) -> List[Dict[str, Any]]:
+_GOR_TIPO_TYPE_LABELS: Dict[str, str] = {
+    "BF": "BUTTERFLY VLV",
+    "LWE": "SOLENOID NC VLV",
+    "IT": "ISOLATION TAP VLV",
+    "VX": "3-WAY SOL VLV",
+    "ST": "SAFETY VLV",
+    "FL": "BLIND FLANGE",
+}
+
+
+def _tipo_suffix(tipo: str) -> Optional[str]:
+    """Extract TIPO family code (e.g. '2K0-BF-65' → 'BF', 'ST-65' → 'ST')."""
+    parts = (tipo or "").split("-")
+    if len(parts) >= 3:
+        return parts[1].upper()
+    if len(parts) == 2:
+        return parts[0].upper()
+    return None
+
+
+def _gor_code03_valve_type(tag: str) -> Optional[str]:
+    """Infer SAP valve type for Code 03 GOR text tags (no TIPO_VALVOLA block)."""
+    t = re.sub(r"\s+", "", str(tag or "").strip()).upper()
+    if not t:
+        return None
+    if "KV" in t:
+        return "AV"
+    if re.match(r"^\d+V-\d", t):
+        return "NC"
+    return "HV"
+
+
+def _tipo_to_sap_type(tipo: str) -> tuple[Optional[str], bool]:
+    """Map GOR TIPO_VALVOLA to SAP valve type. Returns (sap_type, is_valve)."""
+    t = (tipo or "").strip().upper()
+    if not t:
+        return None, True
+
+    suffix = _tipo_suffix(t) or ""
+    prefix = t.split("-")[0].upper() if "-" in t else ""
+
+    if suffix == "FL":
+        return None, False
+    if suffix == "ST":
+        return "SV", True
+    if suffix == "VX":
+        return "AV", True
+    if suffix == "LWE":
+        return "NC", True
+    if suffix == "IT":
+        return "NC", True
+    if suffix == "BF":
+        return ("AV", True) if prefix.startswith("6") else ("NC", True)
+
+    return None, True
+
+
+def _seed_gor_valve_types(inv_path: Path, valve_types_path: Path, fn_id: str) -> None:
+    """Create valve_types.json entries from GOR inventory (no Bedrock vision)."""
+    try:
+        inv_data = json.loads(inv_path.read_text(encoding="utf-8"))
+    except Exception:
+        return
+
+    raw: Dict[str, Any] = {}
+    if valve_types_path.exists():
+        try:
+            raw = json.loads(valve_types_path.read_text(encoding="utf-8"))
+        except Exception:
+            raw = {}
+    tags_data = raw.get("tags", {})
+    if not isinstance(tags_data, dict):
+        tags_data = {}
+
+    seeded = 0
+    for v in inv_data.get("valves") or []:
+        tag = str(v.get("tag") or "").strip().upper()
+        if not tag or tag == "TAG VALVOLA":
+            continue
+        if tag not in tags_data:
+            tags_data[tag] = {
+                "fn": fn_id,
+                "layer": str(v.get("layer") or "1-VALVE TEXT GOR"),
+            }
+            seeded += 1
+
+    raw["tags"] = tags_data
+    valve_types_path.parent.mkdir(parents=True, exist_ok=True)
+    valve_types_path.write_text(
+        json.dumps(raw, indent=2, ensure_ascii=False), encoding="utf-8"
+    )
+    if seeded:
+        print(f"[gor] valve_types seeded: {seeded} tags from inventory", flush=True)
+
+
+def _patch_gor_valve_types(inv_path: Path, valve_types_path: Path, fn_id: str) -> None:
+    """Apply TIPO SAP types and mark instruments is_valve=False in valve_types.json."""
+    try:
+        inv_data = json.loads(inv_path.read_text(encoding="utf-8"))
+    except Exception:
+        return
+    _seed_gor_valve_types(inv_path, valve_types_path, fn_id)
+    if not valve_types_path.exists():
+        return
+    try:
+        raw = json.loads(valve_types_path.read_text(encoding="utf-8"))
+    except Exception:
+        return
+    tags_data = raw.get("tags", {})
+    if not isinstance(tags_data, dict):
+        tags_data = {}
+
+    # Build TIPO → SAP type map from inventory valves
+    tipo_map: Dict[str, Optional[str]] = {}
+    tipo_full: Dict[str, str] = {}
+    valve_flags: Dict[str, bool] = {}
+    for v in inv_data.get("valves") or []:
+        tag = str(v.get("tag") or "").strip().upper()
+        tipo = str(v.get("valve_type") or "").strip()
+        if tag:
+            tipo_full[tag] = tipo
+            sap_type, is_valve = _tipo_to_sap_type(tipo)
+            tipo_map[tag] = sap_type
+            valve_flags[tag] = is_valve
+
+    # Instrument tags (skip LOOPDCS placeholders)
+    instr_tags: set = set()
+    seen_instr: set = set()
+    for instr in inv_data.get("instruments") or []:
+        tag = str(instr.get("tag") or "").strip().upper()
+        if tag and tag not in ("LOOPDCS",) and tag not in seen_instr:
+            seen_instr.add(tag)
+            instr_tags.add(tag)
+
+    tipo_applied = instr_marked = 0
+
+    for tag_upper in list(tags_data.keys()):
+        entry = tags_data[tag_upper]
+        if not isinstance(entry, dict):
+            continue
+
+        if tag_upper in instr_tags:
+            entry["is_valve"] = False
+            entry["type"] = "INSTR"
+            instr_marked += 1
+        elif tag_upper in tipo_map:
+            # TIPO code is authoritative for GOR drawings — Bedrock vision is
+            # trained on SML symbols and misclassifies Valmet/Italian CAD styles.
+            is_valve = valve_flags.get(tag_upper, True)
+            vtype = tipo_map[tag_upper] or _gor_code03_valve_type(tag_upper)
+            entry["tipo"] = tipo_full.get(tag_upper, "")
+            entry["source"] = "tipo_code" if tipo_map[tag_upper] else "gor_tag"
+            if not is_valve:
+                entry["is_valve"] = False
+                entry.pop("type", None)
+            elif vtype:
+                entry["type"] = vtype
+                tipo_applied += 1
+        else:
+            vtype = _gor_code03_valve_type(tag_upper)
+            if vtype:
+                entry["type"] = vtype
+                entry["source"] = "gor_tag"
+                entry["is_valve"] = True
+                tipo_applied += 1
+
+    raw["tags"] = tags_data
+    valve_types_path.write_text(
+        json.dumps(raw, indent=2, ensure_ascii=False), encoding="utf-8"
+    )
+    print(
+        f"[gor] valve_types patched: {tipo_applied} TIPO codes applied, {instr_marked} instruments marked",
+        flush=True,
+    )
+
+
+def _is_gor_inventory(inv_path: Path) -> bool:
+    """True when the inventory is from a GOR/Valmet drawing (Code 03, 13, or 14)."""
+    try:
+        data = json.loads(inv_path.read_text(encoding="utf-8"))
+        # Code 14: Pipeno blocks produce gor_pipe_id source on lines
+        if any(ln.get("source") == "gor_pipe_id" for ln in (data.get("lines") or [])):
+            return True
+        # Code 14: TAG VALVOLA INSERT blocks
+        if any(str(v.get("block_name") or "").upper() == "TAG VALVOLA" for v in (data.get("valves") or [])):
+            return True
+        # Code 03/13: valve text labels written to 1-VALVE TEXT GOR
+        if any(str(v.get("layer") or "") == "1-VALVE TEXT GOR" for v in (data.get("valves") or [])):
+            return True
+        # Legacy: explicit WU function tag
+        return any(_GOR_FN_RE.match(str(fn.get("function") or "")) for fn in (data.get("functions") or []))
+    except Exception:
+        return False
+
+
+def _gor_valve_desc(tag: str, tipo: str) -> str:
+    parts = (tipo or "").split("-")
+    if len(parts) >= 3:
+        vtype, dn = parts[1], parts[2]
+    elif len(parts) == 2:
+        vtype, dn = parts[0], parts[1]
+    else:
+        vtype, dn = tipo, ""
+    label = _GOR_TIPO_TYPE_LABELS.get(vtype.upper(), f"{vtype} VLV" if vtype else "VLV")
+    return f"{tag} {label} DN{dn}" if dn else f"{tag} {label}"
+
+
+def build_gor_hierarchy(inventory: Dict[str, Any]) -> List[Dict[str, str]]:
+    """Build hierarchy CSV for GOR/Valmet drawings without calling Bedrock.
+
+    For Code 14 (WU series): valves are nested as SUB-EQUIPMENT under the pipe line
+    whose numeric suffix matches (168V-522 → sub of 168L-522).
+    For Code 03/13: no Pipeno blocks, so valves/instruments are flat EQUIPMENT.
+    """
+    rows: List[Dict[str, str]] = []
+    for fn_item in (inventory.get("functions") or []):
+        unit_id = str(fn_item.get("function") or "").strip().upper()
+        if not unit_id:
+            continue
+        desc = str(fn_item.get("description") or f"{unit_id} VENTIL UNIT")
+        rows.append({
+            "SUB-PROCESS": "", "FUNCTION": unit_id, "EQUIPMENT": "",
+            "SUB-EQUIPMENT": "", "MASK": unit_id, "DESCRIPTION": desc,
+        })
+
+        # Build suffix→line_tag map from Pipeno blocks (Code 14 only)
+        suffix_to_line: Dict[str, str] = {}
+        lines_in_order: List[tuple] = []
+        seen_lines: set = set()
+        for line in (inventory.get("lines") or []):
+            if line.get("source") != "gor_pipe_id":
+                continue
+            ltag = str(line.get("line_number") or "").strip()
+            if not ltag or ltag.upper() in seen_lines:
+                continue
+            seen_lines.add(ltag.upper())
+            m = _TAG_SUFFIX_RE.search(ltag)
+            if m:
+                sfx = m.group(1)
+                if sfx not in suffix_to_line:
+                    suffix_to_line[sfx] = ltag
+            lines_in_order.append((ltag, line))
+
+        # Assign each valve to its matching line by numeric suffix
+        valves_for_line: Dict[str, List[Dict[str, Any]]] = {}
+        unmatched_valves: List[Dict[str, Any]] = []
+        seen_valves: set = set()
+        for v in (inventory.get("valves") or []):
+            tag = str(v.get("tag") or "").strip()
+            if not tag or tag.upper() == "TAG VALVOLA" or tag.upper() in seen_valves:
+                continue
+            seen_valves.add(tag.upper())
+            m = _TAG_SUFFIX_RE.search(tag)
+            parent_line = suffix_to_line.get(m.group(1)) if m else None
+            if parent_line:
+                valves_for_line.setdefault(parent_line, []).append(v)
+            else:
+                unmatched_valves.append(v)
+
+        # Emit each line as EQUIPMENT, then its matched valves as SUB-EQUIPMENT
+        for ltag, line in lines_in_order:
+            size = str(line.get("nominal_size") or "")
+            pc = str(line.get("pipe_class") or "")
+            desc_parts = [ltag, "PIPE"]
+            if size:
+                desc_parts.append(f"DN{size}")
+            if pc:
+                desc_parts.append(pc)
+            rows.append({
+                "SUB-PROCESS": "", "FUNCTION": "", "EQUIPMENT": ltag,
+                "SUB-EQUIPMENT": "", "MASK": "",
+                "DESCRIPTION": " ".join(desc_parts),
+            })
+            for v in valves_for_line.get(ltag, []):
+                vtag = str(v.get("tag") or "").strip()
+                rows.append({
+                    "SUB-PROCESS": "", "FUNCTION": "", "EQUIPMENT": "",
+                    "SUB-EQUIPMENT": vtag, "MASK": "",
+                    "DESCRIPTION": _gor_valve_desc(vtag, str(v.get("valve_type") or "")),
+                })
+
+        # Unmatched valves (no Pipeno suffix match, or Code 03/13) as EQUIPMENT
+        for v in unmatched_valves:
+            vtag = str(v.get("tag") or "").strip()
+            rows.append({
+                "SUB-PROCESS": "", "FUNCTION": "", "EQUIPMENT": vtag,
+                "SUB-EQUIPMENT": "", "MASK": "",
+                "DESCRIPTION": _gor_valve_desc(vtag, str(v.get("valve_type") or "")),
+            })
+
+        # Instruments (real tag strings; skip LOOPDCS block-name placeholders)
+        seen_instr: set = set()
+        for instr in (inventory.get("instruments") or []):
+            tag = str(instr.get("tag") or "").strip()
+            if not tag or tag.upper() in ("LOOPDCS",) or tag.upper() in seen_instr:
+                continue
+            seen_instr.add(tag.upper())
+            rows.append({
+                "SUB-PROCESS": "", "FUNCTION": "", "EQUIPMENT": tag,
+                "SUB-EQUIPMENT": "", "MASK": "",
+                "DESCRIPTION": f"{tag} INSTRUMENT",
+            })
+    return rows
+
+
+DEFAULT_HIERARCHY_FUNCTION_KINDS = ("equipment", "line")
+_INSTRUMENT_FN_RE = re.compile(r"^\d{2}-\d{2}(?:ES|HS|HI|WI|KI|KJ|MCS)-\d", re.I)
+_PHANTOM_EQUIP_RE = re.compile(r"\.\d+$")
+
+
+def _is_instrument_function_tag(tag: str) -> bool:
+    return bool(_INSTRUMENT_FN_RE.match(str(tag or "").strip().upper().replace(" ", "")))
+
+
+def _dominant_area_prefixes(inv_path: Path, *, min_count: int = 2, limit: int = 4) -> set[str]:
+    try:
+        data = json.loads(inv_path.read_text(encoding="utf-8"))
+    except Exception:
+        return set()
+    from collections import Counter
+
+    counts: Counter[str] = Counter()
+    for fn in data.get("functions") or []:
+        if str(fn.get("kind") or "").lower() not in DEFAULT_HIERARCHY_FUNCTION_KINDS:
+            continue
+        tag = str(fn.get("function") or "").strip().upper().replace(" ", "")
+        m = re.match(r"^(\d{2}-\d{2})", tag)
+        if m:
+            counts[m.group(1)] += 1
+    return {p for p, c in counts.most_common(limit) if c >= min_count}
+
+
+def _plant_prefix(tag: str) -> str:
+    m = re.match(r"^(\d{2}-\d{2})", str(tag or "").strip().upper().replace(" ", ""))
+    return m.group(1) if m else ""
+
+
+def sanitize_hierarchy_rows(rows: List[Dict[str, str]]) -> List[Dict[str, str]]:
+    """Drop phantom AI tags, cross-area noise, and duplicate equipment assignments."""
+    out: List[Dict[str, str]] = []
+    seen_equipment: set[str] = set()
+    current_fn_prefix = ""
+
+    for row in rows:
+        fn = str(row.get("FUNCTION") or "").strip().upper().replace(" ", "")
+        eq = str(row.get("EQUIPMENT") or "").strip().upper().replace(" ", "")
+        sub = str(row.get("SUB-EQUIPMENT") or "").strip().upper().replace(" ", "")
+
+        if fn and not eq and not sub:
+            current_fn_prefix = _plant_prefix(fn)
+            out.append(row)
+            continue
+
+        if not eq and not sub:
+            out.append(row)
+            continue
+
+        tag = eq or sub
+        if _PHANTOM_EQUIP_RE.search(tag):
+            continue
+        if current_fn_prefix and _plant_prefix(tag) and _plant_prefix(tag) != current_fn_prefix:
+            continue
+        if tag in seen_equipment:
+            continue
+        seen_equipment.add(tag)
+        out.append(row)
+    return out
+
+
+def load_inventory_functions(
+    path: Path,
+    kinds: Optional[List[str]] = None,
+    *,
+    area_prefixes: Optional[set[str]] = None,
+) -> List[Dict[str, Any]]:
     data = json.loads(path.read_text(encoding="utf-8"))
     rows = data.get("functions") or []
-    if kinds:
+    if kinds is not None:
         want = {k.lower() for k in kinds}
         rows = [r for r in rows if str(r.get("kind") or "").lower() in want]
     # Keep inventory order; drop duplicate tags (first kind wins).
@@ -52,12 +430,20 @@ def load_inventory_functions(path: Path, kinds: Optional[List[str]] = None) -> L
     seen = set()
     for r in rows:
         tag = str(r.get("function") or "").strip().upper().replace(" ", "")
-        if not tag or tag in seen:
+        if not tag or tag in seen or _is_instrument_function_tag(tag):
             continue
         seen.add(tag)
         row = dict(r)
         row["function"] = tag
         out.append(row)
+    if area_prefixes:
+        filtered: List[Dict[str, Any]] = []
+        for r in out:
+            tag = str(r.get("function") or "")
+            prefix = _plant_prefix(tag)
+            if not prefix or prefix in area_prefixes:
+                filtered.append(r)
+        out = filtered
     return out
 
 
@@ -216,7 +602,7 @@ def _append_orphan_valve_rows(
             "FUNCTION": "",
             "EQUIPMENT": tag,
             "SUB-EQUIPMENT": "",
-            "MASK": "",
+            "MASK": "ORPHAN",
             "DESCRIPTION": f"{tag} VLV",
         }
 
@@ -324,7 +710,7 @@ def main() -> int:
     parser.add_argument(
         "--kinds",
         default="",
-        help="Comma-separated function kinds (equipment,instrument,line). Empty = all inventory FUNCTIONs",
+        help="Comma-separated function kinds (equipment,instrument,line). Default: equipment,line. Use 'all' for every kind.",
     )
     parser.add_argument(
         "--tags",
@@ -394,17 +780,28 @@ def main() -> int:
         return 2
 
     gt_path = Path(args.gt).expanduser().resolve()
-    if not gt_path.exists():
+    is_gor = _is_gor_inventory(inv_path)
+    if not gt_path.exists() and not is_gor:
         print(f"[error] Missing GT file: {gt_path}", file=sys.stderr)
         return 2
-    gt_rows = load_gt_rows(gt_path)
+    gt_rows = load_gt_rows(gt_path) if gt_path.exists() else []
 
     if args.tags.strip():
         tags = [t.strip().upper() for t in args.tags.split(",") if t.strip()]
         selected = [{"function": t, "kind": "explicit"} for t in tags]
     else:
-        kinds = [k.strip() for k in args.kinds.split(",") if k.strip() and k.strip().lower() != "all"]
-        selected = load_inventory_functions(inv_path, kinds=kinds or None)
+        if args.kinds.strip().lower() == "all":
+            kinds = None
+        elif args.kinds.strip():
+            kinds = [k.strip() for k in args.kinds.split(",") if k.strip()]
+        else:
+            kinds = list(DEFAULT_HIERARCHY_FUNCTION_KINDS)
+        area_prefixes = _dominant_area_prefixes(inv_path)
+        selected = load_inventory_functions(
+            inv_path,
+            kinds=kinds,
+            area_prefixes=area_prefixes or None,
+        )
         if args.limit > 0:
             selected = selected[: args.limit]
         tags = [str(r.get("function") or "").upper() for r in selected if r.get("function")]
@@ -416,6 +813,40 @@ def main() -> int:
     all_tags = list(tags)
 
     combined_csv = out_dir / f"{base}.hierarchy_orchestrator.csv"
+
+    # GOR bypass: build hierarchy deterministically without Bedrock, then run
+    # valve classify + SAP export the same as normal.
+    if is_gor:
+        print(f"[gor] Detected GOR/Valmet drawing — building deterministic hierarchy for: {', '.join(tags)}", flush=True)
+        inventory_data = json.loads(inv_path.read_text(encoding="utf-8"))
+        gor_rows = build_gor_hierarchy(inventory_data)
+        write_hierarchy_csv(combined_csv, gor_rows)
+        print(f"[gor] Written {len(gor_rows)} rows → {combined_csv.name}", flush=True)
+        limit_s = str(args.limit if args.limit > 0 else 0)
+        if combined_csv.exists() and combined_csv.stat().st_size > 0:
+            valve_types_path = json_path(out_dir, f"{base}.valve_types.json")
+            fn_id = tags[0] if tags else ""
+            print("\n---------- gor tipo mapping (TIPO_VALVOLA → SAP) ----------", flush=True)
+            _patch_gor_valve_types(inv_path, valve_types_path, fn_id)
+            if not args.no_export_floc:
+                floc_cmd = [
+                    sys.executable,
+                    str(Path(__file__).resolve().parent / "export_sap_floc.py"),
+                    "--input", str(input_path), "--output-dir", str(out_dir),
+                    "--hierarchy-csv", str(combined_csv), "--gt", str(gt_path), "--limit", limit_s,
+                ]
+                print("\n---------- export SAP FLOC ----------", flush=True)
+                subprocess.run(floc_cmd, check=False)
+            if not args.no_export_equipment:
+                eq_cmd = [
+                    sys.executable,
+                    str(Path(__file__).resolve().parent / "export_sap_equipment.py"),
+                    "--input", str(input_path), "--output-dir", str(out_dir),
+                    "--hierarchy-csv", str(combined_csv), "--limit", limit_s,
+                ]
+                print("\n---------- export SAP Equipment ----------", flush=True)
+                subprocess.run(eq_cmd, check=False)
+        return 0
     report_json = json_path(out_dir, f"{base}.hierarchy_orchestrator_report.json")
     log_path = log_dir / "hierarchy-orchestrator.log"
     parts_dir = out_dir / "jsons" / "_orchestrator_parts"
@@ -525,13 +956,17 @@ def main() -> int:
                 continue
             combined_rows.extend(tag_rows)
             write_hierarchy_csv(combined_csv, combined_rows)
-            score = score_function(tag, tag_rows, gt_rows)
+            scoreable_tag_rows = [r for r in tag_rows if (r.get("MASK") or "").strip().upper() != "ORPHAN"]
+            score = score_function(tag, scoreable_tag_rows, gt_rows)
             per_function_scores.append(score)
             print(format_function_report(score))
 
     # Final scores always cover the full selected set from the combined CSV.
+    # Strip orphan rows (MASK=ORPHAN) — they exist for SAP export completeness but
+    # are placed by proximity heuristic, not AI, so they must not penalise scoring.
     combined_rows = read_hierarchy_csv(combined_csv) if combined_csv.exists() else combined_rows
-    per_function_scores = [score_function(tag, combined_rows, gt_rows) for tag in all_tags]
+    scoreable_rows = [r for r in combined_rows if (r.get("MASK") or "").strip().upper() != "ORPHAN"]
+    per_function_scores = [score_function(tag, scoreable_rows, gt_rows) for tag in all_tags]
     for score in per_function_scores:
         print(format_function_report(score))
 
@@ -602,6 +1037,9 @@ def main() -> int:
     if combined_csv.exists() and combined_csv.stat().st_size > 0:
         structural_path = json_path(out_dir, f"{base}.structural_dump.json")
         _append_orphan_valve_rows(combined_csv, structural_path, inv_path)
+        cleaned = sanitize_hierarchy_rows(read_hierarchy_csv(combined_csv))
+        write_hierarchy_csv(combined_csv, cleaned)
+        print(f"[sanitize] hierarchy cleaned → {len(cleaned)} rows", flush=True)
 
     if combined_csv.exists() and combined_csv.stat().st_size > 0:
         limit_s = str(args.limit if args.limit > 0 else 0)

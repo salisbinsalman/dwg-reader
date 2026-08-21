@@ -31,13 +31,14 @@ from dwg_floc_context import (
     ALLOWED_VALVE_TOKENS,
     apply_sop_valve_type,
     combine_valve_type,
+    is_pump_equipment,
     is_valve_equipment,
 )
 from dwg_pure_dump import evidence_dir, find_json, json_path, safe_name, write_json
 
 LEGEND_PATH = Path("inputs/legend.png")
 DEFAULT_MODEL_ID = "eu.anthropic.claude-sonnet-4-6"
-VALVE_LAYERS = frozenset({"P-VALVEPOS", "P-CVPOS", "P-SYMB"})
+VALVE_LAYERS = frozenset({"P-VALVEPOS", "P-CVPOS", "P-SYMB", "1-VALVE TEXT GOR"})
 
 # Shared bowtie fill rules — white (Shotton P&ID) and red/colored (GOR legend sheets).
 _BOWTIE_FILL_RULES = """\
@@ -239,6 +240,34 @@ def collect_text_locations(structural: Dict[str, Any]) -> Dict[str, Dict[str, An
         # reference copies on annotation layers would snap to the wrong position.
         valve_locs = [loc for loc in locs if loc["layer"] in VALVE_LAYERS]
         out[txt] = (valve_locs or locs)[0]
+    return out
+
+
+def collect_gor_attribute_tag_locations(structural: Dict[str, Any]) -> Dict[str, Dict[str, Any]]:
+    """GOR drawings store valve tags in TAG VALVOLA INSERT attributes, not TEXT entities.
+
+    Returns a tag→{x,y,layer} map that can be merged into text_locations so the
+    rest of the valve-locate pipeline treats them like any other located tag.
+    """
+    out: Dict[str, Dict[str, Any]] = {}
+    for ins in structural.get("inserts") or []:
+        if not isinstance(ins, dict):
+            continue
+        if ins.get("name") != "TAG VALVOLA":
+            continue
+        xy = _xy(ins)
+        if xy is None:
+            continue
+        tag_val = ""
+        for a in ins.get("attributes", []):
+            if isinstance(a, dict) and (a.get("tag") or "").upper() == "TAG_VALVOLA":
+                tag_val = str(a.get("text") or a.get("value") or "").strip()
+                break
+        if not tag_val:
+            continue
+        key = _norm_tag(tag_val)
+        if key:
+            out[key] = {"x": xy[0], "y": xy[1], "layer": "1-VALVE TEXT GOR"}
     return out
 
 
@@ -1529,6 +1558,8 @@ def hierarchy_valve_rows(hierarchy_rows: List[Dict[str, str]]) -> List[Dict[str,
         tag = eq or sub
         if not tag or tag in seen:
             continue
+        if is_pump_equipment(tag, desc):
+            continue
         seen.add(tag)
         out.append({"tag": tag, "fn": current_fn, "description": desc})
     return out
@@ -1621,6 +1652,8 @@ def main() -> int:
     inventory = json.loads(inv_path.read_text(encoding="utf-8")) if inv_path.exists() else {}
 
     text_locations = collect_text_locations(structural)
+    # GOR drawings store valve tags in block attributes, not TEXT entities — merge them in.
+    text_locations.update(collect_gor_attribute_tag_locations(structural))
     valve_inserts = collect_valve_inserts(structural)
     symb_inserts = collect_symb_bowtie_inserts(structural)
     drain_markers = collect_drain_markers(structural)

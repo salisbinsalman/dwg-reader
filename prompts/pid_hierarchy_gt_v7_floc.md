@@ -42,13 +42,14 @@ SUB-PROCESS=BR1
 FUNCTION=35-24P501
 description=35-24P501 PRESS PLPR PMP
 EQUIPMENT:
-  35-24P501            <- optional self row for the pump
+  35-24P501            <- optional self row for the pump (pump/vessel only, never lines)
   35-24-501.1          <- motor / local id
   35-24-111            <- suction line short id
   35-24-112            <- discharge line short id
 SUB-EQUIPMENT under suction/discharge lines:
   35-24-113, 35-24LV1-501, 35-24XS-501, 35-24XSV-501
 ```
+**After the pump self-row, suction/discharge lines still go in EQUIPMENT (not sub-equipment).** Only valves/instruments physically on those lines go in SUB-EQUIPMENT under them.
 
 ### Example C — process LINE as FUNCTION (not a vessel/pump)
 When $tag is a line number (`35-24-NNN`), the FUNCTION is the header line itself.
@@ -64,6 +65,8 @@ SUB-EQUIPMENT under that spool:
   35-24PI-9252, 35-24FI-9253, 35-24FS-506
 ```
 Typical line pattern: one EQUIPMENT branch, then PI / FI / FS (or HV/HS/HI triplets) nested under it.
+**CRITICAL for LINE functions**: Do NOT add a self-referential row `EQUIPMENT: 35-24-008` — the function tag is already the header. The first EQUIPMENT row must be a BRANCH or SPOOL (different tag), never $tag itself. A self-referential EQUIPMENT row causes scoring failures.
+
 If $tag is an instrument (LC/PI/FV/XS/…) and no labelled accessories sit on it, emit the FUNCTION header + description only — empty `rows` is correct.
 
 ### Rules those examples teach

@@ -26,13 +26,14 @@ from typing import Any, Dict, Iterable, List, Optional, Sequence, Tuple
 
 
 def _patch_odafc_no_focus() -> None:
-    """Monkey-patch ezdxf odafc on macOS to prevent ODA from stealing focus.
+    """Monkey-patch ezdxf odafc on macOS to run ODA File Converter fully hidden.
 
-    Injects no_focus_steal.dylib via DYLD_INSERT_LIBRARIES, which patches
-    -[NSApplication activateIgnoringOtherApps:] to a no-op at runtime so the
-    ODA process cannot bring itself to the foreground.
+    Uses `open -jg -n --wait-apps` so macOS launches the .app bundle in the
+    background (no Dock bounce, no window, no focus steal).  Falls back to the
+    DYLD_INSERT_LIBRARIES approach when the .app bundle path cannot be inferred.
     """
     import platform
+    import re
     import subprocess
     import types
 
@@ -50,16 +51,36 @@ def _patch_odafc_no_focus() -> None:
         if system != "Darwin":
             return _orig(system, command, arguments)
         env = os.environ.copy()
+
+        # Derive the .app bundle path from the binary path so we can use
+        # `open -jg` which launches the app fully hidden (no window, no Dock).
+        # e.g. /Applications/ODAFileConverter.app/Contents/MacOS/ODAFileConverter
+        #   -> /Applications/ODAFileConverter.app
+        m = re.match(r"(.*?\.app)/", command)
+        if m:
+            app_bundle = m.group(1)
+            proc = subprocess.run(
+                ["open", "-j", "-g", "-n", "-a", app_bundle,
+                 "--wait-apps", "--args"] + list(arguments),
+                text=True, capture_output=True, env=env, timeout=300,
+            )
+            return types.SimpleNamespace(
+                returncode=proc.returncode,
+                stdout=proc.stdout or "",
+                stderr=proc.stderr or "",
+            )
+
+        # Fallback: run binary directly, inject dylib if available.
         if _dylib.is_file():
             existing = env.get("DYLD_INSERT_LIBRARIES", "")
             env["DYLD_INSERT_LIBRARIES"] = (
                 f"{existing}:{_dylib}" if existing else str(_dylib)
             )
         proc = subprocess.run(
-            [command] + arguments, text=True, capture_output=True, env=env
+            [command] + list(arguments), text=True, capture_output=True, env=env
         )
         return types.SimpleNamespace(
-            returncode=proc.returncode, stdout=proc.stdout, stderr=proc.stderr
+            returncode=proc.returncode, stdout=proc.stdout or "", stderr=proc.stderr or ""
         )
 
     _odafc._run_with_no_gui = _darwin_no_focus

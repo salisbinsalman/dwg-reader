@@ -18,6 +18,9 @@ from typing import Any, Dict, Iterable, List, Optional, Sequence, Tuple
 from dwg_floc_context import (
     build_tplnr,
     floc_paths_for_function,
+    format_line_eqktx,
+    is_line_equipment_tag,
+    load_floc_context_for_input,
     merge_floc_context,
     normalize_pltxt,
 )
@@ -181,6 +184,8 @@ def build_floc_rows(
         pltxt = desc or normalize_pltxt(tag)
         if pltxt and not pltxt.startswith(tag):
             pltxt = normalize_pltxt(f"{tag} {pltxt}")
+        if is_line_equipment_tag(tag):
+            pltxt = format_line_eqktx(tag, pltxt)
         _eqart, gewrk = classify_equipment(tag, pltxt)
         rows.append(
             blank_row(
@@ -354,7 +359,8 @@ def main() -> int:
     if args.limit > 0:
         functions = functions[: args.limit]
 
-    floc_rows = build_floc_rows(functions)
+    ctx = load_floc_context_for_input(Path(args.input))
+    floc_rows = build_floc_rows(functions, ctx=ctx)
     out_xlsx = out_dir / f"{base}.functional_locations.xlsx"
     write_floc_workbook(template, out_xlsx, floc_rows)
 

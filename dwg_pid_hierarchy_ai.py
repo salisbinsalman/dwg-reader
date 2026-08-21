@@ -28,6 +28,7 @@ from dwg_floc_context import (
     build_tplnr,
     description_from_nearby,
     floc_paths_for_function,
+    load_floc_context_for_input,
     merge_floc_context,
     normalize_pltxt,
 )
@@ -227,7 +228,11 @@ def build_equipment_dossier(
     ]
     return "\n".join(parts)
 
-def title_context(enrichment: Dict[str, Any], sheet_title: str) -> Dict[str, str]:
+def title_context(
+    enrichment: Dict[str, Any],
+    sheet_title: str,
+    input_path: Optional[Path] = None,
+) -> Dict[str, str]:
     site = line = ""
     process = sheet_title
     for block in enrichment.get("title_block") or []:
@@ -237,17 +242,26 @@ def title_context(enrichment: Dict[str, Any], sheet_title: str) -> Dict[str, str
             site = str(block.get("PROJECT2") or block.get("PROJECT1") or "").strip() or site
             line = str(block.get("PROJECT3") or block.get("LYH") or "").strip() or line
             process = str(block.get("TITLE1") or "").strip() or process
-    floc = merge_floc_context()
-    sub_process = floc["sub_process"]
-    # Broke System GT uses BR1; keep extensible via title cues later.
-    if "broke" in process.lower() or "broke" in sheet_title.lower():
-        sub_process = "BR1"
+    floc = (
+        load_floc_context_for_input(Path(input_path))
+        if input_path
+        else merge_floc_context()
+    )
+    stem_lower = (Path(input_path).stem if input_path else sheet_title).lower()
+    # Only force Broke GT codes on the actual Broke System drawing — not every title
+    # containing the word "broke" and not other PM03 areas (OCC, CHEM, Vacuum, …).
+    if "broke system" in stem_lower or (
+        process
+        and "broke" in process.lower()
+        and "occ" not in process.lower()
+        and not input_path
+    ):
         floc = merge_floc_context(process_code="BR", sub_process="BR1", process_name="BROKE SYSTEM")
     return {
         "site": site or floc.get("site_name", ""),
         "line": line or floc.get("line_name", ""),
         "process": process or floc.get("process_name", ""),
-        "sub_process": sub_process,
+        "sub_process": floc["sub_process"],
         "plant": floc["plant"],
         "line_code": floc["line_code"],
         "process_code": floc["process_code"],
@@ -256,7 +270,7 @@ def title_context(enrichment: Dict[str, Any], sheet_title: str) -> Dict[str, str
         "maintenance_plant": floc["maintenance_plant"],
         "planning_plant": floc["planning_plant"],
         "fl_type_line": floc["fl_type_line"],
-        "process_name": floc.get("process_name", "BROKE SYSTEM"),
+        "process_name": floc.get("process_name", process or "BROKE SYSTEM"),
         "line_name": floc.get("line_name", "PAPER MACHINE 3"),
         "site_name": floc.get("site_name", "SHOTTON MILL LTD"),
     }
@@ -406,10 +420,17 @@ def pick_parent(
     if m:
         type_letter = m.group(1).upper()
     hints = {
-        "L": ("PULPER", "TANK", "VESSEL", "CHEST"),
+        "L": ("PULPER", "TANK", "VESSEL", "CHEST", "AGITATOR"),
         "T": ("TANK", "VESSEL", "CHEST"),
         "P": ("PUMP",),
+        "A": ("AGITATOR", "MIXER"),
+        "E": ("PULPER", "REFINER", "MACHINE"),
     }.get(type_letter, ())
+    # L401–L499 = Agitator per SML PS-21 / Valmet PM3 — override generic L hints
+    if type_letter == "L":
+        num_m = re.search(r"(\d+)$", want)
+        if num_m and 401 <= int(num_m.group(1)) <= 499:
+            hints = ("AGITATOR", "MIXER")
 
     def score(r: Dict[str, Any]) -> Tuple:
         cat = str(r.get("category") or "")
@@ -1210,7 +1231,8 @@ def rows_from_ai(
     rows: List[Dict[str, str]] = []
     order = order_start
     want = normalize_tag(tag)
-    sub_process = str(parsed.get("sub_process") or context.get("sub_process") or DEFAULT_SUB_PROCESS).strip()
+    # SUB-PROCESS comes from per-drawing FLOC context — never from AI few-shot bleed.
+    sub_process = str(context.get("sub_process") or DEFAULT_SUB_PROCESS).strip()
     function = normalize_tag(parsed.get("function") or want) or want
     paths = floc_paths_for_function(function, context)
     fn_desc = normalize_pltxt(str(parsed.get("description") or ""))
@@ -1412,7 +1434,7 @@ def main() -> int:
     inventory = load_json(inv_path) if inv_path.exists() else None
     structural_path = find_json(out_dir, f"{base}.structural_dump.json")
     structural = load_json(structural_path) if structural_path.exists() else None
-    context = title_context(enrichment, input_path.stem)
+    context = title_context(enrichment, input_path.stem, input_path)
     region = args.region or os.environ.get("AWS_REGION") or os.environ.get("AWS_DEFAULT_REGION") or "eu-west-2"
 
     doc = None

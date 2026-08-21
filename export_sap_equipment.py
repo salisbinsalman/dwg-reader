@@ -11,6 +11,7 @@ from __future__ import annotations
 import argparse
 import csv
 import json
+import re
 import sys
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Sequence, Set
@@ -22,7 +23,9 @@ from dwg_floc_context import (
     format_line_eqktx,
     format_valve_eqktx,
     is_line_equipment_tag,
+    is_pump_equipment,
     is_valve_equipment,
+    load_floc_context_for_input,
     merge_floc_context,
     normalize_pltxt,
 )
@@ -32,7 +35,45 @@ from dwg_pure_dump import json_path, safe_name, write_json
 TEMPLATE_DEFAULT = Path("docs/examples/SML-Equipment Template RW.xlsx")
 SHEET_NAME = "Equipment"
 DATA_START_ROW = 7  # 1-based; row 7 is the sample Boiler in the template
-VALVE_LAYERS = {"P-VALVEPOS", "P-CVPOS"}
+VALVE_LAYERS = {"P-VALVEPOS", "P-CVPOS", "1-VALVE TEXT GOR"}
+
+_INVALID_EQUNR_RE = re.compile(r"^(CHAR\s*\d+|FUNCTIONAL\s+LOCATION)$", re.I)
+
+# Driven equipment patterns: pumps (35-24P518) and agitators by L401–L499 range
+_PUMP_TAG_NODASH_RE = re.compile(r"^(\d{2}-\d{2})P(\d+)$", re.I)
+_AGITATOR_L_NODASH_RE = re.compile(r"^(\d{2}-\d{2})L(4\d{2})$", re.I)
+
+
+def _motor_tag_for(tag: str, *, tissue_standard: bool = False) -> str:
+    """Derive the motor tag for a driven equipment tag.
+
+    SML PS-21 / Valmet PM3: strip letter, append .1  →  35-24P518 → 35-24-518.1
+    Valmet Tissue:           append -M1              →  124P-001  → 124P-001-M1
+    Returns "" if the tag format is not recognised.
+    """
+    t = re.sub(r"\s+", "", str(tag or "").strip()).upper()
+    if tissue_standard:
+        return f"{t}-M1"
+    derived = re.sub(r"^(\d{2}-\d{2})[A-Z]+(\d+)$", r"\1-\2.1", t)
+    return derived if derived != t else ""
+
+
+def _is_driven_equipment(tag: str) -> bool:
+    """True for pumps and agitators (L401–L499) that must have a motor."""
+    t = re.sub(r"\s+", "", str(tag or "").strip()).upper()
+    if _PUMP_TAG_NODASH_RE.match(t):
+        return True
+    m = _AGITATOR_L_NODASH_RE.match(t)
+    if m and 401 <= int(m.group(2)) <= 499:
+        return True
+    return False
+
+
+def _is_valid_equipment_tag(tag: str) -> bool:
+    t = str(tag or "").strip().upper()
+    if not t or _INVALID_EQUNR_RE.match(t):
+        return False
+    return bool(re.match(r"^[\dA-Z][\dA-Z./-]{2,}$", t))
 
 SAP_COLUMNS = [
     "TPLNR",
@@ -85,7 +126,12 @@ def _valve_hint(tag: str, *, cache: dict[str, dict]) -> dict:
     """Return CAD/vision classification cache entry for a tag."""
     ca = cache.get(tag) or {}
     layer = str(ca.get("layer") or "")
-    is_valve = bool(ca.get("is_valve") or ca.get("type") or layer in VALVE_LAYERS)
+    stored_is_valve = ca.get("is_valve")
+    # Explicit False in cache is authoritative (e.g. instruments in GOR drawings).
+    if stored_is_valve is False:
+        is_valve = False
+    else:
+        is_valve = bool(stored_is_valve or ca.get("type") or layer in VALVE_LAYERS)
     return {
         "type": ca.get("type") or None,
         "fn": ca.get("fn") or None,
@@ -222,6 +268,9 @@ def build_equipment_rows(
         else:
             continue
 
+        if not _is_valid_equipment_tag(tag):
+            continue
+
         if tag in emitted:
             continue
         emitted.add(tag)
@@ -254,7 +303,20 @@ def build_equipment_rows(
             eqktx = format_valve_eqktx(tag, effective_fn, eqktx, valve_type_override=cache_type)
             if reasoning_out is not None:
                 source = hint.get("source")
-                if source == "vision" and cache_type:
+                if source == "tipo_code" and cache_type:
+                    vtype = cache_type
+                    vsource = "TIPO_CODE"
+                    tipo = str(cache.get(tag_upper, {}).get("tipo") or "").strip()
+                    vreason = (
+                        f"GOR TIPO_VALVOLA '{tipo}' → {vtype}"
+                        if tipo
+                        else f"GOR TIPO code → {vtype}"
+                    )
+                elif source == "gor_tag" and cache_type:
+                    vtype = cache_type
+                    vsource = "GOR_TAG"
+                    vreason = f"GOR tag pattern → {vtype}"
+                elif source == "vision" and cache_type:
                     vtype = cache_type
                     vsource = "VISION"
                     vreason = f"Tight-crop + legend classification → {vtype}"
@@ -289,6 +351,33 @@ def build_equipment_rows(
                 GEWRK=gewrk,
             )
         )
+
+    # Second pass: inject implicit motor rows for driven equipment with no motor emitted
+    for eq_row in list(out):
+        eq_tag = eq_row["EQUNR"]
+        if eq_row["HEQUI"] or not _is_driven_equipment(eq_tag):
+            continue
+        motor_tag = _motor_tag_for(eq_tag)
+        if not motor_tag or motor_tag in emitted:
+            continue
+        emitted.add(motor_tag)
+        parent_tplnr = eq_row["TPLNR"]
+        parent_key = f"{parent_tplnr}|{eq_tag}"
+        sub_pos_by_parent[parent_key] = sub_pos_by_parent.get(parent_key, 0) + 10
+        motor_eqktx = normalize_pltxt(f"{motor_tag} MOTOR")[:40]
+        m_eqart, m_gewrk = classify_equipment(motor_tag, motor_eqktx)
+        out.append(
+            blank_row(
+                TPLNR=parent_tplnr,
+                EQUNR=motor_tag[:18],
+                HEQUI=eq_tag[:18],
+                POSNR=f"{sub_pos_by_parent[parent_key]:04d}",
+                EQKTX=motor_eqktx,
+                EQART=m_eqart,
+                GEWRK=m_gewrk,
+            )
+        )
+
     return out
 
 
@@ -356,6 +445,7 @@ def main() -> int:
         print(f"[error] Missing template: {template}", flush=True)
         return 2
 
+    ctx = load_floc_context_for_input(Path(args.input))
     hierarchy_rows = read_hierarchy_csv(hier_path)
     reasoning_rows: List[Dict[str, str]] = []
     cache_path = json_path(out_dir, f"{base}.valve_types.json")
@@ -363,6 +453,7 @@ def main() -> int:
     equipment_rows = build_equipment_rows(
         hierarchy_rows,
         limit_functions=args.limit,
+        ctx=ctx,
         reasoning_out=reasoning_rows,
         valve_cache=valve_cache,
     )

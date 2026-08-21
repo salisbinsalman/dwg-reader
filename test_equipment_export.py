@@ -18,7 +18,12 @@ from dwg_floc_context import (
     strip_valve_prefix,
 )
 from dwg_object_type import classify_equipment, lookup
-from export_sap_equipment import build_equipment_rows, write_equipment_workbook
+from export_sap_equipment import (
+    _is_driven_equipment,
+    _motor_tag_for,
+    build_equipment_rows,
+    write_equipment_workbook,
+)
 
 ROOT = Path(__file__).resolve().parent
 HIERARCHY_CSV = ROOT / "outputs/Broke System.hierarchy_orchestrator.csv"
@@ -186,7 +191,8 @@ class EquipmentExportTests(unittest.TestCase):
             {"FUNCTION": "", "EQUIPMENT": "35-24P519", "SUB-EQUIPMENT": "", "DESCRIPTION": "35-24P519 PMP"},
         ]
         out = build_equipment_rows(rows)
-        self.assertEqual(len(out), 3)
+        # 3 explicit rows + 1 implicit motor for 35-24P519
+        self.assertEqual(len(out), 4)
         self.assertEqual(out[0]["EQUNR"], "35-24-189")
         self.assertEqual(out[0]["HEQUI"], "")
         self.assertEqual(out[0]["POSNR"], "0010")
@@ -209,6 +215,68 @@ class EquipmentExportTests(unittest.TestCase):
         self.assertEqual(out[2]["EQUNR"], "35-24P519")
         self.assertEqual(out[2]["HEQUI"], "")
         self.assertEqual(out[2]["POSNR"], "0020")
+
+        # implicit motor injected as sub-equipment of the pump
+        self.assertEqual(out[3]["EQUNR"], "35-24-519.1")
+        self.assertEqual(out[3]["HEQUI"], "35-24P519")
+        self.assertEqual(out[3]["POSNR"], "0010")
+        self.assertEqual(out[3]["EQART"], "1101")
+        self.assertEqual(out[3]["GEWRK"], "ELEC")
+        self.assertEqual(out[3]["TPLNR"], out[2]["TPLNR"])
+
+    def test_motor_tag_for_pump(self) -> None:
+        self.assertEqual(_motor_tag_for("35-24P518"), "35-24-518.1")
+        self.assertEqual(_motor_tag_for("35-24P519"), "35-24-519.1")
+
+    def test_motor_tag_for_agitator(self) -> None:
+        self.assertEqual(_motor_tag_for("35-24L404"), "35-24-404.1")
+        self.assertEqual(_motor_tag_for("35-24L499"), "35-24-499.1")
+
+    def test_motor_tag_for_tissue(self) -> None:
+        self.assertEqual(_motor_tag_for("124P-001", tissue_standard=True), "124P-001-M1")
+
+    def test_motor_tag_for_line_tag_returns_empty(self) -> None:
+        # 35-24-095 (line/pipe tag, no letter code) → no motor derivable
+        self.assertEqual(_motor_tag_for("35-24-095"), "")
+
+    def test_is_driven_pump(self) -> None:
+        self.assertTrue(_is_driven_equipment("35-24P501"))
+        self.assertTrue(_is_driven_equipment("35-24P518"))
+
+    def test_is_driven_agitator_range(self) -> None:
+        self.assertTrue(_is_driven_equipment("35-24L401"))
+        self.assertTrue(_is_driven_equipment("35-24L499"))
+
+    def test_is_not_driven_below_range(self) -> None:
+        self.assertFalse(_is_driven_equipment("35-24L002"))
+        self.assertFalse(_is_driven_equipment("35-24L400"))
+
+    def test_is_not_driven_line_tag(self) -> None:
+        self.assertFalse(_is_driven_equipment("35-24-095"))
+
+    def test_motor_not_duplicated_when_in_hierarchy(self) -> None:
+        """Motor already on diagram must not be injected a second time."""
+        rows = [
+            {"FUNCTION": "35-24L001", "EQUIPMENT": "", "SUB-EQUIPMENT": "", "DESCRIPTION": ""},
+            {"FUNCTION": "", "EQUIPMENT": "35-24P518", "SUB-EQUIPMENT": "", "DESCRIPTION": "PUMP"},
+            {"FUNCTION": "", "EQUIPMENT": "", "SUB-EQUIPMENT": "35-24-518.1", "DESCRIPTION": "MOTOR"},
+        ]
+        out = build_equipment_rows(rows)
+        motor_rows = [r for r in out if r["EQUNR"] == "35-24-518.1"]
+        self.assertEqual(len(motor_rows), 1, "motor must not be emitted twice")
+
+    def test_implicit_motor_for_agitator(self) -> None:
+        """L401–L499 agitator tags trigger motor injection."""
+        rows = [
+            {"FUNCTION": "35-24L004", "EQUIPMENT": "", "SUB-EQUIPMENT": "", "DESCRIPTION": "PULPER"},
+            {"FUNCTION": "", "EQUIPMENT": "35-24L404", "SUB-EQUIPMENT": "", "DESCRIPTION": "AGITATOR"},
+        ]
+        out = build_equipment_rows(rows)
+        by_tag = {r["EQUNR"]: r for r in out}
+        self.assertIn("35-24-404.1", by_tag, "agitator motor must be injected")
+        motor = by_tag["35-24-404.1"]
+        self.assertEqual(motor["HEQUI"], "35-24L404")
+        self.assertEqual(motor["EQART"], "1101")
 
     def test_sub_equipment_posnr_resets_per_parent(self) -> None:
         """Review issue 3: subs reset POSNR; top-level continues separately."""

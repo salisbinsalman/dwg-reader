@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python3 -c ' *)",
+      "Bash(python3 export_sap_floc.py --input \"inputs/Broke System.dwg\")",
+      "Bash(python3 -m pytest test_hierarchy_ai.py -k \"test_build_rows_hequi_and_posnr\" -v)",
+      "Bash(python3 -m unittest test_hierarchy_ai.TestHierarchyAI.test_build_rows_hequi_and_posnr -v)",
+      "Bash(python3 -m unittest test_equipment_export.py)",
+      "Bash(python3 -m unittest test_equipment_export.py test_hierarchy_ai.py)",
+      "WebFetch(domain:claude.ai)"
+    ]
+  }
+}
