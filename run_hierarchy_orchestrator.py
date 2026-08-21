@@ -22,7 +22,7 @@ import os
 import subprocess
 import sys
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Tuple
 
 import re
 
@@ -634,6 +634,148 @@ def _append_orphan_valve_rows(
     return count
 
 
+_AGITATOR_EQ_RE = re.compile(r"^\d{2}-\d{2}L(4\d{2})$", re.I)
+_TANK_FN_RE = re.compile(r"^\d{2}-\d{2}T\d+", re.I)
+
+
+def _append_agitator_equipment_rows(
+    combined_csv: Path,
+    inv_path: Path,
+    structural_path: Optional[Path] = None,
+) -> int:
+    """Insert bound L401–L499 agitators as EQUIPMENT under the nearest tank FUNCTION.
+
+    Agitators are deliberately excluded from inventory FUNCTIONs (they belong under
+    tanks). After CAD bind they still need a hierarchy EQUIPMENT row so export can
+    inject the implicit motor (35-24L404 → 35-24-404.1).
+    """
+    import math
+
+    if not inv_path.exists():
+        print(f"[agitator-mopup] inventory not found: {inv_path}; skipping")
+        return 0
+
+    existing = read_hierarchy_csv(combined_csv)
+    if not existing:
+        return 0
+
+    inventory = json.loads(inv_path.read_text(encoding="utf-8"))
+    if structural_path and structural_path.exists():
+        from dwg_pid_inventory import bind_agitator_tags
+
+        structural = json.loads(structural_path.read_text(encoding="utf-8"))
+        n_bound = bind_agitator_tags(inventory, structural)
+        if n_bound:
+            inv_path.write_text(json.dumps(inventory, indent=2), encoding="utf-8")
+            print(f"[agitator-mopup] bound {n_bound} agitator insert tags in inventory")
+
+    in_hierarchy: set = set()
+    for row in existing:
+        for col in ("FUNCTION", "EQUIPMENT", "SUB-EQUIPMENT"):
+            v = (row.get(col) or "").strip().upper().replace(" ", "")
+            if v:
+                in_hierarchy.add(v)
+
+    orphans: Dict[str, Dict[str, Any]] = {}
+    for item in inventory.get("agitators") or []:
+        if item.get("source") != "insert":
+            continue
+        tag = re.sub(r"\s+", "", str(item.get("tag") or "").strip()).upper()
+        m = _AGITATOR_EQ_RE.match(tag)
+        if not m or not (401 <= int(m.group(1)) <= 499):
+            continue
+        if tag in in_hierarchy or tag in orphans:
+            continue
+        x, y = item.get("x"), item.get("y")
+        if x is None or y is None:
+            continue
+        orphans[tag] = {
+            "x": float(x),
+            "y": float(y),
+            "description": str(item.get("description") or f"{tag} AGITATOR").strip(),
+        }
+
+    if not orphans:
+        print("[agitator-mopup] no unbound agitator tags to append")
+        return 0
+
+    existing_fn_headers: set = {
+        row.get("FUNCTION", "").strip().upper().replace(" ", "")
+        for row in existing
+        if row.get("FUNCTION") and not row.get("EQUIPMENT") and not row.get("SUB-EQUIPMENT")
+    }
+    fn_locs: Dict[str, Tuple[float, float]] = {}
+    for fn in inventory.get("functions") or []:
+        tag = str(fn.get("function") or "").strip().upper().replace(" ", "")
+        x, y = fn.get("x"), fn.get("y")
+        if tag in existing_fn_headers and x is not None and y is not None:
+            fn_locs[tag] = (float(x), float(y))
+
+    tank_locs = {fn: xy for fn, xy in fn_locs.items() if _TANK_FN_RE.match(fn)}
+    if not tank_locs and not fn_locs:
+        print("[agitator-mopup] no function positions available; skipping")
+        return 0
+
+    def _nearest(candidates: Dict[str, Tuple[float, float]], ox: float, oy: float):
+        return min(
+            ((fn, math.hypot(ox - fx, oy - fy)) for fn, (fx, fy) in candidates.items()),
+            key=lambda t: t[1],
+        )
+
+    fn_agits: Dict[str, List[str]] = {}
+    desc_by_tag = {t: info["description"] for t, info in orphans.items()}
+    for tag, info in sorted(orphans.items()):
+        ox, oy = info["x"], info["y"]
+        # Prefer a tank within 150 drawing units; else nearest tank / function.
+        if tank_locs:
+            best_fn, best_d = _nearest(tank_locs, ox, oy)
+            if best_d > 150 and fn_locs:
+                alt_fn, alt_d = _nearest(fn_locs, ox, oy)
+                if alt_d + 20 < best_d:
+                    best_fn, best_d = alt_fn, alt_d
+        else:
+            best_fn, best_d = _nearest(fn_locs, ox, oy)
+        fn_agits.setdefault(best_fn, []).append(tag)
+        print(f"[agitator-mopup]   {tag} → {best_fn} (d={best_d:.0f})")
+
+    for fn in fn_agits:
+        fn_agits[fn].sort()
+
+    def _agit_row(tag: str) -> Dict[str, str]:
+        return {
+            "SUB-PROCESS": "",
+            "FUNCTION": "",
+            "EQUIPMENT": tag,
+            "SUB-EQUIPMENT": "",
+            "MASK": "AGITATOR",
+            "DESCRIPTION": desc_by_tag.get(tag, f"{tag} AGITATOR"),
+        }
+
+    result: List[Dict[str, str]] = []
+    pending: List[str] = []
+
+    for row in existing:
+        fn = (row.get("FUNCTION") or "").strip().upper().replace(" ", "")
+        eq = (row.get("EQUIPMENT") or "").strip()
+        sub = (row.get("SUB-EQUIPMENT") or "").strip()
+        is_fn_header = bool(fn) and not eq and not sub
+
+        if is_fn_header:
+            for t in pending:
+                result.append(_agit_row(t))
+            pending = fn_agits.get(fn, [])
+
+        result.append(row)
+
+    for t in pending:
+        result.append(_agit_row(t))
+
+    count = sum(len(v) for v in fn_agits.values())
+    write_hierarchy_csv(combined_csv, result)
+    print(f"[agitator-mopup] appended {count} agitator equipment rows → {combined_csv.name}")
+    return count
+
+
 def run_hierarchy_for_tag(
     *,
     tag: str,
@@ -698,7 +840,7 @@ def main() -> int:
     )
     parser.add_argument(
         "--gt",
-        default="inputs/gt_hierarchy_broke_system.xlsx",
+        default="resources/gt_hierarchy_broke_system.xlsx",
         help="GT hierarchy workbook/CSV for hit-miss scoring",
     )
     parser.add_argument(
@@ -1037,6 +1179,7 @@ def main() -> int:
     if combined_csv.exists() and combined_csv.stat().st_size > 0:
         structural_path = json_path(out_dir, f"{base}.structural_dump.json")
         _append_orphan_valve_rows(combined_csv, structural_path, inv_path)
+        _append_agitator_equipment_rows(combined_csv, inv_path, structural_path)
         cleaned = sanitize_hierarchy_rows(read_hierarchy_csv(combined_csv))
         write_hierarchy_csv(combined_csv, cleaned)
         print(f"[sanitize] hierarchy cleaned → {len(cleaned)} rows", flush=True)

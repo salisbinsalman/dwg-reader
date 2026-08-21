@@ -1,0 +1,26 @@
+{
+  "name": "Tissue KSDM160104 — GOR S.r.l. (Italian) + KSD/Andritz",
+  "standard_id": "tissue_ksdm160104",
+  "line_tag_pattern": "^\\d+L-\\d+$",
+  "tag_pattern": "^(\\d{3})([A-Z])-(\\d{3})$",
+  "motor_suffix_patterns": ["-M\\d+$"],
+  "motor_from_equipment": {
+    "mode": "append_suffix",
+    "suffix": "-M1",
+    "example": "124P-001 → 124P-001-M1"
+  },
+  "driven_patterns": {
+    "pump": "^\\d{3}P-\\d{3}$",
+    "agitator": "^\\d{3}A-\\d{3}$"
+  },
+  "tag_prefix_rules": {
+    "P": "701",
+    "A": "2001",
+    "T": "601",
+    "E": "2000"
+  },
+  "valve_layers": ["1-VALVE TEXT GOR"],
+  "instrument_layers": ["1-TAG AND INSTRUMENTS GOR"],
+  "equipment_layers": ["1-EQUIPMENT GOR"],
+  "notes": "T=601 (TANK per SML OBJECT TYPE LIST V3). E=2000 (PROCESS MACHINES — description keywords will further refine to 2002/REFINER or 2005/PULPER when AI description is available). Applies to both GOR (GORA*/GORB*) and KSD/Andritz (KSDM*) DWGs."
+}

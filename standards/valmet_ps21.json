@@ -1,0 +1,28 @@
+{
+  "name": "Valmet PS-21 / PM3 — SML Shotton Paper Machine 3",
+  "standard_id": "valmet_ps21",
+  "line_tag_pattern": "^\\d{2}-\\d{2}-\\d+$",
+  "motor_suffix_patterns": ["\\.\\d+$"],
+  "motor_from_equipment": {
+    "mode": "strip_letter_append_dot_one",
+    "regex": "^(\\d{2}-\\d{2})[A-Z]+(\\d+)$",
+    "replace": "\\1-\\2.1",
+    "example": "35-24P518 → 35-24-518.1"
+  },
+  "driven_patterns": {
+    "pump": "^\\d{2}-\\d{2}P\\d+$",
+    "agitator_l": {
+      "pattern": "^\\d{2}-\\d{2}L(\\d+)$",
+      "range": [401, 499]
+    }
+  },
+  "tag_prefix_rules": {
+    "P": "701",
+    "M": "1101",
+    "A": "2001"
+  },
+  "valve_layers": ["P-VALVEPOS", "P-CVPOS"],
+  "instrument_layers": ["P-INSTRPOS"],
+  "equipment_layers": ["P-LINEPOS"],
+  "notes": "L401–L499 = agitator (PM3 number-series convention). L001–L399 = process equipment / pipeline."
+}

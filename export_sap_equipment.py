@@ -16,6 +16,7 @@ import sys
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Sequence, Set
 
+from dwg_ecosystem import Ecosystem, detect as _detect_ecosystem
 from dwg_floc_context import (
     combine_valve_type,
     explain_valve_type,
@@ -44,29 +45,57 @@ _PUMP_TAG_NODASH_RE = re.compile(r"^(\d{2}-\d{2})P(\d+)$", re.I)
 _AGITATOR_L_NODASH_RE = re.compile(r"^(\d{2}-\d{2})L(4\d{2})$", re.I)
 
 
-def _motor_tag_for(tag: str, *, tissue_standard: bool = False) -> str:
+def _motor_tag_for(tag: str, *, ecosystem: Optional[Ecosystem] = None) -> str:
     """Derive the motor tag for a driven equipment tag.
 
-    SML PS-21 / Valmet PM3: strip letter, append .1  →  35-24P518 → 35-24-518.1
-    Valmet Tissue:           append -M1              →  124P-001  → 124P-001-M1
+    Tissue / KSDM160104 (GOR + KSD): append -M1    →  124P-001  → 124P-001-M1
+    Valmet PS-21 / PM3 (default):     strip letter, append .1  →  35-24P518 → 35-24-518.1
     Returns "" if the tag format is not recognised.
     """
     t = re.sub(r"\s+", "", str(tag or "").strip()).upper()
-    if tissue_standard:
+    if ecosystem is not None and ecosystem.is_tissue:
         return f"{t}-M1"
     derived = re.sub(r"^(\d{2}-\d{2})[A-Z]+(\d+)$", r"\1-\2.1", t)
     return derived if derived != t else ""
 
 
-def _is_driven_equipment(tag: str) -> bool:
-    """True for pumps and agitators (L401–L499) that must have a motor."""
+def _is_driven_equipment(tag: str, ecosystem: Optional[Ecosystem] = None) -> bool:
+    """True for pumps and agitators that must have a motor.
+
+    Tissue / KSDM160104: pumps (^\d{3}P-\d{3}$) and agitators (^\d{3}A-\d{3}$).
+    Valmet PS-21 / PM3 (default): pumps (35-24P\d+) and L401–L499 agitators.
+    """
     t = re.sub(r"\s+", "", str(tag or "").strip()).upper()
+    if ecosystem is not None and ecosystem.is_tissue:
+        return bool(
+            re.match(r"^\d{3}P-\d{3}$", t) or
+            re.match(r"^\d{3}A-\d{3}$", t)
+        )
     if _PUMP_TAG_NODASH_RE.match(t):
         return True
     m = _AGITATOR_L_NODASH_RE.match(t)
     if m and 401 <= int(m.group(2)) <= 499:
         return True
     return False
+
+
+def _motor_eqktx(motor_tag: str, parent_tag: str, parent_eqktx: str) -> str:
+    """Build motor description from parent equipment text.
+
+    Example (Valmet): parent ``35-24P518 BROKE REJECT PMP`` →
+    ``35-24-518.1 BROKE REJECT PMP MTR`` (abbreviated via normalize_pltxt).
+    """
+    body = re.sub(r"\s+", " ", str(parent_eqktx or "").strip())
+    pt = re.sub(r"\s+", "", str(parent_tag or "").strip())
+    if pt:
+        m = re.match(re.escape(pt) + r"(?:\s+|$)", body, re.I)
+        if m:
+            body = body[m.end() :].strip(" -")
+    body = re.sub(r"\b(MOTOR|MTR)\b", "", body, flags=re.I)
+    body = re.sub(r"\s+", " ", body).strip(" -")
+    if body:
+        return normalize_pltxt(f"{motor_tag} {body} MTR")[:40]
+    return normalize_pltxt(f"{motor_tag} MTR")[:40]
 
 
 def _is_valid_equipment_tag(tag: str) -> bool:
@@ -94,6 +123,9 @@ SAP_COLUMNS = [
     "STORT",
     "BEGRU",
 ]
+
+# Codes Excel often coerces to numbers (losing leading zeros / type). Force text.
+_TEXT_FORMAT_COLUMNS = frozenset({"POSNR", "EQART", "EQTYP", "ABCKZ", "BEGRU"})
 
 
 _CACHE_META_KEYS = {"input", "model_id", "region", "legend", "tags", "count"}
@@ -177,6 +209,7 @@ def build_equipment_rows(
     ctx: Optional[Dict[str, str]] = None,
     valve_cache: dict[str, dict] | None = None,
     reasoning_out: Optional[List[Dict[str, str]]] = None,
+    ecosystem: Optional[Ecosystem] = None,
 ) -> List[Dict[str, str]]:
     """
     Walk hierarchy stream and emit one Equipment row per EQUIPMENT / SUB-EQUIPMENT.
@@ -184,8 +217,11 @@ def build_equipment_rows(
     FUNCTION headers set the install TPLNR. SUB-EQUIPMENT gets HEQUI = last EQUIPMENT.
     reasoning_out: if a list is passed, one reasoning dict per valve is appended to it.
     Columns: EQUNR, FUNCTION, EQKTX, TYPE, SOURCE, AI_DESCRIPTION, REASONING.
+    ecosystem: if None, auto-detected from ctx["ecosystem"] (set by floc_context_map.json).
     """
     c = merge_floc_context(ctx)
+    if ecosystem is None:
+        ecosystem = _detect_ecosystem(ctx=c)
     plant = c["plant"]
     cache: dict[str, dict] = valve_cache if valve_cache is not None else {}
     allowed: Optional[Set[str]] = None
@@ -355,16 +391,16 @@ def build_equipment_rows(
     # Second pass: inject implicit motor rows for driven equipment with no motor emitted
     for eq_row in list(out):
         eq_tag = eq_row["EQUNR"]
-        if eq_row["HEQUI"] or not _is_driven_equipment(eq_tag):
+        if eq_row["HEQUI"] or not _is_driven_equipment(eq_tag, ecosystem):
             continue
-        motor_tag = _motor_tag_for(eq_tag)
+        motor_tag = _motor_tag_for(eq_tag, ecosystem=ecosystem)
         if not motor_tag or motor_tag in emitted:
             continue
         emitted.add(motor_tag)
         parent_tplnr = eq_row["TPLNR"]
         parent_key = f"{parent_tplnr}|{eq_tag}"
         sub_pos_by_parent[parent_key] = sub_pos_by_parent.get(parent_key, 0) + 10
-        motor_eqktx = normalize_pltxt(f"{motor_tag} MOTOR")[:40]
+        motor_eqktx = _motor_eqktx(motor_tag, eq_tag, eq_row.get("EQKTX") or "")
         m_eqart, m_gewrk = classify_equipment(motor_tag, motor_eqktx)
         out.append(
             blank_row(
@@ -405,7 +441,11 @@ def write_equipment_workbook(
     for r_i, row in enumerate(equipment_rows, start=DATA_START_ROW):
         ws.cell(r_i, 1, value=None)  # ID column unused
         for c_i, key in enumerate(SAP_COLUMNS, start=2):
-            ws.cell(r_i, c_i, value=row.get(key) or None)
+            val = row.get(key) or None
+            cell = ws.cell(r_i, c_i, value=val)
+            if key in _TEXT_FORMAT_COLUMNS and val is not None:
+                cell.number_format = "@"
+                cell.value = str(val)
 
     out_path.parent.mkdir(parents=True, exist_ok=True)
     wb.save(out_path)

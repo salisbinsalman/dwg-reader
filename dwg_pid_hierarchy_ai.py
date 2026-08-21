@@ -47,7 +47,7 @@ from dwg_pure_dump import (
 
 HIERARCHY_PROMPT_FILE = "pid_hierarchy_gt_v8.md"
 DEFAULT_MODEL_ID = "eu.anthropic.claude-sonnet-4-6"
-LEGEND_PATH = Path("inputs/legend.png")
+LEGEND_PATH = Path("standards/legend.png")
 
 # GT sheet columns (primary deliverable shape)
 GT_COLUMNS = [
@@ -1358,7 +1358,7 @@ def main() -> int:
     parser.add_argument(
         "--legend",
         default=str(LEGEND_PATH),
-        help="Legend PNG sent as Image 2 for valve type classification (default: inputs/legend.png)",
+        help="Legend PNG sent as Image 2 for valve type classification (default: standards/legend.png)",
     )
     parser.add_argument(
         "--inventory-json",

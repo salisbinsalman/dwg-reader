@@ -19,7 +19,9 @@ from dwg_floc_context import (
 )
 from dwg_object_type import classify_equipment, lookup
 from export_sap_equipment import (
+    SAP_COLUMNS,
     _is_driven_equipment,
+    _motor_eqktx,
     _motor_tag_for,
     build_equipment_rows,
     write_equipment_workbook,
@@ -143,6 +145,8 @@ class FormatLineEqktxTests(unittest.TestCase):
 
     def test_is_line_equipment_tag(self) -> None:
         self.assertTrue(is_line_equipment_tag("35-24-095"))
+        self.assertTrue(is_line_equipment_tag("55-30-001"))
+        self.assertTrue(is_line_equipment_tag("168L-522"))
         self.assertFalse(is_line_equipment_tag("35-24-001.1"))
         self.assertFalse(is_line_equipment_tag("35-24LC-576"))
         self.assertFalse(is_line_equipment_tag("35-24HV-548"))
@@ -233,7 +237,9 @@ class EquipmentExportTests(unittest.TestCase):
         self.assertEqual(_motor_tag_for("35-24L499"), "35-24-499.1")
 
     def test_motor_tag_for_tissue(self) -> None:
-        self.assertEqual(_motor_tag_for("124P-001", tissue_standard=True), "124P-001-M1")
+        from dwg_ecosystem import detect
+        eco = detect("GORA68210")
+        self.assertEqual(_motor_tag_for("124P-001", ecosystem=eco), "124P-001-M1")
 
     def test_motor_tag_for_line_tag_returns_empty(self) -> None:
         # 35-24-095 (line/pipe tag, no letter code) → no motor derivable
@@ -277,6 +283,34 @@ class EquipmentExportTests(unittest.TestCase):
         motor = by_tag["35-24-404.1"]
         self.assertEqual(motor["HEQUI"], "35-24L404")
         self.assertEqual(motor["EQART"], "1101")
+
+    def test_motor_eqktx_inherits_parent_description(self) -> None:
+        """Motor text follows Example for motors.docx: parent desc + MTR."""
+        self.assertIn(
+            "BROKE",
+            _motor_eqktx("35-24-518.1", "35-24P518", "35-24P518 BROKE REJECT PMP").upper(),
+        )
+        self.assertTrue(
+            _motor_eqktx("35-24-518.1", "35-24P518", "35-24P518 BROKE REJECT PMP")
+            .upper()
+            .endswith("MTR")
+            or " MTR" in _motor_eqktx("35-24-518.1", "35-24P518", "35-24P518 BROKE REJECT PMP").upper()
+        )
+        rows = [
+            {"FUNCTION": "35-24T606", "EQUIPMENT": "", "SUB-EQUIPMENT": "", "DESCRIPTION": "TANK"},
+            {
+                "FUNCTION": "",
+                "EQUIPMENT": "35-24L404",
+                "SUB-EQUIPMENT": "",
+                "DESCRIPTION": "35-24L404 BROKE REJECT AGITATOR TANK",
+            },
+        ]
+        out = build_equipment_rows(rows)
+        motor = next(r for r in out if r["EQUNR"] == "35-24-404.1")
+        self.assertEqual(motor["HEQUI"], "35-24L404")
+        self.assertIn("BROKE", motor["EQKTX"].upper())
+        self.assertIn("MTR", motor["EQKTX"].upper())
+        self.assertNotEqual(motor["EQKTX"].upper(), "35-24-404.1 MTR")
 
     def test_sub_equipment_posnr_resets_per_parent(self) -> None:
         """Review issue 3: subs reset POSNR; top-level continues separately."""
@@ -347,6 +381,12 @@ class EquipmentExportTests(unittest.TestCase):
             self.assertEqual(ws.cell(7, 3).value, "35-24-189")
             self.assertEqual(ws.cell(7, 7).value, "P")
             self.assertEqual(ws.cell(7, 8).value, "9999")  # "35-24-189 OVFL" → no match
+            eqart_col = 2 + SAP_COLUMNS.index("EQART")
+            posnr_col = 2 + SAP_COLUMNS.index("POSNR")
+            self.assertEqual(ws.cell(7, eqart_col).number_format, "@")
+            self.assertEqual(ws.cell(7, posnr_col).number_format, "@")
+            self.assertIsInstance(ws.cell(7, eqart_col).value, str)
+            self.assertIsInstance(ws.cell(7, posnr_col).value, str)
 
 
 class RealHierarchyLineEqktxTests(unittest.TestCase):

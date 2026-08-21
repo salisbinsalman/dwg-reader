@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build inputs/sml_abbreviations.json from the SML abbreviation workbook."""
+"""Build standards/sml_abbreviations.json from the SML abbreviation workbook."""
 
 from __future__ import annotations
 
@@ -8,8 +8,8 @@ import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-XLSX = ROOT / "inputs/SML Naming Abbreviation Standard.xlsx"
-OUT = ROOT / "inputs/sml_abbreviations.json"
+XLSX = ROOT / "resources/SML Naming Abbreviation Standard.xlsx"
+OUT = ROOT / "standards/sml_abbreviations.json"
 
 # Broke System FLOC descriptions keep these full even when the workbook maps them.
 PRESERVE_TOKENS = [

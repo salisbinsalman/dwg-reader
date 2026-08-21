@@ -18,8 +18,8 @@ from functools import lru_cache
 from pathlib import Path
 from typing import Any, Dict, List, Mapping, Optional
 
-DEFAULT_ABBREV_JSON = Path("inputs/sml_abbreviations.json")
-FLOC_MAP_PATH = Path("inputs/floc_context_map.json")
+DEFAULT_ABBREV_JSON = Path("standards/sml_abbreviations.json")
+FLOC_MAP_PATH = Path("standards/floc_context_map.json")
 
 # Locked Broke System / Shotton PM3 defaults (SML + GT MASK).
 DEFAULT_FLOC_CONTEXT: Dict[str, str] = {

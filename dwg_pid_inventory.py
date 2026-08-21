@@ -81,8 +81,9 @@ DN_RE = re.compile(r"^DN\d+$", re.I)
 #   - instruments: HI / HS / KJ / ES / XS (often split as letter + number on P&ID)
 #   - lines: short line ids that are CMMS functional locations (esp. WFL hose lines)
 FUNCTION_TAG_RE = re.compile(r"^\d{2}-\d{2}[LPT]\d{2,4}[A-Z]?$", re.I)
-# Agitator equipment numbers (L401–L407) are SUB/EQUIPMENT under tanks, not FUNCTIONs.
-FUNCTION_AGITATOR_TAG_RE = re.compile(r"^\d{2}-\d{2}L40[1-7]$", re.I)
+# Agitator equipment numbers (L401–L499 per Valmet PS-21) are EQUIPMENT under tanks, not FUNCTIONs.
+FUNCTION_AGITATOR_TAG_RE = re.compile(r"^\d{2}-\d{2}L(4\d{2})$", re.I)
+_AGITATOR_NUM_RE = re.compile(r"^\d{2}-\d{2}L(4\d{2})$", re.I)
 EQUIP_TAG_RE = re.compile(r"^\d{2}-\d{2}[A-Z]\d{2,4}[A-Z]?$", re.I)
 FUNCTION_INSTR_LETTERS = {"HI", "HS", "KJ", "ES", "XS"}
 FUNCTION_LINE_TYPES = {"WFL", "WAF", "WFC", "PP"}
@@ -305,6 +306,142 @@ def extract_text_labels(structural: Dict[str, Any]) -> Dict[str, List[Dict[str, 
             )
         )
     return buckets
+
+
+def _is_agitator_equipment_tag(tag: str) -> bool:
+    """True for Valmet L401–L499 agitator equipment numbers."""
+    m = _AGITATOR_NUM_RE.match(re.sub(r"\s+", "", str(tag or "").strip()).upper())
+    return bool(m and 401 <= int(m.group(1)) <= 499)
+
+
+def _is_agitator_desc_noise(text: str) -> bool:
+    """Skip sizes, codes, and catalog strings near agitator symbols."""
+    raw = str(text or "").strip()
+    if not raw or len(raw) <= 2:
+        return True
+    u = raw.upper()
+    if u == "TANK":
+        return False
+    if re.match(r"^[\d.,\s%/]+$", raw):
+        return True
+    if re.match(r"^\d+[.,]?\d*\s*m", raw, re.I):
+        return True
+    # Catalog / vendor codes e.g. SFVPT-110-2, 2621 ADTPD
+    if re.match(r"^[A-Z]{2,}\d", u.replace("-", "")):
+        return True
+    if re.match(r"^\d{3,}\s+[A-Z]{2,}", u):
+        return True
+    # Sheet / title noise often near couch pit
+    if u in {"PRODUCTION", "CAPACITY", "DESIGN", "NOTES", "LEGEND"}:
+        return True
+    if EQUIP_TAG_RE.match(u.replace(" ", "")) or FUNCTION_TAG_RE.match(u.replace(" ", "")):
+        return True
+    if AGITATOR_RE.search(raw):
+        return True
+    return False
+
+
+def _agitator_description(tag: str, desc_hits: List[Dict[str, Any]]) -> str:
+    """Build EQKTX-style text: e.g. '35-24L404 BROKE REJECT AGITATOR TANK'."""
+    # Prefer tank-layer labels (COUCH PIT, BROKE REJECT) over nearby P-TEXT noise.
+    ordered = sorted(
+        desc_hits,
+        key=lambda h: (0 if h.get("layer") == "P-TANK_POS" else 1, float(h.get("distance") or 999)),
+    )
+    name_parts: List[str] = []
+    has_tank = False
+    for h in ordered:
+        raw = str(h.get("text") or "").strip()
+        if raw.upper() == "TANK":
+            has_tank = True
+            continue
+        if _is_agitator_desc_noise(raw):
+            continue
+        name_parts.append(raw)
+        if len(name_parts) >= 4:
+            break
+    name = " ".join(name_parts).strip()
+    if name and has_tank:
+        return f"{tag} {name} AGITATOR TANK"
+    if name:
+        return f"{tag} {name} AGITATOR"
+    if has_tank:
+        return f"{tag} AGITATOR TANK"
+    return f"{tag} AGITATOR"
+
+
+def bind_agitator_tags(
+    inventory: Dict[str, List[Dict[str, Any]]],
+    structural: Dict[str, Any],
+) -> int:
+    """Bind L401–L499 labels on P-AGITATOR_POS to agitator insert symbols.
+
+    PPI agitator blocks store the block name as ``tag``; the real equipment
+    number sits as nearby TEXT on ``P-AGITATOR_POS`` (often within ~10 units).
+    Returns how many inserts received a new tag.
+    """
+    texts = structural.get("text_entities") or []
+    used: Set[str] = set()
+    for item in inventory.get("agitators") or []:
+        if item.get("source") != "insert":
+            continue
+        existing = re.sub(r"\s+", "", str(item.get("tag") or "").strip()).upper()
+        if _is_agitator_equipment_tag(existing):
+            used.add(existing)
+            continue
+
+    bound = 0
+    for item in inventory.get("agitators") or []:
+        if item.get("source") != "insert":
+            continue
+        if item.get("x") is None or item.get("y") is None:
+            continue
+        existing = re.sub(r"\s+", "", str(item.get("tag") or "").strip()).upper()
+        if _is_agitator_equipment_tag(existing):
+            if not item.get("description"):
+                desc_hits = _nearest_texts(
+                    (float(item["x"]), float(item["y"])),
+                    texts,
+                    max_dist=80.0,
+                    layers={"P-TANK_POS", "P-TEXT"},
+                    limit=15,
+                )
+                item["description"] = _agitator_description(existing, desc_hits)
+            continue
+
+        pos = (float(item["x"]), float(item["y"]))
+        tag_hits = _nearest_texts(
+            pos,
+            texts,
+            max_dist=40.0,
+            layers={"P-AGITATOR_POS"},
+            predicate=lambda s: _is_agitator_equipment_tag(s.replace(" ", "")),
+            limit=8,
+        )
+        resolved = None
+        for h in tag_hits:
+            cand = h["text"].replace(" ", "").upper()
+            if cand in used:
+                continue
+            resolved = cand
+            break
+        if not resolved:
+            continue
+
+        used.add(resolved)
+        item["tag"] = resolved
+        item["confidence"] = "high"
+        desc_hits = _nearest_texts(
+            pos,
+            texts,
+            max_dist=80.0,
+            layers={"P-TANK_POS", "P-TEXT"},
+            limit=15,
+        )
+        item["description"] = _agitator_description(resolved, desc_hits)
+        item["nearby_tags"] = "; ".join(h["text"] for h in tag_hits[:5])
+        bound += 1
+    return bound
 
 
 def extract_gor_instrument_texts(structural: Dict[str, Any]) -> List[Dict[str, Any]]:
@@ -736,7 +873,7 @@ def build_functions(
         tag = tag.strip().upper()
         if not tag or "." in tag:
             return
-        if FUNCTION_AGITATOR_TAG_RE.match(tag):
+        if _is_agitator_equipment_tag(tag):
             return
         prev = best.get(tag)
         if prev and int(prev.get("category_rank", 99)) <= rank:
@@ -782,13 +919,13 @@ def build_functions(
                 cand = h["text"].replace(" ", "").upper()
                 if not FUNCTION_TAG_RE.match(cand):
                     continue
-                if FUNCTION_AGITATOR_TAG_RE.match(cand):
+                if _is_agitator_equipment_tag(cand):
                     continue
                 resolved = cand
                 break
             if not resolved and item.get("position_number"):
                 cand = str(item["position_number"]).replace(" ", "").upper()
-                if FUNCTION_TAG_RE.match(cand) and not FUNCTION_AGITATOR_TAG_RE.match(cand):
+                if FUNCTION_TAG_RE.match(cand) and not _is_agitator_equipment_tag(cand):
                     resolved = cand
             if not resolved:
                 continue
@@ -967,7 +1104,7 @@ def build_functions(
         for i in inventory.get("delivery_limits") or []
         if i.get("x") is not None and i.get("y") is not None
     ]
-    agi_pts = [t for t in text_pts if FUNCTION_AGITATOR_TAG_RE.match(t["norm"])]
+    agi_pts = [t for t in text_pts if _is_agitator_equipment_tag(t["norm"])]
 
     # Prefer the label closest to a delivery limit for each short id.
     line_best: Dict[str, Dict[str, Any]] = {}
@@ -1225,6 +1362,8 @@ def build_inventory(structural: Dict[str, Any]) -> Dict[str, List[Dict[str, Any]
         "pipe_segments": pipe_segments,
         "primary_components": primary_components,
     }
+    # Bind L401–L499 labels to PPI agitator inserts before FUNCTION extraction.
+    bind_agitator_tags(inventory, structural)
     inventory["functions"] = build_functions(inventory, structural)
     if not inventory["functions"]:
         inventory["functions"] = build_gor_functions(inventory, structural)

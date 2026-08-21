@@ -1,5 +1,6 @@
 {
   "Broke System": {
+    "ecosystem": "valmet",
     "plant": "5001",
     "line_code": "PM03",
     "process_code": "BR",
@@ -8,8 +9,8 @@
     "line_name": "PAPER MACHINE 3",
     "process_name": "BROKE SYSTEM"
   },
-
   "STOD206336.11 Stock Preparation and Mixing area": {
+    "ecosystem": "valmet",
     "plant": "5001",
     "line_code": "PM03",
     "process_code": "SP",
@@ -19,6 +20,7 @@
     "process_name": "STOCK PREPARATION"
   },
   "STOD206337.11 Approach Flow System": {
+    "ecosystem": "valmet",
     "plant": "5001",
     "line_code": "PM03",
     "process_code": "AF",
@@ -28,6 +30,7 @@
     "process_name": "APPROACH FLOW SYSTEM"
   },
   "STOD206338.11_White Water system": {
+    "ecosystem": "valmet",
     "plant": "5001",
     "line_code": "PM03",
     "process_code": "WW",
@@ -37,6 +40,7 @@
     "process_name": "WHITE WATER SYSTEM"
   },
   "STOD206339.10 Broke System": {
+    "ecosystem": "valmet",
     "plant": "5001",
     "line_code": "PM03",
     "process_code": "BR",
@@ -46,6 +50,7 @@
     "process_name": "BROKE SYSTEM"
   },
   "STOD206340.10 OCC Pulping line 1": {
+    "ecosystem": "valmet",
     "plant": "5001",
     "line_code": "PM03",
     "process_code": "OC",
@@ -55,6 +60,7 @@
     "process_name": "OCC PULPING LINE 1"
   },
   "STOD206341.10 OCC Pulping line 2": {
+    "ecosystem": "valmet",
     "plant": "5001",
     "line_code": "PM03",
     "process_code": "OC",
@@ -64,6 +70,7 @@
     "process_name": "OCC PULPING LINE 2"
   },
   "STOD206342.10 OCC cleaning and fractionation": {
+    "ecosystem": "valmet",
     "plant": "5001",
     "line_code": "PM03",
     "process_code": "OC",
@@ -73,6 +80,7 @@
     "process_name": "OCC CLEANING AND FRACTIONATION"
   },
   "STOD206343.10 OCC Thickening": {
+    "ecosystem": "valmet",
     "plant": "5001",
     "line_code": "PM03",
     "process_code": "OC",
@@ -82,6 +90,7 @@
     "process_name": "OCC THICKENING"
   },
   "STOD206344.13_OCC Reject handling": {
+    "ecosystem": "valmet",
     "plant": "5001",
     "line_code": "PM03",
     "process_code": "OC",
@@ -91,6 +100,7 @@
     "process_name": "OCC REJECT HANDLING"
   },
   "STOD212164.03 OCC Utility Pipe Routes": {
+    "ecosystem": "valmet",
     "plant": "5001",
     "line_code": "PM03",
     "process_code": "OC",
@@ -99,8 +109,8 @@
     "line_name": "PAPER MACHINE 3",
     "process_name": "OCC UTILITY PIPE ROUTES"
   },
-
   "PCSG028666.03_Surface_size_preparation": {
+    "ecosystem": "valmet",
     "plant": "5001",
     "line_code": "PM03",
     "process_code": "CH",
@@ -110,6 +120,7 @@
     "process_name": "SURFACE SIZE PREPARATION"
   },
   "PCSG028667.02_sizing_agent": {
+    "ecosystem": "valmet",
     "plant": "5001",
     "line_code": "PM03",
     "process_code": "CH",
@@ -119,6 +130,7 @@
     "process_name": "SIZING AGENT DOSING"
   },
   "PCSG028668.02_PAC": {
+    "ecosystem": "valmet",
     "plant": "5001",
     "line_code": "PM03",
     "process_code": "CH",
@@ -128,6 +140,7 @@
     "process_name": "PAC DOSING"
   },
   "PCSG028669.02_Defoamer_and_biocide": {
+    "ecosystem": "valmet",
     "plant": "5001",
     "line_code": "PM03",
     "process_code": "CH",
@@ -137,6 +150,7 @@
     "process_name": "DEFOAMER AND BIOCIDE DOSING"
   },
   "PCSG028670.03_CPAM": {
+    "ecosystem": "valmet",
     "plant": "5001",
     "line_code": "PM03",
     "process_code": "CH",
@@ -146,6 +160,7 @@
     "process_name": "CPAM DOSING"
   },
   "PCSG028671.02_Bentonite": {
+    "ecosystem": "valmet",
     "plant": "5001",
     "line_code": "PM03",
     "process_code": "CH",
@@ -155,6 +170,7 @@
     "process_name": "BENTONITE DOSING"
   },
   "PCSG028672.02_Dye_brown": {
+    "ecosystem": "valmet",
     "plant": "5001",
     "line_code": "PM03",
     "process_code": "CH",
@@ -164,6 +180,7 @@
     "process_name": "DYE BROWN DOSING"
   },
   "PCSG028673.02_Defoamer": {
+    "ecosystem": "valmet",
     "plant": "5001",
     "line_code": "PM03",
     "process_code": "CH",
@@ -173,6 +190,7 @@
     "process_name": "DEFOAMER DOSING"
   },
   "PCSG028674.02_Biocide and hypochloride": {
+    "ecosystem": "valmet",
     "plant": "5001",
     "line_code": "PM03",
     "process_code": "CH",
@@ -182,6 +200,7 @@
     "process_name": "BIOCIDE AND HYPOCHLORIDE"
   },
   "PCSG028675.03_Biocide_and_hypochloride_dosing": {
+    "ecosystem": "valmet",
     "plant": "5001",
     "line_code": "PM03",
     "process_code": "CH",
@@ -191,6 +210,7 @@
     "process_name": "BIOCIDE HYPOCHLORIDE DOSING"
   },
   "PCSG028676.03_Micropolymer_and_wire_conditioning": {
+    "ecosystem": "valmet",
     "plant": "5001",
     "line_code": "PM03",
     "process_code": "CH",
@@ -200,6 +220,7 @@
     "process_name": "MICROPOLYMER WIRE CONDITIONING"
   },
   "PCSG028677.03_Wire_and_felt_cleaning_agents": {
+    "ecosystem": "valmet",
     "plant": "5001",
     "line_code": "PM03",
     "process_code": "CH",
@@ -209,6 +230,7 @@
     "process_name": "WIRE AND FELT CLEANING AGENTS"
   },
   "PCSG028678.03_Optisizer_hard_with_spray_supply_system": {
+    "ecosystem": "valmet",
     "plant": "5001",
     "line_code": "PM03",
     "process_code": "CH",
@@ -217,8 +239,8 @@
     "line_name": "PAPER MACHINE 3",
     "process_name": "OPTISIZER SPRAY SUPPLY"
   },
-
   "RAU6401404_01_FLOW_DIAGRAM_DOUBLEJET_TAIL_JET_P": {
+    "ecosystem": "valmet",
     "plant": "5001",
     "line_code": "PM03",
     "process_code": "UT",
@@ -228,6 +250,7 @@
     "process_name": "DOUBLEJET TAIL JET DIAGRAM"
   },
   "RAU8F00290.10_Steam and Condensate": {
+    "ecosystem": "valmet",
     "plant": "5001",
     "line_code": "PM03",
     "process_code": "SC",
@@ -237,6 +260,7 @@
     "process_name": "STEAM AND CONDENSATE"
   },
   "RAU8G02312.11 Shower Water system": {
+    "ecosystem": "valmet",
     "plant": "5001",
     "line_code": "PM03",
     "process_code": "SW",
@@ -246,6 +270,7 @@
     "process_name": "SHOWER WATER SYSTEM"
   },
   "RAU8G02313.11 Vacuum system": {
+    "ecosystem": "valmet",
     "plant": "5001",
     "line_code": "PM03",
     "process_code": "VU",
@@ -255,6 +280,7 @@
     "process_name": "VACUUM SYSTEM"
   },
   "RAU8G02314.09 Fresh and Cooling Water system": {
+    "ecosystem": "valmet",
     "plant": "5001",
     "line_code": "PM03",
     "process_code": "CW",
@@ -264,6 +290,7 @@
     "process_name": "FRESH AND COOLING WATER"
   },
   "RAU8G02315.10 Compressed Air system": {
+    "ecosystem": "valmet",
     "plant": "5001",
     "line_code": "PM03",
     "process_code": "CA",
@@ -273,6 +300,7 @@
     "process_name": "COMPRESSED AIR SYSTEM"
   },
   "RAU8G02316.10 Instrument Air": {
+    "ecosystem": "valmet",
     "plant": "5001",
     "line_code": "PM03",
     "process_code": "IA",
@@ -282,6 +310,7 @@
     "process_name": "INSTRUMENT AIR"
   },
   "RAU8G02317.09 Sealing Water system": {
+    "ecosystem": "valmet",
     "plant": "5001",
     "line_code": "PM03",
     "process_code": "SL",
@@ -291,6 +320,7 @@
     "process_name": "SEALING WATER SYSTEM"
   },
   "RAU8G02327.09 Heating water": {
+    "ecosystem": "valmet",
     "plant": "5001",
     "line_code": "PM03",
     "process_code": "HW",
@@ -300,6 +330,7 @@
     "process_name": "HEATING WATER SYSTEM"
   },
   "RAU8G02334.07 Connections Between Departments": {
+    "ecosystem": "valmet",
     "plant": "5001",
     "line_code": "PM03",
     "process_code": "UT",
@@ -309,6 +340,7 @@
     "process_name": "CONNECTIONS BETWEEN DEPARTMENTS"
   },
   "RAU8G02456.00 Washing water utility pipe route": {
+    "ecosystem": "valmet",
     "plant": "5001",
     "line_code": "PM03",
     "process_code": "UT",
@@ -317,8 +349,8 @@
     "line_name": "PAPER MACHINE 3",
     "process_name": "WASHING WATER UTILITY ROUTES"
   },
-
   "GORA68210.05_Code 03 - P&ID AirCap_SWE Shotton_CE": {
+    "ecosystem": "gor",
     "plant": "5001",
     "line_code": "TM01",
     "process_code": "AC",
@@ -328,6 +360,7 @@
     "process_name": "AIR CAP SYSTEM"
   },
   "GORA68211.03_Code 03 - P&Id Adv ReDry_SWE Shotton_CE": {
+    "ecosystem": "gor",
     "plant": "5001",
     "line_code": "TM01",
     "process_code": "DR",
@@ -337,6 +370,7 @@
     "process_name": "ADVANCED REDRY SYSTEM"
   },
   "GORA68212.04_Code 03 - P&ID Heat Recoveries_SWE Shotton_CE": {
+    "ecosystem": "gor",
     "plant": "5001",
     "line_code": "TM01",
     "process_code": "HR",
@@ -346,6 +380,7 @@
     "process_name": "HEAT RECOVERY SYSTEM"
   },
   "GORA68208.04_Code 13 - P&Id Mist Removal_SWE Shotton_CE": {
+    "ecosystem": "gor",
     "plant": "5001",
     "line_code": "TM01",
     "process_code": "MR",
@@ -355,6 +390,7 @@
     "process_name": "MIST REMOVAL SYSTEM"
   },
   "GORA68209.03_Code 13 - P&ID AdvWetDust_SWE Shotton_CE": {
+    "ecosystem": "gor",
     "plant": "5001",
     "line_code": "TM01",
     "process_code": "WD",
@@ -364,6 +400,7 @@
     "process_name": "ADV WET DUST SYSTEM"
   },
   "GORB18781.02_Code 13 - P&ID Active AirFoil_SWE Shotton_CE": {
+    "ecosystem": "gor",
     "plant": "5001",
     "line_code": "TM01",
     "process_code": "AB",
@@ -373,6 +410,7 @@
     "process_name": "ACTIVE AIRFOIL SYSTEM"
   },
   "GORB18782.02_Code 13 - P&ID QCS - WIS_SWE Shotton_CE": {
+    "ecosystem": "gor",
     "plant": "5001",
     "line_code": "TM01",
     "process_code": "QC",
@@ -382,6 +420,7 @@
     "process_name": "QCS WIS SYSTEM"
   },
   "GORA68213.05_Code 14 - P&ID MHV Heat recovery_SWE Shotton_CE": {
+    "ecosystem": "gor",
     "plant": "5001",
     "line_code": "TM01",
     "process_code": "MH",
@@ -391,6 +430,7 @@
     "process_name": "MHV HEAT RECOVERY"
   },
   "GORA68267.03_Code 14 - MHV Water ring piping overview_SWE Shotton_CE": {
+    "ecosystem": "gor",
     "plant": "5001",
     "line_code": "TM01",
     "process_code": "MH",
@@ -400,6 +440,7 @@
     "process_name": "MHV WATER RING PIPING"
   },
   "GORB18777.05_Code 14 - P&ID Turboblower & WE Roof heating_SWE Shotton_CE": {
+    "ecosystem": "gor",
     "plant": "5001",
     "line_code": "TM01",
     "process_code": "TB",
@@ -409,6 +450,7 @@
     "process_name": "TURBOBLOWER AND ROOF HEATING"
   },
   "GORB18778.04_SH1(2)_Code 14 - P&ID Ventil Unit SU01_SWE Shotton_CE": {
+    "ecosystem": "gor",
     "plant": "5001",
     "line_code": "TM01",
     "process_code": "SU",
@@ -418,6 +460,7 @@
     "process_name": "VENTIL UNIT SU01"
   },
   "GORB18778.04_SH2(2)_Code 14 - P&ID Ventil Unit SU02_SWE Shotton_CE": {
+    "ecosystem": "gor",
     "plant": "5001",
     "line_code": "TM01",
     "process_code": "SU",
@@ -427,6 +470,7 @@
     "process_name": "VENTIL UNIT SU02"
   },
   "GORB18779.05_SH1(12)_Code 14 - P&ID Ventil Unit WU01_SWE Shotton_CE": {
+    "ecosystem": "gor",
     "plant": "5001",
     "line_code": "TM01",
     "process_code": "WU",
@@ -436,6 +480,7 @@
     "process_name": "VENTIL UNIT WU01"
   },
   "GORB18779.05_SH2(12)_Code 14 - P&ID Ventil Unit WU02_SWE Shotton_CE": {
+    "ecosystem": "gor",
     "plant": "5001",
     "line_code": "TM01",
     "process_code": "WU",
@@ -445,6 +490,7 @@
     "process_name": "VENTIL UNIT WU02"
   },
   "GORB18779.05_SH3(12)_Code 14 - P&ID Ventil Unit WU03_SWE Shotton_CE": {
+    "ecosystem": "gor",
     "plant": "5001",
     "line_code": "TM01",
     "process_code": "WU",
@@ -454,6 +500,7 @@
     "process_name": "VENTIL UNIT WU03"
   },
   "GORB18779.05_SH4(12)_Code 14 - P&ID Ventil Unit WU04_SWE Shotton_CE": {
+    "ecosystem": "gor",
     "plant": "5001",
     "line_code": "TM01",
     "process_code": "WU",
@@ -463,6 +510,7 @@
     "process_name": "VENTIL UNIT WU04"
   },
   "GORB18779.05_SH5(12)_Code 14 - P&ID Ventil Unit WU05_SWE Shotton_CE": {
+    "ecosystem": "gor",
     "plant": "5001",
     "line_code": "TM01",
     "process_code": "WU",
@@ -472,6 +520,7 @@
     "process_name": "VENTIL UNIT WU05"
   },
   "GORB18779.05_SH6(12)_Code 14 - P&ID Ventil Unit WU06_SWE Shotton_CE": {
+    "ecosystem": "gor",
     "plant": "5001",
     "line_code": "TM01",
     "process_code": "WU",
@@ -481,6 +530,7 @@
     "process_name": "VENTIL UNIT WU06"
   },
   "GORB18779.05_SH7(12)_Code 14 - P&ID Ventil Unit WU07_SWE Shotton_CE": {
+    "ecosystem": "gor",
     "plant": "5001",
     "line_code": "TM01",
     "process_code": "WU",
@@ -490,6 +540,7 @@
     "process_name": "VENTIL UNIT WU07"
   },
   "GORB18779.05_SH8(12)_Code 14 - P&ID Ventil Unit WU08_SWE Shotton_CE": {
+    "ecosystem": "gor",
     "plant": "5001",
     "line_code": "TM01",
     "process_code": "WU",
@@ -499,6 +550,7 @@
     "process_name": "VENTIL UNIT WU08"
   },
   "GORB18779.05_SH9(12)_Code 14 - P&ID Ventil Unit WU09_SWE Shotton_CE": {
+    "ecosystem": "gor",
     "plant": "5001",
     "line_code": "TM01",
     "process_code": "WU",
@@ -508,6 +560,7 @@
     "process_name": "VENTIL UNIT WU09"
   },
   "GORB18779.05_SH10(12)_Code 14 - P&ID Ventil Unit WU10_SWE Shotton_CE": {
+    "ecosystem": "gor",
     "plant": "5001",
     "line_code": "TM01",
     "process_code": "WU",
@@ -517,6 +570,7 @@
     "process_name": "VENTIL UNIT WU10"
   },
   "GORB18779.05_SH11(12)_Code 14 - P&ID Ventil Unit WU11_SWE Shotton_CE": {
+    "ecosystem": "gor",
     "plant": "5001",
     "line_code": "TM01",
     "process_code": "WU",
@@ -526,6 +580,7 @@
     "process_name": "VENTIL UNIT WU11"
   },
   "GORB18779.05_SH12(12)_Code 14 - P&ID Ventil Unit WU12_SWE Shotton_CE": {
+    "ecosystem": "gor",
     "plant": "5001",
     "line_code": "TM01",
     "process_code": "WU",
@@ -535,6 +590,7 @@
     "process_name": "VENTIL UNIT WU12"
   },
   "GORB18780.03_Code 14 - P&ID Bale pulper Extractor_SWE Shotton_CE": {
+    "ecosystem": "gor",
     "plant": "5001",
     "line_code": "TM01",
     "process_code": "BP",
@@ -544,6 +600,7 @@
     "process_name": "BALE PULPER EXTRACTOR"
   },
   "GORB18784.04_Code 14 - P&ID Machine Hall Extractors_SWE Shotton_CE": {
+    "ecosystem": "gor",
     "plant": "5001",
     "line_code": "TM01",
     "process_code": "EX",
@@ -551,5 +608,235 @@
     "site_name": "SHOTTON MILL LTD",
     "line_name": "TISSUE MACHINE 1",
     "process_name": "MACHINE HALL EXTRACTORS"
+  },
+  "KSDM160104102_04_SH01_Bale handling_C": {
+    "ecosystem": "ksd",
+    "plant": "5001",
+    "line_code": "TM01",
+    "process_code": "SP",
+    "sub_process": "BHS",
+    "site_name": "SHOTTON MILL LTD",
+    "line_name": "TISSUE MACHINE 1",
+    "process_name": "STOCK PREP"
+  },
+  "KSDM160104102_07_SH03_Soft and hardwood line_C": {
+    "ecosystem": "ksd",
+    "plant": "5001",
+    "line_code": "TM01",
+    "process_code": "SP",
+    "sub_process": "SP1",
+    "site_name": "SHOTTON MILL LTD",
+    "line_name": "TISSUE MACHINE 1",
+    "process_name": "STOCK PREP"
+  },
+  "KSDM160104102_07_SH05_Thick stock screening_C": {
+    "ecosystem": "ksd",
+    "plant": "5001",
+    "line_code": "TM01",
+    "process_code": "CF",
+    "sub_process": "CF1",
+    "site_name": "SHOTTON MILL LTD",
+    "line_name": "TISSUE MACHINE 1",
+    "process_name": "CLEANING AND FRACTIONATION"
+  },
+  "KSDM160104102_07_SH06_Approach system_C": {
+    "ecosystem": "ksd",
+    "plant": "5001",
+    "line_code": "TM01",
+    "process_code": "AF",
+    "sub_process": "AF1",
+    "site_name": "SHOTTON MILL LTD",
+    "line_name": "TISSUE MACHINE 1",
+    "process_name": "APPROACH FLOW"
+  },
+  "KSDM160104102_07_SH07_Machine broke pulper system_C": {
+    "ecosystem": "ksd",
+    "plant": "5001",
+    "line_code": "TM01",
+    "process_code": "BR",
+    "sub_process": "BR1",
+    "site_name": "SHOTTON MILL LTD",
+    "line_name": "TISSUE MACHINE 1",
+    "process_name": "BROKE SYSTEM"
+  },
+  "KSDM160104102_07_SH09_Internal broke system_C": {
+    "ecosystem": "ksd",
+    "plant": "5001",
+    "line_code": "TM01",
+    "process_code": "BR",
+    "sub_process": "BR2",
+    "site_name": "SHOTTON MILL LTD",
+    "line_name": "TISSUE MACHINE 1",
+    "process_name": "BROKE SYSTEM"
+  },
+  "KSDM160104102_08_SH02_SW_HW Dissolving system_C": {
+    "ecosystem": "ksd",
+    "plant": "5001",
+    "line_code": "TM01",
+    "process_code": "SP",
+    "sub_process": "SP2",
+    "site_name": "SHOTTON MILL LTD",
+    "line_name": "TISSUE MACHINE 1",
+    "process_name": "STOCK PREP"
+  },
+  "KSDM160104102_09_SH04_Mixing system_C": {
+    "ecosystem": "ksd",
+    "plant": "5001",
+    "line_code": "TM01",
+    "process_code": "SP",
+    "sub_process": "SP3",
+    "site_name": "SHOTTON MILL LTD",
+    "line_name": "TISSUE MACHINE 1",
+    "process_name": "STOCK PREP"
+  },
+  "KSDM160104102_09_SH08_Converting broke pulper_C": {
+    "ecosystem": "ksd",
+    "plant": "5001",
+    "line_code": "TM01",
+    "process_code": "BR",
+    "sub_process": "BR3",
+    "site_name": "SHOTTON MILL LTD",
+    "line_name": "TISSUE MACHINE 1",
+    "process_name": "BROKE SYSTEM"
+  },
+  "KSDM160104103_05_SH01_White water system_C": {
+    "ecosystem": "ksd",
+    "plant": "5001",
+    "line_code": "TM01",
+    "process_code": "WW",
+    "sub_process": "WW1",
+    "site_name": "SHOTTON MILL LTD",
+    "line_name": "TISSUE MACHINE 1",
+    "process_name": "WHITE WATER SYSTEM"
+  },
+  "KSDM160104103_08_SH04_White water system_C": {
+    "ecosystem": "ksd",
+    "plant": "5001",
+    "line_code": "TM01",
+    "process_code": "WW",
+    "sub_process": "WW2",
+    "site_name": "SHOTTON MILL LTD",
+    "line_name": "TISSUE MACHINE 1",
+    "process_name": "WHITE WATER SYSTEM"
+  },
+  "KSDM160104103_09_SH02_White water system_C": {
+    "ecosystem": "ksd",
+    "plant": "5001",
+    "line_code": "TM01",
+    "process_code": "WW",
+    "sub_process": "WW3",
+    "site_name": "SHOTTON MILL LTD",
+    "line_name": "TISSUE MACHINE 1",
+    "process_name": "WHITE WATER SYSTEM"
+  },
+  "KSDM160104103_09_SH03_White water system_C": {
+    "ecosystem": "ksd",
+    "plant": "5001",
+    "line_code": "TM01",
+    "process_code": "WW",
+    "sub_process": "WW4",
+    "site_name": "SHOTTON MILL LTD",
+    "line_name": "TISSUE MACHINE 1",
+    "process_name": "WHITE WATER SYSTEM"
+  },
+  "KSDM160104104_06_SH01_Shower water system_C": {
+    "ecosystem": "ksd",
+    "plant": "5001",
+    "line_code": "TM01",
+    "process_code": "WS",
+    "sub_process": "SHW",
+    "site_name": "SHOTTON MILL LTD",
+    "line_name": "TISSUE MACHINE 1",
+    "process_name": "WATER SYSTEMS"
+  },
+  "KSDM160104105_05_SH03_Fresh water system_C": {
+    "ecosystem": "ksd",
+    "plant": "5001",
+    "line_code": "TM01",
+    "process_code": "WS",
+    "sub_process": "WM1",
+    "site_name": "SHOTTON MILL LTD",
+    "line_name": "TISSUE MACHINE 1",
+    "process_name": "WATER SYSTEMS"
+  },
+  "KSDM160104105_06_SH01_Fresh water system_C": {
+    "ecosystem": "ksd",
+    "plant": "5001",
+    "line_code": "TM01",
+    "process_code": "WS",
+    "sub_process": "WM2",
+    "site_name": "SHOTTON MILL LTD",
+    "line_name": "TISSUE MACHINE 1",
+    "process_name": "WATER SYSTEMS"
+  },
+  "KSDM160104105_06_SH02_Fresh water system_C": {
+    "ecosystem": "ksd",
+    "plant": "5001",
+    "line_code": "TM01",
+    "process_code": "WS",
+    "sub_process": "WM3",
+    "site_name": "SHOTTON MILL LTD",
+    "line_name": "TISSUE MACHINE 1",
+    "process_name": "WATER SYSTEMS"
+  },
+  "KSDM160104106_08_SH01_Vacuum system_C": {
+    "ecosystem": "ksd",
+    "plant": "5001",
+    "line_code": "TM01",
+    "process_code": "VS",
+    "sub_process": "VU1",
+    "site_name": "SHOTTON MILL LTD",
+    "line_name": "TISSUE MACHINE 1",
+    "process_name": "VACUUM SYSTEM"
+  },
+  "KSDM160104107_09_SH01_Steam and condensate system_C": {
+    "ecosystem": "ksd",
+    "plant": "5001",
+    "line_code": "TM01",
+    "process_code": "SC",
+    "sub_process": "SC1",
+    "site_name": "SHOTTON MILL LTD",
+    "line_name": "TISSUE MACHINE 1",
+    "process_name": "STEAM AND CONDENSATE SYSTEMS"
+  },
+  "KSDM160104108_06_SH01_Mill air system_C": {
+    "ecosystem": "ksd",
+    "plant": "5001",
+    "line_code": "TM01",
+    "process_code": "IA",
+    "sub_process": "IA1",
+    "site_name": "SHOTTON MILL LTD",
+    "line_name": "TISSUE MACHINE 1",
+    "process_name": "INSTRUMENT AIR"
+  },
+  "KSDM160104110_08_SH01_Internal effluent treatment_C": {
+    "ecosystem": "ksd",
+    "plant": "5001",
+    "line_code": "TM01",
+    "process_code": "AT",
+    "sub_process": "AT1",
+    "site_name": "SHOTTON MILL LTD",
+    "line_name": "TISSUE MACHINE 1",
+    "process_name": "ANAEROBIC TREATMENT"
+  },
+  "KSDM160104111_06_SH01_Process ventilation_C": {
+    "ecosystem": "ksd",
+    "plant": "5001",
+    "line_code": "TM01",
+    "process_code": "HA",
+    "sub_process": "HA1",
+    "site_name": "SHOTTON MILL LTD",
+    "line_name": "TISSUE MACHINE 1",
+    "process_name": "HALL VENTILATION"
+  },
+  "KSDM160104112_05_SH01_Sealing water system_C": {
+    "ecosystem": "ksd",
+    "plant": "5001",
+    "line_code": "TM01",
+    "process_code": "WS",
+    "sub_process": "SW1",
+    "site_name": "SHOTTON MILL LTD",
+    "line_name": "TISSUE MACHINE 1",
+    "process_name": "WATER SYSTEMS"
   }
 }

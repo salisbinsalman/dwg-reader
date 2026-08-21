@@ -24,6 +24,7 @@ from dwg_floc_context import (
     merge_floc_context,
     normalize_pltxt,
 )
+from dwg_floc_standards import lookup_line, lookup_process, lookup_sub_process
 from dwg_object_type import classify_equipment
 from dwg_pure_dump import find_json, json_path, safe_name, write_json
 
@@ -61,6 +62,9 @@ SAP_COLUMNS = [
     "INGRP",
     "GEWRK",
 ]
+
+# Codes Excel often coerces to numbers (losing leading zeros / type). Force text.
+_TEXT_FORMAT_COLUMNS = frozenset({"POSNR", "FLTYP", "EQART", "EQUART", "ABCKZ"})
 
 
 def _norm(value: object) -> str:
@@ -118,10 +122,32 @@ def build_floc_rows(
 ) -> List[Dict[str, str]]:
     """Build plant→line→process→subprocess→function FL rows."""
     c = merge_floc_context(ctx)
+    # raw_ctx holds only what the caller explicitly passed — used below so that
+    # DEFAULT_FLOC_CONTEXT values don't shadow FLOC standards lookups.
+    raw_ctx: Dict[str, str] = dict(ctx or {})
     plant = c["plant"]
     line = build_tplnr(plant, c["line_code"])
     process = build_tplnr(plant, c["line_code"], c["process_code"])
     subprocess = build_tplnr(plant, c["line_code"], c["process_code"], c["sub_process"])
+
+    # Resolve display names: explicit raw ctx wins, then FLOC standards lookup, then code.
+    # We check raw_ctx (not merged c) so DEFAULT_FLOC_CONTEXT values don't suppress
+    # the standards lookup when a caller passes only line_code / process_code.
+    line_name = (
+        raw_ctx.get("line_name")
+        or lookup_line(c["line_code"])
+        or c["line_code"]
+    )
+    process_name = (
+        raw_ctx.get("process_name")
+        or lookup_process(c["process_code"])
+        or c["process_code"]
+    )
+    sub_process_name = (
+        raw_ctx.get("sub_process_name")
+        or lookup_sub_process(c["sub_process"])
+        or process_name
+    )
 
     def blank_row(**kwargs: str) -> Dict[str, str]:
         row = {k: "" for k in SAP_COLUMNS}
@@ -147,7 +173,7 @@ def build_floc_rows(
             TPLNR=line,
             TPLMA=plant,
             POSNR="0010",
-            PLTXT=normalize_pltxt(c.get("line_name") or "PAPER MACHINE 3"),
+            PLTXT=normalize_pltxt(line_name),
             EQART=c.get("fl_type_line") or "0100",
             IWERK=c.get("planning_plant") or plant,
             INGRP=c.get("planning_group", "P01"),
@@ -159,7 +185,7 @@ def build_floc_rows(
             TPLNR=process,
             TPLMA=line,
             POSNR="0010",
-            PLTXT=normalize_pltxt(c.get("process_name") or "BROKE SYSTEM"),
+            PLTXT=normalize_pltxt(process_name),
             IWERK=c.get("planning_plant") or plant,
             INGRP=c.get("planning_group", "P01"),
         )
@@ -170,7 +196,7 @@ def build_floc_rows(
             TPLNR=subprocess,
             TPLMA=process,
             POSNR="0010",
-            PLTXT=normalize_pltxt(c.get("process_name") or "BROKE SYSTEM"),
+            PLTXT=normalize_pltxt(sub_process_name),
             IWERK=c.get("planning_plant") or plant,
             INGRP=c.get("planning_group", "P01"),
         )
@@ -181,9 +207,13 @@ def build_floc_rows(
         tplnr = mask if mask.startswith(subprocess) else paths["function"]
         if len(tplnr) > 30:
             tplnr = tplnr[:30]
-        pltxt = desc or normalize_pltxt(tag)
+        # Always normalize; then apply LN prefix for pipe-line FUNCTION tags
+        # (same rule as Equipment EQKTX — Rob/SML feedback).
+        pltxt = desc or tag
         if pltxt and not pltxt.startswith(tag):
             pltxt = normalize_pltxt(f"{tag} {pltxt}")
+        else:
+            pltxt = normalize_pltxt(pltxt)
         if is_line_equipment_tag(tag):
             pltxt = format_line_eqktx(tag, pltxt)
         _eqart, gewrk = classify_equipment(tag, pltxt)
@@ -228,7 +258,12 @@ def write_floc_workbook(
     for r_i, row in enumerate(floc_rows, start=8):
         ws.cell(r_i, 1, value=None)  # ID column unused in examples
         for c_i, key in enumerate(SAP_COLUMNS, start=2):
-            ws.cell(r_i, c_i, value=row.get(key) or None)
+            val = row.get(key) or None
+            cell = ws.cell(r_i, c_i, value=val)
+            if key in _TEXT_FORMAT_COLUMNS and val is not None:
+                cell.number_format = "@"
+                # Re-set as string so Excel/openpyxl keep leading zeros (e.g. 0100).
+                cell.value = str(val)
 
     out_path.parent.mkdir(parents=True, exist_ok=True)
     wb.save(out_path)
@@ -320,7 +355,7 @@ def main() -> int:
     parser.add_argument("--input", default="inputs/Broke System.dwg", help="Used for output stem")
     parser.add_argument("--output-dir", default="outputs")
     parser.add_argument("--template", default=str(TEMPLATE_DEFAULT))
-    parser.add_argument("--gt", default="inputs/gt_hierarchy_broke_system.xlsx")
+    parser.add_argument("--gt", default="resources/gt_hierarchy_broke_system.xlsx")
     parser.add_argument(
         "--limit",
         type=int,

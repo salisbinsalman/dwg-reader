@@ -268,7 +268,7 @@ def rows_from_hierarchy_csv(path: Path) -> List[Dict[str, str]]:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description="Score hierarchy output vs GT")
-    parser.add_argument("--gt", default="inputs/gt_hierarchy_broke_system.xlsx")
+    parser.add_argument("--gt", default="resources/gt_hierarchy_broke_system.xlsx")
     parser.add_argument("--pred", required=True, help="Predicted hierarchy CSV (GT columns)")
     parser.add_argument("--json-out", default="")
     parser.add_argument(

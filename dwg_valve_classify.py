@@ -36,7 +36,7 @@ from dwg_floc_context import (
 )
 from dwg_pure_dump import evidence_dir, find_json, json_path, safe_name, write_json
 
-LEGEND_PATH = Path("inputs/legend.png")
+LEGEND_PATH = Path("standards/legend.png")
 DEFAULT_MODEL_ID = "eu.anthropic.claude-sonnet-4-6"
 VALVE_LAYERS = frozenset({"P-VALVEPOS", "P-CVPOS", "P-SYMB", "1-VALVE TEXT GOR"})
 

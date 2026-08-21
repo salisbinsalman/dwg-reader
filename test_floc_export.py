@@ -19,11 +19,18 @@ from dwg_floc_context import (
     normalize_pltxt,
 )
 from dwg_pid_hierarchy_ai import rows_from_ai, title_context
-from export_sap_floc import _strip_trailing_spec, build_floc_rows, collect_functions, evaluate_against_gt, write_floc_workbook
+from export_sap_floc import (
+    SAP_COLUMNS,
+    _strip_trailing_spec,
+    build_floc_rows,
+    collect_functions,
+    evaluate_against_gt,
+    write_floc_workbook,
+)
 
 
 ROOT = Path(__file__).resolve().parent
-ABBREV_JSON = ROOT / "inputs/sml_abbreviations.json"
+ABBREV_JSON = ROOT / "standards/sml_abbreviations.json"
 HIERARCHY_CSV = ROOT / "outputs/Broke System.hierarchy_orchestrator.csv"
 
 
@@ -228,6 +235,39 @@ class ExportFlocTests(unittest.TestCase):
             ws = wb["Functional Location"]
             self.assertEqual(ws.cell(8, 2).value, "5001")
             self.assertEqual(ws.cell(12, 2).value, "5001-PM03-BR-BR1-35-24L009")
+            fltyp_col = 2 + SAP_COLUMNS.index("FLTYP")
+            eqart_col = 2 + SAP_COLUMNS.index("EQART")
+            self.assertEqual(ws.cell(12, fltyp_col).number_format, "@")
+            self.assertEqual(ws.cell(12, eqart_col).number_format, "@")
+            self.assertIsInstance(ws.cell(12, fltyp_col).value, str)
+
+    def test_line_function_pltxt_gets_ln_prefix(self) -> None:
+        """Pipe-line FUNCTION tags must get LN … PLTXT (same rule as Equipment)."""
+        functions = [
+            ("35-24-194", "5001-PM03-BR-BR1-35-24-194", "35-24-194 SEALING WATER TO HOSE"),
+            ("35-24-095", "5001-PM03-BR-BR1-35-24-095", "35-24-095 PP-200 PLPR LN"),
+            ("168L-522", "5001-TM01-WU-WUC-168L-522", "168L-522 PIPE DN65"),
+        ]
+        floc_rows = build_floc_rows(functions)
+        line_rows = [r for r in floc_rows if r["TPLNR"].endswith(("35-24-194", "35-24-095", "168L-522"))]
+        self.assertEqual(len(line_rows), 3)
+        for r in line_rows:
+            self.assertTrue(
+                r["PLTXT"].startswith("LN "),
+                msg=f"{r['TPLNR']} PLTXT={r['PLTXT']!r}",
+            )
+        self.assertTrue(any(r["PLTXT"].startswith("LN 35-24-194") for r in line_rows))
+        self.assertTrue(any(r["PLTXT"].startswith("LN 35-24-095") for r in line_rows))
+        self.assertTrue(any(r["PLTXT"].startswith("LN 168L-522") for r in line_rows))
+
+    def test_non_line_function_pltxt_no_ln_prefix(self) -> None:
+        functions = [
+            ("35-24L009", "5001-PM03-BR-BR1-35-24L009", "35-24L009 BROKE ROLL PLPR"),
+        ]
+        floc_rows = build_floc_rows(functions)
+        fn = next(r for r in floc_rows if r["TPLNR"].endswith("35-24L009"))
+        self.assertFalse(fn["PLTXT"].startswith("LN "))
+        self.assertTrue(fn["PLTXT"].startswith("35-24L009"))
 
     def test_function_rows_populate_gewrk(self) -> None:
         functions = [
@@ -290,7 +330,7 @@ class ExportFlocTests(unittest.TestCase):
             fns = collect_functions(rows)
             self.assertEqual(fns[0][0], "35-24L009")
             floc_rows = build_floc_rows(fns)
-            gt = ROOT / "inputs/gt_hierarchy_broke_system.xlsx"
+            gt = ROOT / "resources/gt_hierarchy_broke_system.xlsx"
             if gt.exists():
                 report = evaluate_against_gt(floc_rows, gt)
                 self.assertGreaterEqual(report["functions_compared"], 1)

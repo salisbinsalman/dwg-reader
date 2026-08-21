@@ -156,7 +156,7 @@ def main() -> int:
     parser.add_argument("--input", default="inputs/Broke System.dwg")
     parser.add_argument("--output-dir", default="outputs")
     parser.add_argument("--hierarchy-csv", default="")
-    parser.add_argument("--legend", default="inputs/legend.png")
+    parser.add_argument("--legend", default="standards/legend.png")
     parser.add_argument("--model-id", default="eu.anthropic.claude-sonnet-4-6")
     parser.add_argument("--region", default="eu-west-2")
     parser.add_argument("--aws-profile", default="foundrydev")
