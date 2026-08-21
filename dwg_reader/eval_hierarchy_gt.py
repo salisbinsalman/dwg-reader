@@ -10,7 +10,10 @@ import re
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Optional, Set, Tuple
 
-GT_COLUMNS = ["SUB-PROCESS", "FUNCTION", "EQUIPMENT", "SUB-EQUIPMENT", "MASK"]
+from dwg_reader.logutil import configure_logging, get_logger
+from dwg_reader.models import GT_COLUMNS
+
+logger = get_logger(__name__)
 
 
 def norm_tag(value: object) -> str:
@@ -267,6 +270,7 @@ def rows_from_hierarchy_csv(path: Path) -> List[Dict[str, str]]:
 
 
 def main() -> int:
+    configure_logging()
     parser = argparse.ArgumentParser(description="Score hierarchy output vs GT")
     parser.add_argument("--gt", default="resources/gt_hierarchy_broke_system.xlsx")
     parser.add_argument("--pred", required=True, help="Predicted hierarchy CSV (GT columns)")
@@ -283,23 +287,19 @@ def main() -> int:
 
     if args.function:
         score = score_function(args.function, pred_rows, gt_rows)
-        print(format_function_report(score))
-        print(json.dumps(score, indent=2))
+        logger.info(format_function_report(score))
+        logger.info(json.dumps(score, indent=2))
         return 0
 
     report = evaluate(pred_rows, gt_rows)
-    print(json.dumps(report, indent=2))
-    print(f"\nPRIMARY accuracy (micro tag F1): {report['accuracy']*100:.1f}%")
-    print(
-        f"EQUIPMENT micro F1: {report['equipment_micro']['f1']*100:.1f}%  "
+    logger.info(json.dumps(report, indent=2))
+    logger.info(f"\nPRIMARY accuracy (micro tag F1): {report['accuracy']*100:.1f}%")
+    logger.info(f"EQUIPMENT micro F1: {report['equipment_micro']['f1']*100:.1f}%  "
         f"(hit={report['equipment_micro']['tp']} miss={report['equipment_micro']['fn']} "
-        f"extra={report['equipment_micro']['fp']})"
-    )
-    print(
-        f"SUB-EQUIPMENT micro F1: {report['subequipment_micro']['f1']*100:.1f}%  "
+        f"extra={report['equipment_micro']['fp']})")
+    logger.info(f"SUB-EQUIPMENT micro F1: {report['subequipment_micro']['f1']*100:.1f}%  "
         f"(hit={report['subequipment_micro']['tp']} miss={report['subequipment_micro']['fn']} "
-        f"extra={report['subequipment_micro']['fp']})"
-    )
+        f"extra={report['subequipment_micro']['fp']})")
     if args.json_out:
         Path(args.json_out).write_text(json.dumps(report, indent=2), encoding="utf-8")
     return 0 if report["accuracy"] >= 0.60 else 1

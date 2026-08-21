@@ -12,35 +12,35 @@ Flow:
 """
 
 from __future__ import annotations
-import dwg_warn  # noqa: F401 — silence boto3 Python 3.9 deprecation noise (subprocesses too via env)
+import dwg_reader.dwg_warn as dwg_warn  # noqa: F401 — silence boto3 Python 3.9 deprecation noise
 
 import argparse
 import concurrent.futures
-import csv
 import json
 import os
-import subprocess
 import sys
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
 import re
 
-from dwg_pure_dump import find_json, json_path, logs_dir, safe_name, write_json
-from eval_hierarchy_gt import (
-    GT_COLUMNS,
+from dwg_reader.dwg_ecosystem import detect as detect_ecosystem, is_gor_inventory
+from dwg_reader.dwg_pid_hierarchy_ai import run_hierarchy_for_tag as _run_hierarchy_for_tag
+from dwg_reader.dwg_pure_dump import find_json, json_path, logs_dir, safe_name, write_json
+from dwg_reader.dwg_valve_classify import run_valve_classify
+from dwg_reader.eval_hierarchy_gt import (
     format_function_report,
     load_gt_rows,
     macro_hit_accuracy,
     score_function,
 )
+from dwg_reader.export_sap_equipment import run_equipment_export
+from dwg_reader.export_sap_floc import run_floc_export
+from dwg_reader.io import read_csv_rows, write_csv_rows
+from dwg_reader.logutil import configure_logging, get_logger
+from dwg_reader.models import HIERARCHY_COLUMNS
 
-# Hierarchy deliverable may include DESCRIPTION for FLOC PLTXT.
-HIERARCHY_COLUMNS = list(GT_COLUMNS)
-if "DESCRIPTION" not in HIERARCHY_COLUMNS:
-    HIERARCHY_COLUMNS = HIERARCHY_COLUMNS + ["DESCRIPTION"]
-if "MASK" not in HIERARCHY_COLUMNS:
-    HIERARCHY_COLUMNS = HIERARCHY_COLUMNS + ["MASK"]
+logger = get_logger(__name__)
 
 _GOR_FN_RE = re.compile(r"^WU\d+$", re.I)
 _TAG_SUFFIX_RE = re.compile(r"(\d+)$")
@@ -106,14 +106,16 @@ def _seed_gor_valve_types(inv_path: Path, valve_types_path: Path, fn_id: str) ->
     """Create valve_types.json entries from GOR inventory (no Bedrock vision)."""
     try:
         inv_data = json.loads(inv_path.read_text(encoding="utf-8"))
-    except Exception:
+    except Exception as exc:
+        logger.warning("Could not read inventory JSON %s: %s", inv_path, exc)
         return
 
     raw: Dict[str, Any] = {}
     if valve_types_path.exists():
         try:
             raw = json.loads(valve_types_path.read_text(encoding="utf-8"))
-        except Exception:
+        except Exception as exc:
+            logger.warning("Could not read valve types %s: %s", valve_types_path, exc)
             raw = {}
     tags_data = raw.get("tags", {})
     if not isinstance(tags_data, dict):
@@ -137,21 +139,23 @@ def _seed_gor_valve_types(inv_path: Path, valve_types_path: Path, fn_id: str) ->
         json.dumps(raw, indent=2, ensure_ascii=False), encoding="utf-8"
     )
     if seeded:
-        print(f"[gor] valve_types seeded: {seeded} tags from inventory", flush=True)
+        logger.info(f"[gor] valve_types seeded: {seeded} tags from inventory")
 
 
 def _patch_gor_valve_types(inv_path: Path, valve_types_path: Path, fn_id: str) -> None:
     """Apply TIPO SAP types and mark instruments is_valve=False in valve_types.json."""
     try:
         inv_data = json.loads(inv_path.read_text(encoding="utf-8"))
-    except Exception:
+    except Exception as exc:
+        logger.warning("Could not read inventory JSON %s: %s", inv_path, exc)
         return
     _seed_gor_valve_types(inv_path, valve_types_path, fn_id)
     if not valve_types_path.exists():
         return
     try:
         raw = json.loads(valve_types_path.read_text(encoding="utf-8"))
-    except Exception:
+    except Exception as exc:
+        logger.warning("Could not read valve types %s: %s", valve_types_path, exc)
         return
     tags_data = raw.get("tags", {})
     if not isinstance(tags_data, dict):
@@ -215,29 +219,16 @@ def _patch_gor_valve_types(inv_path: Path, valve_types_path: Path, fn_id: str) -
     valve_types_path.write_text(
         json.dumps(raw, indent=2, ensure_ascii=False), encoding="utf-8"
     )
-    print(
-        f"[gor] valve_types patched: {tipo_applied} TIPO codes applied, {instr_marked} instruments marked",
-        flush=True,
-    )
+    logger.info(f"[gor] valve_types patched: {tipo_applied} TIPO codes applied, {instr_marked} instruments marked")
 
 
 def _is_gor_inventory(inv_path: Path) -> bool:
-    """True when the inventory is from a GOR/Valmet drawing (Code 03, 13, or 14)."""
+    """True when the inventory is from a GOR drawing (Code 03, 13, or 14)."""
     try:
         data = json.loads(inv_path.read_text(encoding="utf-8"))
-        # Code 14: Pipeno blocks produce gor_pipe_id source on lines
-        if any(ln.get("source") == "gor_pipe_id" for ln in (data.get("lines") or [])):
-            return True
-        # Code 14: TAG VALVOLA INSERT blocks
-        if any(str(v.get("block_name") or "").upper() == "TAG VALVOLA" for v in (data.get("valves") or [])):
-            return True
-        # Code 03/13: valve text labels written to 1-VALVE TEXT GOR
-        if any(str(v.get("layer") or "") == "1-VALVE TEXT GOR" for v in (data.get("valves") or [])):
-            return True
-        # Legacy: explicit WU function tag
-        return any(_GOR_FN_RE.match(str(fn.get("function") or "")) for fn in (data.get("functions") or []))
-    except Exception:
+    except (OSError, json.JSONDecodeError):
         return False
+    return is_gor_inventory(data)
 
 
 def _gor_valve_desc(tag: str, tipo: str) -> str:
@@ -362,7 +353,8 @@ def _is_instrument_function_tag(tag: str) -> bool:
 def _dominant_area_prefixes(inv_path: Path, *, min_count: int = 2, limit: int = 4) -> set[str]:
     try:
         data = json.loads(inv_path.read_text(encoding="utf-8"))
-    except Exception:
+    except Exception as exc:
+        logger.warning("Could not read inventory JSON %s: %s", inv_path, exc)
         return set()
     from collections import Counter
 
@@ -477,20 +469,11 @@ def rows_for_function(rows: List[Dict[str, str]], tag: str) -> List[Dict[str, st
 
 
 def write_hierarchy_csv(path: Path, rows: List[Dict[str, str]]) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    cols = HIERARCHY_COLUMNS
-    with path.open("w", encoding="utf-8", newline="") as f:
-        writer = csv.DictWriter(f, fieldnames=cols, extrasaction="ignore")
-        writer.writeheader()
-        for row in rows:
-            writer.writerow({c: row.get(c, "") for c in cols})
+    write_csv_rows(path, rows, HIERARCHY_COLUMNS)
 
 
 def read_hierarchy_csv(path: Path) -> List[Dict[str, str]]:
-    if not path.exists():
-        return []
-    with path.open(encoding="utf-8", newline="") as f:
-        return [{c: str(raw.get(c) or "").strip() for c in raw.keys()} for raw in csv.DictReader(f)]
+    return read_csv_rows(path, missing_ok=True)
 
 
 def _append_orphan_valve_rows(
@@ -516,7 +499,7 @@ def _append_orphan_valve_rows(
     VALVE_POS_RE = re.compile(r"^\d{2}-\d{2}-\d{3,4}$")
 
     if not structural_path.exists():
-        print(f"[orphan-mopup] structural dump not found: {structural_path}; skipping")
+        logger.info(f"[orphan-mopup] structural dump not found: {structural_path}; skipping")
         return 0
 
     existing = read_hierarchy_csv(combined_csv)
@@ -546,10 +529,10 @@ def _append_orphan_valve_rows(
 
     orphans = {tag: xy for tag, xy in valve_locs.items() if tag not in in_hierarchy}
     if not orphans:
-        print("[orphan-mopup] no orphan valve tags found")
+        logger.info("[orphan-mopup] no orphan valve tags found")
         return 0
 
-    print(f"[orphan-mopup] {len(orphans)} orphan valve tags to assign")
+    logger.info(f"[orphan-mopup] {len(orphans)} orphan valve tags to assign")
 
     # Function positions from inventory (only those already in the hierarchy CSV).
     existing_fn_headers: set = {
@@ -566,7 +549,7 @@ def _append_orphan_valve_rows(
             fn_locs[tag] = (float(x), float(y))
 
     if not fn_locs:
-        print("[orphan-mopup] no function positions available; skipping")
+        logger.info("[orphan-mopup] no function positions available; skipping")
         return 0
 
     # Group functions by sub-process prefix (e.g. "35-27") for prefix-aware matching.
@@ -591,7 +574,7 @@ def _append_orphan_valve_rows(
         else:
             best_fn, best_d = _nearest(fn_locs, ox, oy)
         fn_orphans.setdefault(best_fn, []).append(tag)
-        print(f"[orphan-mopup]   {tag} → {best_fn} (d={best_d:.0f})")
+        logger.info(f"[orphan-mopup]   {tag} → {best_fn} (d={best_d:.0f})")
 
     for fn in fn_orphans:
         fn_orphans[fn].sort()
@@ -630,7 +613,7 @@ def _append_orphan_valve_rows(
 
     count = sum(len(v) for v in fn_orphans.values())
     write_hierarchy_csv(combined_csv, result)
-    print(f"[orphan-mopup] appended {count} orphan valve rows → {combined_csv.name}")
+    logger.info(f"[orphan-mopup] appended {count} orphan valve rows → {combined_csv.name}")
     return count
 
 
@@ -652,7 +635,7 @@ def _append_agitator_equipment_rows(
     import math
 
     if not inv_path.exists():
-        print(f"[agitator-mopup] inventory not found: {inv_path}; skipping")
+        logger.info(f"[agitator-mopup] inventory not found: {inv_path}; skipping")
         return 0
 
     existing = read_hierarchy_csv(combined_csv)
@@ -661,13 +644,13 @@ def _append_agitator_equipment_rows(
 
     inventory = json.loads(inv_path.read_text(encoding="utf-8"))
     if structural_path and structural_path.exists():
-        from dwg_pid_inventory import bind_agitator_tags
+        from dwg_reader.dwg_pid_inventory import bind_agitator_tags
 
         structural = json.loads(structural_path.read_text(encoding="utf-8"))
         n_bound = bind_agitator_tags(inventory, structural)
         if n_bound:
             inv_path.write_text(json.dumps(inventory, indent=2), encoding="utf-8")
-            print(f"[agitator-mopup] bound {n_bound} agitator insert tags in inventory")
+            logger.info(f"[agitator-mopup] bound {n_bound} agitator insert tags in inventory")
 
     in_hierarchy: set = set()
     for row in existing:
@@ -696,7 +679,7 @@ def _append_agitator_equipment_rows(
         }
 
     if not orphans:
-        print("[agitator-mopup] no unbound agitator tags to append")
+        logger.info("[agitator-mopup] no unbound agitator tags to append")
         return 0
 
     existing_fn_headers: set = {
@@ -713,7 +696,7 @@ def _append_agitator_equipment_rows(
 
     tank_locs = {fn: xy for fn, xy in fn_locs.items() if _TANK_FN_RE.match(fn)}
     if not tank_locs and not fn_locs:
-        print("[agitator-mopup] no function positions available; skipping")
+        logger.info("[agitator-mopup] no function positions available; skipping")
         return 0
 
     def _nearest(candidates: Dict[str, Tuple[float, float]], ox: float, oy: float):
@@ -736,7 +719,7 @@ def _append_agitator_equipment_rows(
         else:
             best_fn, best_d = _nearest(fn_locs, ox, oy)
         fn_agits.setdefault(best_fn, []).append(tag)
-        print(f"[agitator-mopup]   {tag} → {best_fn} (d={best_d:.0f})")
+        logger.info(f"[agitator-mopup]   {tag} → {best_fn} (d={best_d:.0f})")
 
     for fn in fn_agits:
         fn_agits[fn].sort()
@@ -772,7 +755,7 @@ def _append_agitator_equipment_rows(
 
     count = sum(len(v) for v in fn_agits.values())
     write_hierarchy_csv(combined_csv, result)
-    print(f"[agitator-mopup] appended {count} agitator equipment rows → {combined_csv.name}")
+    logger.info(f"[agitator-mopup] appended {count} agitator equipment rows → {combined_csv.name}")
     return count
 
 
@@ -791,43 +774,25 @@ def run_hierarchy_for_tag(
     no_clean_prev: bool,
     aws_profile: str,
 ) -> int:
-    cmd = [
-        sys.executable,
-        str(Path(__file__).resolve().parent / "dwg_pid_hierarchy_ai.py"),
-        "--input",
-        str(input_path),
-        "--output-dir",
-        str(out_dir),
-        "--tags",
-        tag,
-        "--model-id",
-        model_id,
-        "--region",
-        region,
-        "--prompt-file",
-        prompt_file,
-        "--inventory-json",
-        str(inventory_json),
-        "--hierarchy-csv-out",
-        str(per_tag_csv),
-        "--hierarchy-json-out",
-        str(per_tag_json),
-    ]
-    if reuse_shots:
-        cmd.append("--reuse-shots")
-    if no_clean_prev:
-        cmd.append("--no-clean-prev")
-
-    env = os.environ.copy()
-    if aws_profile:
-        env["AWS_PROFILE"] = aws_profile
-    print(f"\n---------- hierarchy: {tag} ----------")
-    print(" ".join(cmd))
-    proc = subprocess.run(cmd, env=env)
-    return int(proc.returncode)
+    logger.info(f"\n---------- hierarchy: {tag} ----------")
+    return _run_hierarchy_for_tag(
+        tag=tag,
+        input_path=input_path,
+        out_dir=out_dir,
+        model_id=model_id,
+        region=region,
+        prompt_file=prompt_file,
+        inventory_json=inventory_json,
+        per_tag_csv=per_tag_csv,
+        per_tag_json=per_tag_json,
+        reuse_shots=reuse_shots,
+        no_clean_prev=no_clean_prev,
+        aws_profile=aws_profile,
+    )
 
 
 def main() -> int:
+    configure_logging()
     parser = argparse.ArgumentParser(
         description="Run hierarchy one-by-one over inventory equipment and score vs GT"
     )
@@ -918,13 +883,18 @@ def main() -> int:
         else find_json(out_dir, f"{base}.pid_inventory.json")
     )
     if not inv_path.exists():
-        print(f"[error] Missing inventory JSON: {inv_path}. Run `make inventory` first.", file=sys.stderr)
+        logger.error(f"[error] Missing inventory JSON: {inv_path}. Run `make inventory` first.")
         return 2
 
     gt_path = Path(args.gt).expanduser().resolve()
-    is_gor = _is_gor_inventory(inv_path)
+    try:
+        inventory_preview: Dict[str, Any] = json.loads(inv_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        inventory_preview = {}
+    eco = detect_ecosystem(input_path.name, inventory=inventory_preview)
+    is_gor = eco.name == "gor"
     if not gt_path.exists() and not is_gor:
-        print(f"[error] Missing GT file: {gt_path}", file=sys.stderr)
+        logger.error(f"[error] Missing GT file: {gt_path}")
         return 2
     gt_rows = load_gt_rows(gt_path) if gt_path.exists() else []
 
@@ -949,7 +919,7 @@ def main() -> int:
         tags = [str(r.get("function") or "").upper() for r in selected if r.get("function")]
 
     if not tags:
-        print("[error] No inventory FUNCTIONs selected.", file=sys.stderr)
+        logger.error("[error] No inventory FUNCTIONs selected.")
         return 2
 
     all_tags = list(tags)
@@ -959,35 +929,34 @@ def main() -> int:
     # GOR bypass: build hierarchy deterministically without Bedrock, then run
     # valve classify + SAP export the same as normal.
     if is_gor:
-        print(f"[gor] Detected GOR/Valmet drawing — building deterministic hierarchy for: {', '.join(tags)}", flush=True)
+        logger.info(f"[gor] Detected GOR/Valmet drawing — building deterministic hierarchy for: {', '.join(tags)}")
         inventory_data = json.loads(inv_path.read_text(encoding="utf-8"))
         gor_rows = build_gor_hierarchy(inventory_data)
         write_hierarchy_csv(combined_csv, gor_rows)
-        print(f"[gor] Written {len(gor_rows)} rows → {combined_csv.name}", flush=True)
+        logger.info(f"[gor] Written {len(gor_rows)} rows → {combined_csv.name}")
         limit_s = str(args.limit if args.limit > 0 else 0)
         if combined_csv.exists() and combined_csv.stat().st_size > 0:
             valve_types_path = json_path(out_dir, f"{base}.valve_types.json")
             fn_id = tags[0] if tags else ""
-            print("\n---------- gor tipo mapping (TIPO_VALVOLA → SAP) ----------", flush=True)
+            logger.info("\n---------- gor tipo mapping (TIPO_VALVOLA → SAP) ----------")
             _patch_gor_valve_types(inv_path, valve_types_path, fn_id)
             if not args.no_export_floc:
-                floc_cmd = [
-                    sys.executable,
-                    str(Path(__file__).resolve().parent / "export_sap_floc.py"),
-                    "--input", str(input_path), "--output-dir", str(out_dir),
-                    "--hierarchy-csv", str(combined_csv), "--gt", str(gt_path), "--limit", limit_s,
-                ]
-                print("\n---------- export SAP FLOC ----------", flush=True)
-                subprocess.run(floc_cmd, check=False)
+                logger.info("\n---------- export SAP FLOC ----------")
+                run_floc_export(
+                    input_path=input_path,
+                    out_dir=out_dir,
+                    hierarchy_csv=combined_csv,
+                    gt=gt_path,
+                    limit=args.limit if args.limit > 0 else 0,
+                )
             if not args.no_export_equipment:
-                eq_cmd = [
-                    sys.executable,
-                    str(Path(__file__).resolve().parent / "export_sap_equipment.py"),
-                    "--input", str(input_path), "--output-dir", str(out_dir),
-                    "--hierarchy-csv", str(combined_csv), "--limit", limit_s,
-                ]
-                print("\n---------- export SAP Equipment ----------", flush=True)
-                subprocess.run(eq_cmd, check=False)
+                logger.info("\n---------- export SAP Equipment ----------")
+                run_equipment_export(
+                    input_path=input_path,
+                    out_dir=out_dir,
+                    hierarchy_csv=combined_csv,
+                    limit=args.limit if args.limit > 0 else 0,
+                )
         return 0
     report_json = json_path(out_dir, f"{base}.hierarchy_orchestrator_report.json")
     log_path = log_dir / "hierarchy-orchestrator.log"
@@ -1001,36 +970,34 @@ def main() -> int:
         existing_headers = set(csv_function_headers(read_hierarchy_csv(combined_csv)))
         before = len(tags)
         tags = [t for t in tags if t not in existing_headers]
-        print(f"[skip-existing] {before - len(tags)} already in {combined_csv.name}; {len(tags)} remaining")
+        logger.info(f"[skip-existing] {before - len(tags)} already in {combined_csv.name}; {len(tags)} remaining")
         combined_rows = read_hierarchy_csv(combined_csv)
 
-    print(f"Selected {len(all_tags)} FUNCTION(s) from {inv_path.name} ({len(tags)} to run)")
+    logger.info(f"Selected {len(all_tags)} FUNCTION(s) from {inv_path.name} ({len(tags)} to run)")
     for i, t in enumerate(tags, 1):
-        print(f"  {i:2d}. {t}")
+        logger.info(f"  {i:2d}. {t}")
 
     if args.dry_run:
-        print("\n[dry-run] GT child counts:")
+        logger.info("\n[dry-run] GT child counts:")
         for tag in all_tags:
             score = score_function(tag, [], gt_rows)
             eq = score["equipment"]
             sub = score["subequipment"]
-            print(
-                f"  {tag}: in_gt={score['in_gt']}  "
-                f"EQUIPMENT gt={eq['gt_count']}  SUB-EQUIPMENT gt={sub['gt_count']}"
-            )
+            logger.info(f"  {tag}: in_gt={score['in_gt']}  "
+                f"EQUIPMENT gt={eq['gt_count']}  SUB-EQUIPMENT gt={sub['gt_count']}")
         return 0
 
     if args.score_only:
         existing = read_hierarchy_csv(combined_csv)
         if not existing:
-            print(f"[error] --score-only but missing {combined_csv}", file=sys.stderr)
+            logger.error(f"[error] --score-only but missing {combined_csv}")
             return 2
         combined_rows = existing
-        print(f"[score-only] scoring {combined_csv}", flush=True)
+        logger.info(f"[score-only] scoring {combined_csv}")
     else:
         jobs = max(1, int(args.jobs or 1))
         if jobs > 1:
-            print(f"[parallel] running up to {jobs} FUNCTIONs concurrently")
+            logger.info(f"[parallel] running up to {jobs} FUNCTIONs concurrently")
         tag_results: Dict[str, Dict[str, Any]] = {}
 
         def _run_one(tag: str, index: int) -> Dict[str, Any]:
@@ -1071,13 +1038,10 @@ def main() -> int:
                     try:
                         tag_results[tag] = fut.result()
                     except Exception as exc:
-                        print(f"[error] {tag}: {exc}", file=sys.stderr, flush=True)
+                        logger.error(f"[error] {tag}: {exc}")
                         tag_results[tag] = {"function": tag, "exit_code": 99, "rows": [], "error": str(exc)}
                     r = tag_results[tag]
-                    print(
-                        f"[done] {tag} exit={r.get('exit_code')} rows={len(r.get('rows') or [])}",
-                        flush=True,
-                    )
+                    logger.info(f"[done] {tag} exit={r.get('exit_code')} rows={len(r.get('rows') or [])}")
 
         # Merge in original inventory/tag order for deterministic output.
         for tag in tags:
@@ -1085,7 +1049,7 @@ def main() -> int:
             rc = int(result.get("exit_code", 99))
             tag_rows = result.get("rows") or []
             if not tag_rows:
-                print(f"[warn] no rows for {tag} (exit={rc}); not appending stale CSV")
+                logger.warning(f"[warn] no rows for {tag} (exit={rc}); not appending stale CSV")
                 per_function_scores.append(
                     {
                         "function": tag,
@@ -1101,7 +1065,7 @@ def main() -> int:
             scoreable_tag_rows = [r for r in tag_rows if (r.get("MASK") or "").strip().upper() != "ORPHAN"]
             score = score_function(tag, scoreable_tag_rows, gt_rows)
             per_function_scores.append(score)
-            print(format_function_report(score))
+            logger.info(format_function_report(score))
 
     # Final scores always cover the full selected set from the combined CSV.
     # Strip orphan rows (MASK=ORPHAN) — they exist for SAP export completeness but
@@ -1110,7 +1074,7 @@ def main() -> int:
     scoreable_rows = [r for r in combined_rows if (r.get("MASK") or "").strip().upper() != "ORPHAN"]
     per_function_scores = [score_function(tag, scoreable_rows, gt_rows) for tag in all_tags]
     for score in per_function_scores:
-        print(format_function_report(score))
+        logger.info(format_function_report(score))
 
     # Aggregate over selected functions only.
     # Accuracy = hit/gt per FUNCTION, then mean (extras ignored).
@@ -1160,18 +1124,14 @@ def main() -> int:
     }
     write_json(report_json, summary)
 
-    print("\n========== ORCHESTRATOR SUMMARY ==========")
-    print(f"functions scored: {len(all_tags)}")
-    print(
-        f"EQUIPMENT:     hit={eq_hit}/{eq_gt}  miss={eq_miss}  extra={eq_extra}  "
-        f"acc={eq_acc*100:.1f}% (mean of per-function hit/gt)"
-    )
-    print(
-        f"SUB-EQUIPMENT: hit={sub_hit}/{sub_gt}  miss={sub_miss}  extra={sub_extra}  "
-        f"acc={sub_acc*100:.1f}% (mean of per-function hit/gt)"
-    )
-    print(f"report: {report_json}")
-    print(f"combined CSV: {combined_csv}")
+    logger.info("\n========== ORCHESTRATOR SUMMARY ==========")
+    logger.info(f"functions scored: {len(all_tags)}")
+    logger.info(f"EQUIPMENT:     hit={eq_hit}/{eq_gt}  miss={eq_miss}  extra={eq_extra}  "
+        f"acc={eq_acc*100:.1f}% (mean of per-function hit/gt)")
+    logger.info(f"SUB-EQUIPMENT: hit={sub_hit}/{sub_gt}  miss={sub_miss}  extra={sub_extra}  "
+        f"acc={sub_acc*100:.1f}% (mean of per-function hit/gt)")
+    logger.info(f"report: {report_json}")
+    logger.info(f"combined CSV: {combined_csv}")
     log_path.write_text(json.dumps(summary, indent=2), encoding="utf-8")
 
     # Mop up valve position tags that the AI hierarchy step missed (e.g. valves
@@ -1182,73 +1142,41 @@ def main() -> int:
         _append_agitator_equipment_rows(combined_csv, inv_path, structural_path)
         cleaned = sanitize_hierarchy_rows(read_hierarchy_csv(combined_csv))
         write_hierarchy_csv(combined_csv, cleaned)
-        print(f"[sanitize] hierarchy cleaned → {len(cleaned)} rows", flush=True)
+        logger.info(f"[sanitize] hierarchy cleaned → {len(cleaned)} rows")
 
     if combined_csv.exists() and combined_csv.stat().st_size > 0:
         limit_s = str(args.limit if args.limit > 0 else 0)
         if not args.no_valve_classify:
-            valve_cmd = [
-                sys.executable,
-                "-u",
-                str(Path(__file__).resolve().parent / "dwg_valve_classify.py"),
-                "--input",
-                str(input_path),
-                "--output-dir",
-                str(out_dir),
-                "--hierarchy-csv",
-                str(combined_csv),
-                "--model-id",
-                args.model_id,
-                "--region",
-                args.region,
-                "--jobs",
-                str(max(1, int(getattr(args, "jobs", 1) or 1))),
-            ]
-            if args.skip_existing:
-                valve_cmd.append("--skip-existing")
-            print("\n---------- valve classify (tight crop + legend) ----------")
-            print(" ".join(valve_cmd), flush=True)
-            env = os.environ.copy()
-            env["PYTHONUNBUFFERED"] = "1"
-            if args.aws_profile:
-                env["AWS_PROFILE"] = args.aws_profile
-            subprocess.run(valve_cmd, check=False, env=env)
+            logger.info("\n---------- valve classify (tight crop + legend) ----------")
+            run_valve_classify(
+                input_path=input_path,
+                out_dir=out_dir,
+                hierarchy_csv=combined_csv,
+                model_id=args.model_id,
+                region=args.region,
+                jobs=max(1, int(getattr(args, "jobs", 1) or 1)),
+                skip_existing=bool(args.skip_existing),
+                aws_profile=args.aws_profile,
+            )
 
         if not args.no_export_floc:
-            floc_cmd = [
-                sys.executable,
-                str(Path(__file__).resolve().parent / "export_sap_floc.py"),
-                "--input",
-                str(input_path),
-                "--output-dir",
-                str(out_dir),
-                "--hierarchy-csv",
-                str(combined_csv),
-                "--gt",
-                str(gt_path),
-                "--limit",
-                limit_s,
-            ]
-            print("\n---------- export SAP FLOC ----------")
-            print(" ".join(floc_cmd))
-            subprocess.run(floc_cmd, check=False)
+            logger.info("\n---------- export SAP FLOC ----------")
+            run_floc_export(
+                input_path=input_path,
+                out_dir=out_dir,
+                hierarchy_csv=combined_csv,
+                gt=gt_path,
+                limit=args.limit if args.limit > 0 else 0,
+            )
 
         if not args.no_export_equipment:
-            eq_cmd = [
-                sys.executable,
-                str(Path(__file__).resolve().parent / "export_sap_equipment.py"),
-                "--input",
-                str(input_path),
-                "--output-dir",
-                str(out_dir),
-                "--hierarchy-csv",
-                str(combined_csv),
-                "--limit",
-                limit_s,
-            ]
-            print("\n---------- export SAP Equipment ----------")
-            print(" ".join(eq_cmd))
-            subprocess.run(eq_cmd, check=False)
+            logger.info("\n---------- export SAP Equipment ----------")
+            run_equipment_export(
+                input_path=input_path,
+                out_dir=out_dir,
+                hierarchy_csv=combined_csv,
+                limit=args.limit if args.limit > 0 else 0,
+            )
 
     return 0
 

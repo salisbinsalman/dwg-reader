@@ -24,6 +24,20 @@ import tempfile
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Optional, Sequence, Tuple
 
+from dwg_reader.io import json_safe, write_json
+from dwg_reader.logutil import configure_logging, dxf_probe_failed, get_logger
+from dwg_reader.paths import (
+    REPO_ROOT,
+    evidence_dir,
+    find_json,
+    json_path,
+    jsons_dir,
+    logs_dir,
+    safe_name,
+)
+
+logger = get_logger(__name__)
+
 
 def _patch_odafc_no_focus() -> None:
     """Monkey-patch ezdxf odafc on macOS to run ODA File Converter fully hidden.
@@ -44,7 +58,7 @@ def _patch_odafc_no_focus() -> None:
     except ImportError:
         return
 
-    _dylib = Path(__file__).resolve().parent / "no_focus_steal.dylib"
+    _dylib = REPO_ROOT / "no_focus_steal.dylib"
     _orig = _odafc._run_with_no_gui
 
     def _darwin_no_focus(system, command, arguments):
@@ -111,82 +125,10 @@ def configure_odafc() -> Optional[str]:
                 odafc.unix_exec_path = str(p.resolve())
                 if odafc.is_installed():
                     return str(p.resolve())
-            except Exception:
+            except Exception as e:
+                dxf_probe_failed(e, "odafc candidate")
                 continue
     return None
-
-
-def json_safe(value: Any) -> Any:
-    """Convert values to JSON-serializable forms."""
-    if value is None or isinstance(value, (str, int, float, bool)):
-        return value
-    if isinstance(value, (list, tuple)):
-        return [json_safe(v) for v in value]
-    if isinstance(value, dict):
-        return {str(k): json_safe(v) for k, v in value.items()}
-    # numpy arrays/scalars
-    mod = type(value).__module__
-    if mod and mod.startswith("numpy"):
-        try:
-            return value.tolist()
-        except Exception:
-            return float(value) if hasattr(value, "item") else str(value)
-    if hasattr(value, "x") and hasattr(value, "y"):
-        return vector(value)
-    return str(value)
-
-
-def write_json(path: Path, data: Any) -> None:
-    path = Path(path)
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(
-        json.dumps(json_safe(data), indent=2, ensure_ascii=True),
-        encoding="utf-8",
-    )
-
-
-def safe_name(path: Path) -> str:
-    return path.stem.replace("/", "_")
-
-
-def evidence_dir(out_dir: Path) -> Path:
-    """Cropped viewer / hierarchy evidence images live under outputs/evidence."""
-    path = Path(out_dir) / "evidence"
-    path.mkdir(parents=True, exist_ok=True)
-    return path
-
-
-def jsons_dir(out_dir: Path) -> Path:
-    """Pipeline / cache JSON files live under outputs/jsons."""
-    path = Path(out_dir) / "jsons"
-    path.mkdir(parents=True, exist_ok=True)
-    return path
-
-
-def logs_dir(out_dir: Path) -> Path:
-    """Run logs live under outputs/logs."""
-    path = Path(out_dir) / "logs"
-    path.mkdir(parents=True, exist_ok=True)
-    return path
-
-
-def json_path(out_dir: Path, filename: str) -> Path:
-    """Canonical write path for a JSON artifact."""
-    return jsons_dir(out_dir) / filename
-
-
-def find_json(out_dir: Path, filename: str) -> Path:
-    """
-    Resolve a JSON artifact: prefer outputs/jsons/, fall back to legacy outputs/ root.
-    Returns the preferred jsons path even if missing (caller checks exists()).
-    """
-    preferred = json_path(out_dir, filename)
-    if preferred.exists():
-        return preferred
-    legacy = Path(out_dir) / filename
-    if legacy.exists():
-        return legacy
-    return preferred
 
 
 def clear_previous_outputs(
@@ -233,7 +175,7 @@ def clear_previous_outputs(
             removed.append(key)
 
     if removed:
-        print(f"[clean] Removed {len(removed)} previous output(s) for '{base}'")
+        logger.info(f"[clean] Removed {len(removed)} previous output(s) for '{base}'")
     return removed
 
 
@@ -259,7 +201,7 @@ def clear_evidence_outputs(out_dir: Path, base: str, tags: Sequence[str]) -> Lis
             path.unlink()
             removed.append(key)
     if removed:
-        print(f"[clean] Removed {len(removed)} evidence image(s) for '{base}'")
+        logger.info(f"[clean] Removed {len(removed)} evidence image(s) for '{base}'")
     return removed
 
 
@@ -391,8 +333,8 @@ def dump_entity_geometry(entity: Any) -> Dict[str, Any]:
             for p in entity.get_points("xyseb"):
                 # x, y, start_width, end_width, bulge
                 pts.append(list(p))
-        except Exception:
-            pass
+        except Exception as e:
+            dxf_probe_failed(e, "LWPOLYLINE points")
         g["points_xyseb"] = pts
         g["closed"] = bool(getattr(entity, "closed", False))
     elif t in ("POLYLINE",):
@@ -400,8 +342,8 @@ def dump_entity_geometry(entity: Any) -> Dict[str, Any]:
         try:
             for v in entity.vertices:
                 verts.append(vector(v.dxf.location))
-        except Exception:
-            pass
+        except Exception as e:
+            dxf_probe_failed(e, "POLYLINE vertices")
         g["vertices"] = verts
         g["is_3d_polyline"] = bool(getattr(entity, "is_3d_polyline", False))
     elif t in ("CIRCLE",):
@@ -423,12 +365,12 @@ def dump_entity_geometry(entity: Any) -> Dict[str, Any]:
         fit_points = []
         try:
             cps = [vector(p) for p in entity.control_points]
-        except Exception:
-            pass
+        except Exception as e:
+            dxf_probe_failed(e, "SPLINE control_points")
         try:
             fit_points = [vector(p) for p in entity.fit_points]
-        except Exception:
-            pass
+        except Exception as e:
+            dxf_probe_failed(e, "SPLINE fit_points")
         g["degree"] = safe_get(d, "degree")
         g["control_points"] = cps
         g["fit_points"] = fit_points
@@ -609,502 +551,9 @@ def infer_pid_nodes_edges(
 
 
 def parse_with_ezdxf(path: Path) -> Tuple[Optional[Dict[str, Any]], str]:
-    try:
-        import ezdxf  # type: ignore
-    except Exception as e:
-        return None, f"ezdxf import failed: {e}"
+    from dwg_reader.ezdxf_parse import parse_ezdxf_document
 
-    source_doc = None
-    backend = ""
-    ext = path.suffix.lower()
-
-    if ext == ".dxf":
-        try:
-            source_doc = ezdxf.readfile(path)
-            backend = "ezdxf:dxf-direct"
-        except Exception as e:
-            return None, f"DXF parse failed: {e}"
-    elif ext == ".dwg":
-        try:
-            from ezdxf.addons import odafc  # type: ignore
-        except Exception as e:
-            return None, f"ezdxf.odafc unavailable: {e}"
-        try:
-            oda_path = configure_odafc()
-            if not odafc.is_installed():
-                return None, (
-                    "odafc not installed; cannot parse DWG structurally. "
-                    "Install ODA File Converter or set ODA_FILE_CONVERTER env var."
-                )
-            backend = f"ezdxf:odafc-dwg ({oda_path})"
-            source_doc = odafc.readfile(str(path))
-        except Exception as e:
-            return None, f"DWG parse via odafc failed: {e}"
-    else:
-        return None, f"Unsupported extension: {ext}"
-
-    doc = source_doc
-    header_vars = {}
-    for key in doc.header.varnames():
-        try:
-            val = doc.header.get(key)
-            if hasattr(val, "x") and hasattr(val, "y"):
-                header_vars[key] = vector(val)
-            else:
-                header_vars[key] = val
-        except Exception:
-            header_vars[key] = str(doc.header.get(key, ""))
-
-    layouts = []
-    for layout in doc.layouts:
-        layouts.append(
-            {
-                "name": layout.name,
-                "taborder": getattr(layout, "taborder", None),
-                "is_modelspace": bool(layout.name.upper() == "MODEL"),
-            }
-        )
-
-    layers = []
-    layer_entity_hist = {}
-    for layer in doc.layers:
-        entry = {
-            "name": layer.dxf.name,
-            "color": safe_get(layer.dxf, "color"),
-            "linetype": safe_get(layer.dxf, "linetype"),
-            "lineweight": safe_get(layer.dxf, "lineweight"),
-            "plot": safe_get(layer.dxf, "plot"),
-            "is_frozen": bool(getattr(layer, "is_frozen", False)),
-            "is_locked": bool(getattr(layer, "is_locked", False)),
-            "is_off": bool(getattr(layer, "is_off", False)),
-            "transparency": safe_get(layer.dxf, "transparency"),
-            "description": safe_get(layer.dxf, "description"),
-        }
-        layers.append(entry)
-        layer_entity_hist[layer.dxf.name] = {}
-
-    block_defs = []
-    inserts = []
-    block_hierarchy = []
-    for block in doc.blocks:
-        if block.name.startswith("*"):
-            # keep anonymous/internal too, but still include
-            pass
-        entities = []
-        nested_refs = []
-        for e in block:
-            entities.append(dump_entity(e, owner_space=f"BLOCK:{block.name}"))
-            if e.dxftype() == "INSERT":
-                nested_refs.append(safe_get(e.dxf, "name"))
-        block_defs.append(
-            {
-                "name": block.name,
-                "base_point": vector(block.base_point),
-                "units": safe_get(block.block.dxf, "units"),
-                "entity_count": len(entities),
-                "entities": entities,
-            }
-        )
-        if nested_refs:
-            block_hierarchy.append({"block": block.name, "contains_inserts": nested_refs})
-
-    all_entities = []
-
-    # Modelspace
-    msp = doc.modelspace()
-    for e in msp:
-        rec = dump_entity(e, owner_space="MODEL")
-        all_entities.append(rec)
-        lyr = rec.get("layer")
-        if lyr in layer_entity_hist:
-            t = rec["type"]
-            layer_entity_hist[lyr][t] = layer_entity_hist[lyr].get(t, 0) + 1
-        if e.dxftype() == "INSERT":
-            attrs = []
-            try:
-                for a in e.attribs:
-                    attrs.append(
-                        {
-                            "tag": safe_get(a.dxf, "tag"),
-                            "text": safe_get(a.dxf, "text"),
-                            "insert": vector(safe_get(a.dxf, "insert")),
-                            "height": safe_get(a.dxf, "height"),
-                            "rotation": safe_get(a.dxf, "rotation"),
-                            "layer": safe_get(a.dxf, "layer"),
-                        }
-                    )
-            except Exception:
-                pass
-            inserts.append(
-                {
-                    "handle": safe_get(e.dxf, "handle"),
-                    "name": safe_get(e.dxf, "name"),
-                    "insert": vector(safe_get(e.dxf, "insert")),
-                    "xscale": safe_get(e.dxf, "xscale", 1.0),
-                    "yscale": safe_get(e.dxf, "yscale", 1.0),
-                    "zscale": safe_get(e.dxf, "zscale", 1.0),
-                    "rotation": safe_get(e.dxf, "rotation", 0.0),
-                    "layer": safe_get(e.dxf, "layer"),
-                    "attributes": attrs,
-                }
-            )
-
-    # Paperspace layouts entities
-    paperspace_entities = []
-    for layout in doc.layouts:
-        if layout.name.upper() == "MODEL":
-            continue
-        for e in layout:
-            rec = dump_entity(e, owner_space=f"PAPER:{layout.name}")
-            paperspace_entities.append(rec)
-            all_entities.append(rec)
-            lyr = rec.get("layer")
-            if lyr in layer_entity_hist:
-                t = rec["type"]
-                layer_entity_hist[lyr][t] = layer_entity_hist[lyr].get(t, 0) + 1
-
-    texts = []
-    for rec in all_entities:
-        if rec["type"] in ("TEXT", "MTEXT"):
-            txt = rec["geometry"].get("text")
-            texts.append(
-                {
-                    "handle": rec["handle"],
-                    "type": rec["type"],
-                    "text": txt,
-                    "layer": rec["layer"],
-                    "rotation": rec["geometry"].get("rotation"),
-                    "height": rec["geometry"].get("height") or rec["geometry"].get("char_height"),
-                    "position": rec["geometry"].get("insert"),
-                }
-            )
-
-    tags = []
-    for ins in inserts:
-        for a in ins["attributes"]:
-            tags.append(
-                {
-                    "insert_name": ins["name"],
-                    "insert_handle": ins["handle"],
-                    "tag": a["tag"],
-                    "value": a["text"],
-                    "position": a["insert"],
-                    "layer": a["layer"],
-                }
-            )
-
-    # Extended entity data (XDATA/EED-like) extraction.
-    appids = []
-    try:
-        appids = [a.dxf.name for a in doc.appids]
-    except Exception:
-        appids = []
-    eed_xdata_dump = []
-    for rec, src_entity in []:
-        pass
-    # We need source entity instances for xdata; gather again from spaces.
-    source_entities = []
-    for e in msp:
-        source_entities.append(("MODEL", e))
-    for layout in doc.layouts:
-        if layout.name.upper() == "MODEL":
-            continue
-        for e in layout:
-            source_entities.append((f"PAPER:{layout.name}", e))
-    for owner_space, ent in source_entities:
-        xdata_items = {}
-        for appid in appids:
-            xd = try_get_xdata(ent, appid)
-            if xd:
-                xdata_items[appid] = [str(item) for item in xd]
-        ext = {
-            "handle": safe_get(ent.dxf, "handle"),
-            "type": ent.dxftype(),
-            "owner_space": owner_space,
-            "layer": safe_get(ent.dxf, "layer"),
-            "xdicobjhandle": safe_get(ent.dxf, "xdicobjhandle"),
-            "reactors": safe_get(ent.dxf, "reactors"),
-            "xdata": xdata_items,
-        }
-        if ext["xdata"] or ext["xdicobjhandle"] or ext["reactors"]:
-            eed_xdata_dump.append(ext)
-
-    pid_graph = infer_pid_nodes_edges(all_entities, inserts, texts, tags)
-
-    # CAD tables / styles
-    linetypes = []
-    try:
-        for lt in doc.linetypes:
-            linetypes.append(
-                {
-                    "name": safe_get(lt.dxf, "name"),
-                    "description": safe_get(lt.dxf, "description"),
-                    "length": safe_get(lt.dxf, "length"),
-                }
-            )
-    except Exception:
-        pass
-
-    text_styles = []
-    try:
-        for st in doc.styles:
-            text_styles.append(
-                {
-                    "name": safe_get(st.dxf, "name"),
-                    "font": safe_get(st.dxf, "font"),
-                    "bigfont": safe_get(st.dxf, "bigfont"),
-                    "height": safe_get(st.dxf, "height"),
-                    "width": safe_get(st.dxf, "width"),
-                    "oblique": safe_get(st.dxf, "oblique"),
-                }
-            )
-    except Exception:
-        pass
-
-    dim_styles = []
-    try:
-        for ds in doc.dimstyles:
-            dim_styles.append(
-                {
-                    "name": safe_get(ds.dxf, "name"),
-                    "dimtxt": safe_get(ds.dxf, "dimtxt"),
-                    "dimscale": safe_get(ds.dxf, "dimscale"),
-                    "dimasz": safe_get(ds.dxf, "dimasz"),
-                    "dimexe": safe_get(ds.dxf, "dimexe"),
-                }
-            )
-    except Exception:
-        pass
-
-    appid_table = []
-    try:
-        for a in doc.appids:
-            appid_table.append({"name": safe_get(a.dxf, "name")})
-    except Exception:
-        pass
-
-    ucs_table = []
-    try:
-        for u in doc.ucs:
-            ucs_table.append(
-                {
-                    "name": safe_get(u.dxf, "name"),
-                    "origin": vector(safe_get(u.dxf, "origin")),
-                    "xaxis": vector(safe_get(u.dxf, "xaxis")),
-                    "yaxis": vector(safe_get(u.dxf, "yaxis")),
-                }
-            )
-    except Exception:
-        pass
-
-    views_table = []
-    try:
-        for v in doc.views:
-            views_table.append(
-                {
-                    "name": safe_get(v.dxf, "name"),
-                    "center": vector(safe_get(v.dxf, "center")),
-                    "height": safe_get(v.dxf, "height"),
-                    "width": safe_get(v.dxf, "width"),
-                }
-            )
-    except Exception:
-        pass
-
-    vports_table = []
-    try:
-        for vp in doc.viewports:
-            vports_table.append(
-                {
-                    "name": safe_get(vp.dxf, "name"),
-                    "center": vector(safe_get(vp.dxf, "center")),
-                    "height": safe_get(vp.dxf, "height"),
-                    "aspect_ratio": safe_get(vp.dxf, "aspect_ratio"),
-                }
-            )
-    except Exception:
-        pass
-
-    # Specialty entity extracts
-    specialty_types = {
-        "DIMENSION",
-        "ALIGNED_DIMENSION",
-        "LINEAR_DIMENSION",
-        "RADIAL_DIMENSION",
-        "DIAMETER_DIMENSION",
-        "ANGULAR_DIMENSION",
-        "ORDINATE_DIMENSION",
-        "ARC_DIMENSION",
-        "LEADER",
-        "MLEADER",
-        "MULTILEADER",
-        "HATCH",
-        "SOLID",
-        "TRACE",
-        "IMAGE",
-        "WIPEOUT",
-        "UNDERLAY",
-        "PDFUNDERLAY",
-        "DWFUNDERLAY",
-        "DGNUNDERLAY",
-        "ACAD_TABLE",
-        "TABLE",
-        "TOLERANCE",
-        "SHAPE",
-        "BODY",
-        "3DSOLID",
-        "REGION",
-        "SURFACE",
-        "MESH",
-        "HELIX",
-        "LIGHT",
-        "CAMERA",
-        "SECTION",
-        "MLINE",
-        "XLINE",
-        "RAY",
-        "POINT",
-        "PROXY",
-        "ACAD_PROXY_ENTITY",
-    }
-    specialty_entities = [e for e in all_entities if e.get("type") in specialty_types or "DIMENSION" in str(e.get("type", "")).upper() or "LEADER" in str(e.get("type", "")).upper() or "UNDERLAY" in str(e.get("type", "")).upper() or "PROXY" in str(e.get("type", "")).upper()]
-
-    # XREFs / block external refs
-    xrefs = []
-    try:
-        for block in doc.blocks:
-            try:
-                if getattr(block, "is_xref", False) or getattr(block, "xref_path", None):
-                    xrefs.append(
-                        {
-                            "name": block.name,
-                            "xref_path": getattr(block, "xref_path", None) or safe_get(block.block.dxf, "xref_path"),
-                            "is_xref": bool(getattr(block, "is_xref", False)),
-                            "is_dxf_xref": bool(getattr(block, "is_dxf_xref", False)),
-                        }
-                    )
-            except Exception:
-                continue
-    except Exception:
-        pass
-
-    # Groups
-    groups = []
-    try:
-        for name, group in doc.groups:
-            handles = []
-            try:
-                handles = [safe_get(e.dxf, "handle") for e in group]
-            except Exception:
-                pass
-            groups.append({"name": name, "entity_handles": handles, "count": len(handles)})
-    except Exception:
-        try:
-            # older API
-            for group in doc.groups:
-                groups.append({"name": str(group), "entity_handles": [], "count": 0})
-        except Exception:
-            pass
-
-    # Title block / drawing metadata from insert attributes
-    title_block_fields = []
-    title_keys = {
-        "TITLE1", "TITLE2", "TITLE3", "PROJECT1", "PROJECT2", "PROJECT3", "DRAWINGID",
-        "SHEET", "LYH", "CAD", "ARKKI", "TUNNUS", "SROIK", "SRVAS", "INF1", "INF2",
-        "INF3", "INF4", "INF5", "INF6", "INF14", "MRK", "MRK2", "PVM", "PVM2", "TAR",
-        "TAR2", "MUU", "MUU2", "MUUTOS", "MUUTOS2", "KPL",
-    }
-    for ins in inserts:
-        attrs = {a.get("tag"): a.get("text") for a in ins.get("attributes", []) if a.get("tag")}
-        hits = {k: v for k, v in attrs.items() if k in title_keys and v}
-        if hits:
-            title_block_fields.append(
-                {
-                    "block_name": ins.get("name"),
-                    "handle": ins.get("handle"),
-                    "layer": ins.get("layer"),
-                    "insert": ins.get("insert"),
-                    "fields": hits,
-                }
-            )
-
-    # Layout detail enrichment
-    layout_details = []
-    for layout in doc.layouts:
-        detail = {
-            "name": layout.name,
-            "is_modelspace": bool(layout.name.upper() == "MODEL"),
-            "entity_count": 0,
-            "plot_layout_flags": safe_get(getattr(layout, "dxf", None), "plot_layout_flags") if hasattr(layout, "dxf") else None,
-        }
-        try:
-            detail["entity_count"] = len(layout)
-        except Exception:
-            pass
-        try:
-            detail["plot_paper_size"] = str(getattr(layout, "get_plot_paper_size", lambda: None)())
-        except Exception:
-            pass
-        layout_details.append(detail)
-
-    result = {
-        "backend": backend,
-        "doc": {
-            "dxfversion": doc.dxfversion,
-            "acad_release": doc.acad_release,
-            "units": header_vars.get("$INSUNITS"),
-            "extmin": header_vars.get("$EXTMIN"),
-            "extmax": header_vars.get("$EXTMAX"),
-            "limmin": header_vars.get("$LIMMIN"),
-            "limmax": header_vars.get("$LIMMAX"),
-        },
-        "header_variables": header_vars,
-        "layouts": layouts,
-        "layout_details": layout_details,
-        "layers": layers,
-        "layer_entity_type_counts": layer_entity_hist,
-        "linetypes": linetypes,
-        "text_styles": text_styles,
-        "dim_styles": dim_styles,
-        "appids": appid_table,
-        "ucs_table": ucs_table,
-        "views_table": views_table,
-        "vports_table": vports_table,
-        "groups": groups,
-        "xrefs": xrefs,
-        "blocks": block_defs,
-        "block_hierarchy": block_hierarchy,
-        "inserts": inserts,
-        "entities": all_entities,
-        "paperspace_entities": paperspace_entities,
-        "specialty_entities": specialty_entities,
-        "text_entities": texts,
-        "attribute_inventory": tags,
-        "title_block_fields": title_block_fields,
-        "eed_xdata_dump": eed_xdata_dump,
-        "pid_graph_candidates": pid_graph,
-        "counts": {
-            "layers": len(layers),
-            "blocks": len(block_defs),
-            "inserts": len(inserts),
-            "entities_total": len(all_entities),
-            "text_entities": len(texts),
-            "attributes": len(tags),
-            "eed_xdata_records": len(eed_xdata_dump),
-            "graph_nodes": pid_graph["counts"]["nodes"],
-            "graph_edges": pid_graph["counts"]["edges"],
-            "graph_junctions": pid_graph["counts"]["junctions"],
-            "linetypes": len(linetypes),
-            "text_styles": len(text_styles),
-            "dim_styles": len(dim_styles),
-            "appids": len(appid_table),
-            "groups": len(groups),
-            "xrefs": len(xrefs),
-            "specialty_entities": len(specialty_entities),
-            "title_block_records": len(title_block_fields),
-        },
-    }
-    return result, ""
+    return parse_ezdxf_document(path)
 
 
 def parse_with_aspose(path: Path) -> Tuple[Optional[Dict[str, Any]], str]:
@@ -1418,6 +867,7 @@ def build_forensic_dump(path: Path, out_dir: Path) -> Dict[str, Any]:
 
 
 def main() -> int:
+    configure_logging()
     parser = argparse.ArgumentParser(description="Forensic DWG/DXF pure dumper.")
     parser.add_argument("--input", required=True, help="Input DWG or DXF path.")
     parser.add_argument("--output-dir", default="outputs", help="Output directory.")
@@ -1475,18 +925,18 @@ def main() -> int:
 
     configure_odafc()
 
-    print(f"[1/5] Loaded file: {input_path}")
+    logger.info(f"[1/5] Loaded file: {input_path}")
     forensic_out = json_path(out_dir, f"{base}.pure_forensic_dump.json")
     forensic = None
     if not args.skip_forensic:
         forensic = build_forensic_dump(input_path, out_dir)
         if write_json_files:
             write_json(forensic_out, forensic)
-            print(f"[2/5] Wrote forensic JSON: {forensic_out}")
+            logger.info(f"[2/5] Wrote forensic JSON: {forensic_out}")
         else:
-            print("[2/5] Skipped forensic JSON (use --write-json to enable)")
+            logger.info("[2/5] Skipped forensic JSON (use --write-json to enable)")
     else:
-        print("[2/5] Skipped forensic dump by flag")
+        logger.info("[2/5] Skipped forensic dump by flag")
 
     structural = None
     structural_error = None
@@ -1509,7 +959,7 @@ def main() -> int:
         if write_json_files:
             structural_out = json_path(out_dir, f"{base}.structural_dump.json")
             write_json(structural_out, structural)
-            print(f"[3/5] Wrote structural dump JSON: {structural_out}")
+            logger.info(f"[3/5] Wrote structural dump JSON: {structural_out}")
             if write_json_splits:
                 split_map = {
                     "layers": structural.get("layers"),
@@ -1524,19 +974,19 @@ def main() -> int:
                 }
                 for key, payload in split_map.items():
                     write_json(json_path(out_dir, f"{base}.{key}.json"), payload)
-                print("[3/5] Wrote JSON structural split dumps")
+                logger.info("[3/5] Wrote JSON structural split dumps")
         else:
-            print("[3/5] Skipped JSON structural dumps (use --write-json to enable)")
+            logger.info("[3/5] Skipped JSON structural dumps (use --write-json to enable)")
     else:
-        print(f"[3/5] Structural dump unavailable: {structural_error}")
+        logger.info(f"[3/5] Structural dump unavailable: {structural_error}")
 
     if write_workbook and (structural is not None or forensic is not None):
         export_full_workbook(workbook_out, structural=structural, forensic=forensic)
-        print(f"[4/5] Wrote workbook: {workbook_out}")
+        logger.info(f"[4/5] Wrote workbook: {workbook_out}")
     elif write_workbook:
-        print("[4/5] Workbook skipped (no data to export)")
+        logger.info("[4/5] Workbook skipped (no data to export)")
     else:
-        print("[4/5] Workbook export disabled")
+        logger.info("[4/5] Workbook export disabled")
 
     structural_json_path = json_path(out_dir, f"{base}.structural_dump.json")
     manifest = {
@@ -1551,7 +1001,7 @@ def main() -> int:
     }
     manifest_out = json_path(out_dir, f"{base}.dump_manifest.json")
     write_json(manifest_out, manifest)
-    print(f"[5/5] Wrote manifest: {manifest_out}")
+    logger.info(f"[5/5] Wrote manifest: {manifest_out}")
 
     return 0
 

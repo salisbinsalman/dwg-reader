@@ -13,10 +13,11 @@ from __future__ import annotations
 
 import json
 from functools import lru_cache
-from pathlib import Path
 from typing import Dict
 
-_STANDARDS_PATH = Path("standards/sml_floc_structure.json")
+from dwg_reader.paths import STANDARDS_DIR
+
+_STANDARDS_PATH = STANDARDS_DIR / "sml_floc_structure.json"
 
 
 @lru_cache(maxsize=1)

@@ -3,7 +3,7 @@
 
 from __future__ import annotations
 
-import dwg_warn  # noqa: F401 — silence boto3 Python 3.9 deprecation noise
+import dwg_reader.dwg_warn as dwg_warn  # noqa: F401 — silence boto3 Python 3.9 deprecation noise
 
 import argparse
 import csv
@@ -12,9 +12,9 @@ import os
 from pathlib import Path
 from typing import Dict, List
 
-from dwg_floc_context import infer_valve_type
-from dwg_pure_dump import evidence_dir, find_json, safe_name
-from dwg_valve_classify import (
+from dwg_reader.dwg_floc_context import infer_valve_type
+from dwg_reader.dwg_pure_dump import evidence_dir, find_json, safe_name
+from dwg_reader.dwg_valve_classify import (
     apply_wfl_drain_attachment,
     bedrock_classify_crop,
     collect_symb_bowtie_inserts,
@@ -183,7 +183,7 @@ def main() -> int:
     cx_frac, cy_frac = valve_ring_frac(float(args.crop_half), float(args.extra_below))
 
     if not args.skip_vision:
-        from dwg_pid_hierarchy_ai import load_drawing
+        from dwg_reader.dwg_pid_hierarchy_ai import load_drawing
     else:
         load_drawing = None  # type: ignore[assignment,misc]
 

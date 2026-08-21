@@ -5,7 +5,7 @@ OUT ?= outputs
 
 # Best hierarchy combo from GT sweep (~61.8% micro tag F1)
 MODEL_ID ?= eu.anthropic.claude-sonnet-4-6
-PROMPT_FILE ?= pid_hierarchy_gt_v7_floc.md
+PROMPT_FILE ?= pid_hierarchy_gt_v8.md
 AWS_REGION ?= eu-west-2
 AWS_PROFILE ?= foundrydev
 TAGS ?= 35-24L009,35-24P519
@@ -24,7 +24,7 @@ help:
 	@echo "  make run-json               # dump + JSON structural cache"
 	@echo "  make inventory              # P&ID inventory workbook"
 	@echo "  make enrich                 # tags/line-binding/loops/tables enrichment"
-	@echo "  make hierarchy              # CAD connectivity hierarchy + local DWG crops"
+	@echo "  make hierarchy              # viewer shots + Bedrock hierarchy (same as hierarchy-ai)"
 	@echo "  make hierarchy-ai           # viewer shots + Bedrock hierarchy (best model/prompt)"
 	@echo "  make hierarchy-orch         # inventory FUNCTIONs → hierarchy vs GT (LIMIT=$(LIMIT), JOBS=$(JOBS))"
 	@echo "  make hierarchy-orch-dry     # list first LIMIT inventory FUNCTIONs + GT child counts"
@@ -35,11 +35,11 @@ help:
 	@echo "  make floc-test              # unit tests for FLOC path/export (no Bedrock)"
 	@echo "  make equipment-test         # unit tests for Equipment export (no Bedrock)"
 	@echo "  make valve-test             # unit tests for per-tag valve locate/parent/type"
-	@echo "  make abbreviations-json     # rebuild inputs/sml_abbreviations.json from SML xlsx"
+	@echo "  make abbreviations-json     # rebuild standards/sml_abbreviations.json from SML xlsx"
 	@echo "  make hierarchy-experiments  # sweep models/prompts vs GT"
 	@echo "  make hierarchy-vendors      # Kimi/Mistral/Gemma/Nova/Qwen/OpenAI-OSS sweep"
 	@echo "  make hierarchy-eval         # score outputs/*hierarchy_orchestrator.csv vs GT"
-	@echo "  make hierarchy-vision       # CAD hierarchy + Bedrock confirm/reject only"
+	@echo "  make hierarchy-vision       # LEGACY CAD-graph + Bedrock confirm/reject"
 	@echo "  make all                    # FULL: dump→inventory→enrich→hierarchy-orch→FLOC+Equipment (LIMIT=$(LIMIT))"
 	@echo "  make all-prep               # dump→inventory→enrich only (no Bedrock)"
 	@echo "  make clean-prev             # remove prior outputs for INPUT stem only"
@@ -57,7 +57,7 @@ help:
 	@echo "                make sap LIMIT=10  # regenerate both SAP workbooks only"
 
 check-odafc:
-	@$(PYTHON) -c 'import dwg_pure_dump as d; p=d.configure_odafc(); from ezdxf.addons import odafc; print("odafc_installed:", odafc.is_installed()); print("odafc_path:", p or getattr(odafc, "unix_exec_path", None))'
+	@$(PYTHON) -c 'import dwg_reader.dwg_pure_dump as d; p=d.configure_odafc(); from ezdxf.addons import odafc; print("odafc_installed:", odafc.is_installed()); print("odafc_path:", p or getattr(odafc, "unix_exec_path", None))'
 
 run:
 	$(PYTHON) "$(SCRIPT)" --input "$(INPUT)" --output-dir "$(OUT)"
@@ -81,8 +81,7 @@ inventory-run: run inventory
 enrich:
 	$(PYTHON) dwg_pid_enrich.py --input "$(INPUT)" --output-dir "$(OUT)"
 
-hierarchy:
-	AWS_PROFILE="$(AWS_PROFILE)" $(PYTHON) dwg_pid_hierarchy_vision.py --input "$(INPUT)" --output-dir "$(OUT)" --tags "$(TAGS)" --model-id "$(MODEL_ID)" --region "$(AWS_REGION)"
+hierarchy: hierarchy-ai
 
 hierarchy-ai:
 	@mkdir -p "$(OUT)/logs"
@@ -108,16 +107,19 @@ valve-classify:
 sap: floc equipment
 
 floc-test:
-	$(PYTHON) -m unittest test_floc_export.py -v
+	$(PYTHON) -m unittest tests.test_floc_export -v
 
 abbreviations-json:
 	$(PYTHON) scripts/build_sml_abbreviations_json.py
 
 equipment-test:
-	$(PYTHON) -m unittest test_equipment_export.py -v
+	$(PYTHON) -m unittest tests.test_equipment_export -v
 
 valve-test:
-	$(PYTHON) -m unittest test_valve_classify.py test_sit_valve_classification.py -v
+	$(PYTHON) -m unittest tests.test_valve_classify tests.test_sit_valve_classification -v
+
+test:
+	$(PYTHON) -m unittest discover -s tests -p 'test_*.py'
 
 hierarchy-experiments:
 	@mkdir -p "$(OUT)/logs"
@@ -128,7 +130,7 @@ hierarchy-vendors:
 	AWS_PROFILE="$(AWS_PROFILE)" $(PYTHON) run_hierarchy_experiments.py --input "$(INPUT)" --output-dir "$(OUT)" --tags "$(TAGS)" --region "$(AWS_REGION)" --vendor-sweep --no-early-stop --prompts "$(PROMPT_FILE)" 2>&1 | tee "$(OUT)/logs/hierarchy-vendors.log"
 
 hierarchy-eval:
-	$(PYTHON) eval_hierarchy_gt.py --gt inputs/gt_hierarchy_broke_system.xlsx --pred "$(OUT)/Broke System.hierarchy_orchestrator.csv"
+	$(PYTHON) eval_hierarchy_gt.py --gt resources/gt_hierarchy_broke_system.xlsx --pred "$(OUT)/Broke System.hierarchy_orchestrator.csv"
 
 hierarchy-vision:
 	AWS_PROFILE="$(AWS_PROFILE)" $(PYTHON) dwg_pid_hierarchy_vision.py --input "$(INPUT)" --output-dir "$(OUT)" --tags "$(TAGS)" --model-id "$(MODEL_ID)" --region "$(AWS_REGION)" --vision-confirm
@@ -153,7 +155,7 @@ structural-aspose:
 	$(PYTHON) "$(SCRIPT)" --input "$(INPUT)" --output-dir "$(OUT)" --skip-forensic --enable-aspose-fallback --write-json
 
 clean-prev:
-	@$(PYTHON) -c 'from pathlib import Path; from dwg_pure_dump import clear_previous_outputs, safe_name; import sys; inp=Path(sys.argv[1]).expanduser(); out=Path(sys.argv[2]).expanduser(); clear_previous_outputs(out, safe_name(inp))' "$(INPUT)" "$(OUT)"
+	@$(PYTHON) -c 'from pathlib import Path; from dwg_reader.dwg_pure_dump import clear_previous_outputs, safe_name; import sys; inp=Path(sys.argv[1]).expanduser(); out=Path(sys.argv[2]).expanduser(); clear_previous_outputs(out, safe_name(inp))' "$(INPUT)" "$(OUT)"
 
 clean-outputs:
 	rm -f "$(OUT)"/*.xlsx

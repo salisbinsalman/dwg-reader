@@ -7,7 +7,7 @@ from pathlib import Path
 from string import Template
 from typing import Mapping, Optional
 
-PROMPTS_DIR = Path(__file__).resolve().parent / "prompts"
+from dwg_reader.paths import PROMPTS_DIR
 
 
 def load_prompt(name: str, mapping: Optional[Mapping[str, object]] = None) -> str:

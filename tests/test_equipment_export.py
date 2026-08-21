@@ -7,7 +7,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from dwg_floc_context import (
+from dwg_reader.dwg_floc_context import (
     format_line_eqktx,
     format_valve_eqktx,
     infer_valve_type,
@@ -17,8 +17,8 @@ from dwg_floc_context import (
     normalize_pltxt,
     strip_valve_prefix,
 )
-from dwg_object_type import classify_equipment, lookup
-from export_sap_equipment import (
+from dwg_reader.dwg_object_type import classify_equipment, lookup
+from dwg_reader.export_sap_equipment import (
     SAP_COLUMNS,
     _is_driven_equipment,
     _motor_eqktx,
@@ -27,7 +27,7 @@ from export_sap_equipment import (
     write_equipment_workbook,
 )
 
-ROOT = Path(__file__).resolve().parent
+ROOT = Path(__file__).resolve().parents[1]
 HIERARCHY_CSV = ROOT / "outputs/Broke System.hierarchy_orchestrator.csv"
 
 
@@ -237,7 +237,7 @@ class EquipmentExportTests(unittest.TestCase):
         self.assertEqual(_motor_tag_for("35-24L499"), "35-24-499.1")
 
     def test_motor_tag_for_tissue(self) -> None:
-        from dwg_ecosystem import detect
+        from dwg_reader.dwg_ecosystem import detect
         eco = detect("GORA68210")
         self.assertEqual(_motor_tag_for("124P-001", ecosystem=eco), "124P-001-M1")
 
@@ -394,7 +394,7 @@ class RealHierarchyLineEqktxTests(unittest.TestCase):
     def test_all_numeric_line_equipment_prefixed_with_ln(self) -> None:
         import re
 
-        from export_sap_equipment import read_hierarchy_csv
+        from dwg_reader.export_sap_equipment import read_hierarchy_csv
 
         hierarchy = read_hierarchy_csv(HIERARCHY_CSV)
         out = build_equipment_rows(hierarchy, limit_functions=5)
@@ -424,14 +424,18 @@ class RealHierarchyLineEqktxTests(unittest.TestCase):
 
     @unittest.skipUnless(HIERARCHY_CSV.exists(), "requires hierarchy orchestrator CSV")
     def test_l001_review_line_examples(self) -> None:
+        from dwg_reader.export_sap_equipment import read_hierarchy_csv
+
         out = build_equipment_rows(
-            __import__("export_sap_equipment").read_hierarchy_csv(HIERARCHY_CSV),
+            read_hierarchy_csv(HIERARCHY_CSV),
             limit_functions=1,
         )
         by_tag = {r["EQUNR"]: r for r in out}
-        self.assertTrue(by_tag["35-24-095"]["EQKTX"].startswith("LN 35-24-095"))
-        self.assertTrue(by_tag["35-24-096"]["EQKTX"].startswith("LN 35-24-096"))
-        self.assertFalse(by_tag["35-24-207"]["EQKTX"].startswith("LN "))
+        # Pipeline tags under 35-24L002 (first function in current CSV)
+        self.assertTrue(by_tag["35-24-150"]["EQKTX"].startswith("LN 35-24-150"))
+        self.assertTrue(by_tag["35-24-149"]["EQKTX"].startswith("LN 35-24-149"))
+        # Instrument tag must NOT get LN prefix
+        self.assertFalse(by_tag["35-24LC-622"]["EQKTX"].startswith("LN "))
 
 
 class ValveFormattingTests(unittest.TestCase):
@@ -696,7 +700,7 @@ class ValveFormattingTests(unittest.TestCase):
         self.assertEqual(reasoning[0]["TYPE"], "AV")
 
     def test_build_rows_reasoning_columns_present(self) -> None:
-        from export_sap_equipment import REASONING_COLUMNS
+        from dwg_reader.export_sap_equipment import REASONING_COLUMNS
         rows = [
             {"FUNCTION": "35-24L005", "EQUIPMENT": "", "SUB-EQUIPMENT": "", "DESCRIPTION": ""},
             {"FUNCTION": "", "EQUIPMENT": "35-24HV-548", "SUB-EQUIPMENT": "", "DESCRIPTION": "35-24HV-548 HAND VLV"},
@@ -708,7 +712,7 @@ class ValveFormattingTests(unittest.TestCase):
     def test_write_valve_reasoning_csv_roundtrip(self) -> None:
         import csv
         import tempfile
-        from export_sap_equipment import write_valve_reasoning_csv, REASONING_COLUMNS
+        from dwg_reader.export_sap_equipment import write_valve_reasoning_csv, REASONING_COLUMNS
         data = [
             {k: f"val_{k}" for k in REASONING_COLUMNS},
         ]

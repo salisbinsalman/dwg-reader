@@ -5,7 +5,7 @@ from __future__ import annotations
 
 import unittest
 
-from dwg_ecosystem import Ecosystem, detect
+from dwg_reader.dwg_ecosystem import Ecosystem, detect
 
 
 class EcosystemDetectionTests(unittest.TestCase):
@@ -78,6 +78,36 @@ class EcosystemDetectionTests(unittest.TestCase):
         eco = detect("STOD206336", ctx={"ecosystem": None})
         self.assertEqual(eco.name, "valmet")
 
+    def test_detect_inventory_gor_overrides_valmet_stem(self) -> None:
+        eco = detect(
+            "Broke System",
+            inventory={
+                "lines": [{"source": "gor_pipe_id"}],
+                "valves": [],
+                "functions": [],
+            },
+        )
+        self.assertEqual(eco.name, "gor")
+        self.assertTrue(eco.is_tissue)
+
+    def test_detect_ctx_still_overrides_gor_inventory(self) -> None:
+        eco = detect(
+            "GORA68210",
+            ctx={"ecosystem": "valmet"},
+            inventory={"valves": [{"layer": "1-VALVE TEXT GOR"}]},
+        )
+        self.assertEqual(eco.name, "valmet")
+
+    def test_is_gor_inventory_signals(self) -> None:
+        from dwg_reader.dwg_ecosystem import is_gor_inventory
+
+        self.assertFalse(is_gor_inventory(None))
+        self.assertFalse(is_gor_inventory({}))
+        self.assertTrue(is_gor_inventory({"valves": [{"block_name": "TAG VALVOLA"}]}))
+        self.assertTrue(is_gor_inventory({"valves": [{"layer": "1-VALVE TEXT GOR"}]}))
+        self.assertTrue(is_gor_inventory({"functions": [{"function": "WU05"}]}))
+        self.assertFalse(is_gor_inventory({"functions": [{"function": "35-24L009"}]}))
+
 
 class EcosystemStandardsTests(unittest.TestCase):
     """Verify standards JSON files load and have required fields."""
@@ -138,7 +168,7 @@ class EcosystemMotorHelperTests(unittest.TestCase):
     """Motor tag derivation and driven-equipment detection via ecosystem."""
 
     def setUp(self) -> None:
-        from export_sap_equipment import _is_driven_equipment, _motor_tag_for
+        from dwg_reader.export_sap_equipment import _is_driven_equipment, _motor_tag_for
         self._motor = _motor_tag_for
         self._driven = _is_driven_equipment
 
@@ -196,7 +226,7 @@ class EcosystemMotorHelperTests(unittest.TestCase):
 
     def test_tissue_motor_injection_via_build_equipment_rows(self) -> None:
         """GOR pump in hierarchy gets -M1 motor injected when ecosystem=gor in ctx."""
-        from export_sap_equipment import build_equipment_rows
+        from dwg_reader.export_sap_equipment import build_equipment_rows
 
         rows = [
             {"FUNCTION": "124L-001", "EQUIPMENT": "", "SUB-EQUIPMENT": "", "DESCRIPTION": "PULPER"},
@@ -219,7 +249,7 @@ class EcosystemMotorHelperTests(unittest.TestCase):
 
     def test_valmet_motor_not_injected_for_tissue_pump_without_ctx(self) -> None:
         """Without ecosystem context, a tissue-format pump doesn't trigger Valmet injection."""
-        from export_sap_equipment import build_equipment_rows
+        from dwg_reader.export_sap_equipment import build_equipment_rows
 
         # 124P-001 doesn't match the Valmet pump RE (^\d{2}-\d{2}P\d+$) so no motor
         rows = [
@@ -236,7 +266,7 @@ class TissueTagObjectTypeTests(unittest.TestCase):
     """Verify dwg_object_type classifies Tissue / KSDM160104 tags correctly."""
 
     def _cls(self, tag: str, desc: str = "") -> tuple[str, str]:
-        from dwg_object_type import classify_equipment
+        from dwg_reader.dwg_object_type import classify_equipment
         return classify_equipment(tag, desc)
 
     def test_tissue_pump_prefix_classifies_701(self) -> None:

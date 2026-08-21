@@ -11,7 +11,7 @@ End-to-end path for `inputs/Broke System.dwg`, including what each stage produce
 | Item | Choice | Why |
 |---|---|---|
 | Model | `eu.anthropic.claude-sonnet-4-6` | Best micro tag F1 on pilot GT |
-| Prompt | `prompts/pid_hierarchy_gt_v4_dossier.md` | Big jump vs earlier prompt versions |
+| Prompt | `prompts/pid_hierarchy_gt_v8.md` | Current shipping default (`make hierarchy-ai`) |
 | Pilot score (L009 / P519) | **61.8%** micro tag F1 | Met ≥60% target |
 | Follow-on (L008 / P509) | **56.0%** micro tag F1 | Same combo; more peer-bleed |
 
@@ -125,7 +125,7 @@ make hierarchy-ai TAGS=35-24L008,35-24P509
 ```
 
 **Script:** `dwg_pid_hierarchy_ai.py`  
-**Defaults:** Claude Sonnet 4.6 + `pid_hierarchy_gt_v4_dossier.md`
+**Defaults:** Claude Sonnet 4.6 + `pid_hierarchy_gt_v8.md`
 
 ### Per-tag loop (e.g. `35-24L009`)
 
@@ -159,7 +159,7 @@ Full packet explanation + examples: [`HIERARCHY_AI_PROMPT_RUNDOWN.md`](./HIERARC
 
 **Command:** `make hierarchy-eval`  
 **Script:** `eval_hierarchy_gt.py`  
-**Pilot GT:** `inputs/gt_hierarchy_broke_system.csv` (functions **L009** + **P519**)  
+**Pilot GT:** `resources/gt_hierarchy_broke_system.xlsx` (functions **L009** + **P519**)  
 **Follow-on GT:** `inputs/gt_hierarchy_L008_P509.csv`
 
 ### How accuracy is defined
@@ -198,9 +198,9 @@ outputs/
 
 ## Accuracies — pilot equipment (`35-24L009` + `35-24P519`)
 
-GT: `inputs/gt_hierarchy_broke_system.csv`
+GT: `resources/gt_hierarchy_broke_system.xlsx`
 
-### Best run (shipped default)
+### Best run (historical v4 dossier sweep; shipping default is now v8)
 
 | Metric | Value |
 |---|---|

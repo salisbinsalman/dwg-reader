@@ -9,7 +9,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from dwg_floc_context import (
+from dwg_reader.dwg_floc_context import (
     abbrev_data,
     abbreviate_pltxt,
     build_tplnr,
@@ -18,8 +18,8 @@ from dwg_floc_context import (
     load_sml_abbreviations,
     normalize_pltxt,
 )
-from dwg_pid_hierarchy_ai import rows_from_ai, title_context
-from export_sap_floc import (
+from dwg_reader.dwg_pid_hierarchy_ai import rows_from_ai, title_context
+from dwg_reader.export_sap_floc import (
     SAP_COLUMNS,
     _strip_trailing_spec,
     build_floc_rows,
@@ -29,7 +29,7 @@ from export_sap_floc import (
 )
 
 
-ROOT = Path(__file__).resolve().parent
+ROOT = Path(__file__).resolve().parents[1]
 ABBREV_JSON = ROOT / "standards/sml_abbreviations.json"
 HIERARCHY_CSV = ROOT / "outputs/Broke System.hierarchy_orchestrator.csv"
 

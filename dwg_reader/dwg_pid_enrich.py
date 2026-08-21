@@ -21,8 +21,11 @@ from collections import defaultdict
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
-from dwg_pure_dump import clear_previous_outputs, find_json, json_path, json_safe, safe_name, write_json
-from dwg_semantic_extract import load_or_parse
+from dwg_reader.dwg_pure_dump import clear_previous_outputs, find_json, json_path, json_safe, safe_name, write_json
+from dwg_reader.dwg_semantic_extract import load_or_parse
+from dwg_reader.logutil import configure_logging, get_logger
+
+logger = get_logger(__name__)
 
 
 EQUIP_TAG_RE = re.compile(r"^\d{2}-\d{2}[A-Z]\d{2,4}[A-Z]?$")
@@ -394,6 +397,7 @@ def export_enrichment_workbook(payload: Dict[str, Any], out_path: Path) -> None:
 
 
 def main() -> int:
+    configure_logging()
     parser = argparse.ArgumentParser(description="P&ID enrichment extractor")
     parser.add_argument("--input", required=True)
     parser.add_argument("--output-dir", default="outputs")
@@ -417,17 +421,17 @@ def main() -> int:
         )
 
     structural, source = load_or_parse(input_path, out_dir, refresh=args.refresh)
-    print(f"[1/4] Loaded structural ({source})")
+    logger.info(f"[1/4] Loaded structural ({source})")
 
     inv_path = find_json(out_dir, f"{base}.pid_inventory.json")
     if inv_path.exists():
         inventory = json.loads(inv_path.read_text(encoding="utf-8"))
-        print("[2/4] Loaded inventory cache")
+        logger.info("[2/4] Loaded inventory cache")
     else:
-        from dwg_pid_inventory import build_inventory
+        from dwg_reader.dwg_pid_inventory import build_inventory
 
         inventory = build_inventory(structural)
-        print("[2/4] Built inventory live")
+        logger.info("[2/4] Built inventory live")
 
     tag_register = build_tag_register(structural, inventory)
     line_bindings = bind_lines_to_geometry(structural)
@@ -446,16 +450,16 @@ def main() -> int:
         **tables,
     }
 
-    print("[3/4] Enrichment counts:")
+    logger.info("[3/4] Enrichment counts:")
     for k, v in payload.items():
-        print(f"  - {k}: {len(v)}")
+        logger.info(f"  - {k}: {len(v)}")
 
     xlsx_out = out_dir / f"{base}.pid_enrichment.xlsx"
     json_out = json_path(out_dir, f"{base}.pid_enrichment.json")
     export_enrichment_workbook(payload, xlsx_out)
     write_json(json_out, payload)
-    print(f"[4/4] Wrote {xlsx_out}")
-    print(f"[4/4] Wrote {json_out}")
+    logger.info(f"[4/4] Wrote {xlsx_out}")
+    logger.info(f"[4/4] Wrote {json_out}")
     return 0
 
 

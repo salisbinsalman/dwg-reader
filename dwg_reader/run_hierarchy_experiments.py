@@ -11,10 +11,14 @@ import sys
 from pathlib import Path
 from typing import Any, Dict, List
 
-from eval_hierarchy_gt import evaluate, load_gt_rows, rows_from_hierarchy_csv
-from dwg_pure_dump import json_path, jsons_dir, logs_dir
+from dwg_reader.dwg_pure_dump import json_path, jsons_dir, logs_dir
+from dwg_reader.eval_hierarchy_gt import evaluate, load_gt_rows, rows_from_hierarchy_csv
+from dwg_reader.logutil import configure_logging, get_logger
+from dwg_reader.paths import REPO_ROOT
 
-ROOT = Path(__file__).resolve().parent
+logger = get_logger(__name__)
+
+ROOT = REPO_ROOT
 
 DEFAULT_MODELS = [
     "eu.anthropic.claude-sonnet-4-6",
@@ -33,7 +37,7 @@ VENDOR_SWEEP_MODELS = [
 ]
 
 DEFAULT_PROMPTS = [
-    "pid_hierarchy_gt_v4_dossier.md",
+    "pid_hierarchy_gt_v8.md",
 ]
 
 
@@ -68,7 +72,7 @@ def run_one(
         cmd.append("--reuse-shots")
 
     env = os.environ.copy()
-    print(f"\n===== RUN model={model_id} prompt={prompt_file} =====")
+    logger.info(f"\n===== RUN model={model_id} prompt={prompt_file} =====")
     proc = subprocess.run(cmd, cwd=str(ROOT), env=env, capture_output=False)
     pred_path = out_dir / "Broke System.hierarchy.csv"
     result: Dict[str, Any] = {
@@ -117,14 +121,13 @@ def run_one(
     # Keep per-run score next to archive and also under jsons/
     (archive / "score.json").write_text(json.dumps(result, indent=2), encoding="utf-8")
     score_path.write_text(json.dumps(result, indent=2), encoding="utf-8")
-    print(
-        f"SCORE {result['accuracy']*100:.1f}%  "
-        f"(P={report['micro']['precision']*100:.1f} R={report['micro']['recall']*100:.1f})"
-    )
+    logger.info(f"SCORE {result['accuracy']*100:.1f}%  "
+        f"(P={report['micro']['precision']*100:.1f} R={report['micro']['recall']*100:.1f})")
     return result
 
 
 def main() -> int:
+    configure_logging()
     parser = argparse.ArgumentParser()
     parser.add_argument("--input", default="inputs/Broke System.dwg")
     parser.add_argument("--output-dir", default="outputs")
@@ -172,7 +175,7 @@ def main() -> int:
             args.tags,
             "--shots-only",
         ]
-        print("Preparing viewer shots...")
+        logger.info("Preparing viewer shots...")
         subprocess.run(prep, cwd=str(ROOT), check=False)
 
     leaderboard: List[Dict[str, Any]] = []
@@ -193,29 +196,27 @@ def main() -> int:
             if row.get("accuracy", 0) > best.get("accuracy", -1):
                 best = row
             if row.get("accuracy", 0) >= args.target and not args.no_early_stop:
-                print(f"\nTARGET MET: {row['accuracy']*100:.1f}% with {model} / {prompt}")
+                logger.info(f"\nTARGET MET: {row['accuracy']*100:.1f}% with {model} / {prompt}")
                 summary = {"target": args.target, "best": best, "leaderboard": leaderboard, "stopped_early": True}
                 board = json_path(out_dir, "leaderboard.json")
                 board.write_text(json.dumps(summary, indent=2), encoding="utf-8")
                 (out_dir / "experiments" / "leaderboard.json").write_text(
                     json.dumps(summary, indent=2), encoding="utf-8"
                 )
-                print(json.dumps(summary, indent=2))
+                logger.info(json.dumps(summary, indent=2))
                 return 0
 
     summary = {"target": args.target, "best": best, "leaderboard": leaderboard, "stopped_early": False}
     board = json_path(out_dir, "leaderboard.json")
     board.write_text(json.dumps(summary, indent=2), encoding="utf-8")
     (out_dir / "experiments" / "leaderboard.json").write_text(json.dumps(summary, indent=2), encoding="utf-8")
-    print("\n===== LEADERBOARD =====")
+    logger.info("\n===== LEADERBOARD =====")
     for row in sorted(leaderboard, key=lambda r: r.get("accuracy", 0), reverse=True):
-        print(
-            f"{row.get('accuracy', 0)*100:5.1f}%  {row.get('model_id')}  {row.get('prompt_file')}  "
-            f"{row.get('error', '')}"
-        )
-    print(f"\nBest: {best.get('accuracy', 0)*100:.1f}%")
-    print(f"Leaderboard JSON: {board}")
-    print(f"Logs dir: {log_dir}")
+        logger.info(f"{row.get('accuracy', 0)*100:5.1f}%  {row.get('model_id')}  {row.get('prompt_file')}  "
+            f"{row.get('error', '')}")
+    logger.info(f"\nBest: {best.get('accuracy', 0)*100:.1f}%")
+    logger.info(f"Leaderboard JSON: {board}")
+    logger.info(f"Logs dir: {log_dir}")
     return 0 if best.get("accuracy", 0) >= args.target else 1
 
 

@@ -18,8 +18,13 @@ from functools import lru_cache
 from pathlib import Path
 from typing import Any, Dict, List, Mapping, Optional
 
-DEFAULT_ABBREV_JSON = Path("standards/sml_abbreviations.json")
-FLOC_MAP_PATH = Path("standards/floc_context_map.json")
+from dwg_reader.logutil import get_logger
+from dwg_reader.paths import STANDARDS_DIR
+
+logger = get_logger(__name__)
+
+DEFAULT_ABBREV_JSON = STANDARDS_DIR / "sml_abbreviations.json"
+FLOC_MAP_PATH = STANDARDS_DIR / "floc_context_map.json"
 
 # Locked Broke System / Shotton PM3 defaults (SML + GT MASK).
 DEFAULT_FLOC_CONTEXT: Dict[str, str] = {
@@ -82,8 +87,8 @@ def load_floc_context_for_input(
             ctx_override = raw.get(stem)
             if ctx_override and isinstance(ctx_override, dict):
                 return merge_floc_context(ctx_override)
-        except Exception:
-            pass
+        except Exception as e:
+            logger.debug("Ignoring invalid FLOC map entry in %s: %s", mp, e)
     return merge_floc_context(None)
 
 
@@ -634,7 +639,8 @@ def load_sml_abbreviations(path: Optional[Path] = None) -> Dict[str, str]:
                 if name and abbr and name.lower() != "nan" and abbr.lower() != "nan":
                     out[name.upper()] = abbr.upper()
             return out
-        except Exception:
+        except Exception as e:
+            logger.debug("Could not load abbreviations from %s: %s", json_path, e)
             return {}
     if DEFAULT_ABBREV_JSON.exists():
         return dict(abbrev_data(DEFAULT_ABBREV_JSON).get("abbreviations") or {})

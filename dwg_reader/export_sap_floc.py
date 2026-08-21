@@ -9,13 +9,11 @@ like docs/examples/final-output-template.xlsx.
 from __future__ import annotations
 
 import argparse
-import csv
-import json
 import re
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Optional, Sequence, Tuple
 
-from dwg_floc_context import (
+from dwg_reader.dwg_floc_context import (
     build_tplnr,
     floc_paths_for_function,
     format_line_eqktx,
@@ -24,11 +22,16 @@ from dwg_floc_context import (
     merge_floc_context,
     normalize_pltxt,
 )
-from dwg_floc_standards import lookup_line, lookup_process, lookup_sub_process
-from dwg_object_type import classify_equipment
-from dwg_pure_dump import find_json, json_path, safe_name, write_json
+from dwg_reader.dwg_floc_standards import lookup_line, lookup_process, lookup_sub_process
+from dwg_reader.dwg_object_type import classify_equipment
+from dwg_reader.dwg_pure_dump import json_path, safe_name, write_json
+from dwg_reader.io import cell as _norm, read_csv_rows
+from dwg_reader.logutil import configure_logging, get_logger
+from dwg_reader.paths import REPO_ROOT
 
-TEMPLATE_DEFAULT = Path("docs/examples/final-output-template.xlsx")
+logger = get_logger(__name__)
+
+TEMPLATE_DEFAULT = REPO_ROOT / "docs/examples/final-output-template.xlsx"
 
 # Strips trailing model/spec codes like "HP-33G2", "GT-2540", "PROFS-250HC", "141BDTPD"
 # from FUNCTION-level PLTXT descriptions.  Plain integers ("CONVEYOR 3") are left intact.
@@ -39,6 +42,8 @@ _TRAILING_SPEC_RE = re.compile(
 
 def _strip_trailing_spec(text: str) -> str:
     return _TRAILING_SPEC_RE.sub("", text).strip()
+
+
 SHEET_NAME = "Functional Location"
 
 # Column order matches template row 0 (Technical Area codes).
@@ -67,14 +72,8 @@ SAP_COLUMNS = [
 _TEXT_FORMAT_COLUMNS = frozenset({"POSNR", "FLTYP", "EQART", "EQUART", "ABCKZ"})
 
 
-def _norm(value: object) -> str:
-    s = str(value or "").strip()
-    return "" if not s or s.lower() == "nan" else s
-
-
 def read_hierarchy_csv(path: Path) -> List[Dict[str, str]]:
-    with path.open(encoding="utf-8", newline="") as f:
-        return [{k: _norm(v) for k, v in row.items()} for row in csv.DictReader(f)]
+    return read_csv_rows(path, missing_ok=False)
 
 
 def collect_functions(
@@ -346,6 +345,7 @@ def evaluate_against_gt(
 
 
 def main() -> int:
+    configure_logging()
     parser = argparse.ArgumentParser(description="Export SAP Functional Location workbook")
     parser.add_argument(
         "--hierarchy-csv",
@@ -367,7 +367,30 @@ def main() -> int:
         action="store_true",
         help="If hierarchy CSV lacks DESCRIPTION, fill PLTXT from GT (offline/testing)",
     )
-    args = parser.parse_args()
+    return run_floc_export_from_args(parser.parse_args())
+
+
+def run_floc_export(
+    *,
+    input_path: Path,
+    out_dir: Path,
+    hierarchy_csv: Path,
+    gt: Path,
+    limit: int = 0,
+) -> int:
+    args = argparse.Namespace(
+        hierarchy_csv=str(hierarchy_csv),
+        input=str(input_path),
+        output_dir=str(out_dir),
+        template=str(TEMPLATE_DEFAULT),
+        gt=str(gt),
+        limit=limit,
+        enrich_descriptions_from_gt=False,
+    )
+    return run_floc_export_from_args(args)
+
+
+def run_floc_export_from_args(args: argparse.Namespace) -> int:
 
     out_dir = Path(args.output_dir).expanduser().resolve()
     base = safe_name(Path(args.input))
@@ -377,12 +400,12 @@ def main() -> int:
         else out_dir / f"{base}.hierarchy_orchestrator.csv"
     )
     if not hier_path.exists():
-        print(f"[error] Missing hierarchy CSV: {hier_path}", flush=True)
+        logger.error(f"[error] Missing hierarchy CSV: {hier_path}")
         return 2
 
     template = Path(args.template).expanduser().resolve()
     if not template.exists():
-        print(f"[error] Missing template: {template}", flush=True)
+        logger.error(f"[error] Missing template: {template}")
         return 2
 
     rows = read_hierarchy_csv(hier_path)
@@ -409,19 +432,15 @@ def main() -> int:
     if gt_path.exists():
         report["gt_eval"] = evaluate_against_gt(floc_rows, gt_path)
         ge = report["gt_eval"]
-        print(
-            f"GT MASK accuracy: {ge['mask_accuracy']*100:.1f}% "
-            f"({ge['mask_hit']}/{ge['mask_hit']+ge['mask_miss']})"
-        )
-        print(
-            f"GT DESCRIPTION exact: {ge['description_accuracy']*100:.1f}% "
-            f"({ge['description_exact']}/{ge['description_total']})"
-        )
+        logger.info(f"GT MASK accuracy: {ge['mask_accuracy']*100:.1f}% "
+            f"({ge['mask_hit']}/{ge['mask_hit']+ge['mask_miss']})")
+        logger.info(f"GT DESCRIPTION exact: {ge['description_accuracy']*100:.1f}% "
+            f"({ge['description_exact']}/{ge['description_total']})")
 
     report_path = json_path(out_dir, f"{base}.functional_locations_report.json")
     write_json(report_path, report)
-    print(f"Wrote {out_xlsx} ({len(floc_rows)} FL rows, {len(functions)} functions)")
-    print(f"Report: {report_path}")
+    logger.info(f"Wrote {out_xlsx} ({len(floc_rows)} FL rows, {len(functions)} functions)")
+    logger.info(f"Report: {report_path}")
     return 0
 
 

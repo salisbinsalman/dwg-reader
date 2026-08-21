@@ -12,10 +12,9 @@ AI returns hierarchy rows for:
 
 from __future__ import annotations
 
-import dwg_warn  # noqa: F401 — silence boto3 Python 3.9 deprecation noise
+import dwg_reader.dwg_warn as dwg_warn  # noqa: F401 — silence boto3 Python 3.9 deprecation noise
 
 import argparse
-import csv
 import json
 import os
 import re
@@ -23,7 +22,8 @@ import sys
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
-from dwg_floc_context import (
+from dwg_reader.config import DEFAULT_MODEL_ID, HIERARCHY_PROMPT_FILE, LEGEND_PATH
+from dwg_reader.dwg_floc_context import (
     DEFAULT_FLOC_CONTEXT,
     build_tplnr,
     description_from_nearby,
@@ -32,8 +32,8 @@ from dwg_floc_context import (
     merge_floc_context,
     normalize_pltxt,
 )
-from dwg_prompts import load_prompt
-from dwg_pure_dump import (
+from dwg_reader.dwg_prompts import load_prompt
+from dwg_reader.dwg_pure_dump import (
     clear_evidence_outputs,
     clear_previous_outputs,
     configure_odafc,
@@ -44,29 +44,12 @@ from dwg_pure_dump import (
     safe_name,
     write_json,
 )
+from dwg_reader.io import load_json
+from dwg_reader.logutil import configure_logging, get_logger
+from dwg_reader.models import CSV_COLUMNS
+from dwg_reader.tags import normalize_tag
 
-HIERARCHY_PROMPT_FILE = "pid_hierarchy_gt_v8.md"
-DEFAULT_MODEL_ID = "eu.anthropic.claude-sonnet-4-6"
-LEGEND_PATH = Path("standards/legend.png")
-
-# GT sheet columns (primary deliverable shape)
-GT_COLUMNS = [
-    "SUB-PROCESS",
-    "FUNCTION",
-    "EQUIPMENT",
-    "SUB-EQUIPMENT",
-    "MASK",
-    "DESCRIPTION",
-]
-
-# Extended workbook still keeps plant context for operators
-CSV_COLUMNS = [
-    "ORDER",
-    "SITE",
-    "LINE",
-    "PROCESS",
-    *GT_COLUMNS,
-]
+logger = get_logger(__name__)
 
 DEFAULT_SUB_PROCESS = "BR1"
 TAG_TOKEN_RE = re.compile(r"\b\d{1,3}-\d{1,3}[A-Z0-9][A-Z0-9./-]*\b", re.IGNORECASE)
@@ -78,19 +61,6 @@ PARENT_PRIORITY = {
     "pumps": 2,
     "agitators": 3,
 }
-
-
-def load_json(path: Path) -> Any:
-    return json.loads(path.read_text(encoding="utf-8"))
-
-
-def normalize_tag(tag: str) -> str:
-    s = re.sub(r"\s+", "", tag or "").upper()
-    # Match GT short line ids: 35-24-192 not full pipe class strings
-    m = re.match(r"^(\d{2}-\d{2}-\d{2,4})(?:-[A-Z].*)?$", s)
-    if m:
-        return m.group(1)
-    return s
 
 
 def build_equipment_dossier(
@@ -805,10 +775,8 @@ def viewer_screenshot(
     from PIL import Image
 
     im = Image.open(BytesIO(png))
-    print(
-        f"[shot] {tag}: {len(ents)} ents, window={xmax-xmin:.0f}x{ymax-ymin:.0f} "
-        f"-> {out_path.name} ({im.width}x{im.height})"
-    )
+    logger.info(f"[shot] {tag}: {len(ents)} ents, window={xmax-xmin:.0f}x{ymax-ymin:.0f} "
+        f"-> {out_path.name} ({im.width}x{im.height})")
     return out_path
 
 
@@ -1317,14 +1285,52 @@ def rows_from_ai(
 
 
 def write_csv(path: Path, rows: List[Dict[str, str]]) -> None:
-    with path.open("w", encoding="utf-8", newline="") as f:
-        w = csv.DictWriter(f, fieldnames=CSV_COLUMNS, extrasaction="ignore")
-        w.writeheader()
-        w.writerows(rows)
+    from dwg_reader.io import write_csv_rows
 
+    write_csv_rows(path, rows, CSV_COLUMNS)
+
+
+def run_hierarchy_for_tag(
+    *,
+    tag: str,
+    input_path: Path,
+    out_dir: Path,
+    model_id: str,
+    region: str,
+    prompt_file: str,
+    inventory_json: Path,
+    per_tag_csv: Path,
+    per_tag_json: Path,
+    reuse_shots: bool,
+    no_clean_prev: bool,
+    aws_profile: str = "",
+) -> int:
+    """Library entry used by the orchestrator instead of subprocess."""
+    if aws_profile:
+        os.environ["AWS_PROFILE"] = aws_profile
+    args = argparse.Namespace(
+        input=str(input_path),
+        output_dir=str(out_dir),
+        tags=tag,
+        crop_half=165.0,
+        crop_half_min=105.0,
+        dpi=260,
+        model_id=model_id,
+        region=region,
+        shots_only=False,
+        prompt_file=prompt_file,
+        reuse_shots=reuse_shots,
+        legend=str(LEGEND_PATH),
+        inventory_json=str(inventory_json),
+        hierarchy_csv_out=str(per_tag_csv),
+        hierarchy_json_out=str(per_tag_json),
+        no_clean_prev=no_clean_prev,
+    )
+    return run_hierarchy_from_args(args)
 
 
 def main() -> int:
+    configure_logging()
     parser = argparse.ArgumentParser(description="Viewer screenshots + Bedrock hierarchy CSV")
     parser.add_argument("--input", default="inputs/Broke System.dwg")
     parser.add_argument("--output-dir", default="outputs")
@@ -1348,7 +1354,7 @@ def main() -> int:
     parser.add_argument(
         "--prompt-file",
         default=HIERARCHY_PROMPT_FILE,
-        help="Prompt template under prompts/ (default: pid_hierarchy_gt_v4_dossier.md)",
+        help="Prompt template under prompts/ (default: pid_hierarchy_gt_v8.md)",
     )
     parser.add_argument(
         "--reuse-shots",
@@ -1376,7 +1382,10 @@ def main() -> int:
         help="Optional explicit path for hierarchy AI JSON output (default: outputs/jsons/<stem>.hierarchy_ai.json)",
     )
     parser.add_argument("--no-clean-prev", action="store_true")
-    args = parser.parse_args()
+    return run_hierarchy_from_args(parser.parse_args())
+
+
+def run_hierarchy_from_args(args: argparse.Namespace) -> int:
 
     input_path = Path(args.input).expanduser().resolve()
     out_dir = Path(args.output_dir).expanduser().resolve()
@@ -1387,10 +1396,10 @@ def main() -> int:
     tags = [normalize_tag(t) for t in args.tags.split(",") if t.strip()]
     legend_path: Optional[Path] = Path(args.legend).expanduser().resolve() if args.legend else None
     if legend_path and not legend_path.exists():
-        print(f"[warn] Legend not found at {legend_path}; valve type tokens will be omitted")
+        logger.warning(f"[warn] Legend not found at {legend_path}; valve type tokens will be omitted")
         legend_path = None
     elif legend_path:
-        print(f"[legend] {legend_path.name} will be sent as Image 2 for valve classification")
+        logger.info(f"[legend] {legend_path.name} will be sent as Image 2 for valve classification")
     out_csv = (
         Path(args.hierarchy_csv_out).expanduser().resolve()
         if args.hierarchy_csv_out
@@ -1409,7 +1418,7 @@ def main() -> int:
     )
 
     if not enr_path.exists():
-        print(f"[error] Missing {enr_path}. Run `make enrich` / `make all` first.", file=sys.stderr)
+        logger.error(f"[error] Missing {enr_path}. Run `make enrich` / `make all` first.")
         return 2
 
     if not args.no_clean_prev:
@@ -1439,11 +1448,11 @@ def main() -> int:
 
     doc = None
     if not args.reuse_shots or args.shots_only:
-        print("[1/3] Opening DWG via ODA for viewer screenshots...")
+        logger.info("[1/3] Opening DWG via ODA for viewer screenshots...")
         doc = load_drawing(input_path)
-        print("[1/3] DWG opened")
+        logger.info("[1/3] DWG opened")
     else:
-        print("[1/3] Reusing existing viewer screenshots")
+        logger.info("[1/3] Reusing existing viewer screenshots")
 
     results = []
     csv_rows: List[Dict[str, str]] = []
@@ -1452,10 +1461,10 @@ def main() -> int:
     tag_locations = text_tag_locations(structural)
 
     for tag in tags:
-        print(f"\n=== {tag} ===")
+        logger.info(f"\n=== {tag} ===")
         parent = pick_parent(tag_register, tag, inventory=inventory)
         if not parent:
-            print(f"[warn] No parent coords for {tag}")
+            logger.warning(f"[warn] No parent coords for {tag}")
             results.append({"tag": tag, "error": "parent_not_found"})
             continue
         center = crop_center(tag, parent, tag_register)
@@ -1472,13 +1481,13 @@ def main() -> int:
                 half_min=args.crop_half_min,
                 dpi=args.dpi,
             )
-            print(f"[2/3] Viewer shot: {shot}")
+            logger.info(f"[2/3] Viewer shot: {shot}")
         elif not shot.exists():
-            print(f"[error] Missing shot {shot}; re-run without --reuse-shots", file=sys.stderr)
+            logger.error(f"[error] Missing shot {shot}; re-run without --reuse-shots")
             results.append({"tag": tag, "error": "missing_shot"})
             continue
         else:
-            print(f"[2/3] Reused shot: {shot}")
+            logger.info(f"[2/3] Reused shot: {shot}")
 
         candidates = collect_candidate_tags(
             tag, center, tag_register, inventory=inventory, structural=structural
@@ -1492,7 +1501,7 @@ def main() -> int:
             enrichment=enrichment,
             structural=structural,
         )
-        print(f"    candidates={len(candidates)} dossier_chars={len(dossier)}")
+        logger.info(f"    candidates={len(candidates)} dossier_chars={len(dossier)}")
 
         if args.shots_only:
             results.append(
@@ -1520,15 +1529,15 @@ def main() -> int:
                 parent_dossier=dossier,
                 legend_path=legend_path,
             )
-            print(f"[3/3] Bedrock hierarchy received ({args.model_id})")
+            logger.info(f"[3/3] Bedrock hierarchy received ({args.model_id})")
         except Exception as e:
-            print(f"[3/3] Bedrock failed: {e}", file=sys.stderr)
+            logger.error(f"[3/3] Bedrock failed: {e}")
             results.append({"tag": tag, "shot": str(shot), "parent": parent, "error": str(e)})
             continue
 
         parsed = ai.get("parsed") or {}
         if not parsed:
-            print("[warn] Could not parse AI JSON; raw saved in hierarchy_ai.json")
+            logger.warning("[warn] Could not parse AI JSON; raw saved in hierarchy_ai.json")
             results.append(
                 {
                     "tag": tag,
@@ -1570,11 +1579,9 @@ def main() -> int:
                 "dossier": dossier,
             }
         )
-        print(
-            f"    function={refined.get('function')} "
+        logger.info(f"    function={refined.get('function')} "
             f"child_rows={len(refined.get('rows') or [])} "
-            f"confidence={refined.get('confidence')}"
-        )
+            f"confidence={refined.get('confidence')}")
 
     if function_payloads:
         resolve_cross_function_tags(function_payloads, tag_locations)
@@ -1618,12 +1625,12 @@ def main() -> int:
     )
     if csv_rows:
         write_csv(out_csv, csv_rows)
-        print(f"\nWrote {out_csv} ({len(csv_rows)} rows)")
+        logger.info(f"\nWrote {out_csv} ({len(csv_rows)} rows)")
     else:
-        print("\nNo hierarchy CSV rows written (shots-only or AI parse failure)")
-    print(f"Evidence images: {ev_dir}")
-    print(f"JSON: {out_json}")
-    print(f"Logs dir: {log_dir}")
+        logger.info("\nNo hierarchy CSV rows written (shots-only or AI parse failure)")
+    logger.info(f"Evidence images: {ev_dir}")
+    logger.info(f"JSON: {out_json}")
+    logger.info(f"Logs dir: {log_dir}")
     return 0
 
 

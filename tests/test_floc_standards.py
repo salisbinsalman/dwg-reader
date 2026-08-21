@@ -7,12 +7,15 @@ import json
 import unittest
 from pathlib import Path
 
+ROOT = Path(__file__).resolve().parents[1]
+STANDARDS_DIR = ROOT / "standards"
+
 
 class FlocStructureJsonTests(unittest.TestCase):
     """Validate sml_floc_structure.json content vs source xlsx expectations."""
 
     def _data(self) -> dict:
-        with open("standards/sml_floc_structure.json", encoding="utf-8") as f:
+        with open(STANDARDS_DIR / "sml_floc_structure.json", encoding="utf-8") as f:
             return json.load(f)
 
     def test_required_top_level_keys(self) -> None:
@@ -57,7 +60,7 @@ class FlocStandardsLookupTests(unittest.TestCase):
     """Unit tests for dwg_floc_standards lookup functions."""
 
     def setUp(self) -> None:
-        from dwg_floc_standards import lookup_line, lookup_process, lookup_sub_process, is_valid_line
+        from dwg_reader.dwg_floc_standards import lookup_line, lookup_process, lookup_sub_process, is_valid_line
         self.line = lookup_line
         self.process = lookup_process
         self.sub = lookup_sub_process
@@ -110,7 +113,7 @@ class FlocStandardsIntegrationTests(unittest.TestCase):
     """Verify FLOC standards are wired into export_sap_floc build_floc_rows."""
 
     def test_build_floc_rows_uses_floc_standards_for_line_name(self) -> None:
-        from export_sap_floc import build_floc_rows
+        from dwg_reader.export_sap_floc import build_floc_rows
 
         ctx = {
             "plant": "5001",
@@ -127,7 +130,7 @@ class FlocStandardsIntegrationTests(unittest.TestCase):
         self.assertEqual(line_row["PLTXT"], "TISSUE MACH 1")
 
     def test_build_floc_rows_uses_floc_standards_for_process_name(self) -> None:
-        from export_sap_floc import build_floc_rows
+        from dwg_reader.export_sap_floc import build_floc_rows
 
         ctx = {
             "plant": "5001",
@@ -142,7 +145,7 @@ class FlocStandardsIntegrationTests(unittest.TestCase):
         self.assertEqual(process_row["PLTXT"], "STOCK PREP")
 
     def test_build_floc_rows_explicit_name_overrides_standards(self) -> None:
-        from export_sap_floc import build_floc_rows
+        from dwg_reader.export_sap_floc import build_floc_rows
 
         ctx = {
             "plant": "5001",
@@ -162,7 +165,7 @@ class FlocStandardsIntegrationTests(unittest.TestCase):
         self.assertEqual(process_row["PLTXT"], "MY CUSTOM PROS")
 
     def test_sub_process_row_uses_registered_sub_process_name(self) -> None:
-        from export_sap_floc import build_floc_rows
+        from dwg_reader.export_sap_floc import build_floc_rows
 
         ctx = {
             "plant": "5001",
@@ -183,7 +186,7 @@ class KsdFlocContextTests(unittest.TestCase):
     """Verify all 23 KSD DWGs have proper FLOC context entries."""
 
     def _ctx(self) -> dict:
-        with open("standards/floc_context_map.json", encoding="utf-8") as f:
+        with open(STANDARDS_DIR / "floc_context_map.json", encoding="utf-8") as f:
             return json.load(f)
 
     def test_all_ksd_entries_present(self) -> None:
@@ -250,16 +253,17 @@ class KsdFlocContextTests(unittest.TestCase):
 class AbbreviationsCompleteTests(unittest.TestCase):
     """Verify sml_abbreviations.json matches xlsx."""
 
+    def _abbrev_json(self) -> dict:
+        with open(STANDARDS_DIR / "sml_abbreviations.json", encoding="utf-8") as f:
+            return json.load(f)
+
     def test_total_abbreviations(self) -> None:
-        with open("standards/sml_abbreviations.json", encoding="utf-8") as f:
-            data = json.load(f)
+        data = self._abbrev_json()
         # 384 entries in xlsx (381 from initial parse — both counts depending on xlsx read mode)
         self.assertGreaterEqual(len(data["abbreviations"]), 380)
 
     def test_missing_entries_now_present(self) -> None:
-        with open("standards/sml_abbreviations.json", encoding="utf-8") as f:
-            data = json.load(f)
-        abbrevs = data["abbreviations"]
+        abbrevs = self._abbrev_json()["abbreviations"]
         # Spot-check previously missing entries
         self.assertEqual(abbrevs.get("BALE HANDLING"), None)  # not a word→abbr entry; check actual ones
         self.assertEqual(abbrevs.get("WHITE WATER"), "WW")
@@ -272,14 +276,10 @@ class AbbreviationsCompleteTests(unittest.TestCase):
         self.assertEqual(abbrevs.get("AGITATOR"), "AGI")
 
     def test_agitator_abbreviation_unchanged(self) -> None:
-        with open("standards/sml_abbreviations.json", encoding="utf-8") as f:
-            data = json.load(f)
-        self.assertEqual(data["abbreviations"]["AGITATOR"], "AGI")
+        self.assertEqual(self._abbrev_json()["abbreviations"]["AGITATOR"], "AGI")
 
     def test_pump_abbreviation_unchanged(self) -> None:
-        with open("standards/sml_abbreviations.json", encoding="utf-8") as f:
-            data = json.load(f)
-        self.assertEqual(data["abbreviations"]["PUMP"], "PMP")
+        self.assertEqual(self._abbrev_json()["abbreviations"]["PUMP"], "PMP")
 
 
 if __name__ == "__main__":

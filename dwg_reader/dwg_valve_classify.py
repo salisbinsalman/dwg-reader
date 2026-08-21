@@ -14,7 +14,7 @@ Export reads this cache; inputs/valve_type_overrides.json still wins.
 
 from __future__ import annotations
 
-import dwg_warn  # noqa: F401 — silence boto3 Python 3.9 deprecation noise
+import dwg_reader.dwg_warn as dwg_warn  # noqa: F401 — silence boto3 Python 3.9 deprecation noise
 
 import argparse
 import csv
@@ -27,17 +27,19 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Optional, Tuple
 
-from dwg_floc_context import (
+from dwg_reader.config import DEFAULT_MODEL_ID, LEGEND_PATH
+from dwg_reader.dwg_floc_context import (
     ALLOWED_VALVE_TOKENS,
     apply_sop_valve_type,
     combine_valve_type,
     is_pump_equipment,
     is_valve_equipment,
 )
-from dwg_pure_dump import evidence_dir, find_json, json_path, safe_name, write_json
+from dwg_reader.dwg_pure_dump import evidence_dir, find_json, json_path, safe_name, write_json
+from dwg_reader.logutil import configure_logging, get_logger
 
-LEGEND_PATH = Path("standards/legend.png")
-DEFAULT_MODEL_ID = "eu.anthropic.claude-sonnet-4-6"
+logger = get_logger(__name__)
+
 VALVE_LAYERS = frozenset({"P-VALVEPOS", "P-CVPOS", "P-SYMB", "1-VALVE TEXT GOR"})
 
 # Shared bowtie fill rules — white (Shotton P&ID) and red/colored (GOR legend sheets).
@@ -608,7 +610,7 @@ def parse_type_tokens(raw: str) -> str:
 
 
 def _log(msg: str) -> None:
-    print(msg, flush=True)
+    logger.info(msg)
 
 
 def build_entity_extent_index(doc) -> List[Tuple[Any, float, float, float, float]]:
@@ -1610,6 +1612,7 @@ def write_crop_meta(crop_path: Path, half: float, extra_below: float) -> None:
 
 
 def main() -> int:
+    configure_logging()
     parser = argparse.ArgumentParser(description="Per-tag tight-crop valve classification")
     parser.add_argument("--input", default="inputs/Broke System.dwg")
     parser.add_argument("--output-dir", default="outputs")
@@ -1628,7 +1631,41 @@ def main() -> int:
     parser.add_argument("--skip-existing", action="store_true")
     parser.add_argument("--locate-only", action="store_true", help="Write CAD locations, skip Bedrock")
     parser.add_argument("--limit", type=int, default=0, help="Max tags to classify (0 = all candidates)")
-    args = parser.parse_args()
+    return run_valve_classify_from_args(parser.parse_args())
+
+
+def run_valve_classify(
+    *,
+    input_path: Path,
+    out_dir: Path,
+    hierarchy_csv: Path,
+    model_id: str,
+    region: str,
+    jobs: int = 1,
+    skip_existing: bool = False,
+    aws_profile: str = "",
+) -> int:
+    if aws_profile:
+        os.environ["AWS_PROFILE"] = aws_profile
+    os.environ["PYTHONUNBUFFERED"] = "1"
+    args = argparse.Namespace(
+        input=str(input_path),
+        output_dir=str(out_dir),
+        hierarchy_csv=str(hierarchy_csv),
+        legend=str(LEGEND_PATH),
+        model_id=model_id,
+        region=region,
+        jobs=jobs,
+        crop_half=42.0,
+        extra_below=60.0,
+        skip_existing=skip_existing,
+        locate_only=False,
+        limit=0,
+    )
+    return run_valve_classify_from_args(args)
+
+
+def run_valve_classify_from_args(args: argparse.Namespace) -> int:
 
     input_path = Path(args.input).expanduser().resolve()
     out_dir = Path(args.output_dir).expanduser().resolve()
@@ -1640,10 +1677,10 @@ def main() -> int:
     struct_path = find_json(out_dir, f"{base}.structural_dump.json")
     inv_path = find_json(out_dir, f"{base}.pid_inventory.json")
     if not hier_path.exists():
-        print(f"[error] Missing hierarchy CSV: {hier_path}", file=sys.stderr)
+        logger.error(f"[error] Missing hierarchy CSV: {hier_path}")
         return 2
     if not struct_path.exists():
-        print(f"[error] Missing structural dump: {struct_path}", file=sys.stderr)
+        logger.error(f"[error] Missing structural dump: {struct_path}")
         return 2
 
     with hier_path.open(encoding="utf-8", newline="") as f:
@@ -1725,7 +1762,7 @@ def main() -> int:
                 need_render.append(loc)
 
         if need_render:
-            from dwg_pid_hierarchy_ai import load_drawing
+            from dwg_reader.dwg_pid_hierarchy_ai import load_drawing
 
             _log(
                 f"[valve-classify] opening DWG for {len(need_render)} zoom-out crops "

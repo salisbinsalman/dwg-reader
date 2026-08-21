@@ -6,13 +6,13 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from dwg_pid_inventory import (
+from dwg_reader.dwg_pid_inventory import (
     _agitator_description,
     _is_agitator_equipment_tag,
     bind_agitator_tags,
 )
-from export_sap_equipment import _motor_eqktx, build_equipment_rows
-from run_hierarchy_orchestrator import _append_agitator_equipment_rows, write_hierarchy_csv
+from dwg_reader.export_sap_equipment import _motor_eqktx, build_equipment_rows
+from dwg_reader.run_hierarchy_orchestrator import _append_agitator_equipment_rows, write_hierarchy_csv
 
 
 class AgitatorBindTests(unittest.TestCase):

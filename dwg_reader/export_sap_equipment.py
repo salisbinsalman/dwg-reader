@@ -16,8 +16,8 @@ import sys
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Sequence, Set
 
-from dwg_ecosystem import Ecosystem, detect as _detect_ecosystem
-from dwg_floc_context import (
+from dwg_reader.dwg_ecosystem import Ecosystem, detect as _detect_ecosystem
+from dwg_reader.dwg_floc_context import (
     combine_valve_type,
     explain_valve_type,
     floc_paths_for_function,
@@ -30,10 +30,15 @@ from dwg_floc_context import (
     merge_floc_context,
     normalize_pltxt,
 )
-from dwg_object_type import classify_equipment
-from dwg_pure_dump import json_path, safe_name, write_json
+from dwg_reader.dwg_object_type import classify_equipment
+from dwg_reader.dwg_pure_dump import json_path, safe_name, write_json
+from dwg_reader.io import cell as _norm, read_csv_rows
+from dwg_reader.logutil import configure_logging, get_logger
+from dwg_reader.paths import REPO_ROOT
 
-TEMPLATE_DEFAULT = Path("docs/examples/SML-Equipment Template RW.xlsx")
+logger = get_logger(__name__)
+
+TEMPLATE_DEFAULT = REPO_ROOT / "docs/examples/SML-Equipment Template RW.xlsx"
 SHEET_NAME = "Equipment"
 DATA_START_ROW = 7  # 1-based; row 7 is the sample Boiler in the template
 VALVE_LAYERS = {"P-VALVEPOS", "P-CVPOS", "1-VALVE TEXT GOR"}
@@ -137,14 +142,15 @@ def _load_valve_cache(path: Path) -> dict[str, dict]:
     if not p.exists():
         return {}
     try:
-        from dwg_valve_classify import load_valve_cache
+        from dwg_reader.dwg_valve_classify import load_valve_cache
 
         return load_valve_cache(p)
-    except Exception:
+    except Exception as exc:
+        logger.debug("load_valve_cache failed for %s, falling back to raw JSON: %s", p, exc)
         try:
             data = json.loads(p.read_text(encoding="utf-8"))
         except (json.JSONDecodeError, OSError) as exc:
-            print(f"[warn] Failed to read valve cache {p}: {exc}", file=sys.stderr, flush=True)
+            logger.warning("Failed to read valve cache %s: %s", p, exc)
             return {}
         blob = data.get("tags") if isinstance(data.get("tags"), dict) else data
         return {
@@ -172,14 +178,8 @@ def _valve_hint(tag: str, *, cache: dict[str, dict]) -> dict:
     }
 
 
-def _norm(value: object) -> str:
-    s = str(value or "").strip()
-    return "" if not s or s.lower() == "nan" else s
-
-
 def read_hierarchy_csv(path: Path) -> List[Dict[str, str]]:
-    with path.open(encoding="utf-8", newline="") as f:
-        return [{k: _norm(v) for k, v in row.items()} for row in csv.DictReader(f)]
+    return read_csv_rows(path, missing_ok=False)
 
 
 REASONING_COLUMNS = [
@@ -460,6 +460,7 @@ def resolve_hierarchy_csv(out_dir: Path, base: str, explicit: str = "") -> Optio
 
 
 def main() -> int:
+    configure_logging()
     parser = argparse.ArgumentParser(description="Export SAP Equipment workbook")
     parser.add_argument("--hierarchy-csv", default="")
     parser.add_argument("--input", default="inputs/Broke System.dwg", help="Used for output stem")
@@ -471,18 +472,38 @@ def main() -> int:
         default=0,
         help="Optional max FUNCTIONs whose children to export (0 = all)",
     )
-    args = parser.parse_args()
+    return run_equipment_export_from_args(parser.parse_args())
+
+
+def run_equipment_export(
+    *,
+    input_path: Path,
+    out_dir: Path,
+    hierarchy_csv: Path,
+    limit: int = 0,
+) -> int:
+    args = argparse.Namespace(
+        hierarchy_csv=str(hierarchy_csv),
+        input=str(input_path),
+        output_dir=str(out_dir),
+        template=str(TEMPLATE_DEFAULT),
+        limit=limit,
+    )
+    return run_equipment_export_from_args(args)
+
+
+def run_equipment_export_from_args(args: argparse.Namespace) -> int:
 
     out_dir = Path(args.output_dir).expanduser().resolve()
     base = safe_name(Path(args.input))
     hier_path = resolve_hierarchy_csv(out_dir, base, args.hierarchy_csv)
     if not hier_path:
-        print(f"[error] Missing hierarchy CSV under {out_dir}", flush=True)
+        logger.error(f"[error] Missing hierarchy CSV under {out_dir}")
         return 2
 
     template = Path(args.template).expanduser().resolve()
     if not template.exists():
-        print(f"[error] Missing template: {template}", flush=True)
+        logger.error(f"[error] Missing template: {template}")
         return 2
 
     ctx = load_floc_context_for_input(Path(args.input))
@@ -516,12 +537,10 @@ def main() -> int:
     }
     report_path = json_path(out_dir, f"{base}.equipment_report.json")
     write_json(report_path, report)
-    print(
-        f"Wrote {out_xlsx} ({len(equipment_rows)} equipment rows, "
-        f"{len(tplnrs)} FLOCs, {report['with_hequi']} with HEQUI)"
-    )
-    print(f"Valve reasoning: {reasoning_csv} ({len(reasoning_rows)} valves)")
-    print(f"Report: {report_path}")
+    logger.info(f"Wrote {out_xlsx} ({len(equipment_rows)} equipment rows, "
+        f"{len(tplnrs)} FLOCs, {report['with_hequi']} with HEQUI)")
+    logger.info(f"Valve reasoning: {reasoning_csv} ({len(reasoning_rows)} valves)")
+    logger.info(f"Report: {report_path}")
     return 0
 
 

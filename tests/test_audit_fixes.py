@@ -4,10 +4,10 @@
 import unittest
 from pathlib import Path
 
-from dwg_floc_context import is_pump_equipment, is_pump_tag, is_valve_equipment, is_valve_tag
-from dwg_pid_hierarchy_ai import rows_from_ai, title_context
-from export_sap_equipment import _is_valid_equipment_tag
-from run_hierarchy_orchestrator import (
+from dwg_reader.dwg_floc_context import is_pump_equipment, is_pump_tag, is_valve_equipment, is_valve_tag
+from dwg_reader.dwg_pid_hierarchy_ai import rows_from_ai, title_context
+from dwg_reader.export_sap_equipment import _is_valid_equipment_tag
+from dwg_reader.run_hierarchy_orchestrator import (
     DEFAULT_HIERARCHY_FUNCTION_KINDS,
     _gor_code03_valve_type,
     _is_instrument_function_tag,

@@ -9,7 +9,7 @@ What we send to the model, how screenshots are made, and what comes back.
 | Setting | Value |
 |---|---|
 | Model | `eu.anthropic.claude-sonnet-4-6` |
-| Prompt template | `prompts/pid_hierarchy_gt_v4_dossier.md` |
+| Prompt template | `prompts/pid_hierarchy_gt_v8.md` |
 | Script | `dwg_pid_hierarchy_ai.py` |
 | Command | `make hierarchy-ai TAGS=35-24L008,35-24P509` |
 
@@ -217,7 +217,7 @@ The model should prefer these (and dossier short line ids) over inventing new ta
 
 ### Step 5 — Fill the prompt template
 
-Template: `prompts/pid_hierarchy_gt_v4_dossier.md`
+Template: `prompts/pid_hierarchy_gt_v8.md`
 
 Placeholders substituted by `build_hierarchy_prompt()` / `load_prompt()`:
 

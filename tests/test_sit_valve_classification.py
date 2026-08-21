@@ -19,9 +19,9 @@ from __future__ import annotations
 import unittest
 from pathlib import Path
 
-from export_sap_equipment import build_equipment_rows
+from dwg_reader.export_sap_equipment import build_equipment_rows
 
-ROOT = Path(__file__).resolve().parent
+ROOT = Path(__file__).resolve().parents[1]
 
 # P&ID crop screenshots produced by the AI hierarchy pipeline.
 # Image 1 (P&ID section) + inputs/legend.png (Image 2) were sent to Bedrock

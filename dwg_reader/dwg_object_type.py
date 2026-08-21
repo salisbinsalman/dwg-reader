@@ -20,7 +20,9 @@ from functools import lru_cache
 from pathlib import Path
 from typing import Dict, List, Tuple
 
-DEFAULT_JSON = Path("standards/sml_object_types.json")
+from dwg_reader.paths import STANDARDS_DIR
+
+DEFAULT_JSON = STANDARDS_DIR / "sml_object_types.json"
 
 # Extracts P&ID instrument letter code from tags like "35-24LC-576", "35-24LV2-576"
 _TAG_PREFIX_RE = re.compile(r"^35-24([A-Z]{2,})\d*-", re.IGNORECASE)

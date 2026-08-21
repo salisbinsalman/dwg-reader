@@ -312,7 +312,7 @@ Key arrays: `tag_register[]`, `line_geometry_bindings[]`, `title_block[]`, `cont
 
 **Script:** `dwg_pid_hierarchy_ai.py`  
 **Command:** `make hierarchy-ai TAGS=35-24L008,35-24P509`  
-**Defaults:** Claude Sonnet 4.6 + `prompts/pid_hierarchy_gt_v4_dossier.md`
+**Defaults:** Claude Sonnet 4.6 + `prompts/pid_hierarchy_gt_v8.md`
 
 One Bedrock call **per parent tag** (FUNCTION). We do not send the whole drawing.
 
@@ -407,7 +407,7 @@ content = [
 ]
 ```
 
-**Text prompt** (`prompts/pid_hierarchy_gt_v4_dossier.md`) includes:
+**Text prompt** (`prompts/pid_hierarchy_gt_v8.md`) includes:
 
 | Section | Example |
 |---|---|

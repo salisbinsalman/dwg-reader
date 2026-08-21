@@ -12,7 +12,7 @@ Design (anti-hallucination):
 
 from __future__ import annotations
 
-import dwg_warn  # noqa: F401 — silence boto3 Python 3.9 deprecation noise
+import dwg_reader.dwg_warn as dwg_warn  # noqa: F401 — silence boto3 Python 3.9 deprecation noise
 
 import argparse
 import csv
@@ -25,7 +25,7 @@ from collections import defaultdict
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Sequence, Tuple
 
-from dwg_pure_dump import (
+from dwg_reader.dwg_pure_dump import (
     clear_evidence_outputs,
     clear_previous_outputs,
     configure_odafc,

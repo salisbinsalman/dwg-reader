@@ -20,7 +20,7 @@ import re
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
-from dwg_pure_dump import (
+from dwg_reader.dwg_pure_dump import (
     clear_previous_outputs,
     configure_odafc,
     find_json,
@@ -30,11 +30,10 @@ from dwg_pure_dump import (
     safe_name,
     write_json,
 )
+from dwg_reader.logutil import configure_logging, get_logger
+from dwg_reader.tags import LINE_NUMBER_RE, parse_line_number
 
-
-LINE_NUMBER_RE = re.compile(
-    r"^(?P<plant_area>\d{2}-\d{2})-(?P<line_seq>\d{3})-(?P<line_type>[A-Z]+)-(?P<size>\d+)-(?P<pipe_class>[A-Z0-9]+)$"
-)
+logger = get_logger(__name__)
 AREA_CODE_RE = re.compile(r"^\d{2}-\d{2}$")
 POSITION_TAG_RE = re.compile(r"^\d{2}-\d{2}[A-Z]\d{3}$")
 EQUIP_TAG_RE = re.compile(r"^\d{2}-\d{2}[PTV]\d{3,4}$")
@@ -77,14 +76,6 @@ def fmt_point(pt: Any) -> Optional[str]:
         return None
     z = pt[2] if len(pt) > 2 else 0.0
     return f"{float(pt[0]):.6f},{float(pt[1]):.6f},{float(z):.6f}"
-
-
-def parse_line_number(text: str) -> Dict[str, Any]:
-    text = text.strip().upper()
-    m = LINE_NUMBER_RE.match(text)
-    if not m:
-        return {"line_number": text, "parsed": False}
-    return {"line_number": text, "parsed": True, **m.groupdict()}
 
 
 def block_family(name: str) -> str:
@@ -626,6 +617,7 @@ def load_or_parse(input_path: Path, out_dir: Path, refresh: bool = False) -> Tup
 
 
 def main() -> int:
+    configure_logging()
     parser = argparse.ArgumentParser(description="P&ID semantic extraction pass")
     parser.add_argument("--input", required=True, help="Input DWG/DXF path")
     parser.add_argument("--output-dir", default="outputs", help="Output directory")
@@ -653,18 +645,18 @@ def main() -> int:
     else:
         structural, source = load_or_parse(input_path, out_dir, refresh=False)
 
-    print(f"[1/3] Loaded structural data ({source})")
+    logger.info(f"[1/3] Loaded structural data ({source})")
     semantic = run_semantic_extraction(structural)
-    print(f"[2/3] Extracted semantic categories:")
+    logger.info(f"[2/3] Extracted semantic categories:")
     for k, v in semantic.items():
-        print(f"  - {k}: {len(v)}")
+        logger.info(f"  - {k}: {len(v)}")
 
     xlsx_out = out_dir / f"{base}.semantic.xlsx"
     export_semantic_workbook(semantic, xlsx_out)
     json_out = json_path(out_dir, f"{base}.semantic.json")
     write_json(json_out, semantic)
-    print(f"[3/3] Wrote {xlsx_out}")
-    print(f"[3/3] Wrote {json_out}")
+    logger.info(f"[3/3] Wrote {xlsx_out}")
+    logger.info(f"[3/3] Wrote {json_out}")
     return 0
 
 

@@ -5,8 +5,8 @@ from __future__ import annotations
 
 import unittest
 
-from dwg_floc_context import apply_sop_valve_type, combine_valve_type, infer_valve_type, is_valve_equipment
-from dwg_valve_classify import (
+from dwg_reader.dwg_floc_context import apply_sop_valve_type, combine_valve_type, infer_valve_type, is_valve_equipment
+from dwg_reader.dwg_valve_classify import (
     apply_wfl_drain_attachment,
     drain_below_valve,
     locate_valve,
@@ -14,12 +14,13 @@ from dwg_valve_classify import (
     pick_parent_fn,
     _parse_one_pass,
 )
-from export_sap_equipment import build_equipment_rows
+from dwg_reader.export_sap_equipment import build_equipment_rows
 
 
 class ParseTypeTokensTests(unittest.TestCase):
     def test_drn_nc(self) -> None:
-        self.assertEqual(parse_type_tokens('{"type": "DRN NC"}'), "DRN NC")
+        # parse_type_tokens extracts body type; attachments are stripped by SOP.
+        self.assertEqual(parse_type_tokens('{"type": "DRN NC"}'), "NC")
 
     def test_av_m_not_split_into_av(self) -> None:
         self.assertEqual(parse_type_tokens("AV-M"), "AV-M")
@@ -43,7 +44,7 @@ class ParseTypeTokensTests(unittest.TestCase):
         )
 
     def test_hand_drain_keeps_nc(self) -> None:
-        self.assertEqual(parse_type_tokens("DRN NC"), "DRN NC")
+        self.assertEqual(parse_type_tokens("DRN NC"), "NC")
 
 
 class AnnotateCropTests(unittest.TestCase):
@@ -53,7 +54,7 @@ class AnnotateCropTests(unittest.TestCase):
 
         from PIL import Image
 
-        from dwg_valve_classify import annotate_valve_crop
+        from dwg_reader.dwg_valve_classify import annotate_valve_crop
 
         with tempfile.TemporaryDirectory() as tmp:
             src = Path(tmp) / "35-24-001.png"

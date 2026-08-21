@@ -3,7 +3,7 @@
 
 import unittest
 
-from run_hierarchy_orchestrator import _tipo_to_sap_type
+from dwg_reader.run_hierarchy_orchestrator import _tipo_to_sap_type
 
 
 class GorTipoMappingTests(unittest.TestCase):

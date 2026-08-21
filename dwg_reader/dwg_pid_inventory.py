@@ -17,13 +17,17 @@ from collections import Counter, defaultdict
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Set, Tuple
 
-from dwg_pure_dump import clear_previous_outputs, find_json, json_path, json_safe, safe_name, write_json
-from dwg_semantic_extract import (
+from dwg_reader.dwg_pure_dump import clear_previous_outputs, find_json, json_path, json_safe, safe_name, write_json
+from dwg_reader.dwg_semantic_extract import (
     block_family,
     fmt_point,
     group_attributes,
     load_or_parse,
 )
+from dwg_reader.logutil import configure_logging, get_logger
+from dwg_reader.tags import DN_RE, LINE_NUMBER_RE, parse_line_number
+
+logger = get_logger(__name__)
 
 
 PROXIMITY_TOL = 12.0
@@ -72,10 +76,6 @@ GOR_PIPE_LAYERS = {
 # Matches e.g. "168TC1", "168TT1", "168TA1", "168HC", "168P-410", "168P-410-M1".
 GOR_INSTR_TAG_RE = re.compile(r"^\s*\d{3}[A-Z]{1,4}[\d\-]*[A-Z]?\d*\s*$", re.I)
 
-LINE_NUMBER_RE = re.compile(
-    r"^(?P<plant_area>\d{2}-\d{2})-(?P<line_seq>\d{3}(?:/\d+)?)(?:-(?P<line_type>[A-Z]+))?(?:-(?P<size>\d*))?-(?P<pipe_class>[A-Z0-9]+)$"
-)
-DN_RE = re.compile(r"^DN\d+$", re.I)
 # Plant FUNCTION parents match the GT hierarchy FUNCTION column taxonomy:
 #   - equipment: vessels/pulpers (L), pumps (P), tanks (T)
 #   - instruments: HI / HS / KJ / ES / XS (often split as letter + number on P&ID)
@@ -134,24 +134,6 @@ def dist2(a: Tuple[float, float], b: Tuple[float, float]) -> float:
 
 def point_key(x: float, y: float, precision: int = 3) -> str:
     return f"{round(x, precision)}|{round(y, precision)}"
-
-
-def parse_line_number(text: str) -> Dict[str, Any]:
-    text = text.strip().upper()
-    if DN_RE.match(text):
-        return {
-            "line_number": text,
-            "parsed": True,
-            "plant_area": None,
-            "line_seq": None,
-            "line_type": "DN_SIZE",
-            "size": text[2:],
-            "pipe_class": None,
-        }
-    m = LINE_NUMBER_RE.match(text)
-    if not m:
-        return {"line_number": text, "parsed": False}
-    return {"line_number": text, "parsed": True, **m.groupdict()}
 
 
 def base_component(
@@ -839,349 +821,9 @@ def build_functions(
     inventory: Dict[str, List[Dict[str, Any]]],
     structural: Dict[str, Any],
 ) -> List[Dict[str, Any]]:
-    """
-    Build the FUNCTION list from CAD only (GT hierarchy taxonomy shape):
+    from dwg_reader.pid_functions import build_functions as _build_functions
 
-      1. equipment  — L / P / T primary machines (tanks, process_equipment, pumps)
-      2. instrument — HI / HS / KJ / ES / XS (panel / shower / e-stop / MCS)
-      3. line       — WFL hose lines + white-water / cooling utility headers
-
-    One row per unique function tag. ``source`` is always ``cad``.
-    """
-    texts = structural.get("text_entities") or []
-    text_pts: List[Dict[str, Any]] = []
-    for t in texts:
-        x, y, _ = xyz(t.get("position"))
-        if x is None or y is None:
-            continue
-        raw = (t.get("text") or "").strip()
-        if not raw:
-            continue
-        text_pts.append(
-            {
-                "text": raw,
-                "norm": raw.replace(" ", "").upper(),
-                "x": x,
-                "y": y,
-                "layer": t.get("layer"),
-            }
-        )
-
-    best: Dict[str, Dict[str, Any]] = {}
-
-    def upsert(tag: str, row: Dict[str, Any], rank: int) -> None:
-        tag = tag.strip().upper()
-        if not tag or "." in tag:
-            return
-        if _is_agitator_equipment_tag(tag):
-            return
-        prev = best.get(tag)
-        if prev and int(prev.get("category_rank", 99)) <= rank:
-            return
-        row = dict(row)
-        row["function"] = tag
-        row["source"] = "cad"
-        row["category_rank"] = rank
-        best[tag] = row
-
-    def mind(x: float, y: float, pts: List[Dict[str, Any]]) -> float:
-        return min((math.hypot(x - p["x"], y - p["y"]) for p in pts), default=9999.0)
-
-    # --- 1) L / P / T equipment -------------------------------------------------
-    for cat in FUNCTION_EQUIP_CATEGORIES:
-        for item in inventory.get(cat) or []:
-            if item.get("source") != "insert":
-                continue
-            if item.get("x") is None or item.get("y") is None:
-                continue
-            pos = (float(item["x"]), float(item["y"]))
-            tag_hits = _nearest_texts(
-                pos,
-                texts,
-                max_dist=90.0,
-                layers=FUNCTION_TAG_LAYERS,
-                predicate=lambda s: bool(EQUIP_TAG_RE.match(s.replace(" ", ""))),
-            )
-            desc_hits = _nearest_texts(
-                pos,
-                texts,
-                max_dist=120.0,
-                layers=FUNCTION_DESC_LAYERS,
-                predicate=lambda s: (
-                    len(s) >= 4
-                    and not EQUIP_TAG_RE.match(s.replace(" ", ""))
-                    and not LINE_NUMBER_RE.match(s.upper())
-                ),
-            )
-            # Prefer T/P over L40x agitator numbers on the same vessel.
-            resolved = None
-            for h in tag_hits:
-                cand = h["text"].replace(" ", "").upper()
-                if not FUNCTION_TAG_RE.match(cand):
-                    continue
-                if _is_agitator_equipment_tag(cand):
-                    continue
-                resolved = cand
-                break
-            if not resolved and item.get("position_number"):
-                cand = str(item["position_number"]).replace(" ", "").upper()
-                if FUNCTION_TAG_RE.match(cand) and not _is_agitator_equipment_tag(cand):
-                    resolved = cand
-            if not resolved:
-                continue
-            rank = {"tanks": 0, "process_equipment": 1, "pumps": 2}.get(cat, 9)
-            upsert(
-                resolved,
-                {
-                    "kind": "equipment",
-                    "category": cat,
-                    "block_name": item.get("block_name"),
-                    "handle": item.get("handle"),
-                    "layer": item.get("layer"),
-                    "x": item.get("x"),
-                    "y": item.get("y"),
-                    "z": item.get("z"),
-                    "description": "; ".join(h["text"] for h in desc_hits[:3]),
-                    "nearby_tags": "; ".join(h["text"] for h in tag_hits[:5]),
-                    "confidence": "high",
-                },
-                rank,
-            )
-
-    # --- 2) Instruments HI/HS/KJ/ES/XS -----------------------------------------
-    for t in text_pts:
-        m = FULL_INSTR_TAG_RE.match(t["norm"])
-        if not m:
-            continue
-        tag = f"{m.group(1)}{m.group(2).upper()}-{m.group(3).upper()}"
-        upsert(
-            tag,
-            {
-                "kind": "instrument",
-                "category": "instruments",
-                "block_name": "",
-                "handle": "",
-                "layer": t.get("layer"),
-                "x": t["x"],
-                "y": t["y"],
-                "z": 0.0,
-                "description": t["text"],
-                "nearby_tags": tag,
-                "confidence": "high",
-            },
-            10,
-        )
-
-    letters = [t for t in text_pts if t["norm"] in FUNCTION_INSTR_LETTERS]
-    nums = [t for t in text_pts if LOOP_NUM_RE.match(t["norm"])]
-    areas = [t for t in text_pts if AREA_CODE_RE.match(t["norm"])]
-    cands: List[Dict[str, Any]] = []
-    for L in letters:
-        best_n = None
-        best_nd = 30.0
-        for n in nums:
-            d = math.hypot(n["x"] - L["x"], n["y"] - L["y"])
-            if d < best_nd:
-                best_nd = d
-                best_n = n
-        if not best_n:
-            continue
-        best_a = None
-        best_ad = 80.0
-        for a in areas:
-            d = math.hypot(a["x"] - L["x"], a["y"] - L["y"])
-            if d < best_ad:
-                best_ad = d
-                best_a = a
-        area = best_a["norm"] if best_a else "35-24"
-        cands.append(
-            {
-                "tag": f"{area}{L['norm']}-{best_n['norm']}",
-                "letter": L["norm"],
-                "num": best_n["norm"],
-                "area": area,
-                "x": L["x"],
-                "y": L["y"],
-                "nd": best_nd,
-                "layer": L.get("layer"),
-                "text": L["text"],
-                "num_text": best_n["text"],
-            }
-        )
-
-    by_num: Dict[str, Set[str]] = defaultdict(set)
-    for c in cands:
-        if c["letter"] in {"HI", "HS"}:
-            by_num[c["num"]].add(c["letter"])
-
-    mcs = [t for t in text_pts if "MCS" in t["text"].upper() and "SIGNAL" in t["text"].upper()]
-    shower = [t for t in text_pts if "SHOWER" in t["text"].upper()]
-    panel = [
-        t
-        for t in text_pts
-        if any(
-            k in t["text"].upper().replace(" ", "")
-            for k in ("LOCAL/REMOTE", "JOGGING", "START/STOP", "EMERGENCYSTOP", "LOCALPANEL")
-        )
-        or ("START" in t["text"].upper() and "STOP" in t["text"].upper())
-    ]
-    kjes = [c for c in cands if c["letter"] in {"KJ", "ES"}]
-    valve_same = []
-    for t in text_pts:
-        m = re.match(r"^(?:\d{2}-\d{2})?(HV|XV|XSV|LV\d?)-(\d+)$", t["norm"])
-        if m:
-            valve_same.append({"num": m.group(2), "x": t["x"], "y": t["y"]})
-
-    def near_valve(c: Dict[str, Any], radius: float = 60.0) -> bool:
-        return any(
-            v["num"] == c["num"] and math.hypot(c["x"] - v["x"], c["y"] - v["y"]) <= radius
-            for v in valve_same
-        )
-
-    kept_instr: Set[str] = set()
-    cand_by_tag = {c["tag"]: c for c in cands}
-    for c in cands:
-        letter = c["letter"]
-        tag = c["tag"]
-        if letter in {"KJ", "ES"}:
-            kept_instr.add(tag)
-            continue
-        if letter == "XS":
-            if mind(c["x"], c["y"], mcs) < 40 or mind(c["x"], c["y"], kjes) < 50:
-                kept_instr.add(tag)
-            continue
-        if letter not in {"HI", "HS"}:
-            continue
-        paired = by_num[c["num"]] >= {"HI", "HS"}
-        d_sh = mind(c["x"], c["y"], shower)
-        d_pn = mind(c["x"], c["y"], panel)
-        d_kj = mind(c["x"], c["y"], kjes)
-        # Skip local valve-control bubbles that are not panel/shower stations.
-        if (not paired) and near_valve(c) and d_pn >= 100 and d_kj >= 120:
-            continue
-        if letter == "HS" and (d_pn < 100 or d_kj < 120):
-            kept_instr.add(tag)
-        elif paired and (d_sh < 80 or d_pn < 100 or d_kj < 150):
-            kept_instr.add(tag)
-        elif letter == "HI" and (d_sh < 55 or d_kj < 150):
-            kept_instr.add(tag)
-
-    # If HI-N kept, also keep HS-N (and vice versa) when both bubbles exist.
-    for tag in list(kept_instr):
-        m = re.match(r"^(\d{2}-\d{2})(HI|HS)-(\d+)$", tag)
-        if not m:
-            continue
-        other = "HS" if m.group(2) == "HI" else "HI"
-        other_tag = f"{m.group(1)}{other}-{m.group(3)}"
-        if other_tag in cand_by_tag:
-            kept_instr.add(other_tag)
-
-    for tag in kept_instr:
-        c = cand_by_tag.get(tag)
-        if not c:
-            continue
-        upsert(
-            tag,
-            {
-                "kind": "instrument",
-                "category": "instruments",
-                "block_name": "",
-                "handle": "",
-                "layer": c.get("layer"),
-                "x": c["x"],
-                "y": c["y"],
-                "z": 0.0,
-                "description": f"{c['text']} {c['num_text']} ({c['area']})",
-                "nearby_tags": f"{c['text']}; {c['num_text']}; {c['area']}",
-                "confidence": "high" if c["nd"] <= 25 else "medium",
-            },
-            11 if c["nd"] <= 25 else 12,
-        )
-
-    # --- 3) Line functional locations -----------------------------------------
-    dlim = [
-        (float(i["x"]), float(i["y"]))
-        for i in inventory.get("delivery_limits") or []
-        if i.get("x") is not None and i.get("y") is not None
-    ]
-    agi_pts = [t for t in text_pts if _is_agitator_equipment_tag(t["norm"])]
-
-    # Prefer the label closest to a delivery limit for each short id.
-    line_best: Dict[str, Dict[str, Any]] = {}
-    for item in inventory.get("lines") or []:
-        raw = str(item.get("line_number") or "").strip().upper()
-        m = LINE_SHORT_RE.match(raw)
-        if not m or item.get("x") is None or item.get("y") is None:
-            continue
-        short = m.group(1)
-        if not short.startswith(FUNCTION_LINE_AREA_PREFIXES):
-            continue
-        lt, size = _line_size_and_type(raw, str(item.get("line_type") or ""))
-        x, y = float(item["x"]), float(item["y"])
-        dd = min((math.hypot(x - a, y - b) for a, b in dlim), default=9999.0)
-        prev = line_best.get(short)
-        if prev and float(prev["dd"]) <= dd:
-            continue
-        line_best[short] = {
-            "raw": raw,
-            "lt": lt,
-            "size": size,
-            "dd": dd,
-            "item": item,
-            "x": x,
-            "y": y,
-        }
-
-    for short, info in line_best.items():
-        lt = info["lt"]
-        size = int(info["size"])
-        dd = float(info["dd"])
-        x, y = float(info["x"]), float(info["y"])
-        ok = False
-        conf = "medium"
-        rank = 22
-        if lt == "WFL":
-            ok, conf, rank = True, "high", 20
-        elif lt == "WFC" and size == 0:
-            # Gearbox cooling send/return headers use blank DN.
-            ok, conf, rank = True, "high", 21
-        elif lt == "WAF":
-            if short.startswith("35-25-"):
-                ok, conf, rank = True, "high", 21
-            elif size >= 250 and dd <= 250:
-                ok, conf, rank = True, "medium", 22
-            elif size == 150 and dd <= 90:
-                ok, conf, rank = True, "medium", 22
-            elif 0 < size <= 20 and dd <= 300:
-                ok, conf, rank = True, "medium", 22
-        elif lt == "PP" and size == 250 and mind(x, y, agi_pts) < 40:
-            # Flushing-water header near couch-pit agitators (35-24-117).
-            ok, conf, rank = True, "medium", 22
-        if not ok:
-            continue
-        item = info["item"]
-        upsert(
-            short,
-            {
-                "kind": "line",
-                "category": "lines",
-                "block_name": "",
-                "handle": item.get("handle"),
-                "layer": item.get("layer"),
-                "x": item.get("x"),
-                "y": item.get("y"),
-                "z": item.get("z"),
-                "description": info["raw"],
-                "nearby_tags": short,
-                "confidence": conf,
-            },
-            rank,
-        )
-
-    rows = sorted(best.values(), key=lambda r: (r.get("kind") or "", r["function"]))
-    for r in rows:
-        r.pop("category_rank", None)
-    return rows
+    return _build_functions(inventory, structural)
 
 
 _GOR_LAYERS = {"1-VALVE TEXT GOR", "1-TAG AND INSTRUMENTS GOR", "1-EQUIPMENT GOR"}
@@ -1548,6 +1190,7 @@ def export_inventory_workbook(
 
 
 def main() -> int:
+    configure_logging()
     parser = argparse.ArgumentParser(description="Strict P&ID component inventory extractor")
     parser.add_argument("--input", required=True)
     parser.add_argument("--output-dir", default="outputs")
@@ -1575,32 +1218,30 @@ def main() -> int:
         )
 
     structural, source = load_or_parse(input_path, out_dir, refresh=args.refresh)
-    print(f"[1/4] Loaded structural data ({source})")
+    logger.info(f"[1/4] Loaded structural data ({source})")
 
     inventory = build_inventory(structural)
-    print("[2/4] Inventory counts:")
+    logger.info("[2/4] Inventory counts:")
     for k, v in inventory.items():
-        print(f"  - {k}: {len(v)}")
+        logger.info(f"  - {k}: {len(v)}")
     funcs = inventory.get("functions") or []
-    print(f"  functions (unique): {len(funcs)}")
+    logger.info(f"  functions (unique): {len(funcs)}")
     by_kind: Dict[str, int] = {}
     for r in funcs:
         by_kind[r.get("kind") or "unknown"] = by_kind.get(r.get("kind") or "unknown", 0) + 1
     if by_kind:
-        print("    by kind: " + ", ".join(f"{k}={v}" for k, v in sorted(by_kind.items())))
-    print("    source: cad")
+        logger.info("    by kind: " + ", ".join(f"{k}={v}" for k, v in sorted(by_kind.items())))
+    logger.info("    source: cad")
     if funcs:
-        print("    sample: " + ", ".join(r["function"] for r in funcs[:10]) + ("…" if len(funcs) > 10 else ""))
+        logger.info("    sample: " + ", ".join(r["function"] for r in funcs[:10]) + ("…" if len(funcs) > 10 else ""))
 
     validation = validate_inventory(structural, inventory)
-    print(f"[3/4] Validation all_pass={validation['all_pass']}")
+    logger.info(f"[3/4] Validation all_pass={validation['all_pass']}")
     for row in validation["checks"]:
         mark = "PASS" if row.get("pass") else "FAIL"
-        print(
-            f"  [{mark}] {row['category']}: gt={row['ground_truth_inserts']} "
+        logger.info(f"  [{mark}] {row['category']}: gt={row['ground_truth_inserts']} "
             f"inserts={row['inventory_inserts']} text={row['inventory_text_labels']} "
-            f"delta={row['delta_inserts']}"
-        )
+            f"delta={row['delta_inserts']}")
 
     xlsx_out = out_dir / f"{base}.pid_inventory.xlsx"
     json_out = json_path(out_dir, f"{base}.pid_inventory.json")
@@ -1608,9 +1249,9 @@ def main() -> int:
     export_inventory_workbook(inventory, validation, xlsx_out)
     write_json(json_out, inventory)
     write_json(report_out, validation)
-    print(f"[4/4] Wrote {xlsx_out}")
-    print(f"[4/4] Wrote {json_out}")
-    print(f"[4/4] Wrote {report_out}")
+    logger.info(f"[4/4] Wrote {xlsx_out}")
+    logger.info(f"[4/4] Wrote {json_out}")
+    logger.info(f"[4/4] Wrote {report_out}")
     return 0 if validation["all_pass"] else 2
 
 

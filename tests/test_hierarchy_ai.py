@@ -12,7 +12,7 @@ import json
 import unittest
 from typing import Any, Dict, List, Optional
 
-from dwg_pid_hierarchy_ai import (
+from dwg_reader.dwg_pid_hierarchy_ai import (
     _fn_numeric,
     _motor_matches_fn,
     canonicalize_vision_tag,
@@ -24,7 +24,7 @@ from dwg_pid_hierarchy_ai import (
     refine_ai_hierarchy,
     rows_from_ai,
 )
-from dwg_floc_context import DEFAULT_FLOC_CONTEXT
+from dwg_reader.dwg_floc_context import DEFAULT_FLOC_CONTEXT
 
 
 # Shared plant context for rows_from_ai tests
