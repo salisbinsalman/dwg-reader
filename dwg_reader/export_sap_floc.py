@@ -39,15 +39,32 @@ TEMPLATE_DEFAULT = REPO_ROOT / "docs/examples/final-output-template.xlsx"
 _TRAILING_SPEC_RE = re.compile(
     r"\s+(?:[A-Z]{1,8}-\d+[A-Z0-9]*|\d+[A-Z][A-Z0-9]*)$"
 )
+# Semicolon-separated spec segments: "HP-33G2", "BDTPD", "2621 ADTPD", "800BDTPD", "40M3"
+_SPEC_SEGMENT_RE = re.compile(
+    r"^(?:"
+    r"[A-Z]{1,8}-\d+[A-Z0-9]*"
+    r"|\d+[A-Z][A-Z0-9]*"
+    r"|(?:\d+\s+)?[A-Z]*DTPD"
+    r")$",
+    re.I,
+)
 
 
 def _strip_trailing_spec(text: str) -> str:
-    """Strip one or more trailing vendor/model tokens (HP-33G2, 800BDTPD, …)."""
+    """Strip one or more trailing vendor/model tokens (HP-33G2, 800BDTPD, …).
+
+    Semicolon-separated spec tails (``SLABBING PLPR; HP-33G2; BDTPD``) are
+    dropped before the space-separated pass, so either separator works.
+    """
     prev = str(text or "").strip()
+    parts = [p.strip() for p in re.split(r"\s*;\s*", prev) if p.strip()]
+    if len(parts) > 1:
+        # Always keep the leading phrase; drop only spec-shaped tails.
+        prev = " ".join([parts[0]] + [p for p in parts[1:] if not _SPEC_SEGMENT_RE.match(p)])
     for _ in range(8):
         nxt = _TRAILING_SPEC_RE.sub("", prev).strip()
         if nxt == prev:
-            return nxt
+            break
         prev = nxt
     return prev
 

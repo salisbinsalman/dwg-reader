@@ -25,6 +25,7 @@ from typing import Any, Dict, List, Optional, Tuple
 import re
 
 from dwg_reader.dwg_ecosystem import detect as detect_ecosystem, is_gor_inventory
+from dwg_reader.dwg_floc_context import is_phantom_motor_line_tag
 from dwg_reader.dwg_pid_hierarchy_ai import run_hierarchy_for_tag as _run_hierarchy_for_tag
 from dwg_reader.dwg_pure_dump import find_json, json_path, logs_dir, safe_name, write_json
 from dwg_reader.dwg_valve_classify import run_valve_classify
@@ -34,6 +35,8 @@ from dwg_reader.eval_hierarchy_gt import (
     macro_hit_accuracy,
     score_function,
 )
+from dwg_reader.dwg_tag_registry import apply_registry_from_output_dir
+from dwg_reader.export_hierarchy_tree import run_hierarchy_tree_export
 from dwg_reader.export_sap_equipment import run_equipment_export
 from dwg_reader.export_sap_floc import run_floc_export
 from dwg_reader.io import read_csv_rows, write_csv_rows
@@ -529,6 +532,8 @@ def sanitize_hierarchy_rows(
         # Drop AI-hallucinated decimal sub-tags (35-24-508.2, .3, .4) unless
         # the tag actually exists in the inventory (genuine rotors like 35-24L009.1).
         if _PHANTOM_EQUIP_RE.search(tag) and tag not in inventory_tags:
+            continue
+        if is_phantom_motor_line_tag(tag, str(row.get("DESCRIPTION") or "")):
             continue
         if current_fn_prefix and _plant_prefix(tag) and _plant_prefix(tag) != current_fn_prefix:
             continue
@@ -1084,6 +1089,54 @@ def run_hierarchy_for_tag(
     )
 
 
+def _apply_registry_and_write(
+    rows: List[Dict[str, str]],
+    *,
+    drawing: str,
+    out_dir: Path,
+    dest: Path,
+) -> List[Dict[str, str]]:
+    filtered = apply_registry_from_output_dir(rows, drawing=drawing, out_dir=out_dir)
+    write_hierarchy_csv(dest, filtered)
+    return filtered
+
+
+def _run_sap_and_tree_exports(
+    *,
+    input_path: Path,
+    out_dir: Path,
+    combined_csv: Path,
+    gt_path: Path,
+    no_export_floc: bool,
+    no_export_equipment: bool,
+    no_export_hierarchy_tree: bool,
+) -> None:
+    if not no_export_floc:
+        logger.info("\n---------- export SAP FLOC ----------")
+        run_floc_export(
+            input_path=input_path,
+            out_dir=out_dir,
+            hierarchy_csv=combined_csv,
+            gt=gt_path,
+            limit=0,
+        )
+    if not no_export_equipment:
+        logger.info("\n---------- export SAP Equipment ----------")
+        run_equipment_export(
+            input_path=input_path,
+            out_dir=out_dir,
+            hierarchy_csv=combined_csv,
+            limit=0,
+        )
+    if not no_export_hierarchy_tree:
+        logger.info("\n---------- export hierarchy tree ----------")
+        run_hierarchy_tree_export(
+            input_path=input_path,
+            out_dir=out_dir,
+            hierarchy_csv=combined_csv,
+        )
+
+
 def main() -> int:
     configure_logging()
     parser = argparse.ArgumentParser(
@@ -1158,6 +1211,11 @@ def main() -> int:
         help="Skip SAP Equipment workbook export at the end",
     )
     parser.add_argument(
+        "--no-export-hierarchy-tree",
+        action="store_true",
+        help="Skip colour-coded hierarchy.xlsx / hierarchy.html review tree",
+    )
+    parser.add_argument(
         "--no-valve-classify",
         action="store_true",
         help="Skip per-tag tight-crop valve classification before SAP export",
@@ -1226,30 +1284,24 @@ def main() -> int:
         inventory_data = json.loads(inv_path.read_text(encoding="utf-8"))
         gor_rows = build_gor_hierarchy(inventory_data)
         write_hierarchy_csv(combined_csv, gor_rows)
+        gor_rows = _apply_registry_and_write(
+            gor_rows, drawing=base, out_dir=out_dir, dest=combined_csv
+        )
         logger.info(f"[gor] Written {len(gor_rows)} rows → {combined_csv.name}")
-        limit_s = str(args.limit if args.limit > 0 else 0)
         if combined_csv.exists() and combined_csv.stat().st_size > 0:
             valve_types_path = json_path(out_dir, f"{base}.valve_types.json")
             fn_id = tags[0] if tags else ""
             logger.info("\n---------- gor tipo mapping (TIPO_VALVOLA → SAP) ----------")
             _patch_gor_valve_types(inv_path, valve_types_path, fn_id)
-            if not args.no_export_floc:
-                logger.info("\n---------- export SAP FLOC ----------")
-                run_floc_export(
-                    input_path=input_path,
-                    out_dir=out_dir,
-                    hierarchy_csv=combined_csv,
-                    gt=gt_path,
-                    limit=0,
-                )
-            if not args.no_export_equipment:
-                logger.info("\n---------- export SAP Equipment ----------")
-                run_equipment_export(
-                    input_path=input_path,
-                    out_dir=out_dir,
-                    hierarchy_csv=combined_csv,
-                    limit=0,
-                )
+            _run_sap_and_tree_exports(
+                input_path=input_path,
+                out_dir=out_dir,
+                combined_csv=combined_csv,
+                gt_path=gt_path,
+                no_export_floc=args.no_export_floc,
+                no_export_equipment=args.no_export_equipment,
+                no_export_hierarchy_tree=args.no_export_hierarchy_tree,
+            )
         return 0
     report_json = json_path(out_dir, f"{base}.hierarchy_orchestrator_report.json")
     log_path = log_dir / "hierarchy-orchestrator.log"
@@ -1446,7 +1498,9 @@ def main() -> int:
     # affect the accuracy numbers above.
     if combined_csv.exists() and combined_csv.stat().st_size > 0:
         cleaned = sanitize_hierarchy_rows(read_hierarchy_csv(combined_csv), inventory_tags)
-        write_hierarchy_csv(combined_csv, cleaned)
+        cleaned = _apply_registry_and_write(
+            cleaned, drawing=base, out_dir=out_dir, dest=combined_csv
+        )
         logger.info(f"[sanitize] hierarchy cleaned → {len(cleaned)} rows")
 
     if combined_csv.exists() and combined_csv.stat().st_size > 0:
@@ -1464,24 +1518,15 @@ def main() -> int:
                 aws_profile=args.aws_profile,
             )
 
-        if not args.no_export_floc:
-            logger.info("\n---------- export SAP FLOC ----------")
-            run_floc_export(
-                input_path=input_path,
-                out_dir=out_dir,
-                hierarchy_csv=combined_csv,
-                gt=gt_path,
-                limit=0,
-            )
-
-        if not args.no_export_equipment:
-            logger.info("\n---------- export SAP Equipment ----------")
-            run_equipment_export(
-                input_path=input_path,
-                out_dir=out_dir,
-                hierarchy_csv=combined_csv,
-                limit=0,
-            )
+        _run_sap_and_tree_exports(
+            input_path=input_path,
+            out_dir=out_dir,
+            combined_csv=combined_csv,
+            gt_path=gt_path,
+            no_export_floc=args.no_export_floc,
+            no_export_equipment=args.no_export_equipment,
+            no_export_hierarchy_tree=args.no_export_hierarchy_tree,
+        )
 
     return 0
 

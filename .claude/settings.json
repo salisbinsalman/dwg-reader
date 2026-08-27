@@ -7,7 +7,30 @@
       "Bash(python3 -m unittest test_hierarchy_ai.TestHierarchyAI.test_build_rows_hequi_and_posnr -v)",
       "Bash(python3 -m unittest test_equipment_export.py)",
       "Bash(python3 -m unittest test_equipment_export.py test_hierarchy_ai.py)",
-      "WebFetch(domain:claude.ai)"
+      "WebFetch(domain:claude.ai)",
+      "Bash(python3 -m unittest discover -s . -p \"test_*.py\")",
+      "Bash(python3 -c \"import json; d=json.load\\(open\\('inputs/sml_object_types.json'\\)\\); print\\('prefix_rules:', d['tag_prefix_rules']\\); print\\('codes:', sorted\\(d['object_types'].keys\\(\\)\\)[:30]\\)\")",
+      "Bash(python -m pytest test_ecosystem.py test_equipment_export.py -v)",
+      "Bash(python3 -m pytest test_ecosystem.py test_equipment_export.py -v)",
+      "Bash(python3 -c \"import sys; print\\(sys.executable\\)\")",
+      "Bash(python3 -m unittest test_ecosystem.py test_equipment_export.py -v)",
+      "Bash(python3 -m unittest test_ecosystem.py -v)",
+      "Bash(python3 -m unittest discover -v)",
+      "Bash(python3 -m unittest discover)",
+      "Bash(python3 -m unittest test_floc_standards -v)",
+      "Bash(python3 -m unittest test_floc_standards.FlocStandardsIntegrationTests.test_build_floc_rows_uses_floc_standards_for_line_name -v)",
+      "Bash(python3 -m unittest test_floc_standards.FlocStandardsIntegrationTests.test_build_floc_rows_explicit_name_overrides_standards -v)",
+      "Bash(sed -i '' 's|inputs/floc_context_map.json|standards/floc_context_map.json|g; s|inputs/sml_abbreviations.json|standards/sml_abbreviations.json|g' test_floc_standards.py)",
+      "Bash(python3 -m pytest tests/ -x --tb=short -q)",
+      "Bash(python3 -m unittest discover -s tests -p 'test_*.py')",
+      "Bash(xargs basename -a)",
+      "Skill(deep-research)",
+      "Skill(deep-research:*)",
+      "Bash(python3 run_hierarchy_orchestrator.py --help)",
+      "Bash(python3 run_hierarchy_orchestrator.py --input 'Broke System.dwg' --output-dir outputs --score-only --no-valve-classify)",
+      "Bash(python3 run_hierarchy_orchestrator.py --input 'GORB18779.05_SH12\\(12\\)_Code 14 - P&ID Ventil Unit WU12_SWE Shotton_CE.dwg' --output-dir outputs --no-valve-classify)",
+      "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); print\\(list\\(d.keys\\(\\)\\)[:5]\\); print\\(len\\(d\\)\\)\")",
+      "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); print\\(json.dumps\\(d, indent=2\\)\\)\")"
     ]
   }
 }

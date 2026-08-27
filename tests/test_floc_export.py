@@ -456,6 +456,26 @@ class StripTrailingSpecTests(unittest.TestCase):
     def test_keeps_clean_description(self) -> None:
         self.assertEqual(_strip_trailing_spec("35-24L003 SIZE PRESS PLPR"), "35-24L003 SIZE PRESS PLPR")
 
+    def test_strips_semicolon_separated_specs(self) -> None:
+        self.assertEqual(
+            _strip_trailing_spec("35-24L007 SLABBING PLPR; HP-33G2; BDTPD"),
+            "35-24L007 SLABBING PLPR",
+        )
+        self.assertEqual(
+            _strip_trailing_spec("35-24L007 SLABBING PLPR; HP-33G2; 800 BDTPD"),
+            "35-24L007 SLABBING PLPR",
+        )
+        self.assertEqual(
+            _strip_trailing_spec("35-24L005 REEL PLPR; HP-63G2; 2621 ADTPD"),
+            "35-24L005 REEL PLPR",
+        )
+
+    def test_semicolon_keeps_non_spec_tail(self) -> None:
+        self.assertEqual(
+            _strip_trailing_spec("35-24L007 SLABBING PLPR; DUTY"),
+            "35-24L007 SLABBING PLPR DUTY",
+        )
+
 
 class ExportFlocTests(unittest.TestCase):
     def test_build_and_write_workbook(self) -> None:
@@ -550,6 +570,17 @@ class ExportFlocTests(unittest.TestCase):
         row = next(r for r in floc_rows if r["TPLNR"].endswith("35-24L008"))
         self.assertEqual(row["PLTXT"], "35-24L008 WINDER PLPR")
         self.assertNotIn("HP-33G2", row["PLTXT"])
+
+    def test_slabbing_floc_strips_semicolon_specs(self) -> None:
+        functions = [
+            ("35-24L007", "5001-PM03-BR-BR1-35-24L007", "35-24L007 SLABBING PLPR; HP-33G2; BDTPD"),
+        ]
+        floc_rows = build_floc_rows(functions)
+        row = next(r for r in floc_rows if r["TPLNR"].endswith("35-24L007"))
+        self.assertEqual(row["PLTXT"], "35-24L007 SLABBING PLPR")
+        self.assertNotIn("HP-33G2", row["PLTXT"])
+        self.assertNotIn("BDTPD", row["PLTXT"])
+        self.assertNotIn(";", row["PLTXT"])
 
     def test_non_line_function_pltxt_no_ln_prefix(self) -> None:
         functions = [

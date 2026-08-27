@@ -58,18 +58,15 @@ class PumpValveTests(unittest.TestCase):
 
 
 class HierarchyCleanupTests(unittest.TestCase):
-    def test_sanitize_drops_phantom_and_duplicates(self) -> None:
+    def test_sanitize_drops_phantom_motor_line(self) -> None:
         rows = [
-            {"FUNCTION": "55-30L001", "EQUIPMENT": "", "SUB-EQUIPMENT": ""},
-            {"FUNCTION": "", "EQUIPMENT": "55-30-001", "SUB-EQUIPMENT": ""},
-            {"FUNCTION": "", "EQUIPMENT": "55-30L001.1", "SUB-EQUIPMENT": ""},
-            {"FUNCTION": "", "EQUIPMENT": "35-13T072", "SUB-EQUIPMENT": ""},
-            {"FUNCTION": "55-30P519", "EQUIPMENT": "", "SUB-EQUIPMENT": ""},
-            {"FUNCTION": "", "EQUIPMENT": "55-30-001", "SUB-EQUIPMENT": ""},
+            {"FUNCTION": "35-24P501", "EQUIPMENT": "", "SUB-EQUIPMENT": "", "DESCRIPTION": "COUCH PIT PMP"},
+            {"FUNCTION": "", "EQUIPMENT": "35-24-1300", "SUB-EQUIPMENT": "", "DESCRIPTION": "35-24-1300 PMP MTR"},
+            {"FUNCTION": "", "EQUIPMENT": "35-24-119", "SUB-EQUIPMENT": "", "DESCRIPTION": "SUCT LN"},
         ]
         out = sanitize_hierarchy_rows(rows)
         tags = [r.get("EQUIPMENT") for r in out if r.get("EQUIPMENT")]
-        self.assertEqual(tags, ["55-30-001"])
+        self.assertEqual(tags, ["35-24-119"])
 
     def test_instrument_functions_excluded(self) -> None:
         self.assertTrue(_is_instrument_function_tag("55-30ES-506"))

@@ -21,10 +21,12 @@ from dwg_reader.dwg_floc_context import (
     combine_valve_type,
     explain_valve_type,
     floc_paths_for_function,
+    clip_pltxt,
     format_line_eqktx,
     format_valve_eqktx,
     is_line_equipment_tag,
     is_never_valve_tag,
+    is_phantom_motor_line_tag,
     is_pump_equipment,
     is_valve_equipment,
     load_floc_context_for_input,
@@ -165,11 +167,19 @@ def _is_driven_equipment(
     return False
 
 
+# Parent equipment-class tokens that are misleading on a motor (TNK on an agitator motor).
+_MOTOR_STRIP_TYPE_RE = re.compile(
+    r"\b(TNK|TANK|AGI|AGIT(?:ATOR)?|CVYR|CONVEYOR|PMP|PUMP|SCRN|SCREEN)\b",
+    re.I,
+)
+
+
 def _motor_eqktx(motor_tag: str, parent_tag: str, parent_eqktx: str) -> str:
     """Build motor description from parent equipment text.
 
     Example (Valmet): parent ``35-24P518 BROKE REJECT PMP`` →
-    ``35-24-518.1 BROKE REJECT PMP MTR`` (abbreviated via normalize_pltxt).
+    ``35-24-518.1 BROKE REJECT MTR``. Parent equipment-class tokens (TNK, AGI,
+    CVYR, PMP, SCRN) are stripped so the motor is not labelled as a tank/pump.
     """
     body = re.sub(r"\s+", " ", str(parent_eqktx or "").strip())
     pt = re.sub(r"\s+", "", str(parent_tag or "").strip())
@@ -178,10 +188,10 @@ def _motor_eqktx(motor_tag: str, parent_tag: str, parent_eqktx: str) -> str:
         if m:
             body = body[m.end() :].strip(" -")
     body = re.sub(r"\b(MOTOR|MTR)\b", "", body, flags=re.I)
+    body = _MOTOR_STRIP_TYPE_RE.sub("", body)
     body = re.sub(r"\s+", " ", body).strip(" -")
-    if body:
-        return normalize_pltxt(f"{motor_tag} {body} MTR")[:40]
-    return normalize_pltxt(f"{motor_tag} MTR")[:40]
+    core = f"{body} MTR" if body else "MTR"
+    return normalize_pltxt(f"{motor_tag} {core}")[:40]
 
 
 def _is_valid_equipment_tag(tag: str) -> bool:
@@ -486,6 +496,10 @@ def build_equipment_rows(
             if primary_unit and tag_unit and tag_unit != primary_unit:
                 continue
 
+        raw_desc = _norm(row.get("DESCRIPTION"))  # original AI text, before abbreviation
+        if is_phantom_motor_line_tag(tag, raw_desc):
+            continue
+
         if tag in emitted:
             continue
         emitted.add(tag)
@@ -497,10 +511,16 @@ def build_equipment_rows(
         else:
             top_pos_by_tplnr[current_tplnr] = top_pos_by_tplnr.get(current_tplnr, 0) + 10
             posnr = f"{top_pos_by_tplnr[current_tplnr]:04d}"
-        raw_desc = _norm(row.get("DESCRIPTION"))  # original AI text, before abbreviation
-        eqktx = desc if desc else normalize_pltxt(tag)
-        if eqktx and not eqktx.startswith(tag):
-            eqktx = normalize_pltxt(f"{tag} {eqktx}")
+        if is_line_equipment_tag(tag):
+            # Abbreviate at 80 so destination words survive; format_line_eqktx clips to 40.
+            eqktx = normalize_pltxt(raw_desc or tag, max_len=80)
+            head = eqktx.upper()
+            if eqktx and not head.startswith((tag.upper(), "LN ")):
+                eqktx = normalize_pltxt(f"{tag} {eqktx}", max_len=80)
+        else:
+            eqktx = desc if desc else normalize_pltxt(tag)
+            if eqktx and not eqktx.startswith(tag):
+                eqktx = normalize_pltxt(f"{tag} {eqktx}")
         eqart, gewrk = classify_equipment(tag, eqktx)
         tag_upper = tag.upper()
         hint = _valve_hint(tag_upper, cache=cache)
@@ -587,7 +607,7 @@ def build_equipment_rows(
                 EQUNR=tag[:18],
                 HEQUI=hequi[:18],
                 POSNR=posnr,
-                EQKTX=eqktx[:40],
+                EQKTX=clip_pltxt(eqktx, 40),
                 EQART=eqart,
                 GEWRK=gewrk,
             )

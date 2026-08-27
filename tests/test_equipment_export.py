@@ -12,6 +12,7 @@ from dwg_reader.dwg_floc_context import (
     format_valve_eqktx,
     infer_valve_type,
     is_line_equipment_tag,
+    is_phantom_motor_line_tag,
     is_valve_equipment,
     is_valve_tag,
     normalize_pltxt,
@@ -159,6 +160,13 @@ class FormatLineEqktxTests(unittest.TestCase):
         self.assertFalse(is_line_equipment_tag("35-24HV-548"))
         self.assertFalse(is_line_equipment_tag("35-24P519"))
 
+    def test_phantom_motor_line_tag(self) -> None:
+        self.assertTrue(is_phantom_motor_line_tag("35-24-1300", "35-24-1300 PMP MTR"))
+        self.assertTrue(is_phantom_motor_line_tag("35-24-1300", "LN 35-24-1300 PMP MTR"))
+        self.assertFalse(is_phantom_motor_line_tag("35-24-119", "35-24-119 SUCT LN"))
+        self.assertFalse(is_phantom_motor_line_tag("35-24P501", "35-24P501 COUCH PIT PMP"))
+        self.assertFalse(is_phantom_motor_line_tag("35-24-501.1", "35-24-501.1 COUCH PIT PMP MTR"))
+
     def test_idempotent_when_already_prefixed(self) -> None:
         text = "LN 35-24-095 PRESS PLPR PP-200"
         self.assertEqual(format_line_eqktx("35-24-095", text), text)
@@ -197,6 +205,31 @@ class FormatLineEqktxTests(unittest.TestCase):
         out = format_line_eqktx("35-24-095", normalize_pltxt(long_desc))
         self.assertLessEqual(len(out), 40)
         self.assertTrue(out.startswith("LN 35-24-095"))
+        self.assertFalse(out.endswith("-"))
+        self.assertFalse(out.endswith(" "))
+
+    def test_drops_peer_tag_to_keep_destination(self) -> None:
+        out = format_line_eqktx(
+            "35-24-100",
+            normalize_pltxt(
+                "35-24-100 35-24-108 SUCTION LINE TO BROKE CONVEYOR 1",
+                max_len=80,
+            ),
+        )
+        self.assertTrue(out.startswith("LN 35-24-100"))
+        self.assertLessEqual(len(out), 40)
+        self.assertNotIn("35-24-108", out)
+        self.assertFalse(out.endswith("-"))
+        self.assertTrue(
+            any(tok in out for tok in ("SUCT", "CVYR", "BROKE")),
+            out,
+        )
+
+    def test_strips_truncated_peer_tag_remnant(self) -> None:
+        self.assertEqual(
+            format_line_eqktx("35-24-100", "LN 35-24-100 35-24-"),
+            "LN 35-24-100",
+        )
 
 
 class EquipmentExportTests(unittest.TestCase):
@@ -396,6 +429,25 @@ class EquipmentExportTests(unittest.TestCase):
         self.assertEqual(motor["HEQUI"], "35-24L404")
         self.assertEqual(motor["EQART"], "1101")
 
+    def test_motor_eqktx_strips_parent_type_tokens(self) -> None:
+        eqktx = _motor_eqktx(
+            "35-24-406.1",
+            "35-24L406",
+            "35-24L406 BROKE COLLECTION AGI TNK",
+        )
+        self.assertIn("BROKE", eqktx.upper())
+        self.assertIn("MTR", eqktx.upper())
+        self.assertNotIn("TNK", eqktx.upper())
+        self.assertNotIn("AGI", eqktx.upper())
+        self.assertLessEqual(len(eqktx), 40)
+
+    def test_motor_eqktx_strips_pmp_token(self) -> None:
+        eqktx = _motor_eqktx("35-24-518.1", "35-24P518", "35-24P518 BROKE REJECT PMP")
+        self.assertIn("BROKE", eqktx.upper())
+        self.assertTrue("REJ" in eqktx.upper())
+        self.assertIn("MTR", eqktx.upper())
+        self.assertNotIn("PMP", eqktx.upper())
+
     def test_motor_eqktx_inherits_parent_description(self) -> None:
         """Motor text follows Example for motors.docx: parent desc + MTR."""
         self.assertIn(
@@ -422,6 +474,7 @@ class EquipmentExportTests(unittest.TestCase):
         self.assertEqual(motor["HEQUI"], "35-24L404")
         self.assertIn("BROKE", motor["EQKTX"].upper())
         self.assertIn("MTR", motor["EQKTX"].upper())
+        self.assertNotIn("TNK", motor["EQKTX"].upper())
         self.assertNotEqual(motor["EQKTX"].upper(), "35-24-404.1 MTR")
 
     def test_sub_equipment_posnr_resets_per_parent(self) -> None:
@@ -460,6 +513,38 @@ class EquipmentExportTests(unittest.TestCase):
         self.assertNotIn("DN", by_tag["35-24-095"]["EQKTX"])
         self.assertNotIn("PP-200", by_tag["35-24-095"]["EQKTX"])
         self.assertFalse(by_tag["35-24-207"]["EQKTX"].startswith("LN "))
+
+    def test_pipeline_eqktx_keeps_destination_not_peer_tag(self) -> None:
+        rows = [
+            {"FUNCTION": "35-24L011", "EQUIPMENT": "", "SUB-EQUIPMENT": "", "DESCRIPTION": "BROKE CVYR 1"},
+            {
+                "FUNCTION": "",
+                "EQUIPMENT": "35-24-100",
+                "SUB-EQUIPMENT": "",
+                "DESCRIPTION": "35-24-100 35-24-108 SUCTION LINE PP-250 TO BROKE CONVEYOR 1",
+            },
+        ]
+        out = build_equipment_rows(rows)
+        eqktx = next(r["EQKTX"] for r in out if r["EQUNR"] == "35-24-100")
+        self.assertTrue(eqktx.startswith("LN 35-24-100"))
+        self.assertLessEqual(len(eqktx), 40)
+        self.assertNotIn("35-24-108", eqktx)
+        self.assertFalse(eqktx.endswith("-"))
+        self.assertTrue(any(tok in eqktx for tok in ("SUCT", "CVYR", "BROKE")), eqktx)
+
+    def test_drops_nameplate_misread_as_pipeline(self) -> None:
+        rows = [
+            {"FUNCTION": "35-24P501", "EQUIPMENT": "", "SUB-EQUIPMENT": "", "DESCRIPTION": "35-24P501 COUCH PIT PMP"},
+            {"FUNCTION": "", "EQUIPMENT": "35-24-1300", "SUB-EQUIPMENT": "", "DESCRIPTION": "35-24-1300 PMP MTR"},
+            {"FUNCTION": "", "EQUIPMENT": "35-24-119", "SUB-EQUIPMENT": "", "DESCRIPTION": "35-24-119 SUCT LN"},
+        ]
+        out = build_equipment_rows(rows)
+        tags = {r["EQUNR"] for r in out}
+        self.assertNotIn("35-24-1300", tags)
+        self.assertIn("35-24-501.1", tags)
+        self.assertIn("35-24-119", tags)
+        suction = next(r for r in out if r["EQUNR"] == "35-24-119")
+        self.assertTrue(suction["EQKTX"].startswith("LN 35-24-119"))
 
     def test_limit_functions(self) -> None:
         rows = [

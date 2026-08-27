@@ -243,25 +243,65 @@ def is_line_equipment_tag(tag: str) -> bool:
     return bool(_LINE_EQUIPMENT_TAG_RE.match(tag_u))
 
 
+# Nameplate misreads: AI copies a kW/rpm figure (e.g. "1300/50") as a line tag
+# and labels it PMP MTR. Real motors use the .1 suffix (35-24-501.1).
+_MOTOR_ONLY_BODY_RE = re.compile(
+    r"^(?:PMP\s+)?MTR$|^(?:PUMP\s+)?MOTOR$",
+    re.I,
+)
+
+
+def _lstrip_ln(text: str) -> str:
+    return text[3:].strip() if text.startswith("LN ") else text
+
+
+def is_phantom_motor_line_tag(tag: str, desc: str) -> bool:
+    """True when a numeric line-shaped tag is actually a misread motor/nameplate."""
+    if not is_line_equipment_tag(tag):
+        return False
+    tag_u = re.sub(r"\s+", "", str(tag or "").strip()).upper()
+    body = _lstrip_ln(re.sub(r"\s+", " ", str(desc or "").strip()).upper())
+    if body.startswith(tag_u):
+        body = body[len(tag_u) :].strip(" -")
+    body = _lstrip_ln(body)
+    return bool(body) and bool(_MOTOR_ONLY_BODY_RE.match(body))
+
+
+def clip_pltxt(text: str, max_len: int = 40) -> str:
+    """Fit text to max_len on a token boundary; never leave a trailing hyphen."""
+    s = re.sub(r"\s+", " ", str(text or "").strip())
+    if len(s) <= max_len:
+        return s.rstrip(" -")
+    kept: list[str] = []
+    for tok in s.split():
+        cand = " ".join(kept + [tok])
+        if len(cand) > max_len:
+            break
+        kept.append(tok)
+    clipped = " ".join(kept) if kept else s[:max_len]
+    return clipped.rstrip(" -")
+
+
 def format_line_eqktx(tag: str, eqktx: str, *, hequi: str = "", max_len: int = 40) -> str:
     """
     SML Equipment Text rule: pipe line rows start with ``LN {tag} …``.
 
     Applied after normalize_pltxt. Strips trailing LINE/LN markers and rebuilds
     with the LN prefix. Skips valves/fittings on lines (usually sub-equipment).
+
+    Peer numeric tags (``35-24-108``) and truncated remnants (``35-24-``) are
+    dropped from the body so destination words survive the 40-char cap.
     """
     tag_u = re.sub(r"\s+", "", str(tag or "").strip()).upper()
     if not is_line_equipment_tag(tag_u):
-        return str(eqktx or "")[:max_len]
+        return clip_pltxt(str(eqktx or ""), max_len)
 
     text = re.sub(r"\s+", " ", str(eqktx or "").strip()).upper()
     if not text:
-        return f"LN {tag_u}"[:max_len]
+        return clip_pltxt(f"LN {tag_u}", max_len)
 
-    if hequi and _VALVE_ON_LINE_RE.search(text):
-        return text[:max_len]
-    if re.search(r"\b(VLV ON|VALVE ON)\b", text):
-        return text[:max_len]
+    if (hequi and _VALVE_ON_LINE_RE.search(text)) or re.search(r"\b(VLV ON|VALVE ON)\b", text):
+        return clip_pltxt(text, max_len)
 
     want = f"LN {tag_u}"
     rest = text
@@ -273,21 +313,23 @@ def format_line_eqktx(tag: str, eqktx: str, *, hequi: str = "", max_len: int = 4
             break
         if rest.startswith(f"{want} "):
             rest = rest[len(want) :].strip()
-            continue
-        if rest.startswith("LN "):
-            rest = rest[3:].strip()
-            continue
-        if rest.startswith(f"{tag_u} "):
+        elif rest.startswith("LN "):
+            rest = _lstrip_ln(rest)
+        elif rest.startswith(f"{tag_u} "):
             rest = rest[len(tag_u) :].strip()
-            continue
-        stripped = re.sub(r"\s+(LINE|LN)$", "", rest).strip()
-        if stripped != rest:
+        else:
+            stripped = re.sub(r"\s+(LINE|LN)$", "", rest).strip()
+            if stripped == rest:
+                break
             rest = stripped
-            continue
-        break
+
+    # Prefer destination words over a second numeric tag that eats the 40-char budget.
+    rest = re.sub(r"\b\d{2}-\d{2}-\d+\b", "", rest)
+    rest = re.sub(r"\b\d{2}-\d{2}-", " ", rest)
+    rest = re.sub(r" {2,}", " ", rest).strip(" -/")
 
     formatted = f"{want} {rest}".strip() if rest else want
-    return formatted[:max_len]
+    return clip_pltxt(formatted, max_len)
 
 
 def description_from_nearby(tag: str, nearby: Any, max_len: int = 40) -> str:
