@@ -1,7 +1,7 @@
 {
   "meta": {
     "source": "resources/SML Naming Abbreviation Standard.xlsx",
-    "description": "SML naming abbreviations for PLTXT / EQKTX text normalization — complete from SML Naming Abbreviation Standard.xlsx",
+    "description": "SML naming abbreviations for PLTXT / EQKTX text normalization \u2014 complete from SML Naming Abbreviation Standard.xlsx",
     "generated_by": "scripts/build_sml_abbreviations_json.py"
   },
   "abbreviations": {
@@ -629,6 +629,14 @@
     }
   ],
   "domain_phrase_rules": [
+    {
+      "pattern": "CONV",
+      "replacement": "CVYR"
+    },
+    {
+      "pattern": "WHITE WTR",
+      "replacement": "WW"
+    },
     {
       "pattern": "BROKE ROLL PULPER",
       "replacement": "BROKE ROLL PLPR"

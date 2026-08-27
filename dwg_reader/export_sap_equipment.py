@@ -24,6 +24,7 @@ from dwg_reader.dwg_floc_context import (
     format_line_eqktx,
     format_valve_eqktx,
     is_line_equipment_tag,
+    is_never_valve_tag,
     is_pump_equipment,
     is_valve_equipment,
     load_floc_context_for_input,
@@ -32,6 +33,11 @@ from dwg_reader.dwg_floc_context import (
 )
 from dwg_reader.dwg_object_type import classify_equipment
 from dwg_reader.dwg_pure_dump import json_path, safe_name, write_json
+from dwg_reader.export_sap_floc import (
+    _clean_line_description,
+    _extract_area_unit,
+    _strip_trailing_spec,
+)
 from dwg_reader.io import cell as _norm, read_csv_rows
 from dwg_reader.logutil import configure_logging, get_logger
 from dwg_reader.paths import REPO_ROOT
@@ -44,10 +50,23 @@ DATA_START_ROW = 7  # 1-based; row 7 is the sample Boiler in the template
 VALVE_LAYERS = {"P-VALVEPOS", "P-CVPOS", "1-VALVE TEXT GOR"}
 
 _INVALID_EQUNR_RE = re.compile(r"^(CHAR\s*\d+|FUNCTIONAL\s+LOCATION)$", re.I)
+_MOTOR_SUFFIX_RE = re.compile(r"(\.\d+|-M\d+)$", re.I)
+_GOR_MOTOR_PARENT_RE = re.compile(r"^(.+)-M\d+$", re.I)
+_VALMET_MOTOR_RE = re.compile(r"^(\d{2}-\d{2})-(\d+)\.\d+$", re.I)
+# AI/hierarchy text that identifies a numeric tag as a pipeline, not a valve.
+_PIPELINE_DESC_RE = re.compile(r"\b(LN|LINE|OVFL|OVERFLOW)\b", re.I)
+_PIPELINE_VALVE_DESC_RE = re.compile(r"\b(VLV|VALVE|DRN|DRAIN|CHK|CHECK|FLS|HV)\b", re.I)
 
 # Driven equipment patterns: pumps (35-24P518) and agitators by L401–L499 range
 _PUMP_TAG_NODASH_RE = re.compile(r"^(\d{2}-\d{2})P(\d+)$", re.I)
 _AGITATOR_L_NODASH_RE = re.compile(r"^(\d{2}-\d{2})L(4\d{2})$", re.I)
+# Rotor sub-equipment tags: 35-24L009.1, 35-24L009.2 — always driven, need a motor
+_ROTOR_TAG_RE = re.compile(r"^(\d{2}-\d{2})[A-Z]+\d+\.\d+$", re.I)
+
+# Description-based driven-equipment detection (screens, gearboxes, agitators by keyword)
+_SCREEN_DESC_RE = re.compile(r"\b(?:SCRN|SCREEN)\b", re.I)
+_GEARBOX_DESC_RE = re.compile(r"\b(?:GRBX|GEARBOX)\b", re.I)
+_AGITATOR_DESC_RE = re.compile(r"\b(?:AGIT(?:ATOR)?)\b", re.I)
 
 
 def _motor_tag_for(tag: str, *, ecosystem: Optional[Ecosystem] = None) -> str:
@@ -55,32 +74,94 @@ def _motor_tag_for(tag: str, *, ecosystem: Optional[Ecosystem] = None) -> str:
 
     Tissue / KSDM160104 (GOR + KSD): append -M1    →  124P-001  → 124P-001-M1
     Valmet PS-21 / PM3 (default):     strip letter, append .1  →  35-24P518 → 35-24-518.1
+    Rotor sub-equipment:              strip letter, keep suffix →  35-24L009.1 → 35-24-009.1
     Returns "" if the tag format is not recognised.
     """
-    t = re.sub(r"\s+", "", str(tag or "").strip()).upper()
-    if ecosystem is not None and ecosystem.is_tissue:
-        return f"{t}-M1"
+    t = re.sub(r"\s+", "", str(tag or "")).strip().upper()
+    # Rotor tags already carry their decimal suffix (35-24L009.1); strip the letter prefix only.
+    rotor_m = re.match(r"^(\d{2}-\d{2})[A-Z]+(\d+\.\d+)$", t)
+    if rotor_m:
+        return f"{rotor_m.group(1)}-{rotor_m.group(2)}"
+    if ecosystem is not None and ecosystem.standard:
+        mfe = ecosystem.standard.get("motor_from_equipment") or {}
+        mode = mfe.get("mode") or ""
+        if mode == "append_suffix":
+            return t + str(mfe.get("suffix") or "-M1")
+        if mode == "strip_letter_append_dot_one":
+            regex = mfe.get("regex") or r"^(\d{2}-\d{2})[A-Z]+(\d+)$"
+            replace = mfe.get("replace") or r"\1-\2.1"
+            result = re.sub(regex, replace, t)
+            return result if result != t else t
+    # Fallback: Valmet convention — return "" when the tag doesn't match the expected pattern
     derived = re.sub(r"^(\d{2}-\d{2})[A-Z]+(\d+)$", r"\1-\2.1", t)
     return derived if derived != t else ""
 
 
-def _is_driven_equipment(tag: str, ecosystem: Optional[Ecosystem] = None) -> bool:
-    """True for pumps and agitators that must have a motor.
+def _is_driven_equipment(
+    tag: str,
+    ecosystem: Optional[Ecosystem] = None,
+    desc: str = "",
+) -> bool:
+    """True for pumps, agitators, screens, and gearboxes that must have a motor.
 
-    Tissue / KSDM160104: pumps (^\d{3}P-\d{3}$) and agitators (^\d{3}A-\d{3}$).
-    Valmet PS-21 / PM3 (default): pumps (35-24P\d+) and L401–L499 agitators.
+    When ecosystem.standard is present, reads driven_patterns from the standard JSON.
+    Falls back to hardcoded Valmet PS-21 patterns otherwise.
     """
-    t = re.sub(r"\s+", "", str(tag or "").strip()).upper()
-    if ecosystem is not None and ecosystem.is_tissue:
-        return bool(
-            re.match(r"^\d{3}P-\d{3}$", t) or
-            re.match(r"^\d{3}A-\d{3}$", t)
-        )
+    t = re.sub(r"\s+", "", str(tag or "")).strip().upper()
+
+    # Rotor sub-equipment (35-24L009.1 / 35-24L009.2) are always driven regardless of ecosystem.
+    if _ROTOR_TAG_RE.match(t):
+        return True
+
+    if ecosystem is not None and ecosystem.standard:
+        patterns = ecosystem.standard.get("driven_patterns") or {}
+
+        # Pump
+        pump_pat = patterns.get("pump")
+        if pump_pat and re.match(pump_pat, t):
+            return True
+
+        # Valmet-style range-gated agitator (agitator_l)
+        agit_l = patterns.get("agitator_l") or {}
+        if agit_l:
+            ap = agit_l.get("pattern")
+            rng = agit_l.get("range")
+            if ap:
+                m = re.match(ap, t)
+                if m:
+                    try:
+                        n = int(m.group(1))
+                        if rng and rng[0] <= n <= rng[1]:
+                            return True
+                    except (IndexError, ValueError):
+                        pass
+
+        # Tissue-style simple agitator pattern
+        agit_pat = patterns.get("agitator")
+        if agit_pat and re.match(agit_pat, t):
+            return True
+
+        # Description keyword matching (reads from standard JSON)
+        desc_kws = patterns.get("description_keywords") or {}
+        if desc and desc_kws:
+            d = desc.upper()
+            for kws in desc_kws.values():
+                for kw in (kws if isinstance(kws, list) else [kws]):
+                    if re.search(r"\b" + re.escape(kw) + r"\b", d):
+                        return True
+
+        return False
+
+    # Legacy path (no ecosystem or no standard loaded)
     if _PUMP_TAG_NODASH_RE.match(t):
         return True
     m = _AGITATOR_L_NODASH_RE.match(t)
     if m and 401 <= int(m.group(2)) <= 499:
         return True
+    if desc:
+        d = str(desc).upper()
+        if _SCREEN_DESC_RE.search(d) or _GEARBOX_DESC_RE.search(d) or _AGITATOR_DESC_RE.search(d):
+            return True
     return False
 
 
@@ -108,6 +189,54 @@ def _is_valid_equipment_tag(tag: str) -> bool:
     if not t or _INVALID_EQUNR_RE.match(t):
         return False
     return bool(re.match(r"^[\dA-Z][\dA-Z./-]{2,}$", t))
+
+
+def _pipeline_description_blocks_valve(desc: str) -> bool:
+    """True when a numeric line tag's AI text is a pipeline, not a valve.
+
+    Vision often flags pipe numbers (35-24-095) as HV. Trust LN/LINE/OVFL in
+    the hierarchy description unless the same text also names a valve.
+    """
+    d = str(desc or "")
+    if not _PIPELINE_DESC_RE.search(d):
+        return False
+    return not _PIPELINE_VALVE_DESC_RE.search(d)
+
+
+def _primary_area_unit(hierarchy_rows: Sequence[Dict[str, str]]) -> str:
+    """Dominant NN-NN prefix from machine FUNCTION headers (not pipelines)."""
+    units: List[str] = []
+    for row in hierarchy_rows:
+        fn = _norm(row.get("FUNCTION")).upper().replace(" ", "")
+        eq = _norm(row.get("EQUIPMENT"))
+        sub = _norm(row.get("SUB-EQUIPMENT"))
+        if fn and not eq and not sub and not is_line_equipment_tag(fn):
+            unit = _extract_area_unit(fn)
+            if unit:
+                units.append(unit)
+    if not units:
+        return ""
+    return max(set(units), key=units.count)
+
+
+def _infer_motor_parent(motor_tag: str, emitted: Set[str]) -> str:
+    """Parent EQUNR for an orphan motor (blank HEQUI).
+
+    Tissue/GOR ``168F-415-M1`` → ``168F-415`` (inject if missing).
+    Valmet ``35-24-008.1`` → ``35-24L008`` if that machine is already emitted.
+    """
+    t = re.sub(r"\s+", "", str(motor_tag or "").strip()).upper()
+    m = _GOR_MOTOR_PARENT_RE.match(t)
+    if m:
+        return m.group(1)
+    m = _VALMET_MOTOR_RE.match(t)
+    if m:
+        area, num = m.group(1), m.group(2)
+        for letter in ("L", "P", "T", "A", "F"):
+            cand = f"{area}{letter}{num}"
+            if cand in emitted:
+                return cand
+    return ""
 
 SAP_COLUMNS = [
     "TPLNR",
@@ -170,8 +299,11 @@ def _valve_hint(tag: str, *, cache: dict[str, dict]) -> dict:
         is_valve = False
     else:
         is_valve = bool(stored_is_valve or ca.get("type") or layer in VALVE_LAYERS)
+    # P-CVPOS layer → control/automatic valve (AV in SML nomenclature); use as default
+    # type when cache has none.
+    cached_type = ca.get("type") or (None if layer != "P-CVPOS" else "AV")
     return {
-        "type": ca.get("type") or None,
+        "type": cached_type,
         "fn": ca.get("fn") or None,
         "is_valve": is_valve,
         "source": ca.get("source"),
@@ -210,6 +342,7 @@ def build_equipment_rows(
     valve_cache: dict[str, dict] | None = None,
     reasoning_out: Optional[List[Dict[str, str]]] = None,
     ecosystem: Optional[Ecosystem] = None,
+    include_function_equipment: bool = True,
 ) -> List[Dict[str, str]]:
     """
     Walk hierarchy stream and emit one Equipment row per EQUIPMENT / SUB-EQUIPMENT.
@@ -256,6 +389,8 @@ def build_equipment_rows(
     top_pos_by_tplnr: Dict[str, int] = {}
     sub_pos_by_parent: Dict[str, int] = {}
     emitted: Set[str] = set()
+    primary_unit = _primary_area_unit(hierarchy_rows)
+    machine_fn_headers: List[tuple[str, str, str]] = []  # (fn, tplnr, desc) for mop-up
 
     for row in hierarchy_rows:
         fn = _norm(row.get("FUNCTION")).upper().replace(" ", "")
@@ -270,10 +405,47 @@ def build_equipment_rows(
                 current_equipment = ""
                 current_line = ""
                 continue
+            tag_unit = _extract_area_unit(fn)
+            if (
+                primary_unit
+                and tag_unit
+                and tag_unit != primary_unit
+                and is_line_equipment_tag(fn)
+            ):
+                # Cross-unit pipeline FUNCTION (e.g. 35-25-* on a Unit-24 sheet).
+                current_fn = ""
+                current_tplnr = ""
+                current_equipment = ""
+                current_line = ""
+                continue
             current_fn = fn
             current_tplnr = floc_paths_for_function(fn, c)["function"]
             current_equipment = ""
             current_line = ""
+            # Emit the machine function itself as Equipment (for spare parts tracking).
+            # Only for non-pipeline machine tags (L, P, T — not 35-24-NNN line tags).
+            if include_function_equipment and not is_line_equipment_tag(fn):
+                machine_fn_headers.append((fn, current_tplnr, _norm(row.get("DESCRIPTION"))))
+            if include_function_equipment and not is_line_equipment_tag(fn) and fn not in emitted:
+                emitted.add(fn)
+                fn_desc = normalize_pltxt(_strip_trailing_spec(_norm(row.get("DESCRIPTION"))))
+                fn_eqktx = fn_desc if fn_desc else normalize_pltxt(fn)
+                if fn_eqktx and not fn_eqktx.upper().startswith(fn.upper()):
+                    fn_eqktx = normalize_pltxt(f"{fn} {fn_eqktx}")
+                fn_eqktx = _strip_trailing_spec(fn_eqktx)[:40]
+                fn_eqart, fn_gewrk = classify_equipment(fn, fn_eqktx)
+                top_pos_by_tplnr[current_tplnr] = 0
+                out.append(
+                    blank_row(
+                        TPLNR=current_tplnr[:30],
+                        EQUNR=fn[:18],
+                        HEQUI="",
+                        POSNR="0001",
+                        EQKTX=fn_eqktx,
+                        EQART=fn_eqart,
+                        GEWRK=fn_gewrk,
+                    )
+                )
             continue
 
         if allowed is not None and current_fn and current_fn not in allowed:
@@ -289,9 +461,11 @@ def build_equipment_rows(
                 current_line = tag
                 current_equipment = tag
             elif current_line and is_valve_equipment(tag, _norm(row.get("DESCRIPTION"))):
-                # SOP rule: valve/instrument appearing after a line in the same FUNCTION
-                # is sub-equipment of that line (line = equipment, valve = sub-equipment).
-                hequi = current_line
+                # SAP PM standard: valves are standalone Equipment records installed at
+                # the pipeline FLOC (TPLNR = current_tplnr), NOT sub-equipment of the
+                # pipeline Equipment record.  HEQUI is reserved for physical components
+                # inside a machine (impeller inside a pump, bearing inside a motor).
+                hequi = ""
                 current_equipment = tag
             else:
                 # Non-line, non-valve equipment (motor, instrument, etc.) — direct FUNCTION child.
@@ -306,6 +480,11 @@ def build_equipment_rows(
 
         if not _is_valid_equipment_tag(tag):
             continue
+
+        if is_line_equipment_tag(tag):
+            tag_unit = _extract_area_unit(tag)
+            if primary_unit and tag_unit and tag_unit != primary_unit:
+                continue
 
         if tag in emitted:
             continue
@@ -334,7 +513,14 @@ def build_equipment_rows(
         effective_tplnr = (
             floc_paths_for_function(cache_fn, c)["function"] if cache_fn else current_tplnr
         )
-        is_valve = is_valve_equipment(tag, eqktx) or bool(hint.get("is_valve"))
+        # Tags with embedded non-valve prefix (e.g. 35-24L401 agitator) are never valves,
+        # even when the vision cache reports is_valve=True (vision saw a drain tap on the tank).
+        _hint_valve = bool(hint.get("is_valve")) and not is_never_valve_tag(tag)
+        if is_line_equipment_tag(tag) and _pipeline_description_blocks_valve(raw_desc):
+            _hint_valve = False
+        is_valve = is_valve_equipment(tag, eqktx) or _hint_valve
+        if is_line_equipment_tag(tag) and _pipeline_description_blocks_valve(raw_desc):
+            is_valve = False
         if is_valve:
             eqktx = format_valve_eqktx(tag, effective_fn, eqktx, valve_type_override=cache_type)
             if reasoning_out is not None:
@@ -376,6 +562,25 @@ def build_equipment_rows(
                 })
         else:
             eqktx = format_line_eqktx(tag, eqktx, hequi=hequi)
+            if is_line_equipment_tag(tag):
+                eqktx = _clean_line_description(eqktx)
+                eqktx = format_line_eqktx(tag, eqktx, hequi=hequi)
+            if not is_line_equipment_tag(tag) and not hequi:
+                eqktx = _strip_trailing_spec(eqktx)
+            if _MOTOR_SUFFIX_RE.search(tag) and not re.search(r"\bMTR\b", eqktx or "", re.I):
+                eqktx = normalize_pltxt(f"{eqktx} MTR")[:40]
+                eqart, gewrk = classify_equipment(tag, eqktx)
+        # Fix #4: re-classify when initial classification failed — the formatted EQKTX
+        # now has HV/LN prefix which the keyword rules can match.
+        if eqart == "9999":
+            if is_valve:
+                eqart = "201"
+                if not gewrk:
+                    gewrk = "MECH"
+            elif is_line_equipment_tag(tag):
+                eqart = "2100"
+                if not gewrk:
+                    gewrk = "MECH"
         out.append(
             blank_row(
                 TPLNR=effective_tplnr[:30],
@@ -388,10 +593,18 @@ def build_equipment_rows(
             )
         )
 
-    # Second pass: inject implicit motor rows for driven equipment with no motor emitted
-    for eq_row in list(out):
+    # Second pass: inject implicit motor rows for driven equipment with no motor emitted.
+    # Includes sub-equipment items (non-empty HEQUI) such as agitator rotors (35-24L009.1)
+    # that appear as children of a pulper but still require their own motor record.
+    # Rotors are sorted first so they claim their motor tag before their parent pulper
+    # attempts to derive the same tag (both 35-24L009 and 35-24L009.1 produce 35-24-009.1).
+    _second_pass_rows = sorted(
+        list(out), key=lambda r: (0 if _ROTOR_TAG_RE.match(r["EQUNR"]) else 1)
+    )
+    for eq_row in _second_pass_rows:
         eq_tag = eq_row["EQUNR"]
-        if eq_row["HEQUI"] or not _is_driven_equipment(eq_tag, ecosystem):
+        eq_desc = eq_row.get("EQKTX") or ""
+        if not _is_driven_equipment(eq_tag, ecosystem, desc=eq_desc):
             continue
         motor_tag = _motor_tag_for(eq_tag, ecosystem=ecosystem)
         if not motor_tag or motor_tag in emitted:
@@ -413,6 +626,73 @@ def build_equipment_rows(
                 GEWRK=m_gewrk,
             )
         )
+
+    # Third pass: nest orphan motors (blank HEQUI) under their driven parent.
+    # GOR fan motors 168F-415-M1 sit as top-level EQUIPMENT; Valmet 35-24-008.1
+    # may be emitted as a FUNCTION child rather than SUB-EQUIPMENT.
+    for eq_row in list(out):
+        if eq_row["HEQUI"]:
+            continue
+        motor_tag = eq_row["EQUNR"]
+        if not _MOTOR_SUFFIX_RE.search(motor_tag):
+            continue
+        parent = _infer_motor_parent(motor_tag, emitted)
+        if not parent:
+            continue
+        parent_tplnr = eq_row["TPLNR"]
+        if parent not in emitted:
+            if not _GOR_MOTOR_PARENT_RE.match(motor_tag):
+                continue
+            p_eqktx = normalize_pltxt(parent)[:40]
+            p_eqart, p_gewrk = classify_equipment(parent, p_eqktx)
+            top_pos_by_tplnr[parent_tplnr] = top_pos_by_tplnr.get(parent_tplnr, 0) + 10
+            out.append(
+                blank_row(
+                    TPLNR=parent_tplnr,
+                    EQUNR=parent[:18],
+                    HEQUI="",
+                    POSNR=f"{top_pos_by_tplnr[parent_tplnr]:04d}",
+                    EQKTX=p_eqktx,
+                    EQART=p_eqart,
+                    GEWRK=p_gewrk,
+                )
+            )
+            emitted.add(parent)
+        parent_key = f"{parent_tplnr}|{parent}"
+        sub_pos_by_parent[parent_key] = sub_pos_by_parent.get(parent_key, 0) + 10
+        eq_row["HEQUI"] = parent[:18]
+        eq_row["POSNR"] = f"{sub_pos_by_parent[parent_key]:04d}"
+        if not re.search(r"\bMTR\b", eq_row.get("EQKTX") or "", re.I):
+            eq_row["EQKTX"] = normalize_pltxt(f"{eq_row.get('EQKTX') or motor_tag} MTR")[:40]
+        m_eqart, m_gewrk = classify_equipment(motor_tag, eq_row["EQKTX"])
+        eq_row["EQART"] = m_eqart
+        eq_row["GEWRK"] = m_gewrk
+
+    # Fourth pass: machine FUNCTION headers that were skipped (already in emitted
+    # as a child, or empty-description edge cases) still need an equipment row
+    # when include_function_equipment is on.
+    if include_function_equipment:
+        for fn, tplnr, raw in machine_fn_headers:
+            if fn in emitted:
+                continue
+            emitted.add(fn)
+            fn_eqktx = normalize_pltxt(_strip_trailing_spec(raw or fn))[:40]
+            if fn_eqktx and not fn_eqktx.upper().startswith(fn.upper()):
+                fn_eqktx = normalize_pltxt(f"{fn} {fn_eqktx}")[:40]
+            fn_eqktx = _strip_trailing_spec(fn_eqktx)[:40]
+            fn_eqart, fn_gewrk = classify_equipment(fn, fn_eqktx)
+            top_pos_by_tplnr[tplnr] = 0 if tplnr not in top_pos_by_tplnr else top_pos_by_tplnr[tplnr]
+            out.append(
+                blank_row(
+                    TPLNR=tplnr[:30],
+                    EQUNR=fn[:18],
+                    HEQUI="",
+                    POSNR="0001",
+                    EQKTX=fn_eqktx or fn[:40],
+                    EQART=fn_eqart,
+                    GEWRK=fn_gewrk,
+                )
+            )
 
     return out
 
@@ -442,6 +722,8 @@ def write_equipment_workbook(
         ws.cell(r_i, 1, value=None)  # ID column unused
         for c_i, key in enumerate(SAP_COLUMNS, start=2):
             val = row.get(key) or None
+            if key == "EQART" and val and str(val).isdigit() and len(str(val)) < 4:
+                val = str(val).zfill(4)
             cell = ws.cell(r_i, c_i, value=val)
             if key in _TEXT_FORMAT_COLUMNS and val is not None:
                 cell.number_format = "@"

@@ -35,6 +35,7 @@ from dwg_reader.dwg_floc_context import (
     is_pump_equipment,
     is_valve_equipment,
 )
+from dwg_reader.dwg_valve_classify_v2 import load_v2_prompt, parse_v2_response
 from dwg_reader.dwg_pure_dump import evidence_dir, find_json, json_path, safe_name, write_json
 from dwg_reader.logutil import configure_logging, get_logger
 
@@ -42,160 +43,11 @@ logger = get_logger(__name__)
 
 VALVE_LAYERS = frozenset({"P-VALVEPOS", "P-CVPOS", "P-SYMB", "1-VALVE TEXT GOR"})
 
-# Shared bowtie fill rules — white (Shotton P&ID) and red/colored (GOR legend sheets).
-_BOWTIE_FILL_RULES = """\
-    Inspect EACH triangle separately (left vs right, or top vs bottom):
-
-    CHK : EXACTLY ONE triangle filled solid (white, red, or other color) AND the other
-          triangle outline-only (background/black visible inside). Half-and-half bowtie
-          = CHK, never NC or HV. If BOTH triangles look the same (both filled or both
-          outline) it is NOT CHK. Also CHK if a diagonal bar crosses the bowtie centre.
-
-    NC  : BOTH triangles filled solid (white, red, magenta, or other solid color) —
-          normally closed hand valve. Only when NEITHER triangle is outline-only.
-          Never NC if one triangle is transparent/outline and the other is filled (CHK).
-
-    HV  : BOTH triangles outline-only / transparent (background/black visible in BOTH).
-          Thin line edges with dark interior = HV outline, NOT solid fill. Only when
-          neither triangle is filled solid. Never HV if any triangle is filled solid
-          (white or colored)."""
-
 _CONVEYOR_RE = re.compile(r"\b(CVYR|CONVEYOR)\b", re.I)
 _VESSEL_HINT_RE = re.compile(r"\b(PLPR|PULPER|TNK|TANK|CHEST|VESSEL|THICKENER)\b", re.I)
 
-ONE_PASS_PROMPT = """\
-CRITICAL: Output ONLY a single JSON object. No explanation, no steps, no markdown, no prose.
-Exactly this format: {{"type": "TOKEN", "attachment": "none"}}
+# V2 vision prompt lives in prompts/valve_classify_v2.md (loaded via load_v2_prompt).
 
-Allowed "type" tokens: NC, HV, AV, AV-M, CHK, PRV, SV, NO, UNKNOWN
-Allowed "attachment" values: none, DRN, FLS, SMP
-
-Classify the P&ID valve tagged {TAG}.
-
-IMAGES:
-  Image 1 = Full marked crop. Yellow ring marks the APPROXIMATE valve location.
-  Image 2 = Tight clean zoom on the target bowtie body (no ring — clearer fill detail).
-  Image 3 = Below-valve strip enlarged (check for floor drain / trough / drain arrows).
-  Image 4 = Wider branch context (check for D marker, sample funnel, or flush stub).
-  Image 5 = Legend (reference only).
-
-STEP 1 — IDENTIFY THE TARGET BOWTIE (Image 1):
-  Find the text label "{TAG}" and follow its LEADER LINE or TAG LINE to the bowtie
-  it connects to. That bowtie is the ONLY one to classify — ignore all others nearby.
-  If the leader line is unclear or absent: the bowtie CLOSEST to the yellow ring
-  center is the target. If two bowties are visible, pick the one AT the ring center.
-  When the tag sits above several bowties, trace the FULL leader/tag line to its
-  endpoint — do not pick a nearby cross-line valve the leader does not touch.
-  Brown/red floor drain branches with downward arrows into a U-channel or sump are
-  drain (DRN) taps even when a cyan/magenta process line crosses nearby.
-  Ignore any valve-type letter in the tag itself (HV/FV/LV); classify the SYMBOL only.
-  Return UNKNOWN only if NO bowtie symbol is visible ANYWHERE in the crop — not
-  because there are multiple bowties or the target is ambiguous.
-
-STEP 2 — BODY / ACTUATOR TYPE (Image 2):
-  Image 2 is a tight zoom centered on the TARGET BOWTIE from STEP 1. Classify only
-  the bowtie at the CENTER of Image 2 — any other bowtie visible near the edges is
-  a neighboring valve; ignore it entirely.
-  Check for a circle actuator on the bowtie stem FIRST:
-    AV-M : stem above bowtie leading to a circle with the letter M CLEARLY readable.
-           Only AV-M if you can explicitly read "M" inside the circle.
-    AV   : a CIRCLE symbol must sit ON the stem line directly connected to the bowtie
-           centre (above or below the triangles). HS/LS/FC/XS/HI/FCV numbers inside
-           that circle = AV. When uncertain between AV and AV-M, use AV.
-           NOT AV if: no circle on the bowtie stem; only plain text nearby (AT, HP,
-           SS, bar, DN); instrument boxes elsewhere in the crop; pump/motor/tank symbols.
-           Outline-only bowtie with NO circle on its stem → HV, never AV.
-
-  Record the body type (AV / AV-M / NC / HV / CHK / …) then continue to STEP 3 for attachment.
-  Actuated valves on drain lines are AV + DRN, not AV alone.
-
-  No circle actuator → hand valve — classify by BODY FILL (Image 2):
-{_BOWTIE_FILL_RULES}
-
-    PRV : extra line segments parallel to each triangle base
-    SV  : stem on top ending in a horizontal T-cap
-    NO  : running-open mark on an outline hand valve (very rare; never when
-          any triangle is filled solid)
-
-  NC, HV, and CHK are mutually exclusive — pick exactly one body type.
-
-STEP 3 — ATTACHMENT (Images 1, 2, 3, 4) — all body types including AV / AV-M:
-  Pick EXACTLY ONE attachment or "none". Check in this strict order and STOP at the
-  first match — do NOT continue to the next rule once a match is found:
-
-    FLS (flush spool) — size "003-50" printed under tag "{TAG}" marks a FLUSHING spool
-          per legend → attachment FLS. NOT drainage — no large tou/sump arrow. L-hook or
-          blunt stub on the bowtie or a short vertical 003-50 spool = FLS.
-          On a vertical branch with two bowties, the UPPER valve tagged 003-50 is FLS;
-          the LOWER valve whose pipe hits the drain arrow is DRN — not the upper one.
-          Size "003-15" under a tag is usually pipe DN only — NOT automatic FLS.
-
-    DRN — PRIMARY: the pipe FROM this valve ends in a LARGE SOLID FLOW ARROW (filled
-          white arrowhead — much larger than normal line direction ticks) pointing
-          into a floor trough, tou, sump recess, U-channel, or open drain basin
-          (Images 1, 3, 4). The arrow direction may be down, up, left, or right.
-          Often a funnel/collector symbol (trapezoid tapering to a point) sits between
-          the valve pipe and the large arrow. Large-arrow-to-tou ALWAYS means DRN.
-
-          Also DRN when the capital letter "D" appears on a pipe DIRECTLY connected to
-          THIS bowtie's inlet OR outlet (Images 2 and 4). In these P&IDs, drain taps are
-          labelled with a capital "D" text placed directly on the pipe — it appears in a
-          distinct color (typically orange or red-orange) against the dark background.
-          Look on BOTH sides of the bowtie (left = inlet, right = outlet). The D can
-          appear close to the bowtie body OR at the far end of the outlet pipe at a
-          vessel drain port — both mean DRN for this valve.
-          Also look in Image 1: search for a single capital letter "D" (not a number,
-          not inside a shape) in a distinct orange or red color on a PIPE that connects
-          to this bowtie — it may be at the far left or far right edge of Image 1.
-          NOTE: numbered revision bubbles (orange/red filled triangles or circles
-          containing numbers like "10", "A1", etc.) are NOT drain markers; ignore them.
-          Also DRN if drain arrows drop from THIS bowtie's outlet pipe into a floor
-          trough or sump in Image 3 — the arrows must be clearly attached to this
-          valve's own pipe, not the general floor area drain of the surroundings.
-          Vertical drain branch (size 001-80 under tag) with arrow into U-channel
-          below THIS bowtie = DRN.
-          On a stacked vertical branch with two bowties IN SERIES on the SAME pipe:
-          only the LOWER bowtie whose outlet hits the drain arrow is DRN; the upper is none.
-          PARALLEL separate branch lines each with their own bowtie, ALL draining into a
-          common funnel/tou collector → EACH bowtie on its own branch is DRN.
-          ⚑ Large solid arrow into tou/trough, capital "D" on pipe, OR drain arrow → DRN.
-
-    SMP — a branch pipe ends in a POINTED or FUNNEL-SHAPED sampling symbol at the
-          branch TIP (Image 4): a solid filled arrowhead (▲ or ►), pointed funnel,
-          or cup/cone shape. The symbol must be POINTED — NOT blunt, NOT T-shaped,
-          NOT a plain cut pipe end. A short branch with a pointed far end = SMP
-          even if the branch is close to the bowtie body.
-          NEVER SMP if the funnel/collector DISCHARGES into a floor U-channel, sump,
-          or drain trough (Image 3) — that is DRN. Sample take-offs do NOT connect
-          to floor drains.
-          NEVER SMP because "003-15" or other pipe-size text appears under the tag —
-          that is pipe DN (nominal diameter), NOT a sampling connection. SMP requires
-          a VISIBLE pointed funnel/cup/arrowhead at a branch tip that is NOT a floor
-          drain connection.
-          NOTE: branch end at a floor drain channel (U-channel below) = DRN or FLS,
-          never SMP.
-          ⚑ Pointed sample funnel NOT into floor drain → SMP. STOP.
-
-    FLS — a small dead-end stub DIRECTLY on THIS bowtie body side (Image 2) with a
-          BLUNT, T-SHAPED, or CUT-PIPE end (not pointed/funnel-shaped). Also FLS: a
-          flushing spool (often 003-50 = 50mm) whose far branch end is a CUT PIPE
-          with NO pointed symbol at its tip. Also FLS: any stub to a floor drain
-          U-channel (Image 3).
-          CRITICAL: if another BOWTIE SYMBOL (two solid or outline triangles) appears
-          on a pipe adjacent to this valve, that element is a SEPARATE VALVE — it is
-          NOT an FLS stub for this valve.
-          ⚑ Dead-end stub with blunt/cut end (no pointed tip) → FLS. STOP.
-
-    none — plain inline valve: no D marker, no pointed branch end, no dead-end stub.
-
-  Decision order: FLS (003-50 under tag) → DRN → SMP → FLS (stub) → none
-
-STEP 4 — RETURN JSON ONLY (no other text):
-  {{"type": "<body>", "attachment": "<SMP|FLS|DRN|none>"}}
-  Examples: {{"type": "NC", "attachment": "DRN"}}
-            {{"type": "AV", "attachment": "DRN"}}
-            {{"type": "HV", "attachment": "none"}}
-""".replace("{_BOWTIE_FILL_RULES}", _BOWTIE_FILL_RULES)
 
 _EXCLUSIVE_ATTACHMENTS = frozenset({"DRN", "FLS", "SMP"})
 
@@ -599,7 +451,11 @@ def parse_type_tokens(raw: str) -> str:
     text = text.replace("AVM", "AV-M").replace("AV_M", "AV-M")
     found: List[str] = []
     # Longer tokens first so AV-M is not split into AV.
-    for tok in ("AV-M", "CHK", "PRV", "FLS", "SMP", "DRN", "AUTO", "AV", "NC", "NO", "SV", "HV"):
+    text = text.replace("GLOBE", "GLV").replace("GLOBAL", "GLV")
+    for tok in (
+        "AV-M", "YSTR", "3WV", "PLUG", "AAV", "GLV", "CHK", "PRV",
+        "FLS", "SMP", "DRN", "AUTO", "AV", "NC", "NO", "SV", "GF", "HV",
+    ):
         if re.search(rf"(?:^|\s){re.escape(tok)}(?:\s|$)", text):
             mapped = "AV" if tok == "AUTO" else tok
             if mapped in ALLOWED_VALVE_TOKENS and mapped not in found:
@@ -897,12 +753,22 @@ FLS_FLUSH_RETRY_PROMPT = """\
 You MUST respond with ONLY a JSON object.
 Format: {{"attachment": "FLS"}} or {{"attachment": "DRN"}} or {{"attachment": "none"}}
 
-Valve {TAG}. Check attachment for THIS bowtie only:
-  FLS — size "003-50" under tag, OR L-hook / horizontal stub welded to bowtie side,
-        OR short vertical spool with blunt/cut pipe end. Flush connection — NOT floor drain.
-  DRN — large solid arrow into tou/sump/U-channel from THIS valve's pipe.
-  none — plain inline valve (e.g. 003-15 is pipe size only, no flush stub, no drain).
-Pick FLS when 003-50 appears under the tag unless a large tou arrow is on THIS pipe.
+Valve {TAG}. Follow the leader line from "{TAG}" to its bowtie.
+
+  FLS — a short stub on THIS bowtie ends with a BLUNT OPEN PIPE END pointing into open air.
+        No arrows, no funnel, no enclosure at the stub tip. Just a cut pipe in empty space.
+
+  DRN — the stub or branch from THIS bowtie's own pipe reaches a drain / sump.
+        Drain indicators that count ONLY when directly on the "{TAG}" bowtie's branch:
+        • Large solid white downward arrows on this pipe branch → DRN
+        • A row of small solid downward arrows (3–8 in a band) on this branch → DRN
+        • A funnel or trapezoid at the branch end, followed by an arrow/channel below → DRN
+        • This branch entering a rectangular box, U-trough, sump, or basin → DRN
+        ⚠ Drain indicators visible beside a DIFFERENT labelled bowtie do NOT count for "{TAG}".
+
+  none — plain inline valve; no service stub or drain branch on the "{TAG}" bowtie.
+
+Key: open stub tip → FLS.  Arrows/funnel/enclosure on THIS bowtie's branch → DRN.  Neither → none.
 """
 
 DRAIN_RETRY_PROMPT = """\
@@ -911,11 +777,15 @@ Format: {{"attachment": "DRN"}} or {{"attachment": "none"}}
 
 Valve {TAG}. Follow the leader line from label "{TAG}" to its bowtie.
 
-DRN — pipe from THIS bowtie ends in a LARGE SOLID FLOW ARROW (filled white arrowhead,
-      much bigger than normal line ticks) pointing into a floor trough, tou, sump recess,
-      or U-channel — arrow direction may be down/up/left/right. Often a funnel/collector
-      (trapezoid) sits between the pipe and the arrow. Parallel branches each with their
-      own bowtie ALL draining to the same tou → each is DRN.
+DRN — pipe from THIS bowtie reaches a floor drain / sump. Accept ANY of these visual forms:
+      • One or more LARGE SOLID FLOW ARROWS (filled white arrowheads) pointing into a trough/tou.
+      • A ROW of small solid downward arrows (3–8 arrows in a band) on a nearby pipe line.
+      • A FUNNEL or TRAPEZOID shape at the pipe end (sometimes with a further arrow into a U-channel).
+      • Pipe entering a RECTANGULAR BOX, U-trough, sump recess, or basin.
+      • THIS valve's branch pipe connects at a T-junction / manifold that routes down to a drain.
+        (Other bowties on PARALLEL branches at the same junction are EACH ALSO DRN independently.)
+      Arrow direction may be down/up/left/right. Often a funnel/collector sits between the pipe and
+      the trough. Parallel branches each with their own bowtie ALL draining to the same tou → each DRN.
 
 none — plain in-line valve; or upper bowtie IN SERIES on one vertical pipe whose lower
        neighbour reaches the drain (not this bowtie's own pipe to the tou).
@@ -925,13 +795,36 @@ DRN_DIRECT_RETRY_PROMPT = """\
 You MUST respond with ONLY a JSON object.
 Format: {{"attachment": "DRN"}} or {{"attachment": "none"}}
 
-Valve {TAG}. Does THIS bowtie's own pipe feed a large solid drain arrow into a
-tou/trough/sump (directly or via a funnel collector)?
+Valve {TAG}. Does THIS bowtie's own pipe branch reach a floor drain / sump? Accept ANY form:
+• Large solid flow arrows on THIS branch pointing into a tou/trough/sump → DRN
+• A funnel, trapezoid, or collector at THIS branch end, with an arrow/channel below → DRN
+• THIS branch entering a rectangular box, U-trough, sump recess, or basin → DRN
+• A row of small downward arrows on THIS branch → DRN
+• THIS valve's own pipe enters a T-junction / manifold whose outlet goes to a drain → DRN
+  (Other bowties on SEPARATE PARALLEL branches at the same T-junction are ALSO DRN independently
+   — they are NOT "in series" with THIS bowtie and do NOT block this bowtie from being DRN.)
 
-DRN — yes: this bowtie's branch reaches the tou (parallel branches each get DRN).
+none — ONLY when the EXACT SAME pipe passes FIRST through THIS bowtie and then through a
+      SECOND bowtie before reaching the drain, with no branch point between them.
+      A valve on its OWN BRANCH pipe entering a common drain manifold IS DRN even if other
+      bowties connect to the same manifold from different branches.
+"""
 
-none — only if this is the UPPER bowtie IN SERIES on one vertical pipe and a
-      second bowtie below it sits between this valve and the tou.
+FLS_STUB_ONLY_PROMPT = """\
+You MUST respond with ONLY a JSON object.
+Format: {{"attachment": "FLS"}} or {{"attachment": "none"}}
+
+Valve {TAG}. Trace the leader line to its bowtie. Ignore all other bowties and their labels.
+
+FLS means the {TAG} bowtie has a SHORT PIPE STUB with an OPEN BLUNT END. Look for:
+  • An L-hook: a short branch off the main pipe that turns 90° and ends openly in empty space.
+  • A horizontal spool / short tee branch with the tip cut clean — no fitting, no arrow, no funnel.
+  • The stub end points into EMPTY SPACE — nothing at the tip whatsoever.
+  The stub may be SMALL OR SUBTLE — even a short extension of 5–10 mm counts if the end is open.
+
+  FLS → an open-ended stub like the above is on the {TAG} bowtie's own pipe
+  none → no open-ended stub on {TAG}; or only drain indicators (arrows, funnels, boxes) visible,
+         which may belong to a DIFFERENT neighboring bowtie — those do NOT count for {TAG}.
 """
 
 VESSEL_DRN_RETRY_PROMPT = """\
@@ -941,6 +834,24 @@ Format: {{"attachment": "DRN"}} or {{"attachment": "none"}}
 Valve {TAG} on a line leaving a vessel/tank bottom: horizontal run through the
 bowtie then an elbow turning downward with a flow arrow = DRN.
 Otherwise none.
+"""
+
+TJUNC_DRN_PROMPT = """\
+You MUST respond with ONLY a JSON object.
+Format: {{"attachment": "DRN"}} or {{"attachment": "none"}}
+
+Valve {TAG} is an actuated valve (AV). Look at its pipe path in Images 1–2.
+
+DRN — {TAG}'s pipe connects to a SHARED VERTICAL DRAIN MANIFOLD: a vertical pipe that
+      routes flow down to a drain/trough/sump. Recognise this topology:
+        • {TAG}'s pipe runs horizontally to a T-junction.
+        • A VERTICAL manifold pipe descends from that T-junction.
+        • Other valves (191, 192, etc.) sit ON the vertical manifold below the T-junction.
+        • Drain indicators (large solid arrows, funnel, U-channel) sit at the BOTTOM of the manifold.
+      {TAG} IS DRN even when the drain indicators appear below other valves — the shared manifold
+      means {TAG}'s pipe ultimately reaches the drain.
+
+none — {TAG}'s pipe goes only to a process vessel, pump, or header, with no drain manifold visible.
 """
 
 SMP_CONFIRM_PROMPT = """\
@@ -1011,7 +922,32 @@ def refine_attachment(
                 below_valve_png(crop_path, half=crop_half, extra_below=extra_below),
             ],
         )
+        if att != "FLS" and _PLAIN_NUMERIC_TAG_RE.match(_norm_tag(tag)):
+            # For plain-numeric tags, run an FLS-only ask before DRAIN_RETRY.  This prevents
+            # a neighbouring bowtie's drain indicators from overriding a subtle FLS stub:
+            # FLS_STUB_ONLY focuses solely on an open pipe-end on the {TAG} bowtie, so
+            # neighbour drain shapes cannot cause a false DRN.
+            fls_only = _bedrock_attachment_ask(
+                FLS_STUB_ONLY_PROMPT.replace("{TAG}", tag),
+                marked,
+                model_id=model_id,
+                region=region,
+                extra_images=[
+                    branch_context_png(marked, cx_frac=cx_frac, cy_frac=cy_frac),
+                    below_valve_png(crop_path, half=crop_half, extra_below=extra_below),
+                ],
+            )
+            if fls_only == "FLS":
+                att = "FLS"
         if att != "FLS":
+            # Non-plain-numeric tags are actuated valves (XV, HV, LV) whose drain indicator
+            # may sit further below the body; use 2× extra_below so the funnel/U-channel is
+            # visible.  Plain-numeric manual valves use the standard below height.
+            _drain_extra_below = (
+                extra_below * 2
+                if not _PLAIN_NUMERIC_TAG_RE.match(_norm_tag(tag))
+                else extra_below
+            )
             att = _bedrock_attachment_ask(
                 DRAIN_RETRY_PROMPT.replace("{TAG}", tag),
                 marked,
@@ -1019,7 +955,7 @@ def refine_attachment(
                 region=region,
                 extra_images=[
                     branch_context_png(marked, cx_frac=cx_frac, cy_frac=cy_frac),
-                    below_valve_png(crop_path, half=crop_half, extra_below=extra_below),
+                    below_valve_png(crop_path, half=crop_half, extra_below=_drain_extra_below),
                 ],
             ) or att
             if not att:
@@ -1030,17 +966,96 @@ def refine_attachment(
                     region=region,
                     extra_images=[branch_context_png(marked, cx_frac=cx_frac, cy_frac=cy_frac)],
                 )
+            # Second-chance DRAIN_RETRY for plain-numeric tags: temperature=0 can still
+            # produce stochastic misses; a second call at the same prompt recovers them
+            # without changing the risk profile (DRN_DIRECT_RETRY still gates below).
+            if not att and _PLAIN_NUMERIC_TAG_RE.match(_norm_tag(tag)):
+                att = _bedrock_attachment_ask(
+                    DRAIN_RETRY_PROMPT.replace("{TAG}", tag),
+                    marked,
+                    model_id=model_id,
+                    region=region,
+                    extra_images=[
+                        branch_context_png(marked, cx_frac=cx_frac, cy_frac=cy_frac),
+                        below_valve_png(crop_path, half=crop_half, extra_below=extra_below),
+                    ],
+                )
 
     if att == "DRN":
-        direct = _bedrock_attachment_ask(
-            DRN_DIRECT_RETRY_PROMPT.replace("{TAG}", tag),
-            marked,
-            model_id=model_id,
-            region=region,
-            extra_images=[branch_context_png(marked, cx_frac=cx_frac, cy_frac=cy_frac)],
-        )
-        if not direct:
-            att = ""
+        if _PLAIN_NUMERIC_TAG_RE.match(_norm_tag(tag)):
+            # Post-DRN FLS check: a subtle FLS stub may have been missed earlier while
+            # a neighbour's drain triggered DRAIN_RETRY.  body_zoom_png gives a tighter
+            # view of the bowtie area than branch_context or below_valve, which helps
+            # surface small L-hooks.  This only fires when att is already "DRN" so it
+            # cannot affect valves (like 35-27-739) whose att never reaches "DRN".
+            # Two zoom levels (4× and 6.7×) at different magnifications: subtle FLS
+            # L-hooks may only become visible at a specific zoom level.  Accept 1-of-2
+            # FLS votes — the lower bar is safe because DRN_DIRECT_RETRY still gates
+            # below, and plain-numeric DRN valves without stubs reliably return "none".
+            _fls_stub_votes = 0
+            _stub_cy_low = min(0.82, cy_frac + 0.07)
+            # Five zoom variants — NO branch_context so a close neighbour's drain trough
+            # (e.g. 35-24-093 sits within 20 drawing-units of 35-24-1105) cannot appear
+            # in the extra image and pollute the FLS decision.
+            # Checks 1–2: biased below cy_frac (downward stubs).
+            # Checks 3–4: centred at cy_frac (horizontal L-hook stubs).
+            # Check 5: tight 5× zoom at cy_frac (most isolated view of the bowtie body).
+            for _stub_frac, _stub_cy in (
+                (0.25, _stub_cy_low),
+                (0.15, _stub_cy_low),
+                (0.30, cy_frac),
+                (0.46, cy_frac),
+                (0.20, cy_frac),
+            ):
+                _v = _bedrock_attachment_ask(
+                    FLS_STUB_ONLY_PROMPT.replace("{TAG}", tag),
+                    marked,
+                    model_id=model_id,
+                    region=region,
+                    extra_images=[
+                        zoom_center_png(crop_path, frac=_stub_frac, cx_frac=cx_frac, cy_frac=_stub_cy),
+                    ],
+                )
+                if _v == "FLS":
+                    _fls_stub_votes += 1
+            if not _fls_stub_votes:
+                # Sixth check: call Bedrock with ONLY the tight body zoom and NO marked
+                # image.  All previous checks pass `marked` (full crop) as Image 1, which
+                # still shows the neighbouring valve's drain trough even when extra_images
+                # is clean.  Removing the marked image eliminates the last contamination
+                # path so the model can judge only the bowtie body at 5× magnification.
+                _zoom_only = zoom_center_png(crop_path, frac=0.15, cx_frac=cx_frac, cy_frac=cy_frac)
+                _c6 = _bedrock_client(region)
+                _r6 = _c6.converse(
+                    modelId=model_id,
+                    messages=[{
+                        "role": "user",
+                        "content": [
+                            {"text": FLS_STUB_ONLY_PROMPT.replace("{TAG}", tag)},
+                            {"image": {"format": "png", "source": {"bytes": _zoom_only}}},
+                        ],
+                    }],
+                    inferenceConfig={"maxTokens": 80, "temperature": 0},
+                )
+                _parts6 = [b["text"] for b in _r6.get("output", {}).get("message", {}).get("content", []) if "text" in b]
+                _v6 = parse_attachment_response("\n".join(_parts6).strip())
+                if _v6 == "FLS":
+                    _fls_stub_votes += 1
+            if _fls_stub_votes >= 1:
+                att = "FLS"
+        if att == "DRN":
+            direct = _bedrock_attachment_ask(
+                DRN_DIRECT_RETRY_PROMPT.replace("{TAG}", tag),
+                marked,
+                model_id=model_id,
+                region=region,
+                extra_images=[
+                    branch_context_png(marked, cx_frac=cx_frac, cy_frac=cy_frac),
+                    below_valve_png(crop_path, half=crop_half, extra_below=extra_below),
+                ],
+            )
+            if not direct:
+                att = ""
 
     if att == "SMP":
         confirm = _bedrock_attachment_ask(
@@ -1146,7 +1161,11 @@ def _normalize_body_type(body: str) -> str:
     """Resolve mutually exclusive body tokens after vision parse."""
     tokens = [t for t in str(body or "").upper().split() if t in ALLOWED_VALVE_TOKENS]
     if "CHK" in tokens:
-        tokens = [t for t in tokens if t not in {"NC", "HV", "NO"}]
+        tokens = [t for t in tokens if t not in {"NC", "HV", "NO", "GLV", "3WV"}]
+    elif "GLV" in tokens:
+        tokens = [t for t in tokens if t not in {"HV", "NC", "NO"}]
+    elif "3WV" in tokens:
+        tokens = [t for t in tokens if t not in {"HV", "NC", "NO"}]
     elif "NC" in tokens:
         tokens = [t for t in tokens if t not in {"HV", "NO"}]
     elif "HV" in tokens:
@@ -1157,13 +1176,40 @@ def _normalize_body_type(body: str) -> str:
 _JSON_RETRY_PROMPT = """\
 Respond with ONLY a JSON object — no other text.
 Format: {{"type": "NC", "attachment": "FLS"}}
-Classify valve {TAG} from the images. type = NC|HV|AV|AV-M|CHK|PRV|SV|NO. attachment = DRN|FLS|SMP|none.
+Classify valve {TAG} from the images. type = NC|HV|GLV|CHK|3WV|SV|AV|AV-M|PRV|PLUG|AAV|GF|YSTR. attachment = DRN|FLS|SMP|none.
 """
 
 _HV_CONFIRM_PROMPT = """\
 Respond with ONLY a JSON object: {{"type": "HV", "attachment": "none"}} or {{"type": "AV", "attachment": "none"}}
 Valve {TAG}. Is there a CIRCLE on the stem directly attached to the bowtie centre?
 Plain text (AT, HP) or distant instruments do NOT count. No circle on stem → HV.
+"""
+
+_GLV_AV_CONFIRM_PROMPT = """\
+Respond with ONLY a JSON object: {{"type": "GLV", "attachment": "none"}} or {{"type": "AV", "attachment": "none"}}
+Valve {TAG}. The symbol has a circle — determine whether it is a globe seat or an actuator.
+
+GLV (globe valve): the SMALL CIRCLE sits INSIDE the bowtie, at the exact point where the two
+     outline triangle tips meet. It is part of the valve body — no stem separates it from the
+     bowtie body. Both triangles must be OUTLINE (empty interior).
+
+AV  (actuated valve): the circle is on a STEM that extends AWAY from the bowtie body. A visible
+     rod or line connects the bowtie centre to a circle or box that is physically outside the body.
+
+Decisive test: can you see a stem/rod between the bowtie and the circle?
+  Yes → AV.  No (circle is at the junction itself) → GLV.
+"""
+
+_GLV_SOLID_CONFIRM_PROMPT = """\
+Respond with ONLY a JSON object: {{"type": "GLV", "attachment": "none"}} or {{"type": "NC", "attachment": "none"}}
+Valve {TAG}: examine the two bowtie triangles closely.
+
+GLV → BOTH triangles are OUTLINE (dark/hollow interior, no fill at all).
+NC  → BOTH triangles are SOLID-FILLED (white, light, or coloured). In SML/Shotton drawings
+      white ink on a dark P&ID background = solid fill = NC.
+
+If the triangles are solid, or if an L-hook / pipe stub is visible near the bowtie → NC.
+If both triangles are genuinely hollow/outline with no fill → GLV.
 """
 
 
@@ -1203,14 +1249,39 @@ _FILL_CONFIRM_PROMPT = """\
 Respond with ONLY a JSON object: {{"type": "NC", "attachment": "none"}} or {{"type": "HV", "attachment": "none"}}
 Valve {TAG}: follow the leader/tag line from label "{TAG}" to the bowtie it connects to.
 Classify ONLY that bowtie — ignore other nearby bowties.
-BOTH triangles solid fill (white, red, or colored) → NC. BOTH outline-only (dark interior) → HV.
+SOLID fill (opaque interior — white, grey, red, or any colour that blocks the background) → NC.
+OUTLINE only (hollow interior — the drawing background shows through the triangle) → HV.
+Both triangles must be assessed: if BOTH solid → NC; if BOTH outline → HV.
 """
 
 
 _BODY_FILL_CONFIRM = """\
 Respond with ONLY a JSON object: {{"type": "NC", "attachment": "none"}} or {{"type": "HV", "attachment": "none"}} or {{"type": "CHK", "attachment": "none"}}
 Valve {TAG} bowtie only: BOTH triangles solid fill (white/red/colored) → NC. BOTH outline → HV.
-EXACTLY one filled (white/red/colored) + one outline → CHK.
+EXACTLY one filled + one outline → CHK.
+SML/Shotton convention: white triangles on a dark P&ID background = solid fill = NC.
+If BOTH triangles look identical (both same shade) → NC, not CHK.
+"""
+
+_CHK_CONFIRM_PROMPT = """\
+Respond with ONLY a JSON object: {{"type": "CHK", "attachment": "none"}} or {{"type": "NC", "attachment": "none"}}
+Valve {TAG}. Image 2: tight zoom centred on the {TAG} bowtie. Image 3: drawing legend.
+
+Step 1 — In Image 1, find label "{TAG}" and TRACE ITS LEADER LINE to the VALVE BODY where it terminates.
+          The valve body is a two-triangle bowtie symbol or, in Valmet drawings, a large inline arrowhead.
+          The leader line terminates AT the valve body — that is the ONLY symbol to assess.
+
+Step 2 — Find the CHK (check valve) entry in the legend (Image 3).
+
+Step 3 — Compare ONLY the {TAG} valve body (where the leader line ends) to the CHK legend entry.
+  CHK if the valve body itself (at the leader line end) has EXACTLY ONE solid half + ONE outline half,
+       OR matches the CHK arrowhead shown in the legend.
+  NC if both halves of the valve body are identically solid-filled.
+
+Critical: large arrows or arrowheads that are NOT where the {TAG} leader line terminates are
+FLOW DIRECTION MARKERS or DRAIN ARROWS — they are SEPARATE elements, not the CHK valve body.
+Drain flow arrows (on the drain pipe below the valve) look like solid arrowheads but are NOT check
+valves. Only the symbol at the precise end of the {TAG} leader line should be assessed.
 """
 
 
@@ -1225,36 +1296,55 @@ def _refine_drain_body_fill(
     cx_frac: float,
     cy_frac: float,
 ) -> str:
-    """Re-check bowtie fill on drain valves often misread as CHK or HV."""
+    """Re-check bowtie fill on service-point valves (DRN/FLS/SMP) misread as CHK or HV.
+
+    Uses two confirmation calls with a compact zoom; requires consensus to override.
+    Only changes the body type — the service-point attachment is preserved.
+    """
     tokens = str(result or "").upper().split()
-    if "DRN" not in tokens:
+    has_service_point = any(t in tokens for t in _EXCLUSIVE_ATTACHMENTS)
+    if not has_service_point:
         return result
     body_tokens = [t for t in tokens if t in {"NC", "HV", "CHK", "NO"}]
     if not body_tokens or body_tokens[0] == "NC":
         return result
-    raw = _bedrock_short_ask(
-        _BODY_FILL_CONFIRM.replace("{TAG}", tag),
-        marked,
-        model_id=model_id,
-        region=region,
-        extra_images=[body_zoom_png(crop_path, cx_frac=cx_frac, cy_frac=cy_frac)],
-    )
-    fixed = _parse_one_pass(raw)
-    if not fixed:
-        return result
-    new_body = strip_attachment_tokens(fixed).split()[0]
     attach = [t for t in tokens if t in _EXCLUSIVE_ATTACHMENTS]
-    return merge_body_and_attachment(new_body, attach[0] if attach else "")
+    # Two confirmation votes; require consensus to override the initial reading.
+    votes: List[str] = []
+    for _ in range(2):
+        raw = _bedrock_short_ask(
+            _BODY_FILL_CONFIRM.replace("{TAG}", tag),
+            marked,
+            model_id=model_id,
+            region=region,
+            extra_images=[body_zoom_png(crop_path, cx_frac=cx_frac, cy_frac=cy_frac)],
+        )
+        fixed = _parse_one_pass(raw)
+        if fixed:
+            body = strip_attachment_tokens(fixed).split()[0]
+            if body in {"NC", "HV", "CHK"}:
+                votes.append(body)
+    if len(votes) == 2 and votes[0] == votes[1]:
+        return merge_body_and_attachment(votes[0], attach[0] if attach else "")
+    return result
 
 
-def _normalize_drain_hand_body(result: str) -> str:
-    """Hand drain valves on this P&ID are normally closed (NC), not CHK/HV."""
+def _normalize_service_point_body(result: str) -> str:
+    """Service-point valves (DRN/FLS/SMP) are always hand-closed (NC), never CHK or HV.
+
+    Vision sometimes misreads the bowtie fill when the service-point geometry crowds
+    the symbol.  This rule is semantically airtight: you open a drain/flush/sample
+    valve to use it, so the running state must be NC.  Actuated valves (AV/AV-M) are
+    excluded because those can appear with DRN as a drain-to-sump attachment.
+    """
     tokens = str(result or "").upper().split()
-    if "DRN" not in tokens or "AV" in tokens or "AV-M" in tokens or "NC" in tokens:
+    service = [t for t in tokens if t in _EXCLUSIVE_ATTACHMENTS]
+    if not service:
         return result
-    if "CHK" in tokens or "HV" in tokens:
-        attach = [t for t in tokens if t in _EXCLUSIVE_ATTACHMENTS] or ["DRN"]
-        return merge_body_and_attachment("NC", attach[0])
+    if "AV" in tokens or "AV-M" in tokens or "NC" in tokens:
+        return result
+    if "CHK" in tokens or "HV" in tokens or "NO" in tokens or "GLV" in tokens:
+        return merge_body_and_attachment("NC", service[0])
     return result
 
 
@@ -1282,6 +1372,62 @@ def _confirm_hv_not_false_av(
     return fixed if fixed else result
 
 
+def _confirm_av_not_glv(
+    result: str,
+    *,
+    tag: str,
+    marked: Path,
+    crop_path: Path,
+    model_id: str,
+    region: str,
+    cx_frac: float = 0.5,
+    cy_frac: float = 0.5,
+) -> str:
+    """Re-confirm AV/GLV on non-plain-numeric tags — circle on stem or inside bowtie?
+
+    GOR globe valves (GLV) have a circle sitting inside the bowtie at the triangle junction.
+    Actuated valves (AV) have a circle on a stem extending away from the bowtie body.
+    Fires for BOTH AV and GLV results so that a stochastic GLV from the main pass on an
+    actuated-valve tag can be corrected back to AV.
+    Plain numeric tags are already handled by _confirm_hv_not_false_av.
+    """
+    tokens = str(result or "").upper().split()
+    has_av = "AV" in tokens and "AV-M" not in tokens
+    has_glv = "GLV" in tokens
+    if not (has_av or has_glv):
+        return result
+    if _PLAIN_NUMERIC_TAG_RE.match(_norm_tag(tag)):
+        return result  # handled by _confirm_hv_not_false_av
+    raw = _bedrock_short_ask(
+        _GLV_AV_CONFIRM_PROMPT.replace("{TAG}", tag),
+        marked,
+        model_id=model_id,
+        region=region,
+    )
+    fixed = _parse_one_pass(raw)
+    if not fixed:
+        # Retry once — verbose first responses sometimes prevent JSON extraction.
+        raw = _bedrock_short_ask(
+            _GLV_AV_CONFIRM_PROMPT.replace("{TAG}", tag),
+            marked,
+            model_id=model_id,
+            region=region,
+        )
+        fixed = _parse_one_pass(raw)
+    if not fixed:
+        # Both attempts failed: pass through _normalize_service_point_body so semantically
+        # impossible tokens (e.g. "DRN GLV") are corrected before they escape.
+        return _normalize_service_point_body(result)
+    fixed_body = strip_attachment_tokens(fixed)
+    orig_attach = [t for t in tokens if t in _EXCLUSIVE_ATTACHMENTS]
+    # Only carry the original attachment forward when the confirmed body is AV — actuated
+    # valves can drain to a sump (AV DRN).  GLV is a process regulating valve and cannot
+    # carry a service-point attachment; carrying DRN onto GLV would produce an invalid token.
+    if orig_attach and fixed_body == "AV":
+        return merge_body_and_attachment("AV", orig_attach[0])
+    return fixed_body
+
+
 def _confirm_nc_vs_hv(
     result: str,
     *,
@@ -1306,7 +1452,7 @@ def _confirm_nc_vs_hv(
         return result
     tight_cx = max(0.35, min(0.55, cx_frac - 0.05))
     hv_votes = 0
-    for cx_off, frac in ((cx_frac, 0.20), (tight_cx, 0.12)):
+    for cx_off, frac in ((cx_frac, 0.20), (tight_cx, 0.12), (cx_frac, 0.30)):
         for _ in range(2):
             raw = _bedrock_short_ask(
                 _FILL_CONFIRM_PROMPT.replace("{TAG}", tag),
@@ -1342,11 +1488,13 @@ def _confirm_chk_body_fill(
     tokens = str(result or "").upper().split()
     if "CHK" not in tokens:
         return result
-    if any(t in tokens for t in ("AV", "AV-M", "FLS", "SMP")):
+    if any(t in tokens for t in ("AV", "AV-M", "SMP")):
         return result
     if not _PLAIN_NUMERIC_TAG_RE.match(_norm_tag(tag)):
         return result
     # Left-bias tight zoom isolates the ring-centre bowtie when a CHK neighbour sits to the right.
+    # FLS is NOT excluded: vision re-confirms the body when CHK+FLS appears (check valves cannot
+    # have flushing stubs — the bowtie is very likely solid NC misread as CHK).
     tight_cx = max(0.35, min(0.55, cx_frac - 0.05))
     tight = zoom_center_png(crop_path, frac=0.12, cx_frac=tight_cx, cy_frac=cy_frac)
     votes: List[str] = []
@@ -1364,34 +1512,63 @@ def _confirm_chk_body_fill(
             body = strip_attachment_tokens(fixed).split()[0]
             if body in {"NC", "HV"}:
                 votes.append(body)
+    attach = [t for t in tokens if t in _EXCLUSIVE_ATTACHMENTS]
     if len(votes) == 2 and votes[0] == votes[1] == "HV":
-        attach = [t for t in tokens if t in _EXCLUSIVE_ATTACHMENTS]
         return merge_body_and_attachment("HV", attach[0] if attach else "")
+    if len(votes) == 2 and votes[0] == votes[1] == "NC":
+        return merge_body_and_attachment("NC", attach[0] if attach else "")
+    return result
+
+
+def _confirm_nc_vs_chk(
+    result: str,
+    *,
+    tag: str,
+    marked: Path,
+    crop_path: Path,
+    model_id: str,
+    region: str,
+    cx_frac: float,
+    cy_frac: float,
+) -> str:
+    """Last-chance CHK upgrade for plain-numeric NC valves with no service point.
+
+    The main V2 pass biases toward NC when fill difference is ambiguous; this tight-zoom
+    re-check surfaces cases where the body-zoom clearly shows one-half-solid / one-half-outline.
+    Requires 2/2 unanimous CHK votes to convert — high bar prevents false CHK on plain NC.
+    """
+    tokens = str(result or "").upper().split()
+    if not tokens or tokens[0] != "NC":
+        return result
+    if any(t in tokens for t in _EXCLUSIVE_ATTACHMENTS):
+        return result
+    if not _PLAIN_NUMERIC_TAG_RE.match(_norm_tag(tag)):
+        return result
+    tight = zoom_center_png(crop_path, frac=0.30, cx_frac=cx_frac, cy_frac=cy_frac)
+    extras: List[bytes] = [tight]
+    if _legend_bytes is not None:
+        extras.append(_legend_bytes)
+    chk_votes = 0
+    for _ in range(2):
+        raw = _bedrock_short_ask(
+            _CHK_CONFIRM_PROMPT.replace("{TAG}", tag),
+            marked,
+            model_id=model_id,
+            region=region,
+            max_tokens=120,
+            extra_images=extras,
+        )
+        fixed = _parse_one_pass(raw)
+        if fixed and strip_attachment_tokens(fixed).split()[0] == "CHK":
+            chk_votes += 1
+    if chk_votes >= 2:
+        return "CHK"
     return result
 
 
 def _parse_one_pass(raw: str) -> str:
-    """Parse {"type": "NC", "attachment": "DRN"} → "NC DRN"."""
-    text = re.sub(r"^```(?:json)?\s*|\s*```$", "", raw.strip())
-    obj = None
-    try:
-        obj = json.loads(text)
-    except Exception:
-        m = re.search(r"\{[^{}]*\"type\"[^{}]*\"attachment\"[^{}]*\}", text, re.I | re.S)
-        if m:
-            try:
-                obj = json.loads(m.group(0))
-            except Exception:
-                pass
-    if isinstance(obj, dict):
-        body = _normalize_body_type(strip_attachment_tokens(parse_type_tokens(str(obj.get("type") or ""))))
-        att_raw = str(obj.get("attachment") or "none").upper().strip()
-        attachment = att_raw if att_raw in _EXCLUSIVE_ATTACHMENTS else ""
-        return merge_body_and_attachment(body, attachment)
-    # Fallback: extract tokens from raw text
-    body = _normalize_body_type(strip_attachment_tokens(parse_type_tokens(raw)))
-    attachment = parse_attachment_response(raw)
-    return merge_body_and_attachment(body, attachment) if body else ""
+    """Parse {"type": "NC", "attachment": "DRN"} → "NC DRN" (V2 legend tokens)."""
+    return parse_v2_response(raw)
 
 
 def bedrock_classify_crop(
@@ -1411,7 +1588,7 @@ def bedrock_classify_crop(
     global _legend_bytes
 
     marked = annotate_valve_crop(crop_path, tag, cx_frac=cx_frac, cy_frac=cy_frac)
-    prompt = ONE_PASS_PROMPT.replace("{TAG}", tag or crop_path.stem)
+    prompt = load_v2_prompt(tag or crop_path.stem)
 
     if legend_path.exists() and _legend_bytes is None:
         with _bedrock_lock:
@@ -1455,6 +1632,34 @@ def bedrock_classify_crop(
     if result:
         result_tokens = set(result.split())
         body_only = strip_attachment_tokens(result)
+
+        # GLV on a plain-numeric tag: re-confirm the triangles are actually outline.
+        # Solid triangles + a circle = NC + service-point attachment, not GLV.
+        if "GLV" in result_tokens and _PLAIN_NUMERIC_TAG_RE.match(_norm_tag(tag or "")):
+            raw2 = _bedrock_short_ask(
+                _GLV_SOLID_CONFIRM_PROMPT.replace("{TAG}", tag or crop_path.stem),
+                marked,
+                model_id=model_id,
+                region=region,
+                extra_images=[body_zoom_png(crop_path, cx_frac=cx_frac, cy_frac=cy_frac)],
+            )
+            confirmed = _parse_one_pass(raw2)
+            if confirmed and strip_attachment_tokens(confirmed).split()[0] == "NC":
+                # Solid triangles: reclassify body as NC and determine attachment.
+                att2 = _bedrock_attachment_ask(
+                    FLS_FLUSH_RETRY_PROMPT.replace("{TAG}", tag or crop_path.stem),
+                    marked,
+                    model_id=model_id,
+                    region=region,
+                    extra_images=[
+                        branch_context_png(marked, cx_frac=cx_frac, cy_frac=cy_frac),
+                        below_valve_png(crop_path, half=crop_half, extra_below=extra_below),
+                    ],
+                )
+                result = merge_body_and_attachment("NC", att2)
+                result_tokens = set(result.split())
+                body_only = strip_attachment_tokens(result)
+
         if "SMP" in result_tokens:
             att = refine_attachment(
                 "SMP",
@@ -1483,8 +1688,44 @@ def bedrock_classify_crop(
             )
             if att == "DRN":
                 result = merge_body_and_attachment(body_only, "DRN")
-            elif att != "FLS":
+            elif att not in ("FLS", "none", ""):
+                # Only override FLS if a different non-empty attachment (e.g. SMP) is returned.
                 result = merge_body_and_attachment(body_only, att)
+            elif _PLAIN_NUMERIC_TAG_RE.match(_norm_tag(tag or "")):
+                # FLS confirmed (or ambiguous none): challenge with DRAIN prompt as second opinion.
+                # Genuine FLS (open pipe end) won't have the large solid drain arrow DRN requires.
+                drn_att = _bedrock_attachment_ask(
+                    DRAIN_RETRY_PROMPT.replace("{TAG}", tag or crop_path.stem),
+                    marked,
+                    model_id=model_id,
+                    region=region,
+                    extra_images=[
+                        branch_context_png(marked, cx_frac=cx_frac, cy_frac=cy_frac),
+                        below_valve_png(crop_path, half=crop_half, extra_below=extra_below),
+                    ],
+                )
+                if drn_att == "DRN":
+                    result = merge_body_and_attachment(body_only, "DRN")
+        elif "DRN" in result_tokens and "FLS" not in result_tokens and _PLAIN_NUMERIC_TAG_RE.match(_norm_tag(tag or "")):
+            # DRN on a plain-numeric tag: require 2 FLS votes to convert; one ambiguous vote keeps DRN.
+            # FLS (open pipe end) and DRN (enclosed shape) are often confused in Shotton crops.
+            _fls_votes: List[str] = []
+            for _ in range(2):
+                _fls_votes.append(
+                    _bedrock_attachment_ask(
+                        FLS_FLUSH_RETRY_PROMPT.replace("{TAG}", tag or crop_path.stem),
+                        marked,
+                        model_id=model_id,
+                        region=region,
+                        extra_images=[
+                            branch_context_png(marked, cx_frac=cx_frac, cy_frac=cy_frac),
+                            below_valve_png(crop_path, half=crop_half, extra_below=extra_below),
+                        ],
+                    )
+                )
+            if _fls_votes.count("FLS") >= 2:
+                # Unanimous FLS: convert DRN → FLS.
+                result = merge_body_and_attachment(body_only, "FLS")
         elif "DRN" not in result_tokens and "FLS" not in result_tokens:
             att = refine_attachment(
                 "",
@@ -1501,16 +1742,34 @@ def bedrock_classify_crop(
             )
             if att:
                 result = merge_body_and_attachment(body_only, att)
-    return _normalize_drain_hand_body(
-        _confirm_chk_body_fill(
-            _confirm_nc_vs_hv(
-                _refine_drain_body_fill(
-                    _confirm_hv_not_false_av(
-                        result,
+    return _normalize_service_point_body(
+        _confirm_nc_vs_chk(
+            _confirm_chk_body_fill(
+                _confirm_nc_vs_hv(
+                    _refine_drain_body_fill(
+                        _confirm_av_not_glv(
+                            _confirm_hv_not_false_av(
+                                result,
+                                tag=tag or crop_path.stem,
+                                marked=marked,
+                                model_id=model_id,
+                                region=region,
+                            ),
+                            tag=tag or crop_path.stem,
+                            marked=marked,
+                            crop_path=crop_path,
+                            model_id=model_id,
+                            region=region,
+                            cx_frac=cx_frac,
+                            cy_frac=cy_frac,
+                        ),
                         tag=tag or crop_path.stem,
                         marked=marked,
+                        crop_path=crop_path,
                         model_id=model_id,
                         region=region,
+                        cx_frac=cx_frac,
+                        cy_frac=cy_frac,
                     ),
                     tag=tag or crop_path.stem,
                     marked=marked,
@@ -1519,6 +1778,7 @@ def bedrock_classify_crop(
                     region=region,
                     cx_frac=cx_frac,
                     cy_frac=cy_frac,
+                    pipe_dn_near=pipe_dn_near,
                 ),
                 tag=tag or crop_path.stem,
                 marked=marked,
@@ -1527,7 +1787,6 @@ def bedrock_classify_crop(
                 region=region,
                 cx_frac=cx_frac,
                 cy_frac=cy_frac,
-                pipe_dn_near=pipe_dn_near,
             ),
             tag=tag or crop_path.stem,
             marked=marked,
@@ -1811,10 +2070,7 @@ def run_valve_classify_from_args(args: argparse.Namespace) -> int:
                     extra_below=extra_below,
                     pipe_dn_near=pipe_dn_label_near_tag(loc["tag"], text_locations, structural),
                 )
-                return loc["tag"], apply_wfl_drain_attachment(
-                    vtype,
-                    wfl_drain_hint=_norm_tag(loc["tag"]) in wfl_tags,
-                )
+                return loc["tag"], vtype
             except Exception as exc:
                 _log(f"  [warn] Bedrock failed for {loc['tag']}: {exc}")
                 return loc["tag"], ""

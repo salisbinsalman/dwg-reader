@@ -306,47 +306,47 @@
     },
     "1200": {
       "name": "INSTRUMENTS",
-      "work_centre": ""
+      "work_centre": "INST"
     },
     "1201": {
       "name": "INSTRUMENT PRESSURE",
-      "work_centre": ""
+      "work_centre": "INST"
     },
     "1202": {
       "name": "INSTRUMENT TEMP",
-      "work_centre": ""
+      "work_centre": "INST"
     },
     "1203": {
       "name": "INSTRUMENT FLOW",
-      "work_centre": ""
+      "work_centre": "INST"
     },
     "1204": {
       "name": "INSTRUMENT LEVEL",
-      "work_centre": ""
+      "work_centre": "INST"
     },
     "1205": {
       "name": "INSTRUMENT SPEED",
-      "work_centre": ""
+      "work_centre": "INST"
     },
     "1206": {
       "name": "INSTRUMENT MOTION",
-      "work_centre": ""
+      "work_centre": "INST"
     },
     "1207": {
       "name": "INSTRUMENT RADIATION",
-      "work_centre": ""
+      "work_centre": "INST"
     },
     "1208": {
       "name": "INSTRUMENT QI/PH",
-      "work_centre": ""
+      "work_centre": "INST"
     },
     "1209": {
       "name": "INSTRUMENT POSITION",
-      "work_centre": ""
+      "work_centre": "INST"
     },
     "1210": {
       "name": "INSTRUMENT OTHER",
-      "work_centre": ""
+      "work_centre": "INST"
     },
     "1300": {
       "name": "LUBRICATION",
@@ -769,7 +769,15 @@
     "P": "701",
     "M": "1101",
     "ES": "1108",
-    "A": "2001"
+    "A": "2001",
+    "FS": "1203",
+    "SC": "1210",
+    "LI": "1204",
+    "KS": "1108",
+    "HC": "1210",
+    "HS": "1210",
+    "YS": "1210",
+    "SS": "1210"
   },
   "description_keyword_rules": [
     {
@@ -1003,6 +1011,18 @@
         "GEARBOX"
       ],
       "code": "901"
+    },
+    {
+      "match": [
+        "HV"
+      ],
+      "code": "201"
+    },
+    {
+      "match": [
+        "LN"
+      ],
+      "code": "2100"
     }
   ]
 }

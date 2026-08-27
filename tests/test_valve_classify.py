@@ -201,7 +201,7 @@ class CacheBackedExportTests(unittest.TestCase):
                 "source": "vision",
             }
         }
-        out = build_equipment_rows(rows, valve_cache=cache)
+        out = build_equipment_rows(rows, valve_cache=cache, include_function_equipment=False)
         self.assertEqual(len(out), 1)
         self.assertEqual(out[0]["EQKTX"], "HV 35-24-137 35-24L005 DRN NC")
         self.assertIn("35-24L005", out[0]["TPLNR"])
@@ -221,7 +221,7 @@ class CacheBackedExportTests(unittest.TestCase):
                 "source": "cad_layer",
             }
         }
-        out = build_equipment_rows(rows, valve_cache=cache)
+        out = build_equipment_rows(rows, valve_cache=cache, include_function_equipment=False)
         self.assertTrue(out[0]["EQKTX"].startswith("HV 35-24-207"))
 
     def test_vision_nc_picks_up_fls_from_description(self) -> None:
@@ -243,7 +243,7 @@ class CacheBackedExportTests(unittest.TestCase):
                 "source": "vision",
             }
         }
-        out = build_equipment_rows(rows, valve_cache=cache)
+        out = build_equipment_rows(rows, valve_cache=cache, include_function_equipment=False)
         self.assertEqual(out[0]["EQKTX"], "HV 35-24-209 35-24P512 NC FLS")
 
 

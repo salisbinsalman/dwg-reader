@@ -17,6 +17,7 @@ from dwg_reader.dwg_pure_dump import evidence_dir, find_json, safe_name
 from dwg_reader.dwg_valve_classify import (
     apply_wfl_drain_attachment,
     bedrock_classify_crop,
+    collect_gor_attribute_tag_locations,
     collect_symb_bowtie_inserts,
     collect_text_locations,
     collect_valve_inserts,
@@ -32,6 +33,7 @@ ALIASES = {
     # User list includes two area-code typos.
     "35-32-1105": "35-24-1105",
     "34-24-215": "35-24-215",
+    "168V-390": "168V-390",
 }
 
 EXPECTED_TYPES = {
@@ -58,19 +60,28 @@ EXPECTED_TYPES = {
     "35-24-196": {"HV"},
     "35-27-739": {"HV"},
     "35-27-740": {"CHK"},
+    "168V-385": {"HV"},
+    "168V-389": {"CHK"},
+    "168V-387": {"NC", "DRN"},
+    "168V-390": {"GLV"},
 }
 
 # Tags that live on a drawing other than the default --input (Broke System).
 TAG_INPUT = {
     "35-27-739": "inputs/RAU8F00290.10_Steam and Condensate.dwg",
     "35-27-740": "inputs/RAU8F00290.10_Steam and Condensate.dwg",
+    "168V-385": "inputs/GORB18779.05_SH5(12)_Code 14 - P&ID Ventil Unit WU05_SWE Shotton_CE.dwg",
+    "168V-389": "inputs/GORB18779.05_SH5(12)_Code 14 - P&ID Ventil Unit WU05_SWE Shotton_CE.dwg",
+    "168V-387": "inputs/GORB18779.05_SH5(12)_Code 14 - P&ID Ventil Unit WU05_SWE Shotton_CE.dwg",
+    "168V-390": "inputs/GORB18779.05_SH5(12)_Code 14 - P&ID Ventil Unit WU05_SWE Shotton_CE.dwg",
 }
 
 DEFAULT_TAGS = (
     "35-32-1105,35-24-093,35-24-001,34-24-215,35-24-108,35-24LV1-560,35-24-137,"
     "35-24-107,35-24-110,35-24-230,35-24-105,35-24HV-618,35-24-217,35-24-121,35-24-123,"
     "35-24-191,35-24-192,35-24XV-665,35-24-198,35-24-199,35-24-196,"
-    "35-27-739,35-27-740"
+    "35-27-739,35-27-740,"
+    "168V-385,168V-389,168V-387,168V-390"
 )
 
 
@@ -133,19 +144,19 @@ def _load_drawing_context(input_path: Path, out_dir: Path, hierarchy_csv: str) -
         else out_dir / f"{base}.hierarchy_orchestrator.csv"
     )
     struct_path = find_json(out_dir, f"{base}.structural_dump.json")
-    if not hier_path.exists():
-        raise SystemExit(f"Missing hierarchy CSV: {hier_path}")
     if not struct_path.exists():
         raise SystemExit(f"Missing structural dump: {struct_path}")
     structural = json.loads(struct_path.read_text(encoding="utf-8"))
     inv_path = find_json(out_dir, f"{base}.pid_inventory.json")
     inventory = json.loads(inv_path.read_text(encoding="utf-8")) if inv_path.exists() else {}
+    text_locations = collect_text_locations(structural)
+    text_locations.update(collect_gor_attribute_tag_locations(structural))
     return {
         "input_path": input_path,
-        "hierarchy": load_hierarchy_rows(hier_path),
+        "hierarchy": load_hierarchy_rows(hier_path) if hier_path.exists() else {},
         "structural": structural,
         "inventory": inventory,
-        "text_locations": collect_text_locations(structural),
+        "text_locations": text_locations,
         "valve_inserts": collect_valve_inserts(structural),
         "symb_inserts": collect_symb_bowtie_inserts(structural),
     }

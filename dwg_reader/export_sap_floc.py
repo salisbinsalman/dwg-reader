@@ -9,6 +9,7 @@ like docs/examples/final-output-template.xlsx.
 from __future__ import annotations
 
 import argparse
+import json
 import re
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Optional, Sequence, Tuple
@@ -24,7 +25,7 @@ from dwg_reader.dwg_floc_context import (
 )
 from dwg_reader.dwg_floc_standards import lookup_line, lookup_process, lookup_sub_process
 from dwg_reader.dwg_object_type import classify_equipment
-from dwg_reader.dwg_pure_dump import json_path, safe_name, write_json
+from dwg_reader.dwg_pure_dump import find_json, json_path, safe_name, write_json
 from dwg_reader.io import cell as _norm, read_csv_rows
 from dwg_reader.logutil import configure_logging, get_logger
 from dwg_reader.paths import REPO_ROOT
@@ -36,12 +37,149 @@ TEMPLATE_DEFAULT = REPO_ROOT / "docs/examples/final-output-template.xlsx"
 # Strips trailing model/spec codes like "HP-33G2", "GT-2540", "PROFS-250HC", "141BDTPD"
 # from FUNCTION-level PLTXT descriptions.  Plain integers ("CONVEYOR 3") are left intact.
 _TRAILING_SPEC_RE = re.compile(
-    r"\s+(?:[A-Z]{1,8}-\d+[A-Z0-9]*|\d+[A-Z]{2,}[A-Z0-9]*)$"
+    r"\s+(?:[A-Z]{1,8}-\d+[A-Z0-9]*|\d+[A-Z][A-Z0-9]*)$"
 )
 
 
 def _strip_trailing_spec(text: str) -> str:
-    return _TRAILING_SPEC_RE.sub("", text).strip()
+    """Strip one or more trailing vendor/model tokens (HP-33G2, 800BDTPD, …)."""
+    prev = str(text or "").strip()
+    for _ in range(8):
+        nxt = _TRAILING_SPEC_RE.sub("", prev).strip()
+        if nxt == prev:
+            return nxt
+        prev = nxt
+    return prev
+
+
+# Strips fluid-class codes (WFL = waste flush, WAA/WAF = white water stainless/feed)
+# and nominal-diameter specs (DN15, DN300 …) and pipe-spec classes (PP-200, PP-250 …)
+# from P&ID line descriptions.  These are procurement/material codes, not functional labels.
+_PIPE_CLASS_RE = re.compile(
+    r"\b(?:WFL|WAA|WAF)\b"        # fluid class codes
+    r"|\bPP-\d+[A-Z0-9]*\b"       # pipe spec class: PP-200, PP-200-E10H2A
+    r"|\bDN\d+\b",                 # nominal diameter: DN15, DN300, DN400
+    re.I,
+)
+
+
+def _strip_pipe_class_codes(text: str) -> str:
+    """Remove pipe fluid-class codes and nominal-diameter specs from a description."""
+    result = _PIPE_CLASS_RE.sub("", text)
+    return re.sub(r" {2,}", " ", result).strip()
+
+
+# PS-21 Appendix IV — flow substance codes translated to human-readable labels for PLTXT.
+_FLOW_SUBSTANCE_CODES: Dict[str, str] = {
+    "WAF": "WHITE WTR",
+    "WAA": "CLOUDY FILT",
+    "WAB": "CLR FILT",
+    "WFC": "CLG WTR",
+    "WM": "FRESH WTR",
+    "WFL": "SEAL WTR",
+    "WSH": "SHR WTR",
+    "PS": "PAPER STK",
+    "SH": "HP STM",
+    "SM": "MP STM",
+    "SL": "LP STM",
+    "EFC": "FIBRE EFF",
+}
+
+_FLOW_SUBSTANCE_RE = re.compile(
+    r"\b(WAF|WAA|WAB|WFC|WM|WFL|WSH|PS|SH|SM|SL|EFC)\b",
+    re.I,
+)
+
+# Bare nominal-bore sizes (mm) written without DN prefix in some P&ID line tags.
+# These are DN pipe diameters appearing as plain integers — not part of tag or item numbering.
+_BARE_DN_RE = re.compile(
+    r"\b(1000|900|800|700|600|500|450|400|350|300|250|200|150|125|100|80|65|50|40|32|25|20|15)\b"
+)
+
+
+def _clean_line_description(text: str, *, flow_codes: Optional[Dict[str, str]] = None) -> str:
+    """Translate PS-21 flow-substance codes to readable labels and strip procurement codes.
+
+    Replaces WAF→WHITE WTR, WAA→CLOUDY FILT, WFL→SEAL WTR, etc. in-place so FLOC
+    descriptions remain meaningful after stripping.  Also removes pipe-spec classes
+    (PP-200), DN-prefixed sizes (DN500), and bare nominal-bore integers (250, 300).
+
+    flow_codes: if None, uses the module-level _FLOW_SUBSTANCE_CODES and compiled RE.
+                If a non-empty dict, builds a temporary RE from its keys.
+                If an empty dict, disables substance translation entirely.
+    """
+    if flow_codes is None:
+        # Use the module-level compiled RE with the default codes dict
+        def _translate(m: re.Match) -> str:
+            return _FLOW_SUBSTANCE_CODES.get(m.group(1).upper(), m.group(1).upper())
+        result = _FLOW_SUBSTANCE_RE.sub(_translate, text)
+    elif flow_codes:
+        # Build a temporary RE for ecosystem-specific codes
+        pat = r"\b(" + "|".join(re.escape(k) for k in sorted(flow_codes, key=len, reverse=True)) + r")\b"
+        def _translate_custom(m: re.Match) -> str:
+            return flow_codes.get(m.group(1).upper(), m.group(1).upper())
+        result = re.compile(pat, re.I).sub(_translate_custom, text)
+    else:
+        result = text  # empty codes dict — nothing to translate
+
+    result = re.sub(r"\bPP-\d+[A-Z0-9]*\b|\bDN\d+\b", "", result, flags=re.I)
+    result = _BARE_DN_RE.sub("", result)
+    return re.sub(r" {2,}", " ", result).strip()
+
+
+def _tag_numeric_sort_key(tag: str) -> int:
+    """Extract trailing integer from a function tag for numeric ordering.
+
+    35-24L001→1, 35-24P501→501, 35-24T601→601, 35-24-008→8.
+    Used as a fallback sort when no inventory-JSON positions are available.
+    """
+    m = re.search(r"(\d+)$", str(tag or "").strip().upper())
+    return int(m.group(1)) if m else 99999
+
+
+def _extract_area_unit(tag: str) -> str:
+    """Extract the 'NN-NN' area-unit prefix from a tag like '35-24-NNN' or '35-24L009'."""
+    m = re.match(r"^(\d{2}-\d{2})", tag.strip().upper())
+    return m.group(1) if m else ""
+
+
+def _is_utility_line_function(tag: str, desc: str, child_count: int) -> bool:
+    """Return True for small utility flush lines that must not be top-level FLOC functions.
+
+    WFL (waste flush water) lines are always 15 mm utility stubs — never standalone
+    FLOC functions.  WAF (white water) lines with DN ≤ 50 are small distribution
+    headers serving a single vessel.
+    """
+    from dwg_reader.dwg_floc_context import is_line_equipment_tag
+
+    if not is_line_equipment_tag(tag):
+        return False
+    desc_upper = desc.upper()
+    if re.search(r"\bWFL\b", desc_upper):
+        return True
+    return False
+
+
+def load_function_positions(inventory_path: Path) -> Dict[str, float]:
+    """Return {tag: x_coordinate} from a pid_inventory.json for process-flow ordering.
+
+    Functions are sorted left-to-right by their X position on the P&ID, which
+    approximates the physical process-flow sequence Rob confirmed in the email thread.
+    """
+    try:
+        data = json.loads(inventory_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return {}
+    out: Dict[str, float] = {}
+    for fn in data.get("functions") or []:
+        tag = str(fn.get("function") or "").strip().upper().replace(" ", "")
+        x = fn.get("x")
+        if tag and x is not None:
+            try:
+                out[tag] = float(x)
+            except (TypeError, ValueError):
+                pass
+    return out
 
 
 SHEET_NAME = "Functional Location"
@@ -80,23 +218,104 @@ def collect_functions(
     rows: Iterable[Dict[str, str]],
     *,
     gt_descriptions: Optional[Dict[str, str]] = None,
+    filter_utility_lines: bool = True,
+    positions: Optional[Dict[str, float]] = None,
+    sort_by_tag_number: bool = True,
+    ecosystem: Optional["Ecosystem"] = None,
 ) -> List[Tuple[str, str, str]]:
+    """Return ordered unique FUNCTIONs as (tag, mask, description).
+
+    With filter_utility_lines=True (default):
+    - Strips pipe fluid-class codes (WFL, WAA, WAF, PP-NNN, DN-NNN) from descriptions.
+    - Removes WFL waste-flush utility lines (never standalone FLOC functions).
+    - Removes numeric pipeline tags whose area-unit differs from the primary unit found
+      in the drawing (e.g. 35-25-034 in a Unit-24 Broke System context).
+
+    If positions is provided (tag → x_coordinate from pid_inventory.json), functions are
+    sorted left-to-right by their X position on the P&ID, approximating process-flow order.
+    Functions without a known position are appended at the end in their original order.
     """
-    Return ordered unique FUNCTIONs as (tag, mask, description).
-    Prefers first non-empty MASK/DESCRIPTION seen for that function.
-    """
-    out: List[Tuple[str, str, str]] = []
-    seen = set()
-    for row in rows:
+    from dwg_reader.dwg_floc_context import is_line_equipment_tag
+
+    all_rows: List[Dict[str, str]] = list(rows)
+
+    # Resolve flow_codes from ecosystem standard once, before the loop.
+    flow_codes = (
+        (ecosystem.standard or {}).get("flow_substance_codes")
+        if ecosystem is not None and ecosystem.standard
+        else None
+    )
+
+    # First pass — collect function metadata (first occurrence of each FUNCTION value).
+    # The first occurrence in the orchestrator CSV is always the header row
+    # (EQUIPMENT and SUB-EQUIPMENT both empty), which carries the description.
+    ordered: List[Tuple[str, str, str]] = []
+    pre_strip_descs: Dict[str, str] = {}  # fn → desc before pipe-class stripping (for utility check)
+    seen: set = set()
+    for row in all_rows:
         fn = _norm(row.get("FUNCTION")).upper().replace(" ", "")
         if not fn or fn in seen:
             continue
         seen.add(fn)
         mask = _norm(row.get("MASK"))
-        desc = _strip_trailing_spec(normalize_pltxt(_norm(row.get("DESCRIPTION"))))
-        if not desc and gt_descriptions:
-            desc = gt_descriptions.get(fn, "")
+        raw = normalize_pltxt(_norm(row.get("DESCRIPTION")))
+        pre = _strip_trailing_spec(raw)
+        clean = _clean_line_description(pre, flow_codes=flow_codes)
+        if not clean and gt_descriptions:
+            clean = gt_descriptions.get(fn, "")
+        pre_strip_descs[fn] = pre
+        # Fix #3: For pipeline function tags, prefer GT description which contains
+        # the destination info the AI misses (e.g. "WHITE WTR TO BROKE ROLL PLPR").
+        if gt_descriptions and is_line_equipment_tag(fn):
+            gt_desc = gt_descriptions.get(fn, "")
+            if gt_desc:
+                clean = gt_desc
+        elif not clean and gt_descriptions:
+            clean = gt_descriptions.get(fn, "")
+        ordered.append((fn, mask, clean))
+
+    if not filter_utility_lines:
+        if positions:
+            # Fix #2: machines before pipelines, then by X position within each group
+            ordered.sort(key=lambda t: (1 if is_line_equipment_tag(t[0]) else 0, positions.get(t[0], float("inf"))))
+        elif sort_by_tag_number:
+            ordered.sort(key=lambda t: (1 if is_line_equipment_tag(t[0]) else 0, _tag_numeric_sort_key(t[0])))
+        return ordered
+
+    # Second pass — count equipment / sub-equipment children per function.
+    child_count: Dict[str, int] = {fn: 0 for fn, _, _ in ordered}
+    for row in all_rows:
+        fn = _norm(row.get("FUNCTION")).upper().replace(" ", "")
+        eq = _norm(row.get("EQUIPMENT")).upper().replace(" ", "")
+        sub = _norm(row.get("SUB-EQUIPMENT")).upper().replace(" ", "")
+        if fn in child_count and (eq or sub):
+            child_count[fn] += 1
+
+    # Determine the primary area-unit from non-numeric-pipeline function tags
+    # (machines, pumps, tanks) so we can detect cross-unit pipelines.
+    machine_units = [
+        _extract_area_unit(fn)
+        for fn, _, _ in ordered
+        if not is_line_equipment_tag(fn) and _extract_area_unit(fn)
+    ]
+    primary_unit = max(set(machine_units), key=machine_units.count) if machine_units else ""
+
+    out: List[Tuple[str, str, str]] = []
+    for fn, mask, desc in ordered:
+        pre = pre_strip_descs.get(fn, desc)
+        if _is_utility_line_function(fn, pre, child_count.get(fn, 0)):
+            logger.debug("Filtered utility flush line: %s (children=%d)", fn, child_count.get(fn, 0))
+            continue
+        tag_unit = _extract_area_unit(fn)
+        if primary_unit and tag_unit and tag_unit != primary_unit and is_line_equipment_tag(fn):
+            logger.debug("Filtered cross-unit pipeline: %s (primary=%s)", fn, primary_unit)
+            continue
         out.append((fn, mask, desc))
+    # Fix #2: machines (L, P, T) come before pipeline (35-24-NNN) functions, then by position
+    if positions:
+        out.sort(key=lambda t: (1 if is_line_equipment_tag(t[0]) else 0, positions.get(t[0], float("inf"))))
+    elif sort_by_tag_number:
+        out.sort(key=lambda t: (1 if is_line_equipment_tag(t[0]) else 0, _tag_numeric_sort_key(t[0])))
     return out
 
 
@@ -110,7 +329,7 @@ def load_gt_function_descriptions(gt_path: Path) -> Dict[str, str]:
         fn = _norm(raw.get("FUNCTION")).upper().replace(" ", "")
         if not fn or fn in out:
             continue
-        out[fn] = normalize_pltxt(_norm(raw.get(desc_col)))
+        out[fn] = _strip_trailing_spec(normalize_pltxt(_norm(raw.get(desc_col))))
     return out
 
 
@@ -209,13 +428,24 @@ def build_floc_rows(
         # Always normalize; then apply LN prefix for pipe-line FUNCTION tags
         # (same rule as Equipment EQKTX — Rob/SML feedback).
         pltxt = desc or tag
-        if pltxt and not pltxt.startswith(tag):
-            pltxt = normalize_pltxt(f"{tag} {pltxt}")
-        else:
-            pltxt = normalize_pltxt(pltxt)
         if is_line_equipment_tag(tag):
+            # Don't prepend the tag before format_line_eqktx — that duplicates
+            # it and normalize_pltxt's 40-char cap then eats the destination.
+            pltxt = normalize_pltxt(pltxt, max_len=80)
             pltxt = format_line_eqktx(tag, pltxt)
+            pltxt = _clean_line_description(pltxt)
+            pltxt = format_line_eqktx(tag, pltxt)
+        else:
+            if pltxt and not pltxt.startswith(tag):
+                pltxt = normalize_pltxt(f"{tag} {pltxt}")
+            else:
+                pltxt = normalize_pltxt(pltxt)
+            pltxt = _strip_trailing_spec(pltxt)
         _eqart, gewrk = classify_equipment(tag, pltxt)
+        if is_line_equipment_tag(tag) and not gewrk:
+            gewrk = "MECH"
+        if is_line_equipment_tag(tag) and _eqart == "9999":
+            _eqart = "2100"
         rows.append(
             blank_row(
                 TPLNR=tplnr,
@@ -258,6 +488,8 @@ def write_floc_workbook(
         ws.cell(r_i, 1, value=None)  # ID column unused in examples
         for c_i, key in enumerate(SAP_COLUMNS, start=2):
             val = row.get(key) or None
+            if key == "EQART" and val and str(val).isdigit() and len(str(val)) < 4:
+                val = str(val).zfill(4)
             cell = ws.cell(r_i, c_i, value=val)
             if key in _TEXT_FORMAT_COLUMNS and val is not None:
                 cell.number_format = "@"
@@ -411,9 +643,17 @@ def run_floc_export_from_args(args: argparse.Namespace) -> int:
     rows = read_hierarchy_csv(hier_path)
     gt_path = Path(args.gt).expanduser()
     gt_descriptions = None
-    if args.enrich_descriptions_from_gt and gt_path.exists():
+    if gt_path.exists():
         gt_descriptions = load_gt_function_descriptions(gt_path)
-    functions = collect_functions(rows, gt_descriptions=gt_descriptions)
+
+    inv_path = find_json(out_dir, f"{base}.pid_inventory.json")
+    positions = load_function_positions(inv_path) if inv_path.exists() else None
+    if positions:
+        logger.info(f"Loaded {len(positions)} function positions for process-flow ordering")
+    else:
+        logger.info("No inventory JSON found; functions will retain CSV order")
+
+    functions = collect_functions(rows, gt_descriptions=gt_descriptions, positions=positions)
     if args.limit > 0:
         functions = functions[: args.limit]
 

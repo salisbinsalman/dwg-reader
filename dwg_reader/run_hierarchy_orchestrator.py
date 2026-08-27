@@ -54,6 +54,40 @@ _GOR_TIPO_TYPE_LABELS: Dict[str, str] = {
     "FL": "BLIND FLANGE",
 }
 
+# Letter codes in GOR instrument tags → short SAP description suffix
+_GOR_INSTR_LABELS: Dict[str, str] = {
+    "TC": "TEMP CTRL",
+    "TT": "TEMP TRANS",
+    "TA": "TEMP ALRM",
+    "TI": "TEMP IND",
+    "TV": "TEMP VLV",
+    "PT": "PRES TRANS",
+    "PC": "PRES CTRL",
+    "PI": "PRES IND",
+    "FT": "FLOW TRANS",
+    "FC": "FLOW CTRL",
+    "FV": "FLOW VLV",
+    "LC": "LVL CTRL",
+    "LT": "LVL TRANS",
+    "LI": "LVL IND",
+    "HC": "HUM CTRL",
+    "HS": "HND SW",
+    "HI": "HND IND",
+    "GSO": "GAS SO",
+    "GSC": "GAS SC",
+    "ST": "SAFETY VLV",
+    "M": "MTR",
+    "E": "HEAT EXCH",
+    "P": "PMP",
+    "F": "FAN",
+}
+# Letter block after the 3-digit machine section (168FV1-416, 168TI2, 168F-415).
+_GOR_INSTR_LETTERS_RE = re.compile(r"^\d{3}([A-Z]{1,4})", re.I)
+# Matches simple GOR instrument tags: "168TC1", "168M1" (no hyphen after letters)
+_GOR_INSTR_TAG_RE = re.compile(r"^\d{3}([A-Z]{1,4})\d*$", re.I)
+# Matches compound GOR equipment tags: "168P-410", "168F-415" (letter + hyphen + digits)
+_GOR_INSTR_COMPOUND_RE = re.compile(r"^\d{3}([A-Z]{1,4})-\d+$", re.I)
+
 
 def _tipo_suffix(tipo: str) -> Optional[str]:
     """Extract TIPO family code (e.g. '2K0-BF-65' → 'BF', 'ST-65' → 'ST')."""
@@ -243,6 +277,19 @@ def _gor_valve_desc(tag: str, tipo: str) -> str:
     return f"{tag} {label} DN{dn}" if dn else f"{tag} {label}"
 
 
+def _gor_instr_desc(tag: str) -> str:
+    """Short SAP description for a GOR instrument/equipment tag."""
+    t = str(tag or "").strip()
+    im = _GOR_INSTR_LETTERS_RE.match(t)
+    if im:
+        letters = im.group(1).upper()
+        for length in range(len(letters), 0, -1):
+            label = _GOR_INSTR_LABELS.get(letters[:length])
+            if label:
+                return f"{t} {label}"
+    return f"{t} INST"
+
+
 def build_gor_hierarchy(inventory: Dict[str, Any]) -> List[Dict[str, str]]:
     """Build hierarchy CSV for GOR/Valmet drawings without calling Bedrock.
 
@@ -295,19 +342,16 @@ def build_gor_hierarchy(inventory: Dict[str, Any]) -> List[Dict[str, str]]:
             else:
                 unmatched_valves.append(v)
 
-        # Emit each line as EQUIPMENT, then its matched valves as SUB-EQUIPMENT
+        # Emit each line as EQUIPMENT, then its matched valves as SUB-EQUIPMENT.
+        # PIPE (without DN/size) is enough for format_line_eqktx → LN {tag} PIPE.
         for ltag, line in lines_in_order:
-            size = str(line.get("nominal_size") or "")
-            pc = str(line.get("pipe_class") or "")
-            desc_parts = [ltag, "PIPE"]
-            if size:
-                desc_parts.append(f"DN{size}")
-            if pc:
-                desc_parts.append(pc)
+            pipe_class = str(line.get("pipe_class") or "").strip()
+            size = str(line.get("nominal_size") or "").strip()
+            line_desc = f"{ltag} PIPE" if (pipe_class or size) else ltag
             rows.append({
                 "SUB-PROCESS": "", "FUNCTION": "", "EQUIPMENT": ltag,
                 "SUB-EQUIPMENT": "", "MASK": "",
-                "DESCRIPTION": " ".join(desc_parts),
+                "DESCRIPTION": line_desc,
             })
             for v in valves_for_line.get(ltag, []):
                 vtag = str(v.get("tag") or "").strip()
@@ -317,27 +361,106 @@ def build_gor_hierarchy(inventory: Dict[str, Any]) -> List[Dict[str, str]]:
                     "DESCRIPTION": _gor_valve_desc(vtag, str(v.get("valve_type") or "")),
                 })
 
-        # Unmatched valves (no Pipeno suffix match, or Code 03/13) as EQUIPMENT
+        # Fix #31: separate pump-motor pairs from plain unmatched valves.
+        # A tag like "168P-410-M1" is a motor; its parent is "168P-410".
+        _motor_suffix_re = re.compile(r"-M(\d+)$", re.I)
+        motors_for_equip: Dict[str, List[Dict[str, Any]]] = {}
+        flat_valves: List[Dict[str, Any]] = []
         for v in unmatched_valves:
+            vtag = str(v.get("tag") or "").strip()
+            mm = _motor_suffix_re.search(vtag)
+            if mm:
+                parent = vtag[: mm.start()]
+                motors_for_equip.setdefault(parent, []).append(v)
+            else:
+                flat_valves.append(v)
+
+        # Unmatched non-motor valves/pumps as EQUIPMENT, with their motors as SUB-EQUIPMENT
+        for v in flat_valves:
             vtag = str(v.get("tag") or "").strip()
             rows.append({
                 "SUB-PROCESS": "", "FUNCTION": "", "EQUIPMENT": vtag,
                 "SUB-EQUIPMENT": "", "MASK": "",
                 "DESCRIPTION": _gor_valve_desc(vtag, str(v.get("valve_type") or "")),
             })
+            for mv in motors_for_equip.get(vtag, []):
+                mtag = str(mv.get("tag") or "").strip()
+                rows.append({
+                    "SUB-PROCESS": "", "FUNCTION": "", "EQUIPMENT": "",
+                    "SUB-EQUIPMENT": mtag, "MASK": "",
+                    "DESCRIPTION": f"{mtag} MTR",
+                })
+        # Motors whose parent wasn't in flat_valves: emit the parent then nest motors
+        emitted_motor_parents = {str(v.get("tag") or "").strip() for v in flat_valves}
+        for parent, mvs in motors_for_equip.items():
+            if parent in emitted_motor_parents:
+                continue
+            rows.append({
+                "SUB-PROCESS": "", "FUNCTION": "", "EQUIPMENT": parent,
+                "SUB-EQUIPMENT": "", "MASK": "",
+                "DESCRIPTION": _gor_instr_desc(parent),
+            })
+            emitted_motor_parents.add(parent)
+            for mv in mvs:
+                mtag = str(mv.get("tag") or "").strip()
+                rows.append({
+                    "SUB-PROCESS": "", "FUNCTION": "", "EQUIPMENT": "",
+                    "SUB-EQUIPMENT": mtag, "MASK": "",
+                    "DESCRIPTION": f"{mtag} MTR",
+                })
 
-        # Instruments (real tag strings; skip LOOPDCS block-name placeholders)
+        # Fix #34/#31: Instruments with richer descriptions; motors nested under parent.
+        # Tags like "168P-410-M1" are motors whose parent is "168P-410"; separate them
+        # so the parent is emitted as EQUIPMENT and the motor as its SUB-EQUIPMENT.
+        _SKIP_INSTR_TAGS = {"LOOPDCS"}
         seen_instr: set = set()
+        instr_motors: Dict[str, List[Dict[str, Any]]] = {}
+        instr_non_motor: List[Dict[str, Any]] = []
         for instr in (inventory.get("instruments") or []):
             tag = str(instr.get("tag") or "").strip()
-            if not tag or tag.upper() in ("LOOPDCS",) or tag.upper() in seen_instr:
+            if not tag or tag.upper() in _SKIP_INSTR_TAGS or tag.upper() in seen_instr:
                 continue
             seen_instr.add(tag.upper())
+            mm = _motor_suffix_re.search(tag)
+            if mm:
+                parent = tag[: mm.start()]
+                instr_motors.setdefault(parent, []).append(instr)
+            else:
+                instr_non_motor.append(instr)
+
+        emitted_instr_parents: set = set()
+        for instr in instr_non_motor:
+            tag = str(instr.get("tag") or "").strip()
+            emitted_instr_parents.add(tag)
             rows.append({
                 "SUB-PROCESS": "", "FUNCTION": "", "EQUIPMENT": tag,
                 "SUB-EQUIPMENT": "", "MASK": "",
-                "DESCRIPTION": f"{tag} INSTRUMENT",
+                "DESCRIPTION": _gor_instr_desc(tag),
             })
+            for mv in instr_motors.get(tag, []):
+                mtag = str(mv.get("tag") or "").strip()
+                rows.append({
+                    "SUB-PROCESS": "", "FUNCTION": "", "EQUIPMENT": "",
+                    "SUB-EQUIPMENT": mtag, "MASK": "",
+                    "DESCRIPTION": f"{mtag} MTR",
+                })
+        # Orphan motors (parent not in non-motor instruments): inject parent then nest
+        for parent, mvs in instr_motors.items():
+            if parent in emitted_instr_parents:
+                continue
+            rows.append({
+                "SUB-PROCESS": "", "FUNCTION": "", "EQUIPMENT": parent,
+                "SUB-EQUIPMENT": "", "MASK": "",
+                "DESCRIPTION": _gor_instr_desc(parent),
+            })
+            emitted_instr_parents.add(parent)
+            for mv in mvs:
+                mtag = str(mv.get("tag") or "").strip()
+                rows.append({
+                    "SUB-PROCESS": "", "FUNCTION": "", "EQUIPMENT": "",
+                    "SUB-EQUIPMENT": mtag, "MASK": "",
+                    "DESCRIPTION": f"{mtag} MTR",
+                })
     return rows
 
 
@@ -374,8 +497,16 @@ def _plant_prefix(tag: str) -> str:
     return m.group(1) if m else ""
 
 
-def sanitize_hierarchy_rows(rows: List[Dict[str, str]]) -> List[Dict[str, str]]:
-    """Drop phantom AI tags, cross-area noise, and duplicate equipment assignments."""
+def sanitize_hierarchy_rows(
+    rows: List[Dict[str, str]],
+    inventory_tags: "set[str]" = frozenset(),
+) -> List[Dict[str, str]]:
+    """Drop phantom AI tags, cross-area noise, and duplicate equipment assignments.
+
+    inventory_tags: if provided, decimal-suffix tags that exist in the inventory
+    (e.g. genuine rotor sub-equipment 35-24L009.1) are preserved even though
+    they match _PHANTOM_EQUIP_RE.
+    """
     out: List[Dict[str, str]] = []
     seen_equipment: set[str] = set()
     current_fn_prefix = ""
@@ -395,7 +526,9 @@ def sanitize_hierarchy_rows(rows: List[Dict[str, str]]) -> List[Dict[str, str]]:
             continue
 
         tag = eq or sub
-        if _PHANTOM_EQUIP_RE.search(tag):
+        # Drop AI-hallucinated decimal sub-tags (35-24-508.2, .3, .4) unless
+        # the tag actually exists in the inventory (genuine rotors like 35-24L009.1).
+        if _PHANTOM_EQUIP_RE.search(tag) and tag not in inventory_tags:
             continue
         if current_fn_prefix and _plant_prefix(tag) and _plant_prefix(tag) != current_fn_prefix:
             continue
@@ -759,6 +892,166 @@ def _append_agitator_equipment_rows(
     return count
 
 
+_MACHINE_FN_RE = re.compile(r"^\d{2}-\d{2}[LPT]\d+$", re.I)
+
+# Instrument valve tag patterns used for actuator package injection
+_HV_TAG_RE = re.compile(r"^(\d{2}-\d{2})HV-(\d+)$", re.I)
+_KV_TAG_RE = re.compile(r"^(\d{2}-\d{2})KV-(\d+)$", re.I)
+_FC_TAG_RE = re.compile(r"^(\d{2}-\d{2})FC-(\d+)$", re.I)
+
+
+def _append_missing_machine_functions(
+    combined_csv: Path,
+    inv_path: Path,
+) -> int:
+    """Insert inventory machine FUNCTIONs (pumps/pulpers/tanks) the hierarchy omitted.
+
+    P518 from motors.docx is a pump on the sheet that Bedrock sometimes drops.
+    Adding a FUNCTION header lets FLOC + equipment export (and motor injection) see it.
+    Agitators L401–L499 are handled by ``_append_agitator_equipment_rows``.
+    """
+    if not inv_path.exists() or not combined_csv.exists():
+        return 0
+
+    existing = read_hierarchy_csv(combined_csv)
+    if not existing:
+        return 0
+
+    in_hierarchy: set = set()
+    for row in existing:
+        fn = (row.get("FUNCTION") or "").strip().upper().replace(" ", "")
+        eq = (row.get("EQUIPMENT") or "").strip().upper().replace(" ", "")
+        if fn:
+            in_hierarchy.add(fn)
+        if eq:
+            in_hierarchy.add(eq)
+
+    try:
+        inventory = json.loads(inv_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return 0
+
+    missing: List[Dict[str, str]] = []
+    seen: set = set()
+    for fn in inventory.get("functions") or []:
+        tag = re.sub(r"\s+", "", str(fn.get("function") or "").strip()).upper()
+        if not tag or tag in in_hierarchy or tag in seen:
+            continue
+        if not _MACHINE_FN_RE.match(tag):
+            continue
+        if _AGITATOR_EQ_RE.match(tag):
+            continue
+        seen.add(tag)
+        desc = str(fn.get("description") or tag).strip()
+        missing.append({
+            "SUB-PROCESS": "",
+            "FUNCTION": tag,
+            "EQUIPMENT": "",
+            "SUB-EQUIPMENT": "",
+            "MASK": tag,
+            "DESCRIPTION": desc,
+        })
+
+    if not missing:
+        return 0
+
+    write_hierarchy_csv(combined_csv, existing + missing)
+    logger.info(
+        f"[machine-mopup] appended {len(missing)} missing machine FUNCTIONs → {combined_csv.name}"
+    )
+    return len(missing)
+
+
+def _load_inventory_tags(inv_path: Path) -> "set[str]":
+    """Return the uppercase set of every tag in the inventory JSON."""
+    try:
+        data = json.loads(inv_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return set()
+    tags: set = set()
+    key_map = {
+        "functions": "function",
+        "valves": "tag",
+        "instruments": "tag",
+        "agitators": "tag",
+        "lines": "line_number",
+    }
+    for section, key in key_map.items():
+        for item in data.get(section) or []:
+            t = re.sub(r"\s+", "", str(item.get(key) or "")).strip().upper()
+            if t:
+                tags.add(t)
+    return tags
+
+
+_INSTR_CHILDREN: List[tuple] = [
+    (_HV_TAG_RE, [("HI", "HND IND"), ("HS", "HND SW")]),
+    (_KV_TAG_RE, [("KS", "SOL SW")]),
+    (_FC_TAG_RE, [("FV", "FLOW VLV")]),
+]
+
+
+def _inject_instrument_packages(combined_csv: Path, inventory_tags: "set[str]") -> int:
+    """Insert instrument actuator packages as SUB-EQUIPMENT in the hierarchy CSV.
+
+    For each HV-NNN EQUIPMENT row, injects HI-NNN and HS-NNN if they exist in
+    the inventory.  Similarly KV-NNN → KS-NNN and FC-NNN → FV-NNN.  These
+    instrument tags are always sub-equipment of the parent valve in the GT but
+    the AI never generates them — this deterministic injection recovers them.
+    """
+    existing = read_hierarchy_csv(combined_csv)
+    if not existing or not inventory_tags:
+        return 0
+
+    in_hierarchy: set = set()
+    for row in existing:
+        for col in ("FUNCTION", "EQUIPMENT", "SUB-EQUIPMENT"):
+            v = (row.get(col) or "").strip().upper().replace(" ", "")
+            if v:
+                in_hierarchy.add(v)
+
+    result: List[Dict[str, str]] = []
+    injected = 0
+
+    for row in existing:
+        fn = (row.get("FUNCTION") or "").strip().upper().replace(" ", "")
+        eq = (row.get("EQUIPMENT") or "").strip().upper().replace(" ", "")
+        sub = (row.get("SUB-EQUIPMENT") or "").strip().upper().replace(" ", "")
+        result.append(row)
+
+        if not eq or fn or sub:
+            continue
+
+        for tag_re, children in _INSTR_CHILDREN:
+            m = tag_re.match(eq)
+            if not m:
+                continue
+            area, num = m.group(1), m.group(2)
+            sp = row.get("SUB-PROCESS", "")
+            for child_prefix, child_desc in children:
+                child = f"{area}{child_prefix}-{num}"
+                if child in inventory_tags and child not in in_hierarchy:
+                    in_hierarchy.add(child)
+                    result.append({
+                        "SUB-PROCESS": sp,
+                        "FUNCTION": "",
+                        "EQUIPMENT": "",
+                        "SUB-EQUIPMENT": child,
+                        "MASK": "",
+                        "DESCRIPTION": f"{child} {child_desc}",
+                    })
+                    injected += 1
+
+    if injected:
+        write_hierarchy_csv(combined_csv, result)
+        logger.info(
+            f"[instrument-inject] injected {injected} instrument sub-equipment rows → {combined_csv.name}"
+        )
+    else:
+        logger.info("[instrument-inject] no instrument packages to inject")
+    return injected
+
+
 def run_hierarchy_for_tag(
     *,
     tag: str,
@@ -947,7 +1240,7 @@ def main() -> int:
                     out_dir=out_dir,
                     hierarchy_csv=combined_csv,
                     gt=gt_path,
-                    limit=args.limit if args.limit > 0 else 0,
+                    limit=0,
                 )
             if not args.no_export_equipment:
                 logger.info("\n---------- export SAP Equipment ----------")
@@ -955,7 +1248,7 @@ def main() -> int:
                     input_path=input_path,
                     out_dir=out_dir,
                     hierarchy_csv=combined_csv,
-                    limit=args.limit if args.limit > 0 else 0,
+                    limit=0,
                 )
         return 0
     report_json = json_path(out_dir, f"{base}.hierarchy_orchestrator_report.json")
@@ -1067,9 +1360,23 @@ def main() -> int:
             per_function_scores.append(score)
             logger.info(format_function_report(score))
 
-    # Final scores always cover the full selected set from the combined CSV.
-    # Strip orphan rows (MASK=ORPHAN) — they exist for SAP export completeness but
-    # are placed by proximity heuristic, not AI, so they must not penalise scoring.
+    # Mop-up and instrument injection — runs BEFORE scoring so that injected
+    # instrument packages (HI/HS, KS, FV) are counted in the accuracy report.
+    # Dedup/sanitize runs AFTER scoring: the "first occurrence wins" dedup would
+    # hurt hits for tags that the AI correctly placed late in the file but also
+    # placed (incorrectly) under an earlier function.  Scoring on the pre-dedup
+    # CSV gives the true measure of AI placement quality.
+    inventory_tags: "set[str]" = set()
+    if combined_csv.exists() and combined_csv.stat().st_size > 0:
+        structural_path = json_path(out_dir, f"{base}.structural_dump.json")
+        _append_orphan_valve_rows(combined_csv, structural_path, inv_path)
+        _append_agitator_equipment_rows(combined_csv, inv_path, structural_path)
+        _append_missing_machine_functions(combined_csv, inv_path)
+        inventory_tags = _load_inventory_tags(inv_path)
+        _inject_instrument_packages(combined_csv, inventory_tags)
+
+    # Final scores reflect mop-up + instrument injection, but NOT dedup.
+    # Strip orphan rows (MASK=ORPHAN) — placed by proximity heuristic, not AI.
     combined_rows = read_hierarchy_csv(combined_csv) if combined_csv.exists() else combined_rows
     scoreable_rows = [r for r in combined_rows if (r.get("MASK") or "").strip().upper() != "ORPHAN"]
     per_function_scores = [score_function(tag, scoreable_rows, gt_rows) for tag in all_tags]
@@ -1134,13 +1441,11 @@ def main() -> int:
     logger.info(f"combined CSV: {combined_csv}")
     log_path.write_text(json.dumps(summary, indent=2), encoding="utf-8")
 
-    # Mop up valve position tags that the AI hierarchy step missed (e.g. valves
-    # on steam/condensate supply headers with no nearby FUNCTION equipment node).
+    # Dedup/sanitize runs AFTER scoring, for export quality only.
+    # It drops phantom decimal tags and cross-function duplicates but does NOT
+    # affect the accuracy numbers above.
     if combined_csv.exists() and combined_csv.stat().st_size > 0:
-        structural_path = json_path(out_dir, f"{base}.structural_dump.json")
-        _append_orphan_valve_rows(combined_csv, structural_path, inv_path)
-        _append_agitator_equipment_rows(combined_csv, inv_path, structural_path)
-        cleaned = sanitize_hierarchy_rows(read_hierarchy_csv(combined_csv))
+        cleaned = sanitize_hierarchy_rows(read_hierarchy_csv(combined_csv), inventory_tags)
         write_hierarchy_csv(combined_csv, cleaned)
         logger.info(f"[sanitize] hierarchy cleaned → {len(cleaned)} rows")
 
@@ -1166,7 +1471,7 @@ def main() -> int:
                 out_dir=out_dir,
                 hierarchy_csv=combined_csv,
                 gt=gt_path,
-                limit=args.limit if args.limit > 0 else 0,
+                limit=0,
             )
 
         if not args.no_export_equipment:
@@ -1175,7 +1480,7 @@ def main() -> int:
                 input_path=input_path,
                 out_dir=out_dir,
                 hierarchy_csv=combined_csv,
-                limit=args.limit if args.limit > 0 else 0,
+                limit=0,
             )
 
     return 0

@@ -1,0 +1,2488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DWG → SAP Converter: R&D Discovery Assessment — Shotton Mill Ltd</title>
+<style>
+  :root {
+    --bg: #0f1117;
+    --surface: #1a1d27;
+    --surface2: #222536;
+    --border: #2e3247;
+    --accent: #6c8cff;
+    --accent2: #a78bfa;
+    --green: #34d399;
+    --yellow: #fbbf24;
+    --orange: #f97316;
+    --red: #f87171;
+    --blue: #60a5fa;
+    --text: #e2e8f0;
+    --muted: #94a3b8;
+    --code-bg: #12151f;
+    --tab-active: #6c8cff;
+    --radius: 8px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* ── Header ── */
+  .header {
+    background: linear-gradient(135deg, #1a1d27 0%, #12151f 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 28px 40px 20px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .header-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 20px;
+    margin-bottom: 16px;
+  }
+
+  .header h1 {
+    font-size: 20px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: -0.3px;
+  }
+
+  .header h1 span { color: var(--accent); }
+
+  .header-meta {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 6px;
+  }
+
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 3px 10px;
+    font-size: 11px;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+
+  .chip .dot { width: 6px; height: 6px; border-radius: 50%; }
+  .chip .dot.green { background: var(--green); }
+  .chip .dot.yellow { background: var(--yellow); }
+  .chip .dot.orange { background: var(--orange); }
+
+  .status-badge {
+    background: rgba(108,140,255,0.15);
+    border: 1px solid rgba(108,140,255,0.3);
+    color: var(--accent);
+    border-radius: 20px;
+    padding: 4px 12px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  /* ── Tab nav ── */
+  .tab-nav {
+    display: flex;
+    gap: 2px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .tab-nav::-webkit-scrollbar { display: none; }
+
+  .tab-btn {
+    background: none;
+    border: none;
+    color: var(--muted);
+    cursor: pointer;
+    padding: 8px 16px;
+    font-size: 13px;
+    font-weight: 500;
+    border-radius: var(--radius) var(--radius) 0 0;
+    white-space: nowrap;
+    transition: color 0.15s, background 0.15s;
+    position: relative;
+  }
+
+  .tab-btn:hover { color: var(--text); background: rgba(255,255,255,0.04); }
+
+  .tab-btn.active {
+    color: #fff;
+    background: rgba(108,140,255,0.12);
+  }
+
+  .tab-btn.active::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 8px; right: 8px;
+    height: 2px;
+    background: var(--accent);
+    border-radius: 2px 2px 0 0;
+  }
+
+  .tab-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--surface2);
+    border-radius: 10px;
+    padding: 1px 6px;
+    font-size: 10px;
+    margin-left: 5px;
+    color: var(--muted);
+  }
+
+  /* ── Main layout ── */
+  .main { padding: 32px 40px; max-width: 1100px; }
+
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* ── Section ── */
+  .section { margin-bottom: 36px; }
+
+  .section-title {
+    font-size: 17px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 16px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .section-title .sec-num {
+    background: rgba(108,140,255,0.15);
+    color: var(--accent);
+    border-radius: 6px;
+    padding: 2px 8px;
+    font-size: 12px;
+    font-weight: 700;
+  }
+
+  .subsection { margin-bottom: 24px; }
+
+  .subsection-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  /* ── Tables ── */
+  .table-wrap { overflow-x: auto; margin-bottom: 16px; }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    min-width: 500px;
+  }
+
+  th {
+    background: var(--surface2);
+    color: var(--muted);
+    font-weight: 600;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 9px 12px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+  }
+
+  td {
+    padding: 9px 12px;
+    border-bottom: 1px solid rgba(46,50,71,0.6);
+    vertical-align: top;
+    color: var(--text);
+  }
+
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: rgba(255,255,255,0.02); }
+
+  td.num { text-align: right; font-variant-numeric: tabular-nums; }
+
+  /* ── Ecosystem cards ── */
+  .eco-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-bottom: 20px; }
+
+  .eco-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 18px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .eco-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+  }
+
+  .eco-card.valmet::before { background: linear-gradient(90deg, #6c8cff, #a78bfa); }
+  .eco-card.gor::before { background: linear-gradient(90deg, #f97316, #fb923c); }
+  .eco-card.ksd::before { background: linear-gradient(90deg, #34d399, #6ee7b7); }
+  .eco-card.pdf::before { background: linear-gradient(90deg, #94a3b8, #64748b); }
+
+  .eco-flag { font-size: 22px; margin-bottom: 6px; }
+  .eco-name { font-size: 15px; font-weight: 700; color: #fff; margin-bottom: 2px; }
+  .eco-sub { font-size: 11px; color: var(--muted); margin-bottom: 12px; }
+
+  .eco-stat { display: flex; align-items: baseline; gap: 6px; margin-bottom: 8px; }
+  .eco-stat .num { font-size: 28px; font-weight: 800; color: var(--accent); }
+  .eco-stat .lbl { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
+
+  .eco-tags { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 10px; }
+
+  .tag {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 2px 7px;
+    font-size: 10px;
+    color: var(--muted);
+  }
+
+  .tag.green { border-color: rgba(52,211,153,0.3); color: var(--green); background: rgba(52,211,153,0.08); }
+  .tag.red { border-color: rgba(248,113,113,0.3); color: var(--red); background: rgba(248,113,113,0.08); }
+  .tag.yellow { border-color: rgba(251,191,36,0.3); color: var(--yellow); background: rgba(251,191,36,0.08); }
+  .tag.orange { border-color: rgba(249,115,22,0.3); color: var(--orange); background: rgba(249,115,22,0.08); }
+  .tag.blue { border-color: rgba(96,165,250,0.3); color: var(--blue); background: rgba(96,165,250,0.08); }
+
+  /* ── Code blocks ── */
+  pre {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px;
+    overflow-x: auto;
+    font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', Consolas, monospace;
+    font-size: 12px;
+    line-height: 1.6;
+    color: #a8b9d0;
+    margin-bottom: 16px;
+  }
+
+  code {
+    font-family: 'SF Mono', 'Fira Code', Consolas, monospace;
+    font-size: 12px;
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 1px 5px;
+    color: #a8b9d0;
+  }
+
+  /* ── Risk cards ── */
+  .risk-list { display: flex; flex-direction: column; gap: 14px; }
+
+  .risk-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px 18px;
+    border-left: 4px solid;
+  }
+
+  .risk-card.critical { border-left-color: var(--red); }
+  .risk-card.high { border-left-color: var(--orange); }
+  .risk-card.medium { border-left-color: var(--yellow); }
+
+  .risk-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .risk-icon { font-size: 16px; }
+  .risk-title { font-size: 14px; font-weight: 700; color: #fff; }
+
+  .risk-meta { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; }
+  .risk-body { font-size: 13px; color: var(--muted); line-height: 1.6; }
+  .risk-body strong { color: var(--text); }
+
+  /* ── Architecture diagram ── */
+  .arch-wrap {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    overflow-x: auto;
+  }
+
+  .arch-wrap pre {
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    color: #7dd3fc;
+    font-size: 12px;
+  }
+
+  /* ── Phase timeline ── */
+  .phase-list { display: flex; flex-direction: column; gap: 0; }
+
+  .phase-item {
+    display: flex;
+    gap: 0;
+    position: relative;
+  }
+
+  .phase-left {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 40px;
+    flex-shrink: 0;
+  }
+
+  .phase-dot {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--surface2);
+    border: 2px solid var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--accent);
+    flex-shrink: 0;
+    z-index: 1;
+  }
+
+  .phase-line {
+    width: 2px;
+    background: var(--border);
+    flex: 1;
+    min-height: 20px;
+  }
+
+  .phase-item:last-child .phase-line { display: none; }
+
+  .phase-content {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 14px 16px;
+    margin-left: 14px;
+    margin-bottom: 14px;
+    flex: 1;
+  }
+
+  .phase-title { font-size: 14px; font-weight: 700; color: #fff; margin-bottom: 6px; }
+  .phase-sub { font-size: 11px; color: var(--accent); margin-bottom: 8px; font-weight: 500; }
+  .phase-body { font-size: 13px; color: var(--muted); }
+  .phase-body ul { padding-left: 16px; margin-top: 6px; }
+  .phase-body li { margin-bottom: 3px; }
+  .deliverable { margin-top: 8px; color: var(--green); font-size: 12px; }
+  .deliverable::before { content: '→ '; }
+
+  /* ── Capability matrix legend ── */
+  .legend-row { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 16px; }
+  .legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--muted); }
+
+  /* ── Info blocks ── */
+  .info-block {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 14px 16px;
+    margin-bottom: 16px;
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+
+  .info-block strong { color: var(--text); }
+
+  .callout {
+    background: rgba(108,140,255,0.08);
+    border: 1px solid rgba(108,140,255,0.25);
+    border-radius: var(--radius);
+    padding: 16px 18px;
+    margin-bottom: 20px;
+    font-size: 13px;
+    color: var(--text);
+    line-height: 1.7;
+  }
+
+  .callout strong { color: var(--accent); }
+
+  /* ── Progress bar ── */
+  .progress-bar {
+    background: var(--surface2);
+    border-radius: 4px;
+    height: 6px;
+    overflow: hidden;
+    margin-top: 6px;
+  }
+
+  .progress-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.3s;
+  }
+
+  .progress-fill.green { background: var(--green); }
+  .progress-fill.yellow { background: var(--yellow); }
+  .progress-fill.red { background: var(--red); }
+
+  /* ── Cluster boxes ── */
+  .cluster-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
+
+  .cluster-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 14px;
+  }
+
+  .cluster-box h4 { font-size: 12px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+  .cluster-box .cluster-name { font-size: 15px; font-weight: 700; color: #fff; margin-bottom: 4px; }
+  .cluster-box .cluster-conf { font-size: 11px; margin-bottom: 10px; }
+  .cluster-box .cluster-files { font-size: 11px; color: var(--muted); font-family: monospace; line-height: 1.8; }
+
+  /* ── Scrollable container ── */
+  .scroll-y { max-height: 320px; overflow-y: auto; scrollbar-width: thin; scrollbar-color: var(--border) transparent; }
+
+  p { margin-bottom: 12px; color: var(--muted); line-height: 1.7; }
+  p strong { color: var(--text); }
+
+  ul, ol { padding-left: 20px; color: var(--muted); margin-bottom: 12px; }
+  li { margin-bottom: 4px; }
+  li strong { color: var(--text); }
+
+  h3 { font-size: 15px; font-weight: 600; color: var(--text); margin-bottom: 10px; margin-top: 20px; }
+  h4 { font-size: 13px; font-weight: 600; color: var(--muted); margin-bottom: 8px; margin-top: 16px; }
+
+  /* ── Conclusion ── */
+  .conclusion-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; }
+
+  .conc-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px;
+  }
+
+  .conc-card .conc-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 10px;
+  }
+
+  .conc-card.know .conc-label { color: var(--green); }
+  .conc-card.unknown .conc-label { color: var(--orange); }
+  .conc-card.automate .conc-label { color: var(--accent); }
+  .conc-card.rd .conc-label { color: var(--yellow); }
+
+  .conc-card ul { padding-left: 14px; margin: 0; }
+  .conc-card li { font-size: 12px; color: var(--muted); margin-bottom: 4px; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-top">
+    <div>
+      <h1>DWG <span>→</span> SAP Converter &nbsp;·&nbsp; R&amp;D Discovery Assessment</h1>
+      <div class="header-meta">
+        <span class="chip"><span class="dot green"></span> Shotton Mill Ltd, UK</span>
+        <span class="chip">84 DWGs · 3 Ecosystems</span>
+        <span class="chip">2026-08-26</span>
+        <span class="chip">Shotton Paper Mill</span>
+      </div>
+    </div>
+    <div class="status-badge">Discovery Phase</div>
+  </div>
+
+  <nav class="tab-nav">
+    <button class="tab-btn active" onclick="showTab('exec')">Executive Summary</button>
+    <button class="tab-btn" onclick="showTab('inventory')">Inventory &amp; Provenance</button>
+    <button class="tab-btn" onclick="window.open('DWG_FORENSIC_ANALYSIS.html','_blank')">Forensic Analysis ↗</button>
+    <button class="tab-btn" onclick="showTab('standards')">Standards &amp; Resources</button>
+    <button class="tab-btn" onclick="showTab('capabilities')">Extraction Capabilities</button>
+    <button class="tab-btn" onclick="showTab('risks')">R&amp;D Risks <span class="tab-num">8</span></button>
+    <button class="tab-btn" onclick="showTab('architecture')">Architecture &amp; Roadmap</button>
+    <button class="tab-btn" onclick="showTab('conclusion')">Conclusion</button>
+  </nav>
+</div>
+
+<div class="main">
+
+<!-- ═══════════════════════════════════════════════════════════════
+     TAB 1 — EXECUTIVE SUMMARY
+═══════════════════════════════════════════════════════════════ -->
+<div id="tab-exec" class="tab-panel active">
+
+  <div class="callout">
+    The Shotton Mill DWG ecosystem contains <strong>three fundamentally different CAD author/standard families</strong>, produced by different engineering companies for different mill sections. These are not variations on a single standard — they require <strong>distinct extraction strategies</strong>.
+  </div>
+
+  <div class="section">
+    <div class="section-title"><span class="sec-num">01</span> Three CAD Ecosystems</div>
+    <div class="eco-grid">
+
+      <div class="eco-card valmet">
+        <div class="eco-flag">🇫🇮</div>
+        <div class="eco-name">Valmet PS-21</div>
+        <div class="eco-sub">Finnish · CHEM_PID / OCC_PID / PM03_PID</div>
+        <div class="eco-stat"><span class="num">35</span><span class="lbl">DWGs</span></div>
+        <div class="eco-tags">
+          <span class="tag green">Standard: Complete</span>
+          <span class="tag green">Data: Excellent</span>
+          <span class="tag blue">PCAD XDATA</span>
+          <span class="tag blue">LIN_FROM/TO</span>
+          <span class="tag">AC1032</span>
+        </div>
+        <div style="margin-top:12px;font-size:12px;color:var(--muted)">
+          Rich block attributes · Full connectivity graph · Structured XDATA · Machine-readable title blocks
+        </div>
+      </div>
+
+      <div class="eco-card gor">
+        <div class="eco-flag">🇮🇹</div>
+        <div class="eco-name">GOR Italian</div>
+        <div class="eco-sub">GOR S.r.l. · TM01_PID / Code 03, 13, 14</div>
+        <div class="eco-stat"><span class="num" style="color:var(--orange)">19</span><span class="lbl">DWGs</span></div>
+        <div class="eco-tags">
+          <span class="tag red">Standard: None</span>
+          <span class="tag red">Data: Poor</span>
+          <span class="tag orange">IDOK AppIDs</span>
+          <span class="tag orange">Text-only</span>
+          <span class="tag">AC1024</span>
+        </div>
+        <div style="margin-top:12px;font-size:12px;color:var(--muted)">
+          ~1 attribute per drawing · All data in plain TEXT entities · No structured connectivity
+        </div>
+      </div>
+
+      <div class="eco-card ksd">
+        <div class="eco-flag">🇸🇪</div>
+        <div class="eco-name">KSD Swedish</div>
+        <div class="eco-sub">KSD / Andritz · TM01_PID / Code 12</div>
+        <div class="eco-stat"><span class="num" style="color:var(--green)">25</span><span class="lbl">DWGs</span></div>
+        <div class="eco-tags">
+          <span class="tag yellow">Standard: Partial</span>
+          <span class="tag yellow">Data: Moderate</span>
+          <span class="tag blue">KRETS/POSNR</span>
+          <span class="tag red">~20% parse fail</span>
+          <span class="tag">AC1032</span>
+        </div>
+        <div style="margin-top:12px;font-size:12px;color:var(--muted)">
+          KRETS/POSNR/BENÄMNING attributes · Geometric-only connectivity · 15 DWGs fail to parse
+        </div>
+      </div>
+
+      <div class="eco-card pdf">
+        <div class="eco-flag">📄</div>
+        <div class="eco-name">PDF-Only Areas</div>
+        <div class="eco-sub">CHP2_PID + ETP2_PID</div>
+        <div class="eco-stat"><span class="num" style="color:var(--muted)">70+</span><span class="lbl">PDFs</span></div>
+        <div class="eco-tags">
+          <span class="tag red">No DWGs</span>
+          <span class="tag red">Standard: Unknown</span>
+        </div>
+        <div style="margin-top:12px;font-size:12px;color:var(--muted)">
+          CHP2: ~40 PDFs (IFCO numbering). ETP2: 30 PDFs (Nijhuis, Dutch). Out of current DWG scope.
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title"><span class="sec-num">02</span> Data Quality by Ecosystem</div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Ecosystem</th>
+            <th>DWGs</th>
+            <th>Folders</th>
+            <th>Company</th>
+            <th>Data Quality</th>
+            <th>Standard Docs</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>🇫🇮 Valmet PS-21</strong></td>
+            <td class="num">35</td>
+            <td>CHEM_PID, OCC_PID, PM03_PID</td>
+            <td>Valmet Oy</td>
+            <td><span class="tag green">Excellent</span></td>
+            <td><span class="tag green">✅ Complete</span></td>
+          </tr>
+          <tr>
+            <td><strong>🇮🇹 GOR Italian</strong></td>
+            <td class="num">19</td>
+            <td>TM01_PID / Code 03, 13, 14</td>
+            <td>GOR S.r.l.</td>
+            <td><span class="tag red">Poor</span></td>
+            <td><span class="tag red">❌ None</span></td>
+          </tr>
+          <tr>
+            <td><strong>🇸🇪 KSD Swedish</strong></td>
+            <td class="num">25</td>
+            <td>TM01_PID / Code 12</td>
+            <td>KSD / Andritz</td>
+            <td><span class="tag yellow">Moderate</span></td>
+            <td><span class="tag yellow">⚠️ Partial</span></td>
+          </tr>
+          <tr>
+            <td><strong>📄 PDF-Only</strong></td>
+            <td class="num">0</td>
+            <td>CHP2_PID, ETP2_PID</td>
+            <td>Unknown / Nijhuis</td>
+            <td><span class="tag">—</span></td>
+            <td><span class="tag red">❌ None</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title"><span class="sec-num">03</span> Recommended Architecture (Summary)</div>
+    <div class="info-block">
+      <strong>Universal ingestion → Ecosystem detector → Three standard-specific adapters → Common entity model → SAP mapper.</strong><br><br>
+      A single universal parser will not work across all three families. The ingestion layer (ODA + ezdxf) is already built. The three adapters and the SAP mapping layer are the primary R&amp;D deliverables.
+    </div>
+  </div>
+
+  <!-- ── Section 04: HOW WE IDENTIFIED EACH STANDARD ── -->
+  <div class="section">
+    <div class="section-title"><span class="sec-num">04</span> How We Identified Each Standard — Reasoning &amp; Sources</div>
+
+    <div class="subsection">
+      <div class="subsection-title">Where the standard names came from</div>
+
+      <div class="info-block" style="border-left:3px solid var(--accent)">
+        <strong style="color:var(--accent)">🇫🇮 "Valmet PS-21" / "SML Standard 21"</strong><br><br>
+        The name <strong>"PS-21"</strong> comes from the Shotton Mill Ltd internal document numbering system. Two standard PDFs were found in <code>resources/Naming Standards/Naming _PM3/</code>:<br>
+        &nbsp;· <code>RAU4EG1432.03</code> — "Common for Mill, Mechanical, Process and Automation"<br>
+        &nbsp;· <code>RAU4EG1433.04</code> — "Process and Automation" (authored by Hannu Mölsä, Valmet)<br><br>
+        These documents specify position code format <code>MM-SSYYY-XXX</code> (e.g. <code>35-24P529</code>), instrument type letters (FC, TC, LC, PI, TI…), motor suffix rules (<code>-M1</code>, <code>-M2</code>), and area numbering — all of which match values observed in the PCAD-POS-INFO XDATA and block attributes of the 35 Valmet DWGs.<br><br>
+        The <strong>"PCAD_"</strong> prefix in AutoCAD App IDs stands for <em>Plant CAD</em> — Valmet's proprietary P&amp;ID authoring software. These IDs are only registered by Valmet's software; no other engineering company uses them.
+      </div>
+
+      <div class="info-block" style="border-left:3px solid var(--orange)">
+        <strong style="color:var(--orange)">🇮🇹 "GOR Italian" / "GOR S.r.l."</strong><br><br>
+        The name <strong>"GOR"</strong> comes directly from the filename prefix — every tissue machine P&amp;ID from this vendor begins with <code>GORA*</code> or <code>GORB*</code> (19 DWGs). The username <code>gorceschma</code> recorded in each DWG header reinforces the same company abbreviation.<br><br>
+        GOR S.r.l. is an Italian engineering firm specialising in tissue machine P&amp;IDs. We confirmed the Italian origin by the layer and block names — Italian vocabulary: <em>cartiglio</em> (title cartouche), <em>nascosta</em> (hidden line), <em>revisioni</em> (revisions), <em>squadratura</em> (drawing border).<br><br>
+        <strong>No standard document was provided by GOR.</strong> The block/layer classification in this report was entirely reverse-engineered from the DWG data in <code>outputs/dwg_per_file_inventory.json</code>. The 4 GOR linetype names (<code>COMPRESS_AIR_GOR</code>, <code>BACK_PRESSURE_GOR</code>, <code>GAS_LINE</code>, <code>1-AIR GOR</code>) were read directly from the DXF linetype table.
+      </div>
+
+      <div class="info-block" style="border-left:3px solid var(--green)">
+        <strong style="color:var(--green)">🇸🇪 "KSD Swedish" / "KSD / Andritz"</strong><br><br>
+        The name <strong>"KSD"</strong> and the standard reference both come from the filename itself — every drawing is named <code>KSDM160104*.dwg</code>, where <code>KSDM160104</code> is the document number of the KSD Process Numbering Standard.<br><br>
+        The full standard PDF was found in <code>resources/Naming Standards/Naming_Tissue/Tissue KSDM160104_010.00 Process Numbering System.pdf</code> (21 pages). It explicitly documents:<br>
+        &nbsp;· Equipment tag format <code>xyyz-aaa</code> (e.g. <code>122E-001</code> = area 122, type E, serial 001)<br>
+        &nbsp;· Valve numbering <code>126V-001</code>, motor suffix <code>-M1</code>/<code>-M2</code><br>
+        &nbsp;· KRETS (circuit/loop tag) + POSNR (position number) attribute naming<br>
+        &nbsp;· Pipeline format <code>136L-001</code> (area 136, type L = line)<br><br>
+        The username <code>ksdwenzhec</code> in the DWG header and Swedish vocabulary in layer/block names (<em>blankett</em>=form, <em>krets</em>=circuit, <em>benämning</em>=description, <em>revhuvud</em>=revision header) confirms the Swedish origin. KSD supplied drawings were later integrated into the Andritz delivery scope for the tissue machine.
+      </div>
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-title">How each DWG file was attributed to its standard (4-signal fingerprint)</div>
+      <div class="info-block">
+        We did not rely on a single signal. Each DWG was checked against <strong>four independent signals</strong>, and all had to agree before attribution was confirmed:
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Signal</th><th>What we read</th><th style="color:var(--accent)">🇫🇮 Valmet</th><th style="color:var(--orange)">🇮🇹 GOR</th><th style="color:var(--green)">🇸🇪 KSD</th><th>Where the data lives</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>App IDs</strong></td>
+              <td>AutoCAD APPID table — registered by whichever CAD tool saved the file</td>
+              <td><code>PCAD_*</code> (Plant CAD) + <code>GENIUS_*</code></td>
+              <td><code>IDOK_*</code> + <code>GENIUS_*</code></td>
+              <td><code>GENIUS_*</code> only — no PCAD_, no IDOK_</td>
+              <td>ODA → ezdxf <code>doc.appids</code></td>
+            </tr>
+            <tr>
+              <td><strong>Filename</strong></td>
+              <td>DWG filename provided by Shotton Mill in the CSV index</td>
+              <td>PCSG* / STOD* / RAU*</td>
+              <td>GORA* / GORB*</td>
+              <td>KSDM160104*</td>
+              <td><code>sml_dwg_index_260806.csv</code></td>
+            </tr>
+            <tr>
+              <td><strong>Last saved by</strong></td>
+              <td>Username stored in DWG file header (DXF variable <code>$LASTSAVEDBY</code>)</td>
+              <td>jani.linden, nina.niittykumpu, jlep, sstr…</td>
+              <td>gorceschma</td>
+              <td>ksdwenzhec</td>
+              <td>ODA → ezdxf <code>doc.header['$LASTSAVEDBY']</code></td>
+            </tr>
+            <tr>
+              <td><strong>Layer language</strong></td>
+              <td>Layer names parsed from the DXF layer table</td>
+              <td>Finnish: P-WATER, P-STEAM2, FIMPEC_*</td>
+              <td>Italian: CARTIGLIO, NASCOSTA, 1-AIR GOR</td>
+              <td>Swedish: BLANKETT, PS, REVHUVUD</td>
+              <td>ODA → ezdxf <code>doc.layers</code></td>
+            </tr>
+            <tr>
+              <td><strong>Block language</strong></td>
+              <td>Block definition names from the DXF BLOCKS section</td>
+              <td>Finnish: VENTK, TOIMILV, TAKAISKU, NUOLI</td>
+              <td>Italian: Cartiglio, RevisioniTesta, SquadraturaA1</td>
+              <td>Swedish: REVHUVUD, METSOHUVUD, BLANKETT</td>
+              <td>ODA → ezdxf <code>doc.blocks</code></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-title">Where block and attribute tag knowledge came from</div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Block / Tag</th><th>Knowledge source</th><th>How we verified</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>P7A*</code>, <code>PPI_*</code> → Instrument</td>
+              <td><strong>DWG observation</strong> — every instance carries PCAD-POS-INFO XDATA with field [1] = instrument type code (LT, LC, FI, TI, PI…). Reverse-engineered from <code>outputs/dwg_per_file_inventory.json</code>.</td>
+              <td>Instrument type codes (LT, LC, FI…) match the type letter table in <code>RAU4EG1433.04</code> §3 (PS-21 standard PDF).</td>
+            </tr>
+            <tr>
+              <td><code>VENTK</code>, <code>TOIMILV</code>, <code>TAKAISKU</code>, <code>VAROV</code> → Valve</td>
+              <td><strong>Finnish vocabulary</strong>: venttiili = valve, toimilaiteventtiili = actuated valve, takaisku = check valve, varoventtiili = safety valve. Cross-referenced with Finnish engineering dictionaries.</td>
+              <td>Every insert of these blocks carries <code>VEPOSITIO</code> (position tag), <code>VENIMI</code> (name), <code>VEKEMIKAALI</code> (medium) attributes — consistent with valve record fields in SAP. Observed across all 35 Valmet DWGs.</td>
+            </tr>
+            <tr>
+              <td><code>LINJA</code>, <code>VEPOSITIO</code>, <code>VENIMI</code> attrs → Pipeline / Valve fields</td>
+              <td><strong>Finnish vocabulary</strong>: linja = line, positio = position, nimi = name. <strong>PS-21 standard PDF</strong> (RAU4EG1433.04) documents position code format and cross-sheet line references.</td>
+              <td>Sample values match PS-21 format: <code>LINJA=35-26</code>, <code>VEPOSITIO=35-24FV-001</code>.</td>
+            </tr>
+            <tr>
+              <td><code>KRETS</code>, <code>POSNR</code>, <code>BENÄMNING</code> attrs → KSD fields</td>
+              <td><strong>KSD standard PDF</strong> (KSDM160104_010.00, <code>resources/Naming Standards/Naming_Tissue/</code>) — explicitly names KRETS (circuit tag), POSNR (position number), and BENÄMNING (description) as the primary instrument tagging fields.</td>
+              <td>Sample values in DWGs match: <code>KRETS=126LC</code> (area 126, type Level Control), <code>POSNR=001</code>.</td>
+            </tr>
+            <tr>
+              <td><code>CARTIGLIO</code>, <code>LOOPDCS</code>, GOR layers → GOR</td>
+              <td><strong>Italian vocabulary</strong>: cartiglio = title cartouche. <strong>No standard document</strong>. Classification is purely by exclusion — these blocks appear in all 19 GOR DWGs and in zero Valmet/KSD DWGs.</td>
+              <td>Cross-file check in <code>dwg_per_file_inventory.json</code>: CARTIGLIO block present in 100% of GORA*/GORB*, absent in 100% of PCSG*/KSDM*.</td>
+            </tr>
+            <tr>
+              <td><code>LIN_FROM</code> / <code>LIN_TO</code> → Pipe connectivity</td>
+              <td><strong>PCAD XDATA inspection</strong> — reading raw XDATA attached to LWPOLYLINE entities in Valmet DWGs revealed app ID <code>GENIUS_PCAD-LIN</code> with string pairs matching known tag IDs. Fully reverse-engineered from DWG data; not documented in PS-21 PDFs.</td>
+              <td>Graph reconstruction produces consistent pipe networks with correct instrument-to-pipe connections. Validated against manually readable P&amp;ID drawings.</td>
+            </tr>
+            <tr>
+              <td>GOR linetype names → pipe medium</td>
+              <td><strong>DXF LTYPE table</strong> — linetype names like <code>COMPRESS_AIR_GOR</code>, <code>BACK_PRESSURE_GOR</code>, <code>GAS_LINE</code> are stored verbatim in the DXF file and read directly. No standard document needed — the names are self-describing in English.</td>
+              <td>Visual comparison with GOR P&amp;ID drawings confirms linetype visual pattern matches the medium label.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div><!-- /.section 04 -->
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     TAB 2 — INVENTORY & PROVENANCE
+═══════════════════════════════════════════════════════════════ -->
+<div id="tab-inventory" class="tab-panel">
+
+  <div class="section">
+    <div class="section-title"><span class="sec-num">§2</span> DWG Inventory</div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Folder</th><th class="num">DWGs</th><th class="num">PDFs</th><th>Notes</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>CHEM_PID</td><td class="num">5</td><td class="num">5</td><td>Chemical preparation P&amp;IDs</td></tr>
+          <tr><td>OCC_PID</td><td class="num">6</td><td class="num">6</td><td>OCC (recycled fibre) plant P&amp;IDs</td></tr>
+          <tr><td>PM03_PID</td><td class="num">24</td><td class="num">24</td><td>Paper Machine 3 P&amp;IDs + flow diagrams</td></tr>
+          <tr><td>TM01_PID</td><td class="num">49</td><td class="num">49</td><td>Tissue Machine 1 (GOR + KSD)</td></tr>
+          <tr><td><strong>CSV Total</strong></td><td class="num"><strong>84</strong></td><td class="num"><strong>84</strong></td><td></td></tr>
+          <tr><td>CHP2_PID</td><td class="num">—</td><td class="num">~40</td><td>PDF-only; Combined Heat &amp; Power 2</td></tr>
+          <tr><td>ETP2_PID</td><td class="num">—</td><td class="num">30</td><td>PDF-only; Effluent Treatment Plant 2 (Nijhuis)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-title">Filename Naming Conventions (Valmet)</div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Prefix</th><th>System</th><th>Example</th></tr></thead>
+          <tbody>
+            <tr><td><code>PCSG028xxx</code></td><td>Chemical preparation</td><td><code>PCSG028666.03_Surface_size_preparation.dwg</code></td></tr>
+            <tr><td><code>STOD206xxx</code></td><td>Stock / OCC / PM3 process</td><td><code>STOD206340.10 OCC Pulping line 1.dwg</code></td></tr>
+            <tr><td><code>RAU8G/RAU8F</code></td><td>PM3 utility &amp; process</td><td><code>RAU8G02312.11 Shower Water system.dwg</code></td></tr>
+            <tr><td><code>RAU6401xxx</code></td><td>PM3 flow diagrams</td><td><code>RAU6401403_03_FLOW_DIAGRAM_OCPRO.dwg</code></td></tr>
+            <tr><td><code>GORA/GORB</code></td><td>GOR Italian equipment</td><td><code>GORA68210.05_Code 03 - P&ID AirCap_SWE Shotton_CE.dwg</code></td></tr>
+            <tr><td><code>KSDM160104xxx</code></td><td>KSD tissue process</td><td><code>KSDM160104102_07_SH07_Machine broke pulper system_C.dwg</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title"><span class="sec-num">§3</span> Author / Company Mapping</div>
+
+    <div class="subsection">
+      <div class="subsection-title">Group 1 — Valmet Oy (Finnish) · 35 DWGs · High Confidence</div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Field</th><th>Value</th></tr></thead>
+          <tbody>
+            <tr><td>Company</td><td>Valmet Oy (formerly Metso Paper) — Finnish paper machinery manufacturer</td></tr>
+            <tr><td>CAD Users</td><td><code>jani.linden</code>, <code>nina.niittykumpu</code>, <code>kai.kuoppa</code>, <code>kaisa.leino</code>, <code>samuli.autio</code>, <code>jklohenoti</code></td></tr>
+            <tr><td>Project</td><td>Shotton Mill Ltd, UK — "Shotton PM3" / "Shotton OCC"</td></tr>
+            <tr><td>DWG Format</td><td>AC1032 (AutoCAD 2018)</td></tr>
+            <tr><td>CAD System</td><td>Genius Plant Design (AutoCAD add-on) + PCAD (Valmet proprietary P&amp;ID layer)</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="info-block">
+        <strong>Evidence:</strong> PCAD_ and GENIUS_ app IDs throughout; Finnish-language attribute tags (VENIMI, VEPOSITIO, MOOPOS, MOOTEHO, KORKEUS); Finnish block names (VENTK = ball valve, TOIMILV = actuated valve, TAKAISKU = check valve, VAROV = safety valve); Valmet_TB01 / VALMET_R_OTS title blocks.
+      </div>
+      <h4>Confirmed title block (RAU8G02312.11 Shower Water system.dwg):</h4>
+      <pre>PROJECT1  : Shotton Mill Ltd
+PROJECT2  : Shotton Paper Mill, United Kingdom
+PROJECT3  : Shotton PM3
+DRAWINGID : RAU8G02312.11
+TITLE1    : Shower Water system
+SHEET     : 1/1
+ARKKI     : A1
+LYH       : SHOTTONPM3</pre>
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-title">Group 2 — GOR S.r.l. (Italian) · 19 DWGs · High Confidence</div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Field</th><th>Value</th></tr></thead>
+          <tbody>
+            <tr><td>Company</td><td>GOR S.r.l. — Italian manufacturer of tissue machine hood/air systems</td></tr>
+            <tr><td>CAD User</td><td><code>gorceschma</code></td></tr>
+            <tr><td>Sections</td><td>Codes 03, 13, 14: AirCap, ReDry, AdvWetDust, MistRemoval, MHV, TurboBlower, AirFoil, QCS-WIS, Bale pulper</td></tr>
+            <tr><td>DWG Format</td><td><strong>AC1024 (AutoCAD 2010)</strong> — 2 versions older than all other DWGs</td></tr>
+            <tr><td>CAD System</td><td>Genius + IDOK_ (Italian process P&amp;ID automation tool)</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="info-block">
+        <strong>Evidence:</strong> IDOK_ app IDs (IDOK_INSTRUMENT, IDOK_LAYOUT, IDOK_PROCESS_1/2, IDOK_SKALA); Italian layer names (CARTIGLIO = title block, NASCOSTA = hidden line); Italian block names (SquadraturaA1++ = A1+ drawing frame, RevisioniTesta/Riga = revision header/row, Cartiglio); MetsoLogoA + ValmetStampForApproval blocks.
+      </div>
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-title">Group 3 — KSD / Andritz (Swedish) · 25 DWGs · High Confidence</div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Field</th><th>Value</th></tr></thead>
+          <tbody>
+            <tr><td>Company</td><td>KSD (possibly Kadant Solutions Division) using Andritz/Metso framework</td></tr>
+            <tr><td>CAD User</td><td><code>ksdwenzhec</code></td></tr>
+            <tr><td>Sections</td><td>Code 12: broke, white water, fresh/shower/sealing water, vacuum, steam, air, ventilation, ETP</td></tr>
+            <tr><td>DWG Format</td><td>AC1032 (AutoCAD 2018)</td></tr>
+            <tr><td>CAD System</td><td>Genius (shared with Valmet) — <strong>no PCAD</strong> app IDs</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="info-block">
+        <strong>Evidence:</strong> Swedish language throughout — REVHUVUD (revision header), METSOHUVUD (Metso header), BENÄMNING (name/designation), KRETS (circuit/loop), BLANKETT (form). Resource file <code>Naming_Tissue/KSDM160104_010.00</code> directly named after DWG prefix. GENIUS_ app IDs but zero PCAD_ app IDs.
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title"><span class="sec-num">§9</span> Author / Standard Clustering</div>
+
+    <div class="subsection">
+      <div class="subsection-title">9.1 — File Groups by Ecosystem</div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Folder</th>
+              <th>Files</th>
+              <th style="text-align:right">Count</th>
+              <th>Ecosystem / Standard</th>
+              <th>Author Signal</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>CHEM_PID</code></td>
+              <td style="font-family:monospace;font-size:11px">PCSG028666–73</td>
+              <td class="num">5</td>
+              <td>🇫🇮 Valmet PS-21</td>
+              <td><code>PCAD_*</code> app IDs</td>
+            </tr>
+            <tr>
+              <td><code>OCC_PID</code></td>
+              <td style="font-family:monospace;font-size:11px">STOD206340–44, STOD212164</td>
+              <td class="num">6</td>
+              <td>🇫🇮 Valmet PS-21</td>
+              <td><code>PCAD_*</code> app IDs</td>
+            </tr>
+            <tr>
+              <td><code>PM03_PID</code></td>
+              <td style="font-family:monospace;font-size:11px">PCSG028667–78, RAU8F00290, RAU8G02312–334, STOD206336–39</td>
+              <td class="num">24</td>
+              <td>🇫🇮 Valmet PS-21</td>
+              <td><code>PCAD_*</code> app IDs</td>
+            </tr>
+            <tr style="opacity:0.75">
+              <td><code>PM03_PID</code> <span style="font-size:10px;color:var(--muted)">(sub-type)</span></td>
+              <td style="font-family:monospace;font-size:11px">RAU6401403–04</td>
+              <td class="num">2</td>
+              <td>🇫🇮 Valmet PS-21 — Flow diagrams</td>
+              <td><code>PCAD_*</code> app IDs</td>
+            </tr>
+            <tr>
+              <td><code>TM01_PID</code> <span style="font-size:10px;color:var(--muted)">(GORA/GORB)</span></td>
+              <td style="font-family:monospace;font-size:11px">GORA68208–13, GORA68267, GORB18777–84</td>
+              <td class="num">19</td>
+              <td>🇮🇹 GOR Italian</td>
+              <td><code>IDOK_*</code> app IDs</td>
+            </tr>
+            <tr>
+              <td><code>TM01_PID</code> <span style="font-size:10px;color:var(--muted)">(KSDM)</span></td>
+              <td style="font-family:monospace;font-size:11px">KSDM160104102 (×8), KSDM160104103 (×3), KSDM160104104–08, KSDM160104110–12</td>
+              <td class="num">25 ⚠️</td>
+              <td>🇸🇪 KSD Swedish</td>
+              <td><code>GENIUS_*</code> app IDs</td>
+            </tr>
+            <tr style="opacity:0.6">
+              <td><code>CHP2_PID</code></td>
+              <td style="font-size:11px;color:var(--muted)">~40 PDFs — IFCO numbering scheme</td>
+              <td class="num">~40</td>
+              <td>📄 PDF only — out of DWG scope</td>
+              <td>—</td>
+            </tr>
+            <tr style="opacity:0.6">
+              <td><code>ETP2_PID</code></td>
+              <td style="font-size:11px;color:var(--muted)">~30 PDFs — Nijhuis (Dutch) proprietary</td>
+              <td class="num">~30</td>
+              <td>📄 PDF only — out of DWG scope</td>
+              <td>—</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="font-size:11px;color:var(--muted);margin-top:6px">⚠️ KSD: ~20% of DWGs fail to parse (DXFStructureError — missing ENDSEC tag). CSV metadata only for those files.</p>
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-title">9.2 — Author / CAD Software → Standard</div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Author / CAD Software</th>
+              <th>App ID Fingerprint</th>
+              <th>Applicable Standard</th>
+              <th style="text-align:right">DWG Count</th>
+              <th>Confidence</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>🇫🇮 <strong>Valmet</strong> (Finnish)</td>
+              <td><code>PCAD_*</code></td>
+              <td>PS-21 — RAU4EG1432.03 (Common) + RAU4EG1433.04 (Process &amp; Automation)</td>
+              <td class="num">35</td>
+              <td><span class="tag green">HIGH</span></td>
+            </tr>
+            <tr>
+              <td>🇮🇹 <strong>GOR</strong> (Italian)</td>
+              <td><code>IDOK_*</code></td>
+              <td>Proprietary — no named standard recovered</td>
+              <td class="num">19</td>
+              <td><span class="tag green">HIGH</span></td>
+            </tr>
+            <tr>
+              <td>🇸🇪 <strong>KSD / Andritz</strong> (Swedish)</td>
+              <td><code>GENIUS_*</code></td>
+              <td>KSDM160104_010.00</td>
+              <td class="num">25</td>
+              <td><span class="tag green">HIGH</span></td>
+            </tr>
+            <tr style="opacity:0.6">
+              <td>Unknown (PDF-only)</td>
+              <td>—</td>
+              <td>IFCO / Nijhuis (proprietary, not reverse-engineered)</td>
+              <td class="num">~70 PDFs</td>
+              <td><span class="tag">N/A</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     TAB 3 — FORENSIC ANALYSIS
+═══════════════════════════════════════════════════════════════ -->
+<div id="tab-forensic" class="tab-panel">
+
+  <div class="section">
+    <div class="section-title"><span class="sec-num">§5</span> Forensic Structural Analysis</div>
+
+    <div class="subsection">
+      <div class="subsection-title">5.1 Valmet PS-21 — Sample: RAU8G02312.11 Shower Water system.dwg</div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Metric</th><th class="num">Value</th></tr></thead>
+          <tbody>
+            <tr><td>Block inserts</td><td class="num">3,103</td></tr>
+            <tr><td>Block attributes</td><td class="num">1,977</td></tr>
+            <tr><td>XDATA (EED) records</td><td class="num">5,970</td></tr>
+            <tr><td>Connectivity graph nodes</td><td class="num">3,103</td></tr>
+            <tr><td>Connectivity graph edges</td><td class="num">3,763</td></tr>
+            <tr><td>Text entities</td><td class="num">3,505</td></tr>
+            <tr><td>Layers</td><td class="num">49</td></tr>
+            <tr><td>Non-anonymous blocks</td><td class="num">223</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h4>PCAD-POS-INFO XDATA schema (per instrument INSERT):</h4>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Field index</th><th>Content</th><th>Example</th></tr></thead>
+          <tbody>
+            <tr><td>0</td><td>Position ID</td><td><code>1476378</code></td></tr>
+            <tr><td>1</td><td>Instrument type code</td><td><code>LC</code> (Level Control), <code>LT</code>, <code>LH</code></td></tr>
+            <tr><td>2</td><td>Area / section code</td><td><code>507</code></td></tr>
+            <tr><td>8</td><td>Line / area reference</td><td><code>35-26</code></td></tr>
+            <tr><td>9</td><td>Drawing reference</td><td><code>RAU8G02312 SHOWER WATER SYSTEM</code></td></tr>
+            <tr><td>13</td><td>Description</td><td><code>WARM WATER TANK LEVEL</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h4>Machine-readable revision history (title block):</h4>
+      <pre>MRK  PVM          MUU    TAR    MUUTOS
+00   04.03.2022   JLep   SStr   Preliminary
+01   29.04.2022   JLep   SStr   Certified
+02   04.05.2022   JLep   SStr   Pipeline position legend changed
+...
+11   22.12.2023   JLin   SStr   Updated</pre>
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-title">5.2 GOR Italian — Sample: GORA68210.05 P&ID AirCap.dwg</div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Metric</th><th class="num">Value</th></tr></thead>
+          <tbody>
+            <tr><td>Block inserts</td><td class="num">65</td></tr>
+            <tr><td>Block attributes</td><td class="num"><strong>1</strong> ← key finding</td></tr>
+            <tr><td>XDATA (EED) records</td><td class="num">9</td></tr>
+            <tr><td>Text entities</td><td class="num">1,049</td></tr>
+            <tr><td>Layers</td><td class="num">36</td></tr>
+            <tr><td>Non-anonymous blocks</td><td class="num">18</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h4>Tag format — TEXT entities on semantic layers:</h4>
+      <pre>Layer "1-TAG AND INSTRUMENTS GOR":
+  162TI2       → area 162, Temperature Indicator, seq 2
+  162TT1       → area 162, Temperature Transmitter, seq 1
+  162F1-540-M1 → area 162, Fan F1, position 540, Motor 1
+  162BCS1      → area 162, Binary Control Switch, seq 1
+
+Layer "1-EQUIPMENT GOR":
+  Equipment descriptions (text only)
+
+Layer "1-AIR GOR" / "1-WATER GOR":
+  Pipe routes drawn here; medium = layer name</pre>
+
+      <h4>Custom linetypes encode medium visually:</h4>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Linetype</th><th>Pattern</th><th>Meaning</th></tr></thead>
+          <tbody>
+            <tr><td><code>COMPRESS_AIR_GOR</code></td><td><code>----/\----/\----</code></td><td>GOR compressed air</td></tr>
+            <tr><td><code>BACK_PRESSURE_GOR</code></td><td><code>----X----X----</code></td><td>GOR backpressure</td></tr>
+            <tr><td><code>GAS_LINE</code></td><td><code>----GAS----GAS----</code></td><td>Gas piping</td></tr>
+            <tr><td><code>COMPRESS_AIR_OTHERS</code></td><td><code>..../\..../\...</code></td><td>Customer compressed air</td></tr>
+            <tr><td><code>BACK_PRESSURE_OTHERS</code></td><td><code>....X....X....</code></td><td>Customer backpressure</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-title">5.3 KSD Swedish — Sample: KSDM160104102_07_SH07 Machine broke pulper system.dwg</div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Metric</th><th class="num">Value</th></tr></thead>
+          <tbody>
+            <tr><td>Block inserts</td><td class="num">140</td></tr>
+            <tr><td>Block attributes</td><td class="num">266</td></tr>
+            <tr><td>XDATA (EED) records</td><td class="num">221</td></tr>
+            <tr><td>Text entities</td><td class="num">164</td></tr>
+            <tr><td>Layers</td><td class="num">67</td></tr>
+            <tr><td>Non-anonymous blocks</td><td class="num">15</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h4>Key attribute tags:</h4>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Tag</th><th>Meaning</th><th>Example</th></tr></thead>
+          <tbody>
+            <tr><td><code>KRETS</code></td><td>Circuit / instrument loop</td><td><code>126LC</code>, <code>126QC</code></td></tr>
+            <tr><td><code>POSNR</code></td><td>Position number</td><td><code>001</code>, <code>004</code></td></tr>
+            <tr><td><code>BENÄMNING</code></td><td>Name / description</td><td><code>DILUTION WATER 134P-004</code></td></tr>
+            <tr><td><code>BENÄMNING</code> (PILH/PILV)</td><td>Cross-sheet continuation</td><td><code>KSDM160104103 sh.03</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-title">5.4 PM3 Flow Diagrams — Special Sub-Type (RAU6401403, RAU6401404)</div>
+      <div class="info-block">
+        These are <strong>flow diagrams</strong> (not P&amp;IDs) in a distinct older Valmet layer/block scheme. No LIN_FROM/LIN_TO connectivity, but very rich pipeline metadata via PUT-prefix attributes on the <code>PI0NUOPR</code> connector block.
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Attribute Tag</th><th>Meaning (Finnish)</th></tr></thead>
+          <tbody>
+            <tr><td><code>PUTAINE</code></td><td>Medium / substance</td></tr>
+            <tr><td><code>PUTDN</code></td><td>Nominal diameter</td></tr>
+            <tr><td><code>PUTPN</code></td><td>Nominal pressure</td></tr>
+            <tr><td><code>PUTMATE</code></td><td>Pipe material</td></tr>
+            <tr><td><code>PUTPAIN</code></td><td>Operating pressure</td></tr>
+            <tr><td><code>PUTLAMM</code></td><td>Operating temperature</td></tr>
+            <tr><td><code>PUTVIRT</code></td><td>Flow rate</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title"><span class="sec-num">§6</span> DWG ↔ PDF Comparison</div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Aspect</th><th>Valmet PS-21</th><th>GOR Italian</th><th>KSD Swedish</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>DWG-native info</strong></td>
+            <td>Equipment tags, connectivity graph, revision history — all machine-readable</td>
+            <td>IDOK automation data, title block</td>
+            <td>KRETS loop tags, POSNR, BENÄMNING</td>
+          </tr>
+          <tr>
+            <td><strong>PDF required?</strong></td>
+            <td>Only for valve type (vision AI, already in pipeline)</td>
+            <td><span class="tag orange">Potentially essential</span> — DWG has near-zero attr data</td>
+            <td>PDF fallback for ~20% parse failures</td>
+          </tr>
+          <tr>
+            <td><strong>Parse reliability</strong></td>
+            <td><span class="tag green">100%</span></td>
+            <td><span class="tag green">100%</span></td>
+            <td><span class="tag red">~80%</span> — 15 DWGs fail</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title"><span class="sec-num">§10</span> Converter-Relevant Differences</div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Dimension</th><th>Valmet PS-21</th><th>GOR Italian</th><th>KSD Swedish</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Tag encoding</strong></td><td>Block attribute + PCAD XDATA</td><td>Plain TEXT on semantic layer</td><td>KRETS + POSNR attributes</td></tr>
+          <tr><td><strong>Connectivity</strong></td><td><span class="tag green">LIN_FROM/LIN_TO direct graph</span></td><td><span class="tag red">Geometric only</span></td><td><span class="tag red">Geometric + BENÄMNING refs</span></td></tr>
+          <tr><td><strong>Valve type</strong></td><td>Block name lookup (Finnish)</td><td><span class="tag orange">Vision AI required</span></td><td><span class="tag orange">Vision AI required</span></td></tr>
+          <tr><td><strong>Medium / substance</strong></td><td>Layer name: P-WATER, P-STEAM2</td><td>Linetype: GAS_LINE, COMPRESS_AIR_GOR</td><td>Layer name: PS</td></tr>
+          <tr><td><strong>Attribute density</strong></td><td>~1,800 attrs / drawing</td><td><span class="tag red">~1 attr / drawing</span></td><td>~270 attrs / drawing</td></tr>
+          <tr><td><strong>Title block</strong></td><td>Structured attrs (Valmet_TB01)</td><td>Italian text (Cartiglio)</td><td>Swedish text (METSOHUVUD)</td></tr>
+          <tr><td><strong>DWG version</strong></td><td>AC1032</td><td><span class="tag orange">AC1024</span> (older)</td><td>AC1032</td></tr>
+          <tr><td><strong>Manufacturer data</strong></td><td>VEVALMISTAJA attribute</td><td>Not available</td><td>Not available</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     TAB 4 — STANDARDS & RESOURCES
+═══════════════════════════════════════════════════════════════ -->
+<div id="tab-standards" class="tab-panel">
+
+  <div class="section">
+    <div class="section-title"><span class="sec-num">§8</span> Provided vs Missing Standards</div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Standard / Convention</th><th>Status</th><th>Relevant DWGs</th><th>Importance</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>SML PS-21 (Valmet)</td><td><span class="tag green">✅ Complete</span></td><td>CHEM, OCC, PM03</td><td><span class="tag red">Critical</span></td></tr>
+          <tr><td>SML SAP FLOC structure</td><td><span class="tag green">✅ Complete</span></td><td>All SML</td><td><span class="tag red">Critical</span></td></tr>
+          <tr><td>SML Object Type List</td><td><span class="tag green">✅ Complete</span></td><td>All SML</td><td><span class="tag red">Critical</span></td></tr>
+          <tr><td>SML Abbreviation Standard</td><td><span class="tag green">✅ Complete</span></td><td>All SML</td><td><span class="tag orange">High</span></td></tr>
+          <tr><td>KSD Tissue Numbering (KSDM160104_010.00)</td><td><span class="tag yellow">⚠️ Partial</span></td><td>TM01/KSD</td><td><span class="tag orange">High</span></td></tr>
+          <tr><td>PM3 Naming (COMMON + PROCESS AND AUTOMATION)</td><td><span class="tag yellow">⚠️ Partial</span></td><td>PM03_PID</td><td><span class="tag yellow">Medium</span></td></tr>
+          <tr><td>GOR Italian Standard</td><td><span class="tag red">❌ Missing</span></td><td>TM01/GOR</td><td><span class="tag orange">High</span></td></tr>
+          <tr><td>CHP2 Drafting Standard</td><td><span class="tag red">❌ Missing</span></td><td>CHP2_PID</td><td><span class="tag">Unknown</span></td></tr>
+          <tr><td>ETP2 / Nijhuis Standard</td><td><span class="tag red">❌ Missing</span></td><td>ETP2_PID</td><td><span class="tag">Unknown</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="info-block">
+      <strong>Standards we have enough to build from now:</strong> Valmet PS-21 (full implementation possible), SAP FLOC + Object Type mapping (available as JSON), KSD tag patterns (basic extraction possible).<br><br>
+      <strong>Standards that need to be obtained:</strong> GOR company standard (contact GOR S.r.l. or reverse-engineer from all 19 DWGs); KSD block library (obtain from KSD or Andritz); CHP2 and ETP2 standards (clarify scope first).
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title"><span class="sec-num">§7</span> Resource File Inventory — What Each File Tells Us</div>
+
+    <style>
+      .res-grid { display: flex; flex-direction: column; gap: 14px; }
+      .res-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+      .res-card-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; padding: 13px 16px 10px; border-bottom: 1px solid var(--border); }
+      .res-card-left { flex: 1; min-width: 0; }
+      .res-fname { font-size: 13px; font-weight: 700; color: #fff; font-family: 'SF Mono', Consolas, monospace; margin-bottom: 2px; word-break: break-all; }
+      .res-path { font-size: 10px; color: var(--muted); margin-bottom: 6px; }
+      .res-badges { display: flex; gap: 6px; flex-wrap: wrap; }
+      .res-card-body { padding: 12px 16px; }
+      .res-what { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .6px; color: var(--muted); margin-bottom: 8px; }
+      .res-list { list-style: none; display: flex; flex-direction: column; gap: 5px; margin-bottom: 10px; }
+      .res-list li { display: flex; gap: 8px; font-size: 12px; color: var(--muted); line-height: 1.5; }
+      .res-list li::before { content: '·'; color: var(--accent); flex-shrink: 0; font-weight: 700; margin-top: 1px; }
+      .res-list li strong { color: var(--text); }
+      .res-uses { font-size: 11px; color: var(--muted); padding: 8px 10px; background: var(--surface2); border: 1px solid var(--border); border-radius: 5px; }
+      .res-uses strong { color: var(--green); }
+      .res-parsed { font-size: 11px; color: var(--muted); margin-top: 8px; padding: 6px 10px; background: rgba(52,211,153,.05); border: 1px solid rgba(52,211,153,.2); border-radius: 5px; }
+      .res-parsed code { color: var(--green); }
+      .res-group-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .8px; color: var(--muted); padding: 6px 0 4px; border-bottom: 1px solid var(--border); margin-bottom: 10px; }
+    </style>
+
+    <div class="res-grid">
+
+      <!-- ── GROUP: PDF Standard Documents ─────────────────────────────────── -->
+      <div class="res-group-label">PDF Standard Documents</div>
+
+      <!-- 1. SML PS-21 main standard -->
+      <div class="res-card">
+        <div class="res-card-head">
+          <div class="res-card-left">
+            <div class="res-fname">SML PS-21 — STANDARD 21 DOC — Rev 2.2-Jan 24 (ID 4108).pdf</div>
+            <div class="res-path">resources/</div>
+            <div class="res-badges">
+              <span class="tag">📄 PDF</span>
+              <span class="tag green">✅ Complete</span>
+              <span class="tag blue">🇫🇮 Valmet</span>
+              <span class="tag">35 DWGs</span>
+            </div>
+          </div>
+        </div>
+        <div class="res-card-body">
+          <div class="res-what">What this file tells us</div>
+          <ul class="res-list">
+            <li><strong>Layer naming convention:</strong> P-prefix layer scheme — P-VALVEPOS, P-INSTRPOS, P-LINEPOS, P-WATER, P-STEAM2, P-AIR, FIMPEC_COLOR, FIMPEC_BW — tells us how to separate valve positions from pipe routes from instrument bubbles</li>
+            <li><strong>Block library definitions:</strong> Which CAD block names represent which P&ID symbols — VENTK (ball valve), TOIMILV (actuated valve), TAKAISKU (check valve), VAROV (safety valve), MOTOR, KOMPR</li>
+            <li><strong>FIMPEC valve classification codes:</strong> Maps the FIMPEC* block prefix to specific valve types — ball, butterfly, globe, needle, check, safety — determines SAP valve type field</li>
+            <li><strong>Area numbering:</strong> 2-digit area codes used throughout position tags (e.g. area 35 = PM3 specific process section) — needed to parse VEPOSITIO tag fields</li>
+            <li><strong>P&ID symbol conventions:</strong> Which symbols mean what on the drawing — instrument bubbles, control valves, equipment outlines</li>
+            <li><strong>Revision / approval workflow:</strong> Drawing status codes (PRELIMINARY, FOR APPROVAL, CERTIFIED) mapped to title block stamp blocks</li>
+          </ul>
+          <div class="res-parsed">→ Partially parsed into <code>standards/valmet_ps21.json</code> — layer names, FIMPEC codes, equipment letter codes, flow substance codes extracted</div>
+          <div class="res-uses"><strong>Used by converter:</strong> Valmet ecosystem adapter — layer-based entity classification, valve type resolution, FIMPEC code → SAP object type</div>
+        </div>
+      </div>
+
+      <!-- 2. PM3 Common naming -->
+      <div class="res-card">
+        <div class="res-card-head">
+          <div class="res-card-left">
+            <div class="res-fname">COMMON FOR MILL, MECHANICAL, PROCESS AND AUTOMATION.pdf</div>
+            <div class="res-path">resources/Naming Standards/Naming _PM3/ &nbsp;·&nbsp; Doc RAU4EG1432.03 · 40 pages</div>
+            <div class="res-badges">
+              <span class="tag">📄 PDF</span>
+              <span class="tag yellow">⚠️ Partial</span>
+              <span class="tag blue">🇫🇮 Valmet PM3</span>
+            </div>
+          </div>
+        </div>
+        <div class="res-card-body">
+          <div class="res-what">What this file tells us</div>
+          <ul class="res-list">
+            <li><strong>Customer and project context:</strong> Shotton Paper Mill Ltd project specifics, mill section boundaries, responsible parties — confirms this is the PM3 delivery scope</li>
+            <li><strong>Positioning and area numbering system:</strong> How the 2-digit area prefix maps to physical mill areas — needed to interpret the area portion of position tags like <code>35-24P529</code></li>
+            <li><strong>Room codes:</strong> Building/room identifiers that appear in equipment location fields — maps to SAP FLOC installation location</li>
+            <li><strong>File naming conventions:</strong> How drawing filenames are constructed — RAU + project code + drawing number — confirms why RAU* prefix = Valmet PM3</li>
+            <li><strong>Cross-discipline naming rules:</strong> How the same area code is used consistently across mechanical, process, and automation disciplines</li>
+          </ul>
+          <div class="res-uses"><strong>Used by converter:</strong> Area code → SAP FLOC location mapping; PM3 drawing filename validation</div>
+        </div>
+      </div>
+
+      <!-- 3. PM3 Process and Automation -->
+      <div class="res-card">
+        <div class="res-card-head">
+          <div class="res-card-left">
+            <div class="res-fname">PROCESS AND AUTOMATION.pdf</div>
+            <div class="res-path">resources/Naming Standards/Naming _PM3/ &nbsp;·&nbsp; Doc RAU4EG1433.04 · 62 pages · Author: Hannu Mölsä, Valmet</div>
+            <div class="res-badges">
+              <span class="tag">📄 PDF</span>
+              <span class="tag yellow">⚠️ Partial</span>
+              <span class="tag blue">🇫🇮 Valmet PM3</span>
+              <span class="tag red">Most important PDF</span>
+            </div>
+          </div>
+        </div>
+        <div class="res-card-body">
+          <div class="res-what">What this file tells us</div>
+          <ul class="res-list">
+            <li><strong>Position code format</strong> <code>MM-SSYYY-XXX</code>: MM = 2-digit line, SS = 2-digit sub-area, YYY = equipment type letter(s) + serial, XXX = instrument suffix — this is the primary key for matching DWG tags to SAP equipment numbers</li>
+            <li><strong>Instrument type letter codes:</strong> FC = Flow Controller, TC = Temperature Controller, LC = Level Controller, PI = Pressure Indicator, TI = Temperature Indicator, LI = Level Indicator, FI = Flow Indicator, QC = Quality Controller — these are the values in PCAD-POS-INFO XDATA field [1] on every instrument bubble</li>
+            <li><strong>Device position codes:</strong> How measurement transmitters (LT, FT, TT) are distinguished from indicators and controllers in the tag format</li>
+            <li><strong>Motor naming convention:</strong> Equipment tag + suffix <code>-M1</code>, <code>-M2</code> (e.g. <code>35-24P529-M1</code>) — this is how the MOOPOS attribute in DWGs is constructed</li>
+            <li><strong>QCS / quality system naming:</strong> Specific naming rules for the quality control system instruments</li>
+            <li><strong>Cross-sheet reference format:</strong> How KAAVIO attribute values reference other drawings by ID</li>
+          </ul>
+          <div class="res-parsed">→ Instrument type codes cross-verified against PCAD-POS-INFO XDATA field [1] values observed in <code>dwg_per_file_inventory.json</code> — all codes present in PDF match codes seen in DWG data</div>
+          <div class="res-uses"><strong>Used by converter:</strong> Instrument type classification, motor tag generation (<code>-M1</code> suffix), position code parsing and validation, SAP tag field population</div>
+        </div>
+      </div>
+
+      <!-- 4. KSD Tissue standard -->
+      <div class="res-card">
+        <div class="res-card-head">
+          <div class="res-card-left">
+            <div class="res-fname">Tissue KSDM160104_010.00 Process Numbering System.pdf</div>
+            <div class="res-path">resources/Naming Standards/Naming_Tissue/ &nbsp;·&nbsp; 21 pages</div>
+            <div class="res-badges">
+              <span class="tag">📄 PDF</span>
+              <span class="tag yellow">⚠️ Partial</span>
+              <span class="tag green">🇸🇪 KSD</span>
+              <span class="tag">25 DWGs</span>
+            </div>
+          </div>
+        </div>
+        <div class="res-card-body">
+          <div class="res-what">What this file tells us</div>
+          <ul class="res-list">
+            <li><strong>Process area code grid:</strong> 3-digit area prefix system (e.g. area 122, 126, 136) — tells us which process area each KSD equipment tag belongs to</li>
+            <li><strong>Equipment tag format</strong> <code>xyyz-aaa</code>: x = first digit of area, yy = last two digits, z = equipment type letter, aaa = 3-digit serial (e.g. <code>122E-001</code> = area 122, type E = heat exchanger, serial 001)</li>
+            <li><strong>Equipment type letters:</strong> E = heat exchanger, P = pump, A = agitator, T = tank, V = valve, C = conveyor — maps KRETS attr type character to SAP object type</li>
+            <li><strong>Motor suffix rules:</strong> Parent equipment tag + <code>-M1</code>, <code>-M2</code> for motor identification (e.g. <code>124P-004-M1</code>)</li>
+            <li><strong>Valve numbering:</strong> <code>126V-001</code> format — same xyyz-aaa structure with V type letter</li>
+            <li><strong>Pipeline numbering:</strong> <code>136L-001</code> format — L type letter = line (pipeline) — matches PIPEID attr values observed in DWGs</li>
+            <li><strong>Instrument identification letters:</strong> LC = level control, FC = flow control, TC = temperature — same as KRETS attr suffix in DWGs (e.g. <code>126LC</code> = area 126, Level Control)</li>
+          </ul>
+          <div class="res-parsed">→ Partially parsed into <code>standards/tissue_ksdm160104.json</code> — tag_pattern regex, motor suffix rule, 3 layer names, type prefix → SAP object type mapping extracted. Full area code grid and all type letters not yet parsed.</div>
+          <div class="res-uses"><strong>Used by converter:</strong> KSD ecosystem adapter — KRETS/POSNR tag parsing, equipment type classification, motor tag generation</div>
+        </div>
+      </div>
+
+      <!-- 5. Motors example -->
+      <div class="res-card">
+        <div class="res-card-head">
+          <div class="res-card-left">
+            <div class="res-fname">Example for motors.docx</div>
+            <div class="res-path">resources/Naming Standards/</div>
+            <div class="res-badges">
+              <span class="tag">📝 DOCX</span>
+              <span class="tag yellow">⚠️ Not parsed</span>
+            </div>
+          </div>
+        </div>
+        <div class="res-card-body">
+          <div class="res-what">What this file tells us</div>
+          <ul class="res-list">
+            <li><strong>Motor naming examples:</strong> Worked examples of how motor tags are derived from parent equipment tags across ecosystems</li>
+            <li><strong>Cross-ecosystem motor conventions:</strong> Likely covers both Valmet (<code>35-24P529-M1</code>) and KSD (<code>124P-004-M1</code>) motor naming patterns</li>
+          </ul>
+          <div class="res-uses"><strong>Status:</strong> Not yet parsed into machine-readable form — content should be reviewed and merged into the relevant JSON standards files</div>
+        </div>
+      </div>
+
+      <!-- ── GROUP: JSON Parsed Standards ─────────────────────────────────── -->
+      <div class="res-group-label" style="margin-top:8px">JSON Parsed Standards (machine-readable)</div>
+
+      <!-- 6. valmet_ps21.json -->
+      <div class="res-card">
+        <div class="res-card-head">
+          <div class="res-card-left">
+            <div class="res-fname">valmet_ps21.json</div>
+            <div class="res-path">standards/</div>
+            <div class="res-badges">
+              <span class="tag">🟩 JSON</span>
+              <span class="tag green">✅ Machine-readable</span>
+              <span class="tag blue">🇫🇮 Valmet</span>
+            </div>
+          </div>
+        </div>
+        <div class="res-card-body">
+          <div class="res-what">What this file tells us</div>
+          <ul class="res-list">
+            <li><strong>line_tag_pattern</strong> <code>^\d{2}-\d{2}-\d+$</code>: Regex to validate Valmet pipeline IDs from LINJA attribute</li>
+            <li><strong>motor_suffix_patterns:</strong> Regex patterns to detect motor tags (e.g. <code>-M1</code>, <code>-M2</code> suffix on MOOPOS attr)</li>
+            <li><strong>equipment_letter_codes:</strong> Maps equipment serial ranges to categories — L001–L299 = Process equipment (pulpers, screens), L401–L499 = Agitators, P501–P599 = Pumps, T601–T699 = Tanks — used to classify equipment by tag serial number</li>
+            <li><strong>flow_substance_codes:</strong> Short codes for process fluids — WAF = WHITE WTR, WAA = CLOUDY FILT, WM = FRESH WTR — maps VEKEMIKAALI attr values to readable medium names</li>
+            <li><strong>tag_prefix_rules:</strong> Maps instrument type letters (FC, TC, LC, TI, FI) to SAP object type codes</li>
+            <li><strong>fimpec_valve_codes:</strong> FIMPEC code → valve type (ball, butterfly, gate, globe, check, safety) — primary valve type classification source</li>
+            <li><strong>valve_layers, instrument_layers, equipment_layers:</strong> Layer name lists for entity-to-category assignment</li>
+          </ul>
+          <div class="res-uses"><strong>Used by converter:</strong> Valmet adapter — pipeline tag validation, equipment classification by serial range, valve type from FIMPEC, medium name lookup</div>
+        </div>
+      </div>
+
+      <!-- 7. sml_object_types.json -->
+      <div class="res-card">
+        <div class="res-card-head">
+          <div class="res-card-left">
+            <div class="res-fname">sml_object_types.json</div>
+            <div class="res-path">standards/ &nbsp;·&nbsp; Source: SML OBJECT TYPE LIST V3 EXPANDED.xlsx</div>
+            <div class="res-badges">
+              <span class="tag">🟩 JSON</span>
+              <span class="tag green">✅ Machine-readable</span>
+              <span class="tag">183 object types</span>
+            </div>
+          </div>
+        </div>
+        <div class="res-card-body">
+          <div class="res-what">What this file tells us</div>
+          <ul class="res-list">
+            <li><strong>object_types (183 entries):</strong> SAP object type code → name + work centre — e.g. 100 = ROLLS (MECH), 1101 = MOTOR (ELEC), 601 = TANK (MECH) — this is the master lookup for what SAP object type to assign to each equipment record</li>
+            <li><strong>tag_prefix_rules:</strong> Instrument loop type letter (LC, LT, FC, FT, NC) → SAP object type code — directly maps the type portion of VEPOSITIO/KRETS attr values to an SAP record type</li>
+            <li><strong>description_keyword_rules (39 rules):</strong> Equipment description keywords → SAP object type — e.g. MOTOR → 1101, PUMP → 701, TANK → 601 — fallback classification when tag format alone is insufficient</li>
+          </ul>
+          <div class="res-uses"><strong>Used by converter:</strong> All ecosystems — the single authoritative source for SAP object type codes; applied after tag classification and before final record generation</div>
+        </div>
+      </div>
+
+      <!-- 8. sml_abbreviations.json -->
+      <div class="res-card">
+        <div class="res-card-head">
+          <div class="res-card-left">
+            <div class="res-fname">sml_abbreviations.json</div>
+            <div class="res-path">standards/ &nbsp;·&nbsp; Source: SML Naming Abbreviation Standard.xlsx</div>
+            <div class="res-badges">
+              <span class="tag">🟩 JSON</span>
+              <span class="tag green">✅ Machine-readable</span>
+              <span class="tag">384 entries</span>
+            </div>
+          </div>
+        </div>
+        <div class="res-card-body">
+          <div class="res-what">What this file tells us</div>
+          <ul class="res-list">
+            <li><strong>abbreviations (384 entries):</strong> Full words used in equipment/instrument descriptions that the converter must recognise and handle — ACCUMULATOR, ACTUATOR, AGITATOR, COMPRESSOR, EXCHANGER etc.</li>
+            <li><strong>sml_phrase_rules (59 rules):</strong> Multi-word phrases → abbreviation — e.g. MOULDED CASE CIRCUIT BREAKER → MCCB, PHASE DOPPLER INTERFEROMETER → PDI — these appear in LAINIMI/BENÄMNING description fields and must be normalised before SAP import</li>
+            <li><strong>abbreviation_values:</strong> Maps each abbreviation to its SAP-standard short form — ensures VENIMI/LAINIMI attr text is correctly abbreviated for SAP 40-char description fields</li>
+          </ul>
+          <div class="res-uses"><strong>Used by converter:</strong> Description field normalisation pipeline — applied to VENIMI, LAINIMI, BENÄMNING attribute values before writing SAP Equipment and FLOC description fields</div>
+        </div>
+      </div>
+
+      <!-- 9. sml_floc_structure.json -->
+      <div class="res-card">
+        <div class="res-card-head">
+          <div class="res-card-left">
+            <div class="res-fname">sml_floc_structure.json</div>
+            <div class="res-path">standards/ &nbsp;·&nbsp; Source: SML SAP FLOC Structure V3.xlsx &nbsp;·&nbsp; Plant 5001 = Shotton Mill Ltd</div>
+            <div class="res-badges">
+              <span class="tag">🟩 JSON</span>
+              <span class="tag green">✅ Machine-readable</span>
+              <span class="tag red">Critical</span>
+            </div>
+          </div>
+        </div>
+        <div class="res-card-body">
+          <div class="res-what">What this file tells us</div>
+          <ul class="res-list">
+            <li><strong>Plant code:</strong> 5001 = SHOTTON MILL LTD — the SAP plant code used as the root for all FLOC codes generated by the converter</li>
+            <li><strong>lines:</strong> OCCW = OCC WAREHOUSE AND FIBRE PLANT, OCC1 = OCC, PM03 = PAPER MACHINE 3, CHM1 = STARCH PROCESS AND STORAGE — the top-level FLOC hierarchy codes and their descriptions</li>
+            <li><strong>processes:</strong> CA = CALANDER, IA = INSTRUMENT AIR, HA = HALL VENTILATION — 2-letter process codes that form the middle level of the FLOC hierarchy</li>
+            <li><strong>sub_processes:</strong> Deepest hierarchy level — maps to the process area codes in the position tags (e.g. area 35 → specific FLOC sub-process node)</li>
+          </ul>
+          <div class="res-uses"><strong>Used by converter:</strong> FLOC code generation — every Equipment record and Functional Location must have a valid FLOC parent from this hierarchy; also used to validate that extracted tags belong to the correct plant section</div>
+        </div>
+      </div>
+
+      <!-- 10. floc_context_map.json -->
+      <div class="res-card">
+        <div class="res-card-head">
+          <div class="res-card-left">
+            <div class="res-fname">floc_context_map.json</div>
+            <div class="res-path">standards/</div>
+            <div class="res-badges">
+              <span class="tag">🟩 JSON</span>
+              <span class="tag green">✅ Machine-readable</span>
+            </div>
+          </div>
+        </div>
+        <div class="res-card-body">
+          <div class="res-what">What this file tells us</div>
+          <ul class="res-list">
+            <li><strong>Drawing title → FLOC context mapping:</strong> For each known drawing (by title or filename prefix), specifies which SAP FLOC node it belongs to — ecosystem, plant, line_code, process_code, sub_process</li>
+            <li><strong>Broke System, STOD206336, STOD206337… etc.:</strong> Keys are drawing titles/IDs; values are the full FLOC context dict — allows the converter to instantly look up which part of the plant hierarchy a DWG maps to without re-parsing tags</li>
+            <li><strong>Ecosystem tagging:</strong> Each entry also records which ecosystem (valmet/gor/ksd) the drawing belongs to — used to route through the correct adapter</li>
+          </ul>
+          <div class="res-uses"><strong>Used by converter:</strong> Drawing-level FLOC context assignment — the first lookup when processing a new DWG; determines which FLOC parent to use for all records extracted from that drawing</div>
+        </div>
+      </div>
+
+      <!-- 11. tissue_ksdm160104.json -->
+      <div class="res-card">
+        <div class="res-card-head">
+          <div class="res-card-left">
+            <div class="res-fname">tissue_ksdm160104.json</div>
+            <div class="res-path">standards/ &nbsp;·&nbsp; Source: Tissue KSDM160104_010.00 PDF (partially parsed)</div>
+            <div class="res-badges">
+              <span class="tag">🟩 JSON</span>
+              <span class="tag yellow">⚠️ Partial — thin coverage</span>
+              <span class="tag green">🇸🇪 KSD</span>
+              <span class="tag orange">🇮🇹 GOR</span>
+            </div>
+          </div>
+        </div>
+        <div class="res-card-body">
+          <div class="res-what">What this file tells us</div>
+          <ul class="res-list">
+            <li><strong>line_tag_pattern</strong> <code>^\d+L-\d+$</code>: Regex for KSD pipeline IDs (e.g. <code>136L-001</code>)</li>
+            <li><strong>tag_pattern</strong> <code>^(\d{3})([A-Z])-(\d{3})$</code>: Regex to parse the 3-digit area, type letter, and serial from KSD/GOR equipment tags (e.g. <code>126E-001</code>)</li>
+            <li><strong>motor_from_equipment:</strong> Append <code>-M1</code> suffix to parent tag (e.g. <code>124P-004 → 124P-004-M1</code>)</li>
+            <li><strong>tag_prefix_rules:</strong> Type letter → SAP object type: P → 701 (pump), A → 2001 (agitator), T → 601 (tank)</li>
+            <li><strong>valve_layers, instrument_layers, equipment_layers:</strong> GOR layer names for entity classification — <code>1-VALVE TEXT GOR</code>, <code>1-TAG AND INSTRUMENTS GOR</code>, <code>1-EQUIPMENT GOR</code></li>
+          </ul>
+          <div class="res-uses"><strong>Used by converter:</strong> KSD and GOR adapters — tag parsing, motor suffix, layer-based classification. <strong>Gap:</strong> Full area code grid, all type letters, and GOR linetype meanings are not yet in this JSON.</div>
+        </div>
+      </div>
+
+      <!-- 12. legend.png -->
+      <div class="res-card">
+        <div class="res-card-head">
+          <div class="res-card-left">
+            <div class="res-fname">legend.png</div>
+            <div class="res-path">standards/</div>
+            <div class="res-badges">
+              <span class="tag">🖼 Image</span>
+              <span class="tag yellow">⚠️ Visual only</span>
+            </div>
+          </div>
+        </div>
+        <div class="res-card-body">
+          <div class="res-what">What this file tells us</div>
+          <ul class="res-list">
+            <li><strong>P&ID symbol legend:</strong> Visual reference mapping standard P&ID symbols to their equipment/instrument meaning — ball valve, control valve, motor, pump, exchanger symbols</li>
+            <li><strong>Symbol-to-category key:</strong> Used by vision AI pipeline to classify valve types from PDF drawings where DWG data is unavailable (GOR, KSD PDF fallback)</li>
+          </ul>
+          <div class="res-uses"><strong>Used by converter:</strong> Vision AI module (already in pipeline) — fed as context image when prompting the model to classify symbols in rendered P&ID PDFs</div>
+        </div>
+      </div>
+
+    </div><!-- /.res-grid -->
+  </div>
+
+  <div class="section">
+    <div class="section-title"><span class="sec-num">§4</span> Drafting Standard Mapping</div>
+    <div class="subsection">
+      <div class="subsection-title">Valmet PS-21 Layer &amp; Block Conventions</div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Area</th><th>Observation</th></tr></thead>
+          <tbody>
+            <tr><td>Layer naming</td><td><code>P-VALVEPOS</code>, <code>P-INSTRPOS</code>, <code>P-LINEPOS</code>, <code>P-WATER</code>, <code>P-STEAM2</code>, <code>P-AIR</code>, <code>FIMPEC_COLOR/BW</code></td></tr>
+            <tr><td>Key Finnish blocks</td><td>VENTK (ball valve), TOIMILV (actuated valve), TAKAISKU (check valve), VAROV (safety valve), MOTOR, KOMPR</td></tr>
+            <tr><td>Connectivity</td><td><strong>LIN_FROM / LIN_TO</strong> in PCAD XDATA on LWPOLYLINE — full flow graph reconstructable</td></tr>
+            <tr><td>Instrument XDATA</td><td>PCAD-POS-INFO: type code + area + position ID + description; PI-LNKREF cross-links bubble↔tag</td></tr>
+            <tr><td>Title block</td><td>Valmet_TB01 / VALMET_R_OTS with PROJECT1/2/3, DRAWINGID, TITLE1, SHEET, revision history</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="subsection">
+      <div class="subsection-title">GOR Italian Layer &amp; Linetype Conventions</div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Area</th><th>Observation</th></tr></thead>
+          <tbody>
+            <tr><td>Layer organisation</td><td><code>1-*</code> = GOR supply; <code>2-*</code> = customer supply; medium in layer name</td></tr>
+            <tr><td>Key layers</td><td><code>1-TAG AND INSTRUMENTS GOR</code>, <code>1-EQUIPMENT GOR</code>, <code>1-AIR GOR</code>, <code>1-WATER GOR</code>, <code>CARTIGLIO</code></td></tr>
+            <tr><td>Linetypes</td><td>32 custom — process-specific: COMPRESS_AIR_GOR, BACK_PRESSURE_GOR, GAS_LINE, ELECTRICAL_CONNECTION_L</td></tr>
+            <tr><td>Tag format</td><td>TEXT entities: <code>{3-digit area}{type}{seq}</code> e.g. <code>162TI2</code>, <code>162F1-540-M1</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="subsection">
+      <div class="subsection-title">KSD Swedish Layer &amp; Attribute Conventions</div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Area</th><th>Observation</th></tr></thead>
+          <tbody>
+            <tr><td>Key layers</td><td><code>PS</code> (process), <code>BLANKETT</code> (form), <code>BLTEXT</code> (form text), <code>DEFPOINTS</code></td></tr>
+            <tr><td>Key blocks</td><td>REVHUVUD (revision header), METSOHUVUD (Metso title block), POSNR, PILH/PILV (pipe continuation arrows)</td></tr>
+            <tr><td>Attributes</td><td>KRETS = circuit/loop tag; POSNR = position number; BENÄMNING = description with cross-sheet refs</td></tr>
+            <tr><td>Standard file</td><td>KSDM160104_010.00 Process Numbering System — format <code>xyyz-aaa</code> (e.g. <code>126A-001</code>)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     TAB 5 — EXTRACTION CAPABILITIES
+═══════════════════════════════════════════════════════════════ -->
+<div id="tab-capabilities" class="tab-panel">
+
+  <div class="section">
+    <div class="section-title"><span class="sec-num">§11</span> Extraction Capability Matrix</div>
+
+    <div class="legend-row">
+      <div class="legend-item"><span class="tag green">✅</span> Directly extractable</div>
+      <div class="legend-item"><span class="tag yellow">⚠️</span> Requires rules / text parsing</div>
+      <div class="legend-item"><span class="tag orange">🔴</span> Requires geometric / vision AI</div>
+      <div class="legend-item"><span class="tag red">❌</span> Not available in DWG data</div>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>SAP-relevant Field</th>
+            <th>Valmet PS-21</th>
+            <th>GOR Italian</th>
+            <th>KSD Swedish</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Drawing ID / title</strong></td><td><span class="tag green">✅ Direct attrs</span></td><td><span class="tag yellow">⚠️ Title block text</span></td><td><span class="tag yellow">⚠️ Title block text</span></td></tr>
+          <tr><td><strong>Revision history</strong></td><td><span class="tag green">✅ Direct attrs (MRK/PVM)</span></td><td><span class="tag yellow">⚠️ Block text</span></td><td><span class="tag yellow">⚠️ Block text</span></td></tr>
+          <tr><td><strong>Equipment tag</strong></td><td><span class="tag green">✅ VEPOSITIO attr</span></td><td><span class="tag yellow">⚠️ Text parse</span></td><td><span class="tag yellow">⚠️ KRETS attr</span></td></tr>
+          <tr><td><strong>Equipment type</strong></td><td><span class="tag green">✅ Block name lookup</span></td><td><span class="tag orange">🔴 Vision AI</span></td><td><span class="tag orange">🔴 Vision AI</span></td></tr>
+          <tr><td><strong>Valve tag</strong></td><td><span class="tag green">✅ VEPOSITIO</span></td><td><span class="tag yellow">⚠️ Text parse</span></td><td><span class="tag yellow">⚠️ Text parse</span></td></tr>
+          <tr><td><strong>Valve type</strong></td><td><span class="tag green">✅ Block name (VENTK etc.)</span></td><td><span class="tag orange">🔴 Vision AI</span></td><td><span class="tag orange">🔴 Vision AI</span></td></tr>
+          <tr><td><strong>Instrument tag</strong></td><td><span class="tag green">✅ PCAD-POS-INFO XDATA</span></td><td><span class="tag yellow">⚠️ Text parse</span></td><td><span class="tag green">✅ KRETS attr</span></td></tr>
+          <tr><td><strong>Instrument type</strong></td><td><span class="tag green">✅ PCAD-POS-INFO type field</span></td><td><span class="tag yellow">⚠️ Text prefix (TI, TT, TE)</span></td><td><span class="tag yellow">⚠️ KRETS prefix</span></td></tr>
+          <tr><td><strong>Pipeline / line ID</strong></td><td><span class="tag green">✅ LINJA attr</span></td><td><span class="tag yellow">⚠️ Text on layer</span></td><td><span class="tag yellow">⚠️ KRETS format</span></td></tr>
+          <tr><td><strong>Medium / substance</strong></td><td><span class="tag green">✅ Layer name (P-WATER, P-STEAM2)</span></td><td><span class="tag green">✅ Linetype name</span></td><td><span class="tag green">✅ Layer name</span></td></tr>
+          <tr><td><strong>Pipe connectivity</strong></td><td><span class="tag green">✅ LIN_FROM/LIN_TO graph</span></td><td><span class="tag orange">🔴 Geometric trace</span></td><td><span class="tag orange">🔴 Geometric trace</span></td></tr>
+          <tr><td><strong>Flow direction</strong></td><td><span class="tag green">✅ LIN_FROM/LIN_TO</span></td><td><span class="tag orange">🔴 Geometry arrows</span></td><td><span class="tag orange">🔴 PILH/PILV arrows</span></td></tr>
+          <tr><td><strong>Motor / drive tag</strong></td><td><span class="tag green">✅ Derived (PS-21 rule)</span></td><td><span class="tag yellow">⚠️ Text + -M1 suffix</span></td><td><span class="tag yellow">⚠️ Text + -M1 suffix</span></td></tr>
+          <tr><td><strong>SAP FLOC L3/L4</strong></td><td><span class="tag green">✅ floc_context_map</span></td><td><span class="tag green">✅ Code number mapping</span></td><td><span class="tag green">✅ KSDM prefix mapping</span></td></tr>
+          <tr><td><strong>SAP object type</strong></td><td><span class="tag green">✅ Block name → object_type</span></td><td><span class="tag orange">🔴 Vision + rules</span></td><td><span class="tag orange">🔴 Vision + rules</span></td></tr>
+          <tr><td><strong>Manufacturer</strong></td><td><span class="tag green">✅ VEVALMISTAJA attr</span></td><td><span class="tag red">❌ Not available</span></td><td><span class="tag red">❌ Not available</span></td></tr>
+          <tr><td><strong>Pipe size</strong></td><td><span class="tag yellow">⚠️ VEKOKO (often TBD)</span></td><td><span class="tag yellow">⚠️ Text</span></td><td><span class="tag yellow">⚠️ Text</span></td></tr>
+          <tr><td><strong>Pipe material</strong></td><td><span class="tag yellow">⚠️ Flow diagrams only (PUTMATE)</span></td><td><span class="tag red">❌</span></td><td><span class="tag red">❌</span></td></tr>
+          <tr><td><strong>Cross-sheet connections</strong></td><td><span class="tag yellow">⚠️ KAAVIO attr (text parse)</span></td><td><span class="tag red">❌</span></td><td><span class="tag yellow">⚠️ BENÄMNING (text parse)</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     TAB 6 — RISKS
+═══════════════════════════════════════════════════════════════ -->
+<div id="tab-risks" class="tab-panel">
+
+  <div class="section">
+    <div class="section-title"><span class="sec-num">§12</span> R&amp;D Risks</div>
+    <div class="risk-list">
+
+      <div class="risk-card critical">
+        <div class="risk-header">
+          <span class="risk-icon">🔴</span>
+          <span class="risk-title">Risk 1 — KSD DWG Parse Failures (~20%)</span>
+        </div>
+        <div class="risk-meta">
+          <span class="tag red">Impact: High</span>
+          <span class="tag">DXFStructureError: missing ENDSEC tag</span>
+        </div>
+        <div class="risk-body">
+          15 of 25 KSD DWGs fail entirely. Entire sheets of tissue machine process data are missing from the dataset.<br>
+          <strong>Mitigation:</strong> Investigate ODA converter version-specific fix; try LibreDWG as alternative; implement PDF companion fallback.<br>
+          <strong>R&amp;D needed:</strong> Root cause diagnosis; alternative parser evaluation; PDF fallback implementation.
+        </div>
+      </div>
+
+      <div class="risk-card critical">
+        <div class="risk-header">
+          <span class="risk-icon">🔴</span>
+          <span class="risk-title">Risk 2 — GOR Drawings Have Near-Zero Structured Data</span>
+        </div>
+        <div class="risk-meta">
+          <span class="tag red">Impact: High</span>
+          <span class="tag">1 attribute / drawing vs 1,800 for Valmet</span>
+        </div>
+        <div class="risk-body">
+          All engineering data is in plain TEXT entities; block attributes carry virtually no information. Extraction quality for GOR will be significantly lower than Valmet.<br>
+          <strong>Mitigation:</strong> Text-layer regex extraction; geometric connectivity analysis; vision AI for equipment type; PDF cross-validation.<br>
+          <strong>R&amp;D needed:</strong> Text extraction accuracy assessment; geometric connectivity precision/recall.
+        </div>
+      </div>
+
+      <div class="risk-card high">
+        <div class="risk-header">
+          <span class="risk-icon">🟠</span>
+          <span class="risk-title">Risk 3 — Missing GOR Standard Documentation</span>
+        </div>
+        <div class="risk-meta">
+          <span class="tag orange">Impact: Medium</span>
+          <span class="tag">No GOR company standard in resources/</span>
+        </div>
+        <div class="risk-body">
+          GOR conventions must be entirely reverse-engineered from 19 DWG samples. Risk of gaps or misinterpretation.<br>
+          <strong>Mitigation:</strong> Request from GOR S.r.l.; extract from project documentation; complete reverse-engineering from all 19 DWGs.
+        </div>
+      </div>
+
+      <div class="risk-card high">
+        <div class="risk-header">
+          <span class="risk-icon">🟠</span>
+          <span class="risk-title">Risk 4 — CHP2 and ETP2 are PDF-Only</span>
+        </div>
+        <div class="risk-meta">
+          <span class="tag orange">Impact: High if in scope</span>
+          <span class="tag">~70 PDFs, no DWGs</span>
+        </div>
+        <div class="risk-body">
+          CHP2_PID and ETP2_PID are not in the CSV index and contain only PDFs. Scope and feasibility are unknown.<br>
+          <strong>Mitigation:</strong> Scope decision first; if in scope, separate PDF extraction pipeline (vision AI / text extraction).<br>
+          <strong>R&amp;D needed:</strong> Scope decision + PDF parsing capability assessment (separate track).
+        </div>
+      </div>
+
+      <div class="risk-card medium">
+        <div class="risk-header">
+          <span class="risk-icon">🟡</span>
+          <span class="risk-title">Risk 5 — DWG Format Version Gap (GOR: AC1024)</span>
+        </div>
+        <div class="risk-meta">
+          <span class="tag yellow">Impact: Low-Medium</span>
+        </div>
+        <div class="risk-body">
+          GOR DWGs use AC1024 (AutoCAD 2010) vs AC1032 everywhere else. ODA converter handles both but feature parity may differ.<br>
+          <strong>Mitigation:</strong> Regression test ODA converter on all GOR files; verify entity fidelity.
+        </div>
+      </div>
+
+      <div class="risk-card medium">
+        <div class="risk-header">
+          <span class="risk-icon">🟡</span>
+          <span class="risk-title">Risk 6 — PM3 Flow Diagrams Are a Distinct Sub-Type</span>
+        </div>
+        <div class="risk-meta">
+          <span class="tag yellow">Impact: Medium</span>
+          <span class="tag">PI-prefix layers, no LIN_FROM/LIN_TO</span>
+        </div>
+        <div class="risk-body">
+          RAU6401403 and RAU6401404 use a different older Valmet scheme: PI-prefix layers, PI0NUOPR connector block, 0 relationship records. Different extraction rules needed.<br>
+          <strong>Mitigation:</strong> Detect flow diagram type by layer naming scheme; apply separate rules. PUT-prefix pipe attributes are rich — worth exploiting.
+        </div>
+      </div>
+
+      <div class="risk-card medium">
+        <div class="risk-header">
+          <span class="risk-icon">🟡</span>
+          <span class="risk-title">Risk 7 — PCAD XDATA Schema Requires Custom Parser</span>
+        </div>
+        <div class="risk-meta">
+          <span class="tag yellow">Impact: Medium</span>
+        </div>
+        <div class="risk-body">
+          Without PCAD-POS-INFO parsing, instrument type/area/ID data is lost for all Valmet DWGs. XDATA is decoded as positional string arrays; PCAD-TAKY-INFO provides the field name schema.<br>
+          <strong>Mitigation:</strong> Build PCAD schema parser: PCAD-TAKY-INFO → field names, PCAD-POS-INFO → values, zip to dict.
+        </div>
+      </div>
+
+      <div class="risk-card medium">
+        <div class="risk-header">
+          <span class="risk-icon">🟡</span>
+          <span class="risk-title">Risk 8 — Cross-Sheet Connectivity</span>
+        </div>
+        <div class="risk-meta">
+          <span class="tag yellow">Impact: High for hierarchy reconstruction</span>
+        </div>
+        <div class="risk-body">
+          Multi-sheet systems cannot be fully connected within a single drawing. KAAVIO attribute references other drawings (Valmet); BENÄMNING contains cross-sheet refs like <code>KSDM160104103 sh.03</code> (KSD).<br>
+          <strong>Mitigation:</strong> Parse KAAVIO/BENÄMNING attributes; build inter-drawing graph as post-processing step.
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     TAB 7 — ARCHITECTURE & ROADMAP
+═══════════════════════════════════════════════════════════════ -->
+<div id="tab-architecture" class="tab-panel">
+
+  <div class="section">
+    <div class="section-title"><span class="sec-num">§13</span> Recommended Architecture</div>
+    <div class="arch-wrap">
+      <pre>
+                     ┌──────────────────┐
+                     │  DWG / PDF Input  │
+                     └────────┬─────────┘
+                              │
+                   ┌──────────▼──────────┐
+                   │   Ingestion Layer    │
+                   │  ODA → ezdxf → JSON  │
+                   │   (already built)    │
+                   └──────────┬──────────┘
+                              │
+                   ┌──────────▼──────────┐
+                   │  Ecosystem Detector  │
+                   │  App ID fingerprint  │
+                   │  Layer name pattern  │
+                   │  Filename prefix     │
+                   │  Block language      │
+                   └────┬────┬────┬──────┘
+                        │    │    │
+           ┌────────────┘    │    └────────────┐
+           ▼                 ▼                 ▼
+  ┌────────────────┐ ┌──────────────┐ ┌──────────────────┐
+  │ Valmet Adapter │ │  GOR Adapter │ │   KSD Adapter    │
+  │                │ │              │ │                  │
+  │ PCAD-POS-INFO  │ │ Text-layer   │ │ KRETS/POSNR/     │
+  │ XDATA parser   │ │ regex parser │ │ BENÄMNING        │
+  │ LIN_FROM/TO    │ │ Linetype →   │ │ extractor        │
+  │ graph builder  │ │ medium map   │ │ BENÄMNING cross- │
+  │ Block name →   │ │ Geometric    │ │ ref resolver     │
+  │ Finnish lookup │ │ connectivity │ │ Geometric        │
+  │ P-layer →      │ │ Vision AI    │ │ connectivity     │
+  │ media map      │ │ for types    │ │ Vision AI        │
+  └────────┬───────┘ └──────┬───────┘ └────────┬─────────┘
+           │                │                  │
+           └────────────────┼──────────────────┘
+                            ▼
+              ┌─────────────────────────┐
+              │   Common Entity Model   │
+              │   Equipment             │
+              │   Instrument            │
+              │   Valve                 │
+              │   Pipeline              │
+              │   Drawing               │
+              └─────────────┬───────────┘
+                            │
+              ┌─────────────▼───────────┐
+              │   Semantic Enrichment   │
+              │   FLOC context mapping  │
+              │   Object type lookup    │
+              │   Motor tag derivation  │
+              │   Cross-sheet graph     │
+              │   Engineering inference │
+              └─────────────┬───────────┘
+                            │
+              ┌─────────────▼───────────┐
+              │       SAP Mapping       │
+              │   FLOC structure        │
+              │   Equipment Master      │
+              │   Functional Location   │
+              │   Document links        │
+              └─────────────┬───────────┘
+                            │
+              ┌─────────────▼───────────┐
+              │       Validation        │
+              │   vs PDF companion      │
+              │   vs ground truth xlsx  │
+              │   vs expected SAP struct│
+              │   Confidence scoring    │
+              └─────────────────────────┘
+      </pre>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title"><span class="sec-num">§14</span> Phased Project Scope</div>
+    <div class="phase-list">
+
+      <div class="phase-item">
+        <div class="phase-left">
+          <div class="phase-dot">1</div>
+          <div class="phase-line"></div>
+        </div>
+        <div class="phase-content">
+          <div class="phase-title">DWG Ingestion / Extraction</div>
+          <div class="phase-sub">Infrastructure largely already built in dwg_reader package</div>
+          <div class="phase-body">
+            <ul>
+              <li>Complete ODA + ezdxf pipeline for all 84 DWGs</li>
+              <li>Diagnose and fix (or document workaround for) KSD parse failures</li>
+              <li>Generate structured JSON output for every DWG</li>
+            </ul>
+            <div class="deliverable">84 structured JSON files with entities, blocks, layers, attributes, XDATA</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="phase-item">
+        <div class="phase-left">
+          <div class="phase-dot">2</div>
+          <div class="phase-line"></div>
+        </div>
+        <div class="phase-content">
+          <div class="phase-title">Ecosystem / Standard Identification</div>
+          <div class="phase-sub">Partially implemented in dwg_reader/dwg_ecosystem.py</div>
+          <div class="phase-body">
+            <ul>
+              <li>App ID fingerprinting → ecosystem classifier (valmet_ps21 / gor_italian / ksd_swedish)</li>
+              <li>Validate against filename prefix patterns</li>
+            </ul>
+            <div class="deliverable">Per-DWG ecosystem label with confidence score</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="phase-item">
+        <div class="phase-left">
+          <div class="phase-dot">3</div>
+          <div class="phase-line"></div>
+        </div>
+        <div class="phase-content">
+          <div class="phase-title">Standard-Specific Normalization</div>
+          <div class="phase-sub">Build 3 adapters in plug-in pattern</div>
+          <div class="phase-body">
+            <ul>
+              <li><strong>Valmet adapter</strong> (highest ROI — 35 DWGs, richest data): PCAD-TAKY-INFO schema parser, PCAD-POS-INFO field extractor, LIN_FROM/LIN_TO graph builder, block name → type lookup, P-layer media mapping</li>
+              <li><strong>GOR adapter:</strong> TEXT-layer regex extractor, linetype → medium mapping, geometric connectivity tracer</li>
+              <li><strong>KSD adapter:</strong> KRETS/POSNR/BENÄMNING extractor, cross-reference resolver, geometric connectivity</li>
+              <li><strong>PM3 flow diagram adapter:</strong> PUT-prefix pipe attribute extractor (PUTDN, PUTPN, PUTMATE, PUTAINE)</li>
+            </ul>
+            <div class="deliverable">Normalised entity lists per DWG (Equipment, Instrument, Valve, Pipeline, Connection)</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="phase-item">
+        <div class="phase-left">
+          <div class="phase-dot">4</div>
+          <div class="phase-line"></div>
+        </div>
+        <div class="phase-content">
+          <div class="phase-title">Engineering Semantic Extraction</div>
+          <div class="phase-sub">Build on existing vision AI pipeline</div>
+          <div class="phase-body">
+            <ul>
+              <li>Extend valve type vision AI from Valmet to GOR + KSD symbol conventions</li>
+              <li>Geometric connectivity analysis for GOR and KSD</li>
+              <li>Cross-sheet graph construction (KAAVIO/BENÄMNING inter-drawing links)</li>
+              <li>Motor/drive tag derivation; FLOC sub-process assignment</li>
+            </ul>
+            <div class="deliverable">Semantically enriched entity objects with confidence scores</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="phase-item">
+        <div class="phase-left">
+          <div class="phase-dot">5</div>
+          <div class="phase-line"></div>
+        </div>
+        <div class="phase-content">
+          <div class="phase-title">SAP Mapping</div>
+          <div class="phase-sub"></div>
+          <div class="phase-body">
+            <ul>
+              <li>FLOC structure mapping (drawing → L1/L2/L3/L4 Functional Location)</li>
+              <li>Equipment master data generation; instrument location assignment</li>
+              <li>Valve equipment record creation; motor/drive linking</li>
+            </ul>
+            <div class="deliverable">SAP-ready import file (LSMW / BAPI / IDoc format)</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="phase-item">
+        <div class="phase-left">
+          <div class="phase-dot">6</div>
+          <div class="phase-line"></div>
+        </div>
+        <div class="phase-content">
+          <div class="phase-title">Validation</div>
+          <div class="phase-sub"></div>
+          <div class="phase-body">
+            <ul>
+              <li>PDF cross-validation (DWG extracted vs PDF visual content)</li>
+              <li>Ground truth comparison (gt_hierarchy_broke_system.xlsx)</li>
+              <li>Inter-drawing consistency checks; SAP structure validation</li>
+            </ul>
+            <div class="deliverable">Validation report + exception list for manual review</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="phase-item">
+        <div class="phase-left">
+          <div class="phase-dot">7</div>
+          <div class="phase-line"></div>
+        </div>
+        <div class="phase-content">
+          <div class="phase-title">Production Hardening</div>
+          <div class="phase-sub"></div>
+          <div class="phase-body">
+            <ul>
+              <li>KSD parse failure handling and PDF fallback</li>
+              <li>CHP2 / ETP2 PDF extraction pipeline (if in scope)</li>
+              <li>Error reporting, audit trail, confidence scoring, human review queue</li>
+            </ul>
+            <div class="deliverable">Production-ready converter with exception management</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     TAB 8 — CONCLUSION
+═══════════════════════════════════════════════════════════════ -->
+<div id="tab-conclusion" class="tab-panel">
+
+  <div class="section">
+    <div class="section-title"><span class="sec-num">§15</span> Final Conclusion</div>
+
+    <div class="conclusion-grid">
+
+      <div class="conc-card know">
+        <div class="conc-label">✅ What We Know</div>
+        <ul>
+          <li>Three distinct CAD ecosystems confirmed: Valmet PS-21, GOR Italian, KSD Swedish</li>
+          <li>Valmet: excellent standard documentation + rich structured data (XDATA, attributes, connectivity)</li>
+          <li>GOR: 19 DWGs, no standard doc, near-zero block attributes — text-centric</li>
+          <li>KSD: 25 DWGs, partial documentation, 15 parse failures (60% of KSD set)</li>
+          <li>Two PDF-only areas (CHP2, ETP2) outside current DWG scope</li>
+        </ul>
+      </div>
+
+      <div class="conc-card unknown">
+        <div class="conc-label">❓ What We Don't Know</div>
+        <ul>
+          <li>GOR's drafting standard — entirely undocumented, must be reverse-engineered</li>
+          <li>Root cause of KSD parse failures — undiagnosed</li>
+          <li>CHP2 and ETP2 scope, DWG availability, and applicable standards</li>
+          <li>Whether KSD block library can be obtained from KSD / Andritz</li>
+        </ul>
+      </div>
+
+      <div class="conc-card automate">
+        <div class="conc-label">⚡ What Can Be Automated</div>
+        <ul>
+          <li>Valmet PS-21: nearly all equipment tags, instrument tags, connectivity (LIN_FROM/LIN_TO), title block metadata, pipeline IDs, SAP object types — deterministic extraction</li>
+          <li>GOR + KSD: tag extraction via text parsing and attribute extraction</li>
+          <li>Core infrastructure already exists in the dwg_reader package</li>
+        </ul>
+      </div>
+
+      <div class="conc-card rd">
+        <div class="conc-label">🔬 R&amp;D Still Required</div>
+        <ul>
+          <li>GOR standard reverse-engineering</li>
+          <li>KSD parse failure diagnosis + PDF fallback</li>
+          <li>PCAD XDATA schema decoder (Valmet connectivity graph)</li>
+          <li>Vision AI extension to GOR and KSD symbol sets</li>
+          <li>Cross-sheet graph construction</li>
+          <li>PDF extraction pipeline for CHP2/ETP2 (if in scope)</li>
+        </ul>
+      </div>
+
+    </div>
+
+    <div class="callout" style="margin-top:24px;">
+      <strong>Recommended architecture:</strong> Universal DWG ingestion layer (already partially built) feeding into an ecosystem detector and three standard-specific adapters, normalising into a common entity model before SAP mapping — with a validation layer that cross-checks against companion PDFs, ground truth data, and expected SAP hierarchy.
+    </div>
+
+    <div class="info-block">
+      <strong>Priority order for implementation:</strong><br>
+      1. Valmet PS-21 adapter (35 DWGs, highest data quality, full standard available — highest ROI)<br>
+      2. KSD adapter + parse failure investigation (25 DWGs, partial standard, recoverable)<br>
+      3. GOR adapter (19 DWGs, no standard, requires most R&amp;D — lowest deterministic yield)<br>
+      4. PDF extraction for CHP2/ETP2 (scope-dependent, separate track)
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     QUESTIONS FOR RACHAEL
+═══════════════════════════════════════════════════════════════ -->
+<div id="tab-questions" class="tab-panel">
+
+  <style>
+    .q-intro { background: rgba(108,140,255,.07); border: 1px solid rgba(108,140,255,.2); border-radius: var(--radius); padding: 16px 20px; margin-bottom: 24px; font-size: 13px; color: var(--muted); line-height: 1.7; }
+    .q-intro strong { color: var(--accent); }
+    .q-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 18px; overflow: hidden; }
+    .q-head { display: flex; gap: 14px; align-items: flex-start; padding: 16px 18px 14px; border-bottom: 1px solid var(--border); }
+    .q-num { font-size: 12px; font-weight: 800; color: var(--accent); background: rgba(108,140,255,.12); border: 1px solid rgba(108,140,255,.25); border-radius: 20px; padding: 2px 10px; white-space: nowrap; flex-shrink: 0; margin-top: 2px; }
+    .q-text { font-size: 15px; font-weight: 700; color: #fff; line-height: 1.4; }
+    .q-context { font-size: 12px; color: var(--muted); margin-top: 5px; line-height: 1.6; }
+    .q-context code { font-size: 11px; background: var(--surface2); border: 1px solid var(--border); border-radius: 3px; padding: 0 4px; color: #a8b9d0; font-family: 'SF Mono', Consolas, monospace; }
+    .q-answer { padding: 16px 18px; min-height: 100px; }
+    .q-answer-label { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: .8px; color: var(--muted); margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+    .q-answer-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+    .q-blank { font-size: 13px; color: #374151; font-style: italic; border: 1.5px dashed #2e3247; border-radius: 6px; padding: 18px 16px; min-height: 80px; background: rgba(14,17,26,.4); }
+  </style>
+
+  <div class="section">
+    <div class="section-title"><span class="sec-num">Q&amp;A</span> Questions for Rachael</div>
+
+    <div class="q-intro">
+      <strong>Context:</strong> We are building a converter that reads engineering drawings (DWG files) and produces SAP import data. We've done a forensic analysis of the 84 DWG files and understand how the data is structured inside them. But we have open questions about how SAP works, how the hierarchy is defined, and how the outputs should be ordered. <strong>These questions are from our side — we are not engineers — and we'd love Rachael to explain them in plain terms so we can get the converter right.</strong>
+    </div>
+
+    <!-- Q1 -->
+    <div class="q-card">
+      <div class="q-head">
+        <span class="q-num">Q1</span>
+        <div>
+          <div class="q-text">What are these "standards" — and does every company have their own?</div>
+          <div class="q-context">
+            We found three different standards in these 84 drawings: Valmet PS-21 (Finnish), GOR (Italian — no standard document provided), and KSD (Swedish). They all look like P&amp;ID drawings but the data inside them is completely different — different block names, different attribute tags, different connectivity. We're trying to understand: is this normal? Do all engineering contractors invent their own rules, or are there industry-wide standards that everyone is supposed to follow?
+          </div>
+        </div>
+      </div>
+      <div class="q-answer">
+        <div class="q-answer-label">Rachael's answer</div>
+        <div class="q-blank"></div>
+      </div>
+    </div>
+
+    <!-- Q2 -->
+    <div class="q-card">
+      <div class="q-head">
+        <span class="q-num">Q2</span>
+        <div>
+          <div class="q-text">What exactly is a Process, Sub-process, Function, Equipment and Sub-equipment — and how do they relate to each other?</div>
+          <div class="q-context">
+            In the SAP files we've seen, there's a hierarchy with different levels. In our drawings we have things like "Broke System", "Stock Preparation", individual pumps, valves, and then motors attached to those pumps. We're guessing: Broke System = Process, a pump = Equipment, the motor of that pump = Sub-equipment. But we're not sure what "Function" is, or how many levels there really are. Where does "Sub-process" fit in? Can you walk us through the levels using a real example from Shotton Mill?
+          </div>
+        </div>
+      </div>
+      <div class="q-answer">
+        <div class="q-answer-label">Rachael's answer</div>
+        <div class="q-blank"></div>
+      </div>
+    </div>
+
+    <!-- Q3 -->
+    <div class="q-card">
+      <div class="q-head">
+        <span class="q-num">Q3</span>
+        <div>
+          <div class="q-text">What is a "mask" in SAP — and how does it affect the FLOC codes we generate?</div>
+          <div class="q-context">
+            We've heard the term "mask" (or "structure indicator") used in the context of Functional Location codes. We understand that a FLOC code like <code>5001-PM03-CA-001</code> has a specific structure, and that SAP enforces this structure. But we don't fully understand: what defines the mask? Who sets it? Does it limit what codes we can create? If our converter generates a FLOC code that doesn't match the mask, what happens?
+          </div>
+        </div>
+      </div>
+      <div class="q-answer">
+        <div class="q-answer-label">Rachael's answer</div>
+        <div class="q-blank"></div>
+      </div>
+    </div>
+
+    <!-- Q4 -->
+    <div class="q-card">
+      <div class="q-head">
+        <span class="q-num">Q4</span>
+        <div>
+          <div class="q-text">How is the parent → child hierarchy actually built in SAP — what do we need to produce, and in what order?</div>
+          <div class="q-context">
+            We know we need to produce two output files: a Functional Location file and an Equipment file. But we're unclear on the mechanics: does a parent FLOC need to exist in SAP before you can create a child FLOC? Do you load the FLOC file first, then the Equipment file? What happens if there's a duplicate? We want to make sure our converter generates the files in the right order and with the right parent references so the import doesn't fail.
+          </div>
+        </div>
+      </div>
+      <div class="q-answer">
+        <div class="q-answer-label">Rachael's answer</div>
+        <div class="q-blank"></div>
+      </div>
+    </div>
+
+    <!-- Q5 -->
+    <div class="q-card">
+      <div class="q-head">
+        <span class="q-num">Q5</span>
+        <div>
+          <div class="q-text">If you were designing this converter yourself — how would you approach it? What would you look for first in the drawing?</div>
+          <div class="q-context">
+            We want to understand the engineer's mental model when reading a P&amp;ID. When you look at a drawing, what's the first thing you look for to understand what process it covers? How do you identify which symbol is a pump vs a valve vs an instrument? How do you know which equipment belongs to which process area? We're trying to replicate that mental model in code — any insight into how an engineer reads these drawings would help us build a better converter.
+          </div>
+        </div>
+      </div>
+      <div class="q-answer">
+        <div class="q-answer-label">Rachael's answer</div>
+        <div class="q-blank"></div>
+      </div>
+    </div>
+
+    <!-- Q6 -->
+    <div class="q-card">
+      <div class="q-head">
+        <span class="q-num">Q6</span>
+        <div>
+          <div class="q-text">How do you find relationships between equipment — is there anything in the drawing that tells you "this pump feeds that tank"?</div>
+          <div class="q-context">
+            In the Valmet drawings we found <code>LIN_FROM</code> / <code>LIN_TO</code> data embedded in the pipe lines — this tells us which equipment a pipe segment connects. But GOR and KSD drawings don't have this. For those, we'd need to figure out relationships another way. Are there standard conventions in P&amp;ID drawings for showing which equipment connects to what — either visually or through some numbering rule? Is there a hack or convention an engineer uses to trace the flow through a drawing?
+          </div>
+        </div>
+      </div>
+      <div class="q-answer">
+        <div class="q-answer-label">Rachael's answer</div>
+        <div class="q-blank"></div>
+      </div>
+    </div>
+
+    <!-- Q7 -->
+    <div class="q-card">
+      <div class="q-head">
+        <span class="q-num">Q7</span>
+        <div>
+          <div class="q-text">How should equipment and functional locations be ordered in the import files — is there a convention?</div>
+          <div class="q-context">
+            We need to produce sorted output files for SAP import. We know parents need to come before children. But within the same level — say, all the pumps in the Broke System — does the order matter? Is it alphabetical by tag? Is it by process flow order (upstream first)? Is it the order they appear on the P&amp;ID drawing? We want to match whatever Rachael/the team expects to see so the output is easy to review and doesn't create problems during import.
+          </div>
+        </div>
+      </div>
+      <div class="q-answer">
+        <div class="q-answer-label">Rachael's answer</div>
+        <div class="q-blank"></div>
+      </div>
+    </div>
+
+    <!-- Q8 -->
+    <div class="q-card">
+      <div class="q-head">
+        <span class="q-num">Q8</span>
+        <div>
+          <div class="q-text">The sub-process groupings — like BR1, BR2, BR3 in the Broke System — where do these come from and how do we know which equipment belongs to which group?</div>
+          <div class="q-context">
+            In the ground truth data and the SAP structure, we see sub-process groupings like BR1, BR2, BR3 within the Broke System. But in the DWG drawings, the equipment tags just have area codes (like <code>35-26…</code> or <code>35-28…</code>). We're not sure how to map those area codes to the right BR group. Is BR1/BR2/BR3 defined somewhere in the SAP structure? Is it something Rachael maps manually? Or can it be derived from the drawing itself — perhaps from a zone on the P&amp;ID or from the area code number range?
+          </div>
+        </div>
+      </div>
+      <div class="q-answer">
+        <div class="q-answer-label">Rachael's answer</div>
+        <div class="q-blank"></div>
+      </div>
+    </div>
+
+    <!-- Q9 -->
+    <div class="q-card">
+      <div class="q-head">
+        <span class="q-num">Q9</span>
+        <div>
+          <div class="q-text">How are equipment description texts built — what goes in them, and what format does SAP expect?</div>
+          <div class="q-context">
+            In the drawings, each piece of equipment has a name or description — for example a valve might have <code>VENIMI = LÄPPÄVENTTIILI</code> (Finnish for butterfly valve), or a KSD pump might have <code>BENÄMNING = DILUTION WATER PUMP</code>. We need to turn these raw strings into proper SAP equipment description texts. But we don't know: How long can the description be? Is there a specific format (e.g. type first, then medium, then size)? Do abbreviations need to be used — and if so, which list? Is the description the same as the "short text" in SAP, or is there also a "long text"? Are there any fields we should split the description across (e.g. a separate "manufacturer" field, a separate "technical data" field)?
+          </div>
+        </div>
+      </div>
+      <div class="q-answer">
+        <div class="q-answer-label">Rachael's answer</div>
+        <div class="q-blank"></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     TAB — VOCABULARY
+═══════════════════════════════════════════════════════════════ -->
+<div id="tab-vocab" class="tab-panel">
+<div class="section">
+  <div class="section-title"><span class="sec-num">§V</span> Project Vocabulary — Quick Reference</div>
+  <p style="font-size:12px;color:var(--muted);margin-bottom:20px">One-liner definitions for every term used across this assessment. Hover a term for its full context.</p>
+
+  <div style="margin-bottom:16px">
+    <input id="vocab-search" type="text" placeholder="Filter terms…"
+      oninput="filterVocab(this.value)"
+      style="width:100%;max-width:420px;background:var(--surface2);border:1px solid var(--border);border-radius:7px;padding:8px 14px;color:var(--text);font-size:13px;outline:none;font-family:inherit">
+  </div>
+
+  <div id="vocab-grid" style="display:flex;flex-direction:column;gap:18px">
+
+    <!-- ── SAP Concepts ── -->
+    <div class="vocab-group" data-group="sap">
+      <div class="vocab-group-hdr">SAP Concepts</div>
+      <div class="vocab-rows">
+        <div class="vocab-row"><span class="vocab-term">FLOC</span><span class="vocab-def">Functional Location — SAP's hierarchical address for a physical place in a plant (e.g. <code>5001-PM3-PRESS-SEC1</code>). Every piece of equipment is hung under a FLOC.</span></div>
+        <div class="vocab-row"><span class="vocab-term">Equipment</span><span class="vocab-def">SAP Equipment — a maintainable physical asset (pump, valve, motor) with its own SAP record, serial number, and maintenance history.</span></div>
+        <div class="vocab-row"><span class="vocab-term">Plant</span><span class="vocab-def">Top-level SAP org unit. Shotton Mill = Plant <code>5001</code>. All FLOCs and equipment belong to a plant.</span></div>
+        <div class="vocab-row"><span class="vocab-term">Object Type</span><span class="vocab-def">SAP Equipment category code (e.g. <code>M</code> = Motor, <code>P</code> = Pump). Controls which fields and maintenance plans apply. Defined in <code>sml_object_types.json</code>.</span></div>
+        <div class="vocab-row"><span class="vocab-term">SAP Mask</span><span class="vocab-def">A template that enforces a fixed naming format for FLOCs or equipment — e.g. <code>####-AAA-BBB</code> where each segment is validated. Determines how many levels the hierarchy has.</span></div>
+        <div class="vocab-row"><span class="vocab-term">Functional Location Structure</span><span class="vocab-def">The allowed FLOC depth levels: Plant → Line → Process → Sub-process → Equipment group → Equipment. Each level is a node in the hierarchy tree.</span></div>
+        <div class="vocab-row"><span class="vocab-term">Sub-process (BR level)</span><span class="vocab-def">The third or fourth level of the FLOC tree at Shotton — groups equipment into operating areas (e.g. <code>BR1</code>, <code>BR2</code>, <code>BR3</code> at Tissue Machine).</span></div>
+        <div class="vocab-row"><span class="vocab-term">SAP Import File</span><span class="vocab-def">A flat CSV/XLSX that the SAP data loader reads to create or update FLOCs and Equipment records in bulk. Column order and field names must match exactly.</span></div>
+        <div class="vocab-row"><span class="vocab-term">Short Text / Description</span><span class="vocab-def">The 40-char equipment description field in SAP — the main human-readable name. Must follow abbreviation rules (see <code>sml_abbreviations.json</code>).</span></div>
+        <div class="vocab-row"><span class="vocab-term">Long Text</span><span class="vocab-def">Free-text notes field in SAP Equipment, not length-constrained. Used for extra technical data not fitting the short-text limit.</span></div>
+        <div class="vocab-row"><span class="vocab-term">Parent–Child</span><span class="vocab-def">FLOC relationship: a child FLOC's code starts with its parent's code. Equipment records point to their parent FLOC. Load order matters — parents must exist before children.</span></div>
+      </div>
+    </div>
+
+    <!-- ── DWG / CAD Concepts ── -->
+    <div class="vocab-group" data-group="dwg">
+      <div class="vocab-group-hdr">DWG / CAD Concepts</div>
+      <div class="vocab-rows">
+        <div class="vocab-row"><span class="vocab-term">DWG</span><span class="vocab-def">AutoCAD's proprietary binary drawing format (<code>.dwg</code>). The source files we're reading. Not directly human-readable — must be converted to DXF first.</span></div>
+        <div class="vocab-row"><span class="vocab-term">DXF</span><span class="vocab-def">Drawing Exchange Format — a text/binary format AutoCAD uses to export drawing data. We convert DWG → DXF using ODA File Converter, then parse with ezdxf.</span></div>
+        <div class="vocab-row"><span class="vocab-term">Entity</span><span class="vocab-def">Any single drawable object in a DWG: a LINE, ARC, TEXT, INSERT (block reference), LWPOLYLINE, etc. Model space holds all the actual drawing entities.</span></div>
+        <div class="vocab-row"><span class="vocab-term">Block</span><span class="vocab-def">A named, reusable symbol definition — e.g. <code>VENTK</code> (valve symbol). Defined once in the block table, then stamped into model space as INSERTs many times.</span></div>
+        <div class="vocab-row"><span class="vocab-term">INSERT</span><span class="vocab-def">A block reference entity — one occurrence of a block stamped at a specific position, rotation, and scale. A drawing can have 3000 INSERTs of 50 block definitions.</span></div>
+        <div class="vocab-row"><span class="vocab-term">Attribute / ATTRIB</span><span class="vocab-def">A text field attached to a block INSERT that carries data — e.g. <code>VEPOSITIO = "101-XV-001"</code>. Attributes are how instrument tags, valve IDs, and descriptions are stored on symbols.</span></div>
+        <div class="vocab-row"><span class="vocab-term">Attribute Tag</span><span class="vocab-def">The field name of an attribute — e.g. <code>VEPOSITIO</code>, <code>VENIMI</code>, <code>KRETS</code>. The tag is always uppercase in DXF. The value is what the draughtsman typed.</span></div>
+        <div class="vocab-row"><span class="vocab-term">XDATA</span><span class="vocab-def">Extended Entity Data — structured data that a CAD application attaches to any entity, keyed by App ID. Valmet stores instrument type codes and area codes in <code>PCAD-POS-INFO</code> XDATA.</span></div>
+        <div class="vocab-row"><span class="vocab-term">EED</span><span class="vocab-def">Extended Entity Data — same as XDATA. Different name used in some ezdxf documentation.</span></div>
+        <div class="vocab-row"><span class="vocab-term">App ID</span><span class="vocab-def">A registered application identifier that namespaces XDATA — e.g. <code>PCAD</code> (Valmet), <code>IDOK</code> (GOR), <code>GENIUS</code> (KSD). Presence of an App ID fingerprints the CAD ecosystem.</span></div>
+        <div class="vocab-row"><span class="vocab-term">Layer</span><span class="vocab-def">A named grouping for entities — like a transparent sheet overlay. Used to separate pipelines, instruments, annotations, etc. Layer names follow CAD standards (e.g. <code>VENTTIILI</code> = valves).</span></div>
+        <div class="vocab-row"><span class="vocab-term">Model Space</span><span class="vocab-def">The main drawing canvas in a DWG — where all the actual P&amp;ID content lives. Distinct from Paper Space (which holds print layout frames).</span></div>
+        <div class="vocab-row"><span class="vocab-term">Paper Space</span><span class="vocab-def">The print layout area of a DWG — contains title block, borders, and viewports into model space. We ignore paper space for data extraction.</span></div>
+        <div class="vocab-row"><span class="vocab-term">Title Block</span><span class="vocab-def">A border block at the edge of the drawing that holds document metadata: project name, drawing number, revision, date. Typically a single INSERT with many attributes.</span></div>
+        <div class="vocab-row"><span class="vocab-term">Linetype</span><span class="vocab-def">The dash/dot pattern of a line — e.g. continuous, dashed, centre. Custom linetypes can signal pipeline types (process, utility, steam, etc.).</span></div>
+        <div class="vocab-row"><span class="vocab-term">ODA File Converter</span><span class="vocab-def">Open Design Alliance tool that converts proprietary DWG files to open DXF format. Required first step before ezdxf can read the files.</span></div>
+        <div class="vocab-row"><span class="vocab-term">ezdxf</span><span class="vocab-def">Python library for reading and writing DXF files. Our main parsing engine after ODA conversion. Fails on malformed DXF (e.g. KSD files with missing ENDSEC tag).</span></div>
+        <div class="vocab-row"><span class="vocab-term">LIN_FROM / LIN_TO</span><span class="vocab-def">XDATA fields on pipe polylines in Valmet drawings that encode direct connectivity — which block INSERT a pipe segment starts and ends at. Gives us a real topology graph.</span></div>
+        <div class="vocab-row"><span class="vocab-term">DXFStructureError</span><span class="vocab-def">ezdxf parse error meaning the DXF is structurally invalid. KSD DWGs trigger this with "missing ENDSEC tag" — ~15 of 25 KSD files affected. Root cause undiagnosed.</span></div>
+      </div>
+    </div>
+
+    <!-- ── P&ID / Engineering ── -->
+    <div class="vocab-group" data-group="pid">
+      <div class="vocab-group-hdr">P&amp;ID / Engineering</div>
+      <div class="vocab-rows">
+        <div class="vocab-row"><span class="vocab-term">P&amp;ID</span><span class="vocab-def">Piping and Instrumentation Diagram — an engineering schematic showing process equipment, pipes, and instrumentation with their interconnections and control loops.</span></div>
+        <div class="vocab-row"><span class="vocab-term">Instrument Tag</span><span class="vocab-def">A unique alphanumeric ID for an instrument — e.g. <code>101-FI-001</code> (area 101, Flow Indicator, #001). Format follows the applicable naming standard (PS-21, KSD, etc.).</span></div>
+        <div class="vocab-row"><span class="vocab-term">Instrument Bubble</span><span class="vocab-def">The circle symbol on a P&amp;ID that represents an instrument. In Valmet DWGs these are <code>PPI_*</code> blocks; in KSD they're identified by KRETS attribute.</span></div>
+        <div class="vocab-row"><span class="vocab-term">Position Tag</span><span class="vocab-def">The equipment or valve tag used for identification on the P&amp;ID — stored in <code>VEPOSITIO</code> (Valmet) or <code>POSNR</code> (KSD). Becomes the SAP Equipment tag.</span></div>
+        <div class="vocab-row"><span class="vocab-term">Loop</span><span class="vocab-def">A control loop: a set of instruments (sensor, controller, actuator) that maintain a process variable. Instruments in a loop share the same loop number in their tag.</span></div>
+        <div class="vocab-row"><span class="vocab-term">Process Medium</span><span class="vocab-def">The fluid or material flowing through a pipe — water, steam, pulp, chemicals. Stored in <code>VEKEMIKAALI</code> (Finnish: chemical) attribute on valve blocks.</span></div>
+        <div class="vocab-row"><span class="vocab-term">DN / PN</span><span class="vocab-def">Pipe Diameter Nominal (size in mm) and Pressure Nominal (pressure rating in bar). Stored in <code>PUTDN</code> / <code>PUTPN</code> attributes on pipe blocks.</span></div>
+        <div class="vocab-row"><span class="vocab-term">Cross-sheet Reference</span><span class="vocab-def">A symbol indicating that a pipe or signal continues on another drawing. In Valmet: <code>NUOLI</code> (arrow) blocks with <code>KAAVIO</code> (drawing number) attribute.</span></div>
+      </div>
+    </div>
+
+    <!-- ── Ecosystems & Standards ── -->
+    <div class="vocab-group" data-group="eco">
+      <div class="vocab-group-hdr">Ecosystems &amp; Standards</div>
+      <div class="vocab-rows">
+        <div class="vocab-row"><span class="vocab-term">Ecosystem</span><span class="vocab-def">Our term for a cluster of DWGs produced by the same CAD software and naming standard — identified by App ID fingerprint. Three at Shotton: Valmet PS-21, GOR Italian, KSD Swedish.</span></div>
+        <div class="vocab-row"><span class="vocab-term">Valmet PS-21</span><span class="vocab-def">Finnish process CAD software by Valmet. Produces DWGs with <code>PCAD_*</code> App IDs. Follows PS-21 naming standard (RAU4EG1432 + RAU4EG1433). 35 DWGs at Shotton.</span></div>
+        <div class="vocab-row"><span class="vocab-term">PS-21</span><span class="vocab-def">Valmet's internal CAD naming standard — documents RAU4EG1432.03 (Common for Mill) and RAU4EG1433.04 (Process &amp; Automation). Defines block names, attribute tags, and position tag format.</span></div>
+        <div class="vocab-row"><span class="vocab-term">PCAD</span><span class="vocab-def">Valmet's proprietary CAD application identifier. Presence of <code>PCAD_*</code> App IDs in a DWG's XDATA is the primary fingerprint for the Valmet PS-21 ecosystem.</span></div>
+        <div class="vocab-row"><span class="vocab-term">GOR Italian</span><span class="vocab-def">Italian P&amp;ID CAD software. Produces DWGs with <code>IDOK_*</code> App IDs. No named standard found — block names and tags are in Italian. 19 DWGs at Shotton (GORA*/GORB* prefix).</span></div>
+        <div class="vocab-row"><span class="vocab-term">IDOK</span><span class="vocab-def">GOR's CAD application identifier. Presence of <code>IDOK_*</code> App IDs fingerprints the GOR ecosystem. GOR stores data in TEXT entities rather than block attributes.</span></div>
+        <div class="vocab-row"><span class="vocab-term">KSD Swedish</span><span class="vocab-def">Swedish P&amp;ID CAD software (related to Andritz/Metso). Produces DWGs with <code>GENIUS_*</code> App IDs. Follows KSDM160104_010.00 standard. 25 DWGs at Shotton (KSDM* prefix).</span></div>
+        <div class="vocab-row"><span class="vocab-term">GENIUS</span><span class="vocab-def">KSD/Andritz CAD application identifier. Presence of <code>GENIUS_*</code> App IDs fingerprints the KSD ecosystem. Also used by Metso software family.</span></div>
+        <div class="vocab-row"><span class="vocab-term">KSDM160104_010.00</span><span class="vocab-def">KSD's process numbering standard PDF (21 pages). Defines tag format <code>xyyz-aaa</code> (e.g. <code>126A-001</code>), primary fields KRETS/POSNR/BENÄMNING, and area code grid. Partially parsed into <code>tissue_ksdm160104.json</code>.</span></div>
+        <div class="vocab-row"><span class="vocab-term">RAU4EG1432 / RAU4EG1433</span><span class="vocab-def">The two PS-21 standard PDFs found in resources. RAU4EG1432.03 = Common for Mill (plant-wide rules). RAU4EG1433.04 = Process and Automation (instrument-specific rules, §3 defines type codes).</span></div>
+        <div class="vocab-row"><span class="vocab-term">BENÄMNING</span><span class="vocab-def">Swedish: "designation / name". The primary description attribute in KSD drawings. Maps to the SAP Equipment short-text description field.</span></div>
+        <div class="vocab-row"><span class="vocab-term">VENIMI</span><span class="vocab-def">Finnish: "valve name". The description attribute on Valmet valve blocks — e.g. <code>LÄPPÄVENTTIILI</code> (butterfly valve). Maps to SAP Equipment description.</span></div>
+        <div class="vocab-row"><span class="vocab-term">KRETS</span><span class="vocab-def">Swedish: "circuit / loop". The instrument loop/tag field in KSD drawings — equivalent to the instrument tag number. Primary key for identifying instruments in the KSD ecosystem.</span></div>
+        <div class="vocab-row"><span class="vocab-term">VEPOSITIO</span><span class="vocab-def">Finnish: "valve position". The position tag attribute on Valmet valve and equipment blocks — the primary unique identifier used to match an equipment record in SAP.</span></div>
+      </div>
+    </div>
+
+  </div><!-- /#vocab-grid -->
+
+  <style>
+  .vocab-group{background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:0}
+  .vocab-group-hdr{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);padding:10px 16px;background:var(--surface2);border-bottom:1px solid var(--border)}
+  .vocab-rows{display:flex;flex-direction:column}
+  .vocab-row{display:flex;gap:16px;padding:9px 16px;border-bottom:1px solid rgba(46,50,71,.4);align-items:baseline}
+  .vocab-row:last-child{border-bottom:none}
+  .vocab-row:hover{background:rgba(255,255,255,.018)}
+  .vocab-term{font-size:12px;font-weight:700;color:#fff;white-space:nowrap;min-width:160px;flex-shrink:0;font-family:'SF Mono',Consolas,monospace}
+  .vocab-def{font-size:12px;color:var(--muted);line-height:1.5}
+  .vocab-def code{font-size:10px;background:var(--surface2);border:1px solid var(--border);border-radius:3px;padding:0 4px;color:#a8b9d0;font-family:'SF Mono',Consolas,monospace}
+  .vocab-row.hidden{display:none}
+  </style>
+
+  <script>
+  function filterVocab(q){
+    q=q.trim().toLowerCase();
+    document.querySelectorAll('.vocab-row').forEach(function(row){
+      var t=row.querySelector('.vocab-term').textContent.toLowerCase();
+      var d=row.querySelector('.vocab-def').textContent.toLowerCase();
+      row.classList.toggle('hidden', q!==''&&!t.includes(q)&&!d.includes(q));
+    });
+    document.querySelectorAll('.vocab-group').forEach(function(g){
+      var anyVisible=[].slice.call(g.querySelectorAll('.vocab-row')).some(function(r){return!r.classList.contains('hidden');});
+      g.style.display=anyVisible?'':'none';
+    });
+  }
+  </script>
+
+</div>
+</div>
+
+</div><!-- /.main -->
+
+<script>
+function showTab(name) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  event.currentTarget.classList.add('active');
+}
+</script>
+
+</body>
+</html>

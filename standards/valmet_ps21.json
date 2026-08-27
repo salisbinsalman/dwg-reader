@@ -14,7 +14,40 @@
     "agitator_l": {
       "pattern": "^\\d{2}-\\d{2}L(\\d+)$",
       "range": [401, 499]
+    },
+    "agitator_rotor": {
+      "pattern": "^\\d{2}-\\d{2}[A-Z]+\\d+\\.\\d+$",
+      "note": "Rotor sub-equipment of agitator/pulper — decimal suffix variant e.g. 35-24L009.1, 35-24L009.2. Motor tag strips the letter but keeps decimal: 35-24L009.1 → 35-24-009.1"
+    },
+    "description_keywords": {
+      "screen": ["SCRN", "SCREEN"],
+      "gearbox": ["GRBX", "GEARBOX"],
+      "agitator": ["AGIT", "AGITATOR"],
+      "winder_pulper": ["WINDER", "PLPR"],
+      "conveyor": ["CVYR", "CONVEYOR"]
     }
+  },
+  "equipment_letter_codes": {
+    "L001-L299": "Process equipment (pulpers, screens, cleaners)",
+    "L301-L399": "Hydraulic equipment",
+    "L401-L499": "Agitators",
+    "P501-P599": "Pumps (centrifugal, vacuum)",
+    "T601-T699": "Tanks and chests"
+  },
+  "flow_substance_codes": {
+    "WAF": "WHITE WTR",
+    "WAA": "CLOUDY FILT",
+    "WAB": "CLR FILT",
+    "WFC": "CLG WTR",
+    "WM": "FRESH WTR",
+    "WFL": "SEAL WTR",
+    "WSH": "SHR WTR",
+    "PP": "BROKE",
+    "PS": "PAPER STK",
+    "SH": "HP STM",
+    "SM": "MP STM",
+    "SL": "LP STM",
+    "EFC": "FIBRE EFF"
   },
   "tag_prefix_rules": {
     "P": "701",
@@ -22,7 +55,21 @@
     "A": "2001"
   },
   "valve_layers": ["P-VALVEPOS", "P-CVPOS"],
+  "av_layer": "P-CVPOS",
   "instrument_layers": ["P-INSTRPOS"],
   "equipment_layers": ["P-LINEPOS"],
-  "notes": "L401–L499 = agitator (PM3 number-series convention). L001–L399 = process equipment / pipeline."
+  "fimpec_valve_codes": {
+    "_note": "Appendix II of PS-21. These codes appear as a hyphen-separated suffix on manual valve tags (e.g. 35-24-123-GLO). The pipeline classifies via CAD layer + vision of the P&ID symbol shape, not by reading the tag suffix. FIMPEC codes are recorded here for reference only.",
+    "_tag_suffix_pattern": "-([A-Z]{3})$",
+    "_pipeline_use": "not used — vision classifies the symbol, not the tag text",
+    "BAL": {"description": "Ball valve", "pid_symbol": "NC or HV bowtie (solid or outline)", "pipeline_token": null},
+    "BUT": {"description": "Butterfly valve", "pid_symbol": "NC or HV bowtie (solid or outline)", "pipeline_token": null},
+    "CHS": {"description": "Check valve (swing type)", "pid_symbol": "Asymmetric bowtie or half-filled bowtie", "pipeline_token": "CHK"},
+    "CHD": {"description": "Check valve (disc type)", "pid_symbol": "Asymmetric bowtie or half-filled bowtie", "pipeline_token": "CHK"},
+    "STR": {"description": "Strainer / Y-strainer", "pid_symbol": "45° Y-branch stub", "pipeline_token": "YSTR"},
+    "FBV": {"description": "Full-bore valve (gate or ball)", "pid_symbol": "NC or HV bowtie", "pipeline_token": null},
+    "GLO": {"description": "Globe valve (regulating)", "pid_symbol": "Outline bowtie with small circle at triangle junction", "pipeline_token": "GLV"},
+    "GAT": {"description": "Gate valve", "pid_symbol": "NC or HV bowtie (solid or outline)", "pipeline_token": null}
+  },
+  "notes": "L401–L499 = agitator (PM3 number-series convention). L001–L399 = process equipment / pipeline. P-CVPOS layer → automatic/control valve (AV type in SML nomenclature). P-VALVEPOS layer → hand valve. Appendix III sub-process codes (22=approach flow, 24=broke) define the pipe tag prefix but are in a scanned table in the PDF — not machine-readable. FIMPEC codes (Appendix II) are tag suffixes on manual valves; only GLO→GLV, CHS/CHD→CHK, STR→YSTR have an unambiguous P&ID symbol mapping — the rest (BAL, BUT, FBV, GAT) share the plain bowtie symbol so the code does not disambiguate between NC and HV."
 }

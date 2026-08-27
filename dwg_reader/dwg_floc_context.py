@@ -60,13 +60,23 @@ def abbrev_data(json_path: Path = DEFAULT_ABBREV_JSON) -> Dict[str, Any]:
 
 def merge_floc_context(base: Optional[Mapping[str, str]] = None, **overrides: str) -> Dict[str, str]:
     out = dict(DEFAULT_FLOC_CONTEXT)
+    incoming: Dict[str, str] = {}
     if base:
         for k, v in base.items():
             if v is not None and str(v).strip():
-                out[k] = str(v).strip()
+                incoming[k] = str(v).strip()
     for k, v in overrides.items():
         if v is not None and str(v).strip():
-            out[k] = str(v).strip()
+            incoming[k] = str(v).strip()
+    out.update(incoming)
+    # Tissue / GOR map entries set plant=6001 but omit SWERK/IWERK fields.
+    # Copy plant onto maintenance/planning unless the caller set them explicitly.
+    plant = out.get("plant") or ""
+    if plant:
+        if "maintenance_plant" not in incoming:
+            out["maintenance_plant"] = plant
+        if "planning_plant" not in incoming:
+            out["planning_plant"] = plant
     return out
 
 
@@ -254,16 +264,27 @@ def format_line_eqktx(tag: str, eqktx: str, *, hequi: str = "", max_len: int = 4
         return text[:max_len]
 
     want = f"LN {tag_u}"
-    if text == want or text.startswith(f"{want} "):
-        return text[:max_len]
-
-    body = re.sub(r"\s+(LINE|LN)$", "", text).strip()
-    if body.startswith(tag_u):
-        rest = body[len(tag_u) :].strip()
-    else:
-        rest = body
-    if rest.startswith("LN "):
-        rest = rest[3:].strip()
+    rest = text
+    # Always rebuild so a duplicated tag after LN (LN 35-24-185 35-24-185 WW)
+    # is stripped, including when the text already starts with LN {tag}.
+    while rest:
+        if rest in {want, tag_u, "LN"}:
+            rest = ""
+            break
+        if rest.startswith(f"{want} "):
+            rest = rest[len(want) :].strip()
+            continue
+        if rest.startswith("LN "):
+            rest = rest[3:].strip()
+            continue
+        if rest.startswith(f"{tag_u} "):
+            rest = rest[len(tag_u) :].strip()
+            continue
+        stripped = re.sub(r"\s+(LINE|LN)$", "", rest).strip()
+        if stripped != rest:
+            rest = stripped
+            continue
+        break
 
     formatted = f"{want} {rest}".strip() if rest else want
     return formatted[:max_len]
@@ -366,6 +387,8 @@ _VALVE_TYPE_ONLY_RE = re.compile(
 _ATTACHMENT_TOKENS = ("FLS", "DRN", "SMP", "CHK", "PRV", "SV")
 ALLOWED_VALVE_TOKENS = {
     "HV", "NC", "NO", "CHK", "PRV", "SV", "FLS", "SMP", "DRN", "AV", "AV-M",
+    # V2 legend bodies / fittings
+    "GLV", "3WV", "PLUG", "AAV", "GF", "YSTR",
     # GOR/Valmet valve type codes
     "BF", "LWE", "ST", "FL", "IT", "VX",
 }
@@ -391,6 +414,18 @@ def is_valve_tag(tag: str) -> bool:
     t = re.sub(r"\s+", "", str(tag or "").strip()).upper()
     m = _VALVE_EMBEDDED_RE.match(t)
     return bool(m) and m.group(2).upper() in _VALVE_LETTER_PREFIXES
+
+
+def is_never_valve_tag(tag: str) -> bool:
+    """True for tags with an embedded non-valve letter prefix (e.g. 35-24L401 agitator).
+
+    These tags must never be treated as valves even when the vision cache says is_valve=True.
+    The embedded letter is structurally meaningful (L = agitator range) so it takes priority
+    over any heuristic or vision classification.
+    """
+    t = re.sub(r"\s+", "", str(tag or "").strip()).upper()
+    m = _VALVE_EMBEDDED_RE.match(t)
+    return bool(m) and m.group(2).upper() not in _VALVE_LETTER_PREFIXES
 
 
 def strip_valve_prefix(tag: str) -> str:
@@ -496,7 +531,11 @@ def apply_sop_valve_type(raw: str) -> str:
         tokens = [t for t in tokens if t not in {"NC", "NO", "HV"}]
         if "AV-M" in tokens:
             tokens = [t for t in tokens if t != "AV"]
-    order = ("AV-M", "AV", "DRN", "NC", "NO", "FLS", "SMP", "CHK", "PRV", "SV", "BF", "LWE", "ST", "FL", "IT", "VX", "HV")
+    order = (
+        "AV-M", "AV", "DRN", "NC", "NO", "FLS", "SMP", "CHK", "PRV", "SV",
+        "GLV", "3WV", "PLUG", "AAV", "GF", "YSTR",
+        "BF", "LWE", "ST", "FL", "IT", "VX", "HV",
+    )
     return " ".join(t for t in order if t in tokens)
 
 

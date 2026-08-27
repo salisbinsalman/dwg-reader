@@ -62,6 +62,9 @@ class PathTests(unittest.TestCase):
     def test_hierarchy_prompt_file_is_v8(self) -> None:
         self.assertEqual(HIERARCHY_PROMPT_FILE, "pid_hierarchy_gt_v8.md")
 
+    def test_valve_classify_v2_prompt_exists(self) -> None:
+        self.assertTrue((PROMPTS_DIR / "valve_classify_v2.md").is_file())
+
 
 class CliWrapperTests(unittest.TestCase):
     MODULES = (

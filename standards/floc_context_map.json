@@ -351,7 +351,7 @@
   },
   "GORA68210.05_Code 03 - P&ID AirCap_SWE Shotton_CE": {
     "ecosystem": "gor",
-    "plant": "5001",
+    "plant": "6001",
     "line_code": "TM01",
     "process_code": "AC",
     "sub_process": "AC1",
@@ -361,7 +361,7 @@
   },
   "GORA68211.03_Code 03 - P&Id Adv ReDry_SWE Shotton_CE": {
     "ecosystem": "gor",
-    "plant": "5001",
+    "plant": "6001",
     "line_code": "TM01",
     "process_code": "DR",
     "sub_process": "DR1",
@@ -371,7 +371,7 @@
   },
   "GORA68212.04_Code 03 - P&ID Heat Recoveries_SWE Shotton_CE": {
     "ecosystem": "gor",
-    "plant": "5001",
+    "plant": "6001",
     "line_code": "TM01",
     "process_code": "HR",
     "sub_process": "HR1",
@@ -381,7 +381,7 @@
   },
   "GORA68208.04_Code 13 - P&Id Mist Removal_SWE Shotton_CE": {
     "ecosystem": "gor",
-    "plant": "5001",
+    "plant": "6001",
     "line_code": "TM01",
     "process_code": "MR",
     "sub_process": "MR1",
@@ -391,7 +391,7 @@
   },
   "GORA68209.03_Code 13 - P&ID AdvWetDust_SWE Shotton_CE": {
     "ecosystem": "gor",
-    "plant": "5001",
+    "plant": "6001",
     "line_code": "TM01",
     "process_code": "WD",
     "sub_process": "WD1",
@@ -401,7 +401,7 @@
   },
   "GORB18781.02_Code 13 - P&ID Active AirFoil_SWE Shotton_CE": {
     "ecosystem": "gor",
-    "plant": "5001",
+    "plant": "6001",
     "line_code": "TM01",
     "process_code": "AB",
     "sub_process": "AB1",
@@ -411,7 +411,7 @@
   },
   "GORB18782.02_Code 13 - P&ID QCS - WIS_SWE Shotton_CE": {
     "ecosystem": "gor",
-    "plant": "5001",
+    "plant": "6001",
     "line_code": "TM01",
     "process_code": "QC",
     "sub_process": "QC1",
@@ -421,7 +421,7 @@
   },
   "GORA68213.05_Code 14 - P&ID MHV Heat recovery_SWE Shotton_CE": {
     "ecosystem": "gor",
-    "plant": "5001",
+    "plant": "6001",
     "line_code": "TM01",
     "process_code": "MH",
     "sub_process": "MH1",
@@ -431,7 +431,7 @@
   },
   "GORA68267.03_Code 14 - MHV Water ring piping overview_SWE Shotton_CE": {
     "ecosystem": "gor",
-    "plant": "5001",
+    "plant": "6001",
     "line_code": "TM01",
     "process_code": "MH",
     "sub_process": "MH2",
@@ -441,7 +441,7 @@
   },
   "GORB18777.05_Code 14 - P&ID Turboblower & WE Roof heating_SWE Shotton_CE": {
     "ecosystem": "gor",
-    "plant": "5001",
+    "plant": "6001",
     "line_code": "TM01",
     "process_code": "TB",
     "sub_process": "TB1",
@@ -451,7 +451,7 @@
   },
   "GORB18778.04_SH1(2)_Code 14 - P&ID Ventil Unit SU01_SWE Shotton_CE": {
     "ecosystem": "gor",
-    "plant": "5001",
+    "plant": "6001",
     "line_code": "TM01",
     "process_code": "SU",
     "sub_process": "SU1",
@@ -461,7 +461,7 @@
   },
   "GORB18778.04_SH2(2)_Code 14 - P&ID Ventil Unit SU02_SWE Shotton_CE": {
     "ecosystem": "gor",
-    "plant": "5001",
+    "plant": "6001",
     "line_code": "TM01",
     "process_code": "SU",
     "sub_process": "SU2",
@@ -471,7 +471,7 @@
   },
   "GORB18779.05_SH1(12)_Code 14 - P&ID Ventil Unit WU01_SWE Shotton_CE": {
     "ecosystem": "gor",
-    "plant": "5001",
+    "plant": "6001",
     "line_code": "TM01",
     "process_code": "WU",
     "sub_process": "WU1",
@@ -481,7 +481,7 @@
   },
   "GORB18779.05_SH2(12)_Code 14 - P&ID Ventil Unit WU02_SWE Shotton_CE": {
     "ecosystem": "gor",
-    "plant": "5001",
+    "plant": "6001",
     "line_code": "TM01",
     "process_code": "WU",
     "sub_process": "WU2",
@@ -491,7 +491,7 @@
   },
   "GORB18779.05_SH3(12)_Code 14 - P&ID Ventil Unit WU03_SWE Shotton_CE": {
     "ecosystem": "gor",
-    "plant": "5001",
+    "plant": "6001",
     "line_code": "TM01",
     "process_code": "WU",
     "sub_process": "WU3",
@@ -501,7 +501,7 @@
   },
   "GORB18779.05_SH4(12)_Code 14 - P&ID Ventil Unit WU04_SWE Shotton_CE": {
     "ecosystem": "gor",
-    "plant": "5001",
+    "plant": "6001",
     "line_code": "TM01",
     "process_code": "WU",
     "sub_process": "WU4",
@@ -511,7 +511,7 @@
   },
   "GORB18779.05_SH5(12)_Code 14 - P&ID Ventil Unit WU05_SWE Shotton_CE": {
     "ecosystem": "gor",
-    "plant": "5001",
+    "plant": "6001",
     "line_code": "TM01",
     "process_code": "WU",
     "sub_process": "WU5",
@@ -521,7 +521,7 @@
   },
   "GORB18779.05_SH6(12)_Code 14 - P&ID Ventil Unit WU06_SWE Shotton_CE": {
     "ecosystem": "gor",
-    "plant": "5001",
+    "plant": "6001",
     "line_code": "TM01",
     "process_code": "WU",
     "sub_process": "WU6",
@@ -531,7 +531,7 @@
   },
   "GORB18779.05_SH7(12)_Code 14 - P&ID Ventil Unit WU07_SWE Shotton_CE": {
     "ecosystem": "gor",
-    "plant": "5001",
+    "plant": "6001",
     "line_code": "TM01",
     "process_code": "WU",
     "sub_process": "WU7",
@@ -541,7 +541,7 @@
   },
   "GORB18779.05_SH8(12)_Code 14 - P&ID Ventil Unit WU08_SWE Shotton_CE": {
     "ecosystem": "gor",
-    "plant": "5001",
+    "plant": "6001",
     "line_code": "TM01",
     "process_code": "WU",
     "sub_process": "WU8",
@@ -551,7 +551,7 @@
   },
   "GORB18779.05_SH9(12)_Code 14 - P&ID Ventil Unit WU09_SWE Shotton_CE": {
     "ecosystem": "gor",
-    "plant": "5001",
+    "plant": "6001",
     "line_code": "TM01",
     "process_code": "WU",
     "sub_process": "WU9",
@@ -561,7 +561,7 @@
   },
   "GORB18779.05_SH10(12)_Code 14 - P&ID Ventil Unit WU10_SWE Shotton_CE": {
     "ecosystem": "gor",
-    "plant": "5001",
+    "plant": "6001",
     "line_code": "TM01",
     "process_code": "WU",
     "sub_process": "WUA",
@@ -571,7 +571,7 @@
   },
   "GORB18779.05_SH11(12)_Code 14 - P&ID Ventil Unit WU11_SWE Shotton_CE": {
     "ecosystem": "gor",
-    "plant": "5001",
+    "plant": "6001",
     "line_code": "TM01",
     "process_code": "WU",
     "sub_process": "WUB",
@@ -581,7 +581,7 @@
   },
   "GORB18779.05_SH12(12)_Code 14 - P&ID Ventil Unit WU12_SWE Shotton_CE": {
     "ecosystem": "gor",
-    "plant": "5001",
+    "plant": "6001",
     "line_code": "TM01",
     "process_code": "WU",
     "sub_process": "WUC",
@@ -591,7 +591,7 @@
   },
   "GORB18780.03_Code 14 - P&ID Bale pulper Extractor_SWE Shotton_CE": {
     "ecosystem": "gor",
-    "plant": "5001",
+    "plant": "6001",
     "line_code": "TM01",
     "process_code": "BP",
     "sub_process": "BP1",
@@ -601,7 +601,7 @@
   },
   "GORB18784.04_Code 14 - P&ID Machine Hall Extractors_SWE Shotton_CE": {
     "ecosystem": "gor",
-    "plant": "5001",
+    "plant": "6001",
     "line_code": "TM01",
     "process_code": "EX",
     "sub_process": "EX1",
@@ -611,7 +611,7 @@
   },
   "KSDM160104102_04_SH01_Bale handling_C": {
     "ecosystem": "ksd",
-    "plant": "5001",
+    "plant": "6001",
     "line_code": "TM01",
     "process_code": "SP",
     "sub_process": "BHS",
@@ -621,7 +621,7 @@
   },
   "KSDM160104102_07_SH03_Soft and hardwood line_C": {
     "ecosystem": "ksd",
-    "plant": "5001",
+    "plant": "6001",
     "line_code": "TM01",
     "process_code": "SP",
     "sub_process": "SP1",
@@ -631,7 +631,7 @@
   },
   "KSDM160104102_07_SH05_Thick stock screening_C": {
     "ecosystem": "ksd",
-    "plant": "5001",
+    "plant": "6001",
     "line_code": "TM01",
     "process_code": "CF",
     "sub_process": "CF1",
@@ -641,7 +641,7 @@
   },
   "KSDM160104102_07_SH06_Approach system_C": {
     "ecosystem": "ksd",
-    "plant": "5001",
+    "plant": "6001",
     "line_code": "TM01",
     "process_code": "AF",
     "sub_process": "AF1",
@@ -651,7 +651,7 @@
   },
   "KSDM160104102_07_SH07_Machine broke pulper system_C": {
     "ecosystem": "ksd",
-    "plant": "5001",
+    "plant": "6001",
     "line_code": "TM01",
     "process_code": "BR",
     "sub_process": "BR1",
@@ -661,7 +661,7 @@
   },
   "KSDM160104102_07_SH09_Internal broke system_C": {
     "ecosystem": "ksd",
-    "plant": "5001",
+    "plant": "6001",
     "line_code": "TM01",
     "process_code": "BR",
     "sub_process": "BR2",
@@ -671,7 +671,7 @@
   },
   "KSDM160104102_08_SH02_SW_HW Dissolving system_C": {
     "ecosystem": "ksd",
-    "plant": "5001",
+    "plant": "6001",
     "line_code": "TM01",
     "process_code": "SP",
     "sub_process": "SP2",
@@ -681,7 +681,7 @@
   },
   "KSDM160104102_09_SH04_Mixing system_C": {
     "ecosystem": "ksd",
-    "plant": "5001",
+    "plant": "6001",
     "line_code": "TM01",
     "process_code": "SP",
     "sub_process": "SP3",
@@ -691,7 +691,7 @@
   },
   "KSDM160104102_09_SH08_Converting broke pulper_C": {
     "ecosystem": "ksd",
-    "plant": "5001",
+    "plant": "6001",
     "line_code": "TM01",
     "process_code": "BR",
     "sub_process": "BR3",
@@ -701,7 +701,7 @@
   },
   "KSDM160104103_05_SH01_White water system_C": {
     "ecosystem": "ksd",
-    "plant": "5001",
+    "plant": "6001",
     "line_code": "TM01",
     "process_code": "WW",
     "sub_process": "WW1",
@@ -711,7 +711,7 @@
   },
   "KSDM160104103_08_SH04_White water system_C": {
     "ecosystem": "ksd",
-    "plant": "5001",
+    "plant": "6001",
     "line_code": "TM01",
     "process_code": "WW",
     "sub_process": "WW2",
@@ -721,7 +721,7 @@
   },
   "KSDM160104103_09_SH02_White water system_C": {
     "ecosystem": "ksd",
-    "plant": "5001",
+    "plant": "6001",
     "line_code": "TM01",
     "process_code": "WW",
     "sub_process": "WW3",
@@ -731,7 +731,7 @@
   },
   "KSDM160104103_09_SH03_White water system_C": {
     "ecosystem": "ksd",
-    "plant": "5001",
+    "plant": "6001",
     "line_code": "TM01",
     "process_code": "WW",
     "sub_process": "WW4",
@@ -741,7 +741,7 @@
   },
   "KSDM160104104_06_SH01_Shower water system_C": {
     "ecosystem": "ksd",
-    "plant": "5001",
+    "plant": "6001",
     "line_code": "TM01",
     "process_code": "WS",
     "sub_process": "SHW",
@@ -751,7 +751,7 @@
   },
   "KSDM160104105_05_SH03_Fresh water system_C": {
     "ecosystem": "ksd",
-    "plant": "5001",
+    "plant": "6001",
     "line_code": "TM01",
     "process_code": "WS",
     "sub_process": "WM1",
@@ -761,7 +761,7 @@
   },
   "KSDM160104105_06_SH01_Fresh water system_C": {
     "ecosystem": "ksd",
-    "plant": "5001",
+    "plant": "6001",
     "line_code": "TM01",
     "process_code": "WS",
     "sub_process": "WM2",
@@ -771,7 +771,7 @@
   },
   "KSDM160104105_06_SH02_Fresh water system_C": {
     "ecosystem": "ksd",
-    "plant": "5001",
+    "plant": "6001",
     "line_code": "TM01",
     "process_code": "WS",
     "sub_process": "WM3",
@@ -781,7 +781,7 @@
   },
   "KSDM160104106_08_SH01_Vacuum system_C": {
     "ecosystem": "ksd",
-    "plant": "5001",
+    "plant": "6001",
     "line_code": "TM01",
     "process_code": "VS",
     "sub_process": "VU1",
@@ -791,7 +791,7 @@
   },
   "KSDM160104107_09_SH01_Steam and condensate system_C": {
     "ecosystem": "ksd",
-    "plant": "5001",
+    "plant": "6001",
     "line_code": "TM01",
     "process_code": "SC",
     "sub_process": "SC1",
@@ -801,7 +801,7 @@
   },
   "KSDM160104108_06_SH01_Mill air system_C": {
     "ecosystem": "ksd",
-    "plant": "5001",
+    "plant": "6001",
     "line_code": "TM01",
     "process_code": "IA",
     "sub_process": "IA1",
@@ -811,7 +811,7 @@
   },
   "KSDM160104110_08_SH01_Internal effluent treatment_C": {
     "ecosystem": "ksd",
-    "plant": "5001",
+    "plant": "6001",
     "line_code": "TM01",
     "process_code": "AT",
     "sub_process": "AT1",
@@ -821,7 +821,7 @@
   },
   "KSDM160104111_06_SH01_Process ventilation_C": {
     "ecosystem": "ksd",
-    "plant": "5001",
+    "plant": "6001",
     "line_code": "TM01",
     "process_code": "HA",
     "sub_process": "HA1",
@@ -831,7 +831,7 @@
   },
   "KSDM160104112_05_SH01_Sealing water system_C": {
     "ecosystem": "ksd",
-    "plant": "5001",
+    "plant": "6001",
     "line_code": "TM01",
     "process_code": "WS",
     "sub_process": "SW1",

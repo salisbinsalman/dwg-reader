@@ -7,9 +7,10 @@ by tag pattern (P&ID letter codes) then description keywords, returning
 (eqart_code, work_centre) for use in the equipment export.
 
 Lookup hierarchy:
-  1. Tag prefix  e.g. "35-24LC-576" → prefix "LC" → 1200 (INSTRUMENT LEVEL)
-  2. Description keywords (ordered, first match wins)
-  3. Fallback → 9999 (NOT CATEGORIZED), work_centre ""
+    1. Tag prefix  e.g. "35-24LC-576" → prefix "LC" → 1200 (INSTRUMENT LEVEL)
+    2. Motor suffix (.1 / -M1) → 1101, before description keywords
+    3. Description keywords (ordered, first match wins)
+    4. Fallback → 9999 (NOT CATEGORIZED), work_centre ""
 """
 
 from __future__ import annotations
@@ -39,6 +40,40 @@ _TISSUE_PREFIX_RULES: Dict[str, str] = {
     "A": "2001",  # Agitator / mixer
     "T": "601",   # Tank (description keywords refine further: SILO→602, VESSEL→604)
     "E": "2000",  # Process machines (description keywords refine to: PULPER→2005, REFINER→2002)
+}
+
+# GOR/Valmet-Tissue tag format: "168TC1", "168P-410", "168TT2", "168L-522", "168VX-521"
+# First group: 3-digit machine section; second group: 1-4 letter instrument code
+_GOR_TAG_PREFIX_RE = re.compile(r"^\d{3}([A-Z]{1,4})(?:-?\d|$)", re.IGNORECASE)
+# GOR letter-code → SAP object type code
+_GOR_PREFIX_RULES: Dict[str, str] = {
+    "P": "701",    # Pump centrifugal
+    "L": "2100",   # Pipe line
+    "V": "201",    # Valve hand
+    "VX": "201",   # 3-way valve
+    "FV": "202",   # Flow valve (auto)
+    "TV": "202",   # Temperature valve (auto)
+    "ST": "203",   # Safety / relief valve
+    "F": "801",    # Fan
+    "TC": "1202",  # Instrument temperature (controller)
+    "TT": "1202",  # Instrument temperature (transmitter)
+    "TA": "1202",  # Instrument temperature (alarm)
+    "TI": "1202",  # Instrument temperature (indicator)
+    "PT": "1201",  # Instrument pressure (transmitter)
+    "PC": "1201",  # Instrument pressure (controller)
+    "PI": "1201",  # Instrument pressure (indicator)
+    "FT": "1203",  # Instrument flow (transmitter)
+    "FC": "1203",  # Instrument flow (controller)
+    "LT": "1204",  # Instrument level (transmitter)
+    "LC": "1204",  # Instrument level (controller)
+    "LI": "1204",  # Instrument level (indicator)
+    "HC": "1210",  # Instrument other (hand controller / humidity)
+    "HS": "1210",  # Instrument other (hand switch)
+    "HI": "1210",  # Instrument other (hand indicator)
+    "GSO": "1210", # Gas shut-off
+    "GSC": "1210", # Gas shut-close
+    "E": "2030",   # Heat exchanger
+    "M": "1101",   # Motor / actuator
 }
 
 
@@ -105,15 +140,26 @@ def classify_equipment(
         if prefix in _TISSUE_PREFIX_RULES:
             return _resolve(_TISSUE_PREFIX_RULES[prefix])
 
+    # 2.6 Motor sub-equipment suffix BEFORE description keywords.
+    # Otherwise a motor copied from a pulper/winder parent ("WINDER PLPR")
+    # classifies as 2005 MECH instead of 1101 ELEC.
+    if _MOTOR_SUFFIX_RE.search(tag):
+        return _resolve("1101")
+
+    # 2.7 GOR/Valmet-Tissue instrument tags: "168TC1", "168P-410", "168TT2"
+    m = _GOR_TAG_PREFIX_RE.match(tag)
+    if m:
+        prefix = m.group(1).upper()
+        # Try longest match first (VX before V; TC before T; FV before F)
+        for length in range(len(prefix), 0, -1):
+            if prefix[:length] in _GOR_PREFIX_RULES:
+                return _resolve(_GOR_PREFIX_RULES[prefix[:length]])
+
     # 3. Description keyword rules (ordered — first match wins)
     desc_upper = eqktx.upper()
     for rule in kw_rules:
         if all(kw in desc_upper for kw in rule["match"]):
             return _resolve(rule["code"])
 
-    # 4. Motor sub-equipment suffix: "35-24-001.1" (Valmet) or "124P-001-M1" (Tissue)
-    if _MOTOR_SUFFIX_RE.search(tag):
-        return _resolve("1101")
-
-    # 5. Fallback
+    # 4. Fallback
     return _resolve("9999")

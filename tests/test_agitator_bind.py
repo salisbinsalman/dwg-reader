@@ -12,7 +12,11 @@ from dwg_reader.dwg_pid_inventory import (
     bind_agitator_tags,
 )
 from dwg_reader.export_sap_equipment import _motor_eqktx, build_equipment_rows
-from dwg_reader.run_hierarchy_orchestrator import _append_agitator_equipment_rows, write_hierarchy_csv
+from dwg_reader.run_hierarchy_orchestrator import (
+    _append_agitator_equipment_rows,
+    _append_missing_machine_functions,
+    write_hierarchy_csv,
+)
 
 
 class AgitatorBindTests(unittest.TestCase):
@@ -141,6 +145,79 @@ class AgitatorBindTests(unittest.TestCase):
         self.assertTrue(eqktx.startswith("35-24-404.1"))
         self.assertIn("MTR", eqktx.upper())
         self.assertIn("BROKE", eqktx.upper())
+
+
+class MissingMachineFunctionTests(unittest.TestCase):
+    def test_appends_p518_when_inventory_has_it(self) -> None:
+        import csv
+        import json
+
+        with tempfile.TemporaryDirectory() as td:
+            td_path = Path(td)
+            hier = td_path / "h.csv"
+            write_hierarchy_csv(
+                hier,
+                [
+                    {
+                        "SUB-PROCESS": "",
+                        "FUNCTION": "35-24L001",
+                        "EQUIPMENT": "",
+                        "SUB-EQUIPMENT": "",
+                        "MASK": "",
+                        "DESCRIPTION": "PRESS PLPR",
+                    },
+                ],
+            )
+            inv = {
+                "functions": [
+                    {"function": "35-24L001", "kind": "equipment", "description": "PRESS PLPR"},
+                    {
+                        "function": "35-24P518",
+                        "kind": "equipment",
+                        "description": "35-24P518 BROKE REJECT PMP",
+                    },
+                ]
+            }
+            inv_path = td_path / "inv.json"
+            inv_path.write_text(json.dumps(inv), encoding="utf-8")
+            n = _append_missing_machine_functions(hier, inv_path)
+            self.assertEqual(n, 1)
+            rows = list(csv.DictReader(hier.open(encoding="utf-8")))
+            fns = [r["FUNCTION"] for r in rows if r.get("FUNCTION")]
+            self.assertIn("35-24P518", fns)
+
+            out = build_equipment_rows(rows)
+            by_tag = {r["EQUNR"]: r for r in out}
+            self.assertIn("35-24P518", by_tag)
+            self.assertIn("35-24-518.1", by_tag)
+            self.assertEqual(by_tag["35-24-518.1"]["HEQUI"], "35-24P518")
+            self.assertEqual(by_tag["35-24-518.1"]["EQART"], "1101")
+
+    def test_does_not_duplicate_existing_function(self) -> None:
+        import json
+
+        with tempfile.TemporaryDirectory() as td:
+            td_path = Path(td)
+            hier = td_path / "h.csv"
+            write_hierarchy_csv(
+                hier,
+                [
+                    {
+                        "SUB-PROCESS": "",
+                        "FUNCTION": "35-24P518",
+                        "EQUIPMENT": "",
+                        "SUB-EQUIPMENT": "",
+                        "MASK": "",
+                        "DESCRIPTION": "PMP",
+                    },
+                ],
+            )
+            inv_path = td_path / "inv.json"
+            inv_path.write_text(
+                json.dumps({"functions": [{"function": "35-24P518", "kind": "equipment"}]}),
+                encoding="utf-8",
+            )
+            self.assertEqual(_append_missing_machine_functions(hier, inv_path), 0)
 
 
 if __name__ == "__main__":

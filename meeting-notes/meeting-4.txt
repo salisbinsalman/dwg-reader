@@ -1,0 +1,822 @@
+Richard: 00:00 
+ Backside of desk driving the opportunity.  Hello.  Hello, Rob.  I.  Sorry to keep you waiting a few minutes.
+
+Rob Whelan: 01:52 
+ Sorry.  No problem.
+
+Richard: 01:55 
+ Previous meeting over.  I gotta go.  Okay.  Okay.  So.  Yes.  Okay.  So I sent you a zip file about half an hour ago.  Did you get that?
+
+Rob Whelan: 02:06 
+ I have.  I've started having a look and I've found quite a lot to be fair.
+
+Richard: 02:11 
+ Okay, sure.  So just to set the scene.  So Broke System is the one that were hoping was getting to the point where it was good.  The other two are much more works in progress where we're still experimenting with sort of valve identification.
+
+Rob Whelan: 02:28 
+ Yeah.
+
+Richard: 02:29 
+ But we thought your feedback would be good anyway.  So hopefully you're not too disheartened by what you found.  But let's go through it.
+
+Rob Whelan: 02:35 
+ Yeah, I am a little bit.  But at the same time, hopefully with the feedback I give.
+
+Richard: 02:41 
+ Yeah.
+
+Rob Whelan: 02:41 
+ It should help for the future.  So.
+
+Richard: 02:46 
+ Yeah.  Yeah, definitely.
+
+Rob Whelan: 02:47 
+ Okay.  So I. I also.  Can you under the.  I'll.  I'll record this.
+
+Richard: 02:55 
+ Yeah, yeah.  If you can record it.  Can you also.  Whenever you're.  Whenever you like.  Just trying to think about the best way to save this information.  Recording it.  Definitely.
+
+Rob Whelan: 03:04 
+ Yeah.
+
+Richard: 03:05 
+ I'm not sure if you're able.  If your.  It will allow you to share the recording with us.  And we haven't tried to do that yet.
+
+Rob Whelan: 03:12 
+ Okay, I could try.  I don't know whether.
+
+Richard: 03:18 
+ I'll tell you what.  I'm going to record it at my end as well.  Just give me a second.
+
+Rob Whelan: 03:21 
+ Yeah, yeah.
+
+Richard: 03:23 
+ Okay.  Hold on.  This can take a minute.  I've just got to do some permissions.  Hold on.  Okay.  That's looking good.  Recording.  Okay.  Yeah, that's great, Rob.  Yeah.  Good stuff.
+
+Rob Whelan: 04:33 
+ Right?  So on the function location sheet, to me, the order is like well off.  So.
+
+Richard: 04:44 
+ Okay.  Which we're looking at Broke system.  Yeah.  Okay.
+
+Rob Whelan: 04:47 
+ Yeah.  Broke system.
+
+Richard: 04:48 
+ Yeah.  Yeah.
+
+Rob Whelan: 04:49 
+ So just as an example, on this system here.
+
+Richard: 05:01 
+ Yeah.
+
+Rob Whelan: 05:02 
+ I would see the.  God, Here we are, right.  I would say the.  So this pulperia 005.
+
+Richard: 05:21 
+ Yeah.
+
+Rob Whelan: 05:22 
+ Then off this is this pump in the hierarchy, we want it to be like in order of process.  So this basically is part of this.  Part of the process here.  And then from our.  From there on this pump here is coming off that.  So we've stated that as a equipment to this pulper.
+
+Richard: 05:53 
+ Yeah.
+
+Rob Whelan: 05:53 
+ That line will be coming off it.  And then once you get to that pump, that should be a new flock and it should be close to in the structure.  This.  So you kind of follow that line through until you get to the next.  Clear.  It's on here.  It's quite a bit away.  It seems like it's grouped the L's and P's.  So it's like grouped pumps together and grouped.  Do you see what I mean?
+
+Richard: 06:25 
+ I. I underst.  I. I understand what you said, but I don't yet see that in the data.  So, so what am I.  What are the yellow.  Yellow highlights where you're saying they should be together?
+
+Rob Whelan: 06:35 
+ Yeah.  So in the structure that I shared.
+
+Richard: 06:39 
+ Yeah.
+
+Rob Whelan: 06:39 
+ That's the pulper.  And right off that here is the pump.  So that's.  That's the suction line to that pump.
+
+Richard: 06:50 
+ Could you.  Could you click on the cell rather than just moving your mouse?  Because it's.
+
+Rob Whelan: 06:52 
+ Yeah, sorry.
+
+Richard: 06:54 
+ Yeah, yeah.  So that's slide.  Yeah.
+
+Rob Whelan: 06:58 
+ So this is the.  The pulper.
+
+Richard: 07:01 
+ Yeah.
+
+Rob Whelan: 07:02 
+ And then that.  That's the line that I was just showing.
+
+Richard: 07:05 
+ So.
+
+Rob Whelan: 07:05 
+ Yeah, that's.  And then the boundary of that system.  This is the pump.
+
+Richard: 07:10 
+ Yeah.
+
+Rob Whelan: 07:10 
+ And then from there on you follow that line through to the next part.
+
+Richard: 07:14 
+ Yeah.
+
+Rob Whelan: 07:15 
+ So I think it would be really helpful if you didn't just generate a template.  You created something similar to like what this is.  That shows the relationships because it's really hard to sift through the two separate sheets.  The equipment.
+
+Richard: 07:36 
+ Yeah.  Okay, so are you asking us to create an output file that is similar to the broke system work example?
+
+Rob Whelan: 07:45 
+ Yes, if possible.  Because from that then you can see where the relationship is.  And then on that, in terms of where it lies in the.  The position.  I would expect this.  Let me just put as an example here.  If I put in.  Just.  I'll put it here.  If I put in position here, I would expect these to be that.  To be.
+
+Richard: 08:34 
+ That.
+
+Rob Whelan: 08:34 
+ To be.  So on.  Yeah, so that in the order, I would expect.
+
+Richard: 08:47 
+ Yeah, yeah.  And then.  And then what you've seen in.  In our equipment is that they're not.
+
+Rob Whelan: 08:54 
+ They're not close.
+
+Richard: 08:55 
+ They're not one after the other.  Yeah.  They're not close to each other.  So.  So basically saying the.  The positioning is wrong.
+
+Rob Whelan: 09:01 
+ Positioning is wrong on this.
+
+Richard: 09:03 
+ Yeah.
+
+Rob Whelan: 09:03 
+ I think another thing I just noticed there was.  The number in here is wrong.
+
+Richard: 09:09 
+ What columns?  That.
+
+Rob Whelan: 09:12 
+ So this is the functional location.
+
+Richard: 09:14 
+ Location type.
+
+Rob Whelan: 09:15 
+ Yeah, so that was the object type.
+
+Richard: 09:19 
+ But I suspect that's from the lookup, isn't it?
+
+Rob Whelan: 09:21 
+ Yeah, I think it's from the lookup.  I suspect it's.  It's should be something along those lines.  I think it's just a formatting thing.  But if this was uploaded as a template, it wouldn't pick it up.
+
+Richard: 09:34 
+ So it needs.  It needs to be treating it as text rather than the number.  Right?
+
+Rob Whelan: 09:37 
+ Yeah.  I think so.  That was the main sort of issue of seeing on there.
+
+Richard: 09:45 
+ Yeah.
+
+Rob Whelan: 09:46 
+ It just looks like it's.  It's grouped it all together.  Another thing I did notice was the lines here.  So that the name of this is.  The lines here is wrong.  And I.  It looks like there's a hell of a.  It's identified a hell of a lot of lines.
+
+Richard: 10:02 
+ Can you just take.  Just for the video.
+
+Rob Whelan: 10:04 
+ Sorry.  Yeah, sorry.
+
+Richard: 10:05 
+ Yeah, yeah.  Just.  Just your mouse is moving.
+
+Rob Whelan: 10:09 
+ I've got a habit.
+
+Richard: 10:10 
+ Oh yeah.  That ln was to be the beginning.
+
+Rob Whelan: 10:11 
+ So I'd expect that to before.
+
+Richard: 10:13 
+ Yeah, I think what we're searching.  Yeah, that's our job actually.  Yeah, we've talked about that one already, Rob.  Yeah.  I'll find out why we've missed that one.
+
+Rob Whelan: 10:23 
+ And I would expect that.  That to be named better than that.  So I wouldn't really expect the pipe size to be in the name of it.
+
+Richard: 10:33 
+ Yeah.
+
+Rob Whelan: 10:34 
+ And I would want to know basically in that like system.
+
+Richard: 10:41 
+ Yeah.
+
+Rob Whelan: 10:42 
+ Wow.  I'd want a bit more of description like Walter saying what it is really.  I know this is all quite hard for.
+
+Richard: 11:03 
+ Yeah.  Sorry.  That the end.  That.  That line bug is still there.  I thought we.  I thought we'd fix that one first.  These are slipped through for some reason.  Are any of them prefixed with line?  I'm just wondering if.  I'm sure that's weird.  Maybe.
+
+Rob Whelan: 11:18 
+ But I don't know whether it's why it's picked.  Might just be that it's picking because some lines might come in as a functional location where it's the start of a system.  So say if I go over to here, where are we going to have.  We are going to have a line.  So I would expect this line here to be a flop.  Going to where it's going to.  That would be a equipment.  That would be sub equipment in that line.  That would be a sub equipment in that line.  And this is going into that line there and it would just stop there.
+
+Richard: 12:14 
+ Then.
+
+Rob Whelan: 12:17 
+ On this example here on the tank, I think it's not picked up that these are agitators.
+
+Richard: 12:27 
+ Yeah.
+
+Rob Whelan: 12:30 
+ So from this tank here, this line, I would expect to be an equipment.  But then once you get to the pump, I'd expect that to be a functional location.
+
+Richard: 12:45 
+ What, what?  Why?  Yeah.
+
+Rob Whelan: 12:53 
+ Once you get to a significant part of a new function of that system.  I know it's.
+
+Richard: 12:58 
+ I see.  Yeah.
+
+Rob Whelan: 12:59 
+ I think when were setting out to do this, I know we had discussions with Pontus and Richard Jeffers in terms of.  I think it definitely needs that kind of like the expertise that Richard has as well.
+
+Richard: 13:19 
+ Yeah, yeah.
+
+Rob Whelan: 13:19 
+ In this.  Bring it to it.  Because I know the plan was for his.  His side of the team as well to also sort of go through these feedback from what the output is of the IT side to see if it tallies up with the drawings before they come to us.  Because, yeah, it really will be impossible to.  To progress without that.
+
+Richard: 13:43 
+ Yeah, he's on.
+
+Rob Whelan: 13:45 
+ I know he's got.  I know he's got a holiday.
+
+Richard: 13:49 
+ Yeah.  So, I mean, he should be back soon.  So I think what's happened.  Because we.  Because we started the project a couple of weeks ahead of our schedule to get started.  We've just been missing that input.
+
+Rob Whelan: 13:58 
+ It'll be good to get a good.  We'll get a head start on it.  And I think.  But I think once.  Once he comes, it should be really beneficial for.  For getting this kind of the link between.
+
+Richard: 14:11 
+ Yeah.
+
+Rob Whelan: 14:11 
+ The process side and.  And the.  IT sort of utilizing AI to get the data because.  Yeah, that's what it's great at doing, isn't it?  It's just where there's these, like, human decisions where you're like, oh, I think it's best to do that.  We're quite good at that as humans, but AI is not.
+
+Richard: 14:31 
+ Whereas thinking of a million.
+
+Rob Whelan: 14:34 
+ Thinking of a million things at once, we can't do.  But it's amazing at doing, isn't it?  So it's just utilizing the best of both and trying to teach it to be able to understand that's a system boundary and that's the beginning of a flock, if you know what I mean.
+
+Richard: 14:50 
+ Yeah, yeah, absolutely.
+
+Rob Whelan: 14:51 
+ Of how we've grouped.  Grouped the systems so that at a glance.  I have only had 20 minutes looking at this, really at a glance, that a couple of the major issues are found with that is the order being the main one.
+
+Richard: 15:12 
+ Yeah.
+
+Rob Whelan: 15:12 
+ And then the name in here, which is less of a concern, but it's just working out how it can.
+
+Richard: 15:18 
+ Yeah.
+
+Rob Whelan: 15:18 
+ I'm not sure why formulate, but it's.
+
+Richard: 15:22 
+ Still there because I was under the impression that we'd address that.  In fact, I thought, I've seen evidence that we have addressed it.  So for some reason it's still in this.  Still in this diagram.  Maybe we didn't release that change in.
+
+Rob Whelan: 15:34 
+ Our environment and for the likes of that.  Just saying, say I can't remember now what WAF is short for.  Off the top of my head.  Is it here?  Is it in here or is it.
+
+Richard: 15:50 
+ Yes.
+
+Rob Whelan: 15:52 
+ So waf White Water.  I would expect that line to say.  I'll just give an example.  L. And at the beginning there.  And I would expect that to say.  I won't delete what it's saying.  I'll just put it into.  If I'll just highlight what I've changed.
+
+Richard: 16:20 
+ Yeah.
+
+Rob Whelan: 16:22 
+ And then I will put.  Put here what I would expect at a glance, without thoroughly seeing what that is doing.  I would expect it to be sort of like line, the number of the line and the name of what it's doing.  And if it's the header of that line or if it's going to the pulper, I would say line white water 2 pulper or pump suction line sort of thing, if you get me.
+
+Richard: 17:05 
+ Yeah, I do.  You know, what I think's happened is that we've only applied that logic.  Yeah, I know what's happened.  We've only applied that line logic to the equipment file.
+
+Rob Whelan: 17:18 
+ Right.
+
+Richard: 17:18 
+ You.  If you look in the equip.  If you open the equipment file I sent you.  Yeah, that would be great, actually, to restore a bit of confidence for you.  Could you just open the equipment file set.  You'll see that we fixed the problem, but we dismissed the fact that it's also needs to be done to the flock.
+
+Rob Whelan: 17:40 
+ Yeah, yeah, it's.  See that name there?
+
+Richard: 17:45 
+ Well, that one's still not quite right.
+
+Rob Whelan: 17:46 
+ Pp that's still not quite right, I think.  I think it knows it's getting there with what it's.  You know, I think it's just close, but no cigar, I think.
+
+Richard: 17:59 
+ Yeah, yeah.
+
+Rob Whelan: 18:00 
+ And I think once that's applied to the other.  Because that's not really that useful in the name to us, it.  It says what it's doing and the size.  But in this description, it better off having as much of a description of the function of the line than the size of it.
+
+Richard: 18:22 
+ Yeah.
+
+Rob Whelan: 18:25 
+ Just because of the limitation.
+
+Richard: 18:27 
+ Yeah, yeah.
+
+Rob Whelan: 18:28 
+ But, yeah, it's just on these.  It hadn't picked out.  Like what.  What it is.  So if I look onto this drawing, I don't think it's just gonna have to put it to the other screen in a sec.
+
+Richard: 18:50 
+ Yeah.  If you open it.  What we found is if you open the PDFs in Acrobat Reader, a lot of the PDFs are searchable.  Some of the PDFs are flat and aren't searchable, but some of them are.
+
+Rob Whelan: 19:02 
+ Let's have a.  Let's see if I can open it.
+
+Richard: 19:20 
+ In,.
+
+Rob Whelan: 19:29 
+ Because I did find a few other things there as well.  So I'll just talk through it before we sort of hone in on her so.  That it Was the naming of it that I've highlighted here.  Is the naming not enough detail, not rich enough.
+
+Richard: 19:55 
+ Yeah, yeah.  If you could drill into maybe like.  I know.
+
+Rob Whelan: 20:00 
+ So this one was weird.  So it's referencing that it's a sub equipment to 24089.  Yeah, I can't find that.  089 Because that one's zero.
+
+Richard: 20:23 
+ So what we.  What we found is that there are.  Yeah, no, I was going to say we found some.  We found some objects in the DWG that aren't necessarily rendered.  So maybe that's part of that.
+
+Rob Whelan: 20:36 
+ Yeah, because that was just one that I was like.  Oh, that's weird how it's saying that hand.  I would expect that to be a hand valve in a line that's not here.
+
+Richard: 20:47 
+ Yeah.
+
+Rob Whelan: 20:50 
+ The name.  So here's an example of the name.  So I would expect that to say that not the motor.  It's real pulper agitator.  So let me get on that drawing.  I did have that one up.
+
+Richard: 21:25 
+ So that line logic.  Just going back to the.  Just thinking about the flock and that line naming convention is the same.  Right.  It's just we haven't applied it to that file.
+
+Rob Whelan: 21:33 
+ We've been.
+
+Richard: 21:35 
+ Yeah.  Okay, good.
+
+Rob Whelan: 21:37 
+ That.  That should be followed through once it's honed in on the equipment name or.  Or the flock name.  Use it for both because.
+
+Richard: 21:46 
+ Yeah, yeah, understood.  Just missing the subtlety of that.
+
+Rob Whelan: 21:50 
+ Yeah.  So.
+
+Richard: 21:56 
+ Yeah, if you could just choose, I don't know, like line 82 where you've got that one yellow.  Just show us that on the diagram and talk us through that example and what that should be.
+
+Rob Whelan: 22:05 
+ Yeah, let me find it.
+
+Richard: 22:28 
+ 35.  35 24L004.  Is that right?
+
+Rob Whelan: 22:43 
+ 35L004y.
+
+Richard: 23:06 
+ Okay, I found.  Did you find it?
+
+Rob Whelan: 23:08 
+ Not yet.
+
+Richard: 23:08 
+ On the drawer.  It's the conveyor on the.  The main.  On the size Crest pulper.  Maybe I'll share my screen.  So I've managed to search for it.  If you search for 24L004 in the DWG.  Sorry.  In the PDF, you'll find it.
+
+Rob Whelan: 23:28 
+ Yeah, it's not working on my.
+
+Richard: 23:30 
+ Okay, let me.  Let me share my screen then, shall I?
+
+Rob Whelan: 23:32 
+ Yeah,.
+
+Richard: 23:41 
+ Yeah.  So I found it here, right?  Yeah.
+
+Rob Whelan: 23:46 
+ So I'd expect the name on that to be.  I'll type in what I would expect to see.
+
+Richard: 23:59 
+ Okay, I'm gonna go.  I'm gonna come back to look at your screen now.  Oh yeah.  Could you share your screen again?
+
+Rob Whelan: 24:07 
+ Yeah, yeah.  So.
+
+Richard: 24:41 
+ Yeah, I can't see your screen yet.
+
+Rob Whelan: 24:43 
+ Oh, well, sorry.
+
+Richard: 24:50 
+ Yeah.
+
+Rob Whelan: 24:51 
+ So 24L04 it's possibly.  From this.  I'm not really picking it.  A bit confused with that one.
+
+Richard: 25:44 
+ How it doesn't actually map to the sheet.
+
+Rob Whelan: 25:46 
+ Yeah, let me see our.  The example we did here.
+
+Richard: 26:03 
+ you know, it was 34, wasn't it?  No, 35.  24.  Sorry, it was 35.  24, Wasn't it?
+
+Rob Whelan: 26:11 
+ 35.
+
+Richard: 26:12 
+ So on the sheet, is it 35, 24 or is it 34?  24.
+
+Rob Whelan: 26:17 
+ Let's have a look.  Yeah.  35, 24.
+
+Richard: 26:21 
+ 35, 24.  Right.  Yeah.  Okay,.
+
+Rob Whelan: 26:32 
+ There we are.  So, yeah, I would expect it to be the conveyor and then the conveyor motor.
+
+Richard: 26:42 
+ So the equipment is 3524004L.  But the equipment name is missing.  Yeah.  Okay.  So it's the.  Again, it's the description that is incomplete in our spreadsheet.
+
+Rob Whelan: 26:58 
+ Just to confuse matters, how we've gone forward is for the likes of that, we've created an equipment as well for it.  So that even say for the.  That pump unit.  That pump unit's also got an equipment off the pump.  So that makes sense.  So that.  Yeah, that's like the location of that pump.  But we carried that through with the likes of tanks and conveyors and stuff so that any spares can be put against the equipment.
+
+Richard: 27:34 
+ Yeah, I see.
+
+Rob Whelan: 27:37 
+ And yeah, for example, that would also need an equipment in.  I know it's really confusing.  It's just as it's evolved here, things have evolved a bit, if you get me.
+
+Richard: 27:55 
+ Yeah, yeah.
+
+Rob Whelan: 27:58 
+ So, Yeah, just.  It's just not picked up what some of the things are, I think as well.
+
+Richard: 28:07 
+ Yeah, yeah.
+
+Rob Whelan: 28:09 
+ But I suppose if you could teach the system that.  That is an agitator or a motor to an agitator or, you know, like if you can teach the system because that's an agitator there, that way is.
+
+Richard: 28:29 
+ That simple in the.  That will have a motor on it.  Let's have a.
+
+Rob Whelan: 28:42 
+ So that might be part of the problem.  No,.
+
+Richard: 28:50 
+ Okay.  Yeah, so we know that now.  So we can.  Yeah.  It's not there, is it?  Yeah, so we'll have to train on that one.  Okay.
+
+Rob Whelan: 28:56 
+ I think it's where it's.  There's some stuff like that where it sort of creates a visual picture of what it is rather than how it'll look in the field.  Like that's a screen, but I don't know whether it's.
+
+Richard: 29:10 
+ So let's just look at that on the.  On the broke reject tank there.  You've got that?  We've got that.  Yeah, yeah.  And then if we look at the label for that.  So label is 35 24L404.
+
+Rob Whelan: 29:24 
+ Yeah.
+
+Richard: 29:25 
+ And then.  So you know that there's a motor attached to that.
+
+Rob Whelan: 29:28 
+ Yeah, yeah.
+
+Richard: 29:29 
+ But clearly the motor isn't attached on the diagram.
+
+Rob Whelan: 29:32 
+ It's just not showing it.
+
+Richard: 29:33 
+ Yeah, I think it's the motor on the diagram, just not connected to it.  Can you find that motor?
+
+Rob Whelan: 29:40 
+ Let's see.
+
+Richard: 29:43 
+ 35, 24 L 404.  Let me have a quick look.  3524.
+
+Rob Whelan: 29:54 
+ Cooler.  It's like on the.  The pumps.  Like, I know that pump's got a motor as well.
+
+Richard: 30:01 
+ Hold on, let me come back to you.  Which pump.  Which pump's that?  Sorry, I was looking at something else then that guy.
+
+Rob Whelan: 30:05 
+ So all pumps will have a motor on them.
+
+Richard: 30:07 
+ But so would you then expect that motor to be in the.  In the sheet, in the spreadsheet as well?
+
+Rob Whelan: 30:17 
+ Yeah, so that.
+
+Richard: 30:19 
+ And it would have.  What would the label for the motor be?
+
+Rob Whelan: 30:21 
+ I can type it up now.
+
+Richard: 30:27 
+ So a motor is an implicit part on some of the electrical.  On the electrical equipment.
+
+Rob Whelan: 30:33 
+ Yeah.  So if it's a pump, it's gonna have a motor on it.  If it's an agitator, it's definitely gonna have a motor.  The.  For the example here, I can't see.
+
+Richard: 30:48 
+ Your screen at the moment because.
+
+Rob Whelan: 30:49 
+ Yeah, I'm just typing.
+
+Richard: 30:50 
+ Oh, yeah, I do it off screen.
+
+Rob Whelan: 30:55 
+ Yeah, yeah.  So.  Or that there.  That's going to be.  Just.  That's going to be the number for it because it's in our standard agitator.  It will be 35, 24, 404.1.  And that's going to be.  And I do understand that this is hard to get out of the drawing because it's just in my head.  I do appreciate that.
+
+Richard: 32:01 
+ We'll get that together.  Cool.
+
+Rob Whelan: 32:03 
+ Yeah.
+
+Richard: 32:03 
+ So I see.  Could you just move that word window just a tiny bit to the right just so I can see the.  There we go.  Okay, so we're looking at that pump.  So the pump.  Oh, I'm looking at the diagram now.  So the pump has a label, has a box below, which is 35, 24P518.  Now, is that the label for the pump?
+
+Rob Whelan: 32:25 
+ That's.  Yeah, that's the label for the pump there.  Sorry.
+
+Richard: 32:28 
+ But what we're saying is it's a pump.  Yeah.  So I'm just picturing it.
+
+Rob Whelan: 32:33 
+ Hold on.
+
+Richard: 32:33 
+ I'm just thinking through logic.  So it's a pump which must have a motor to drive the pump.
+
+Rob Whelan: 32:38 
+ Yeah.
+
+Richard: 32:39 
+ Okay.  Okay, I see.  And then the same thing with the agitator.  Yeah, go on.  So what are we adding here?  Oh, yeah, okay.  Okay.  Yeah, so that's.  That's the agitator.  Sorry, that's the pump.  And then the agitator is the same.  Yeah.  Okay.
+
+Rob Whelan: 32:56 
+ So it's all in the project.
+
+Richard: 32:57 
+ It's the rule then, that.  Can you think of any others in this category that agitators and pumps also must have motors?
+
+Rob Whelan: 33:06 
+ Agitator, pumps, screens.  See that screen's got a motor.  There may be showing it on the drawing.  Yeah, it's showing that on the drawing.  That screen there.
+
+Richard: 33:22 
+ And how do you know that is the punk?
+
+Rob Whelan: 33:28 
+ Yeah, so that's.  Yeah, the dot, instead of being an L, it's got a.  So that broke screens 24 L010.  So the L is.  Denotes it's a piece of equipment.  So L could be an agitator.  A screen.  T is a tank, P is a pump.  Motors have a dash.  So whether it's a motor for a pump or an agitator, it will be that number, but without an L or a P. See, it's just got a dash dot one.
+
+Richard: 34:12 
+ So I'm just going to the standards and I'm looking at the object type list here.
+
+Rob Whelan: 34:19 
+ And if it's a gearbox,.
+
+Richard: 34:23 
+ That.
+
+Rob Whelan: 34:23 
+ Gearboxes would have a motor on them as well.  So gearboxes would.
+
+Richard: 34:28 
+ Sorry, I'm just.  Just two sets, Rob.  Sorry, Just two sets.  I'm not keeping that with you.  Just one sec.  Yeah, so just seeing if we've got any of this in any of the lookup spreadsheets that you've given us.  Don't see it in that one.  Don't see it in that one.  Okay.  Yeah.  So what would be useful?  I think so these little.  These mini abbreviations like T for tank, P for pump.  Don't think we've got these in any lookups at the moment.
+
+Rob Whelan: 35:10 
+ Yeah, definitely get them in there.  If you could create a rule that it.  If it's.
+
+Richard: 35:17 
+ Could you.  Could you.  Could you send it.  Just send us that on an email from what memory is.
+
+Rob Whelan: 35:22 
+ Yeah, yeah.
+
+Richard: 35:25 
+ Well, ideally, if you add it to the.  If you add it to the standards folder.  Yeah, then we can just grab.  We can grab the standards.  So ideally, if you continue to master all of the abbreviations and then we'll just take updates whenever you give them to us.
+
+Rob Whelan: 35:40 
+ So we've got project standard.  Now, where it's complicated is that it's been adopted for the Valmet stuff, but tissue is a different standard because that machine, as you found, was meant to be in Italy.  So that was purchased before they purchased this site and they used the Valmet standard.  So their naming of things is different to the shot and site standard and the.  The new Valmet standards different to our.
+
+Richard: 36:13 
+ Old standard and we can we get the Valmet standards, is that.
+
+Rob Whelan: 36:17 
+ Yeah, yeah, I will.  I don't know whether I should have it in our.
+
+Richard: 36:24 
+ Project.
+
+Rob Whelan: 36:26 
+ I'll just move save.
+
+Richard: 36:28 
+ Cool.  Okay, so this is emerging.  This is a good emerging bit of information.  So yeah, different systems I guess have a vote that the documentation.  So let's say the period is a doc piece documentation.  It's the documentation for each system has been written at different times when different standards are in place.  So the Valmet diagram has been written to the Valmet standard and what we're trying to do is convert that standard to the current shot and standard.  Yeah.  So we need, so we need to.  We need.
+
+Rob Whelan: 37:03 
+ We don't have to convert anything.  We've as it is in the field.
+
+Richard: 37:08 
+ We need to be able to read the BAM at the.
+
+Rob Whelan: 37:10 
+ We just need to be able to.  We just need to be able to interpret it.  Interpret each standard because what's in the dolphin's ever going to get renumbered as it is on these drawings, isn't.
+
+Richard: 37:20 
+ Yeah, yeah.  Yes, it is what it is.  Yeah.
+
+Rob Whelan: 37:24 
+ In an ideal world that wouldn't be a different standard.
+
+Richard: 37:27 
+ But just from understood.  Yeah.
+
+Rob Whelan: 37:30 
+ Decisions have been made unfortunately we are where we are.  So I will add into here now.  Still got access to our share folder.
+
+Richard: 37:42 
+ Double check.  Yeah, still have access.  Yes.  If you could have a little think then, because I think this is information that you've got that we don't.  So there's different authors.  As we've, as we've seen, there's eight different authors in total across several different companies.  And I think what I've inferred from what you've said today is those companies have created the diagrams to standards, different standards, which is complicated.  Just to complicate things a bit further.
+
+Rob Whelan: 38:37 
+ Yeah.
+
+Richard: 38:38 
+ But hopefully the standards are.  Well, I guess without the standards we're going to have to reverse engineer them, which is going to take a long time because otherwise, you know, we're just going to keep having conversations like this because we didn't know what the standard was.  So we need the standard that was used to create each document.
+
+Rob Whelan: 38:55 
+ Yeah, I will.
+
+Richard: 38:58 
+ Can we programmatically help you with that problem?  Is there anything that.  So we've got 84 DWGs and I guess the remaining are PDFs.
+
+Rob Whelan: 39:09 
+ Yeah.
+
+Richard: 39:09 
+ Those 132 diagrams have been each individually created To a standard.  Yeah, we need to know which standard so when we read it we're using the right standard to interpret.
+
+Rob Whelan: 39:21 
+ Yeah.  So let me add it.  I'll add it to this folder here.  I'll have to do it off.  Off the call because it.
+
+Richard: 39:30 
+ Yeah, yeah.
+
+Rob Whelan: 39:31 
+ You'll never find it when you.  No, yeah, the tissue standard.  I'll have to see if I can find that is because basically I. I've got document that's the shot and standard that's being updated for the new Valmet numbering.  I'll send that over.  So.  Yeah, that should help.  I'll add that file.
+
+Richard: 40:04 
+ So I'm just stepping back a minute.  So what.  So I'm just trying to work out what led to this kind of realization.  So were looking at.  We were looking at a Valmet diagram, I think.
+
+Rob Whelan: 40:16 
+ Yeah.
+
+Richard: 40:17 
+ And we realized that there's a naming convention that T is for tank and P is for pump.
+
+Rob Whelan: 40:23 
+ Yeah.
+
+Richard: 40:24 
+ Those single letter abbreviations don't yet exist in.  In any of the abbreviation docs you shared with us.  Which kind of brought to light that there is a standard in that diagram, but it's not a standard that.  That our software is currently being exposed to.  Yeah.  So that's the gap.
+
+Rob Whelan: 40:48 
+ Yep.  So that was pretty much kind of where I got to unnoticed.
+
+Richard: 40:56 
+ Yeah.  No, that's great.  I mean that's.  I mean we just.  We've just come to.  We've learned a lot in this half hour, haven't we?  Yeah.
+
+Rob Whelan: 41:02 
+ So I've noticed here as well.  Like this is another one that's a little bit.  I don't know where it's picked that up as.  Yeah, a sub equipment.  So yeah, there's a few.  Just little.
+
+Richard: 41:16 
+ What, what's that?  Just, just give me that yellow.  That, that code that you've highlighted there again.  What is it?  30, 33, 24, 108.
+
+Rob Whelan: 41:24 
+ Yeah, 35, 24, 108.
+
+Richard: 41:29 
+ Okay, now I do see that on the diagram.  It is in the press pulper and it is.  Yeah.  I'll show my screen.  Let me share my screen quickly.
+
+Rob Whelan: 41:54 
+ It's weird.  Yeah.  So it's down there.
+
+Richard: 41:58 
+ You see it?
+
+Rob Whelan: 41:59 
+ Yeah.  It's funny how that one is up there, but it's the sub equipment of that one.  Is that it?
+
+Richard: 42:15 
+ So 35, 24, 108 PP.  Yeah.  So that's a line.  I mean that's a automated valve going into a drain.  Yeah, it's a valve going into a drain.
+
+Rob Whelan: 42:29 
+ There might be that number might also be a line which might be complicated just some of how the numbering is.
+
+Richard: 42:43 
+ Yeah.  So the complete 3524,108 is a normally closed valve.
+
+Rob Whelan: 42:49 
+ Yeah.
+
+Richard: 42:52 
+ Just to the left.  Just to the left of the Pulpa.  You see it?
+
+Rob Whelan: 42:58 
+ Yeah, yeah.  So that's reference there.  35, 24, 108.  And that was up here, wasn't it?  Yeah.  So just a.  Another little bit of a. Yeah.
+
+Richard: 44:24 
+ Okay.  Well, yeah, at least we found it.  I mean, it does.
+
+Rob Whelan: 44:27 
+ Yeah, yeah.
+
+Richard: 44:27 
+ On the diagram.  That was the first question, wasn't it?  But then the question is it.  Is it subordinate?  And is it.  Has it got the right equipment connected to it?  We shall keep digging.  So I think.  Should we.  I just.  Conscious of taking your time, Rob.  Thank you.  All right, so we found.  Just recapping the call.  So we haven't applied the line logic to the Flock file, but we will do.  We've realized that some of the descriptions are still not correct.  We realize that the diagram has been created to a standard that we haven't seen yet, which might be why the descriptions are lacking, because we haven't been able to decipher the code.
+
+Rob Whelan: 45:18 
+ Yeah,.
+
+Richard: 45:21 
+ And.  And the first thing you talked about is the grouping was off in the.  In the flop, wasn't it?  Yeah.  Okay.
+
+Rob Whelan: 45:28 
+ Yeah.
+
+Richard: 45:28 
+ Right, we shall.  We shall take this feedback and fold it back in.
+
+Rob Whelan: 45:31 
+ Yeah, Cheers.  Thank you very much.
+
+Richard: 45:33 
+ Thanks.  Yeah, thank you.  Bye.
+
+Rob Whelan: 45:34 
+ Bye, bye.
+
