@@ -16,7 +16,7 @@ class EcosystemDetectionTests(unittest.TestCase):
         self.assertEqual(eco.name, "gor")
         self.assertTrue(eco.is_tissue)
         self.assertFalse(eco.is_valmet)
-        self.assertEqual(eco.standard_id, "tissue_ksdm160104")
+        self.assertEqual(eco.standard_id, "gor_fiorentini")
 
     def test_detect_gorb_stem(self) -> None:
         eco = detect("GORB18781.02_something")
@@ -27,7 +27,7 @@ class EcosystemDetectionTests(unittest.TestCase):
         eco = detect("KSDM160104_010")
         self.assertEqual(eco.name, "ksd")
         self.assertTrue(eco.is_tissue)
-        self.assertEqual(eco.standard_id, "tissue_ksdm160104")
+        self.assertEqual(eco.standard_id, "ksd_andritz")
 
     def test_detect_stod_stem(self) -> None:
         eco = detect("STOD206336.11 Stock Preparation and Mixing area")
@@ -68,7 +68,7 @@ class EcosystemDetectionTests(unittest.TestCase):
         eco = detect("", ctx={"ecosystem": "ksd"})
         self.assertEqual(eco.name, "ksd")
         self.assertTrue(eco.is_tissue)
-        self.assertEqual(eco.standard_id, "tissue_ksdm160104")
+        self.assertEqual(eco.standard_id, "ksd_andritz")
 
     def test_detect_ctx_unknown_value_falls_back_to_stem(self) -> None:
         eco = detect("GORB18781", ctx={"ecosystem": "not_a_real_ecosystem"})
@@ -107,6 +107,60 @@ class EcosystemDetectionTests(unittest.TestCase):
         self.assertTrue(is_gor_inventory({"valves": [{"layer": "1-VALVE TEXT GOR"}]}))
         self.assertTrue(is_gor_inventory({"functions": [{"function": "WU05"}]}))
         self.assertFalse(is_gor_inventory({"functions": [{"function": "35-24L009"}]}))
+
+    def test_ksd_structural_from_ps_equip(self) -> None:
+        from dwg_reader.dwg_ecosystem import is_ksd_structural
+
+        structural = {"inserts": [{"layer": "PS-EQUIP", "name": "EQ", "attributes": []}]}
+        self.assertTrue(is_ksd_structural(structural))
+        eco = detect("", structural=structural)
+        self.assertEqual(eco.name, "ksd")
+
+    def test_ksd_structural_from_krets(self) -> None:
+        from dwg_reader.dwg_ecosystem import is_ksd_structural
+
+        structural = {
+            "inserts": [{
+                "layer": "0",
+                "name": "instr",
+                "attributes": [{"tag": "KRETS", "text": "126LC"}, {"tag": "POSNR", "text": "001"}],
+            }]
+        }
+        self.assertTrue(is_ksd_structural(structural))
+
+    def test_pipeid_alone_is_not_ksd(self) -> None:
+        from dwg_reader.dwg_ecosystem import is_ksd_structural
+
+        structural = {
+            "inserts": [{
+                "layer": "Revison 03",
+                "name": "Pipeno",
+                "attributes": [{"tag": "PIPEID", "text": "168L-001"}],
+            }]
+        }
+        self.assertFalse(is_ksd_structural(structural))
+        self.assertEqual(detect("", structural=structural).name, "gor")
+
+    def test_gor_structural_from_tag_valvola(self) -> None:
+        from dwg_reader.dwg_ecosystem import is_gor_structural
+
+        structural = {"inserts": [{"layer": "0", "name": "TAG VALVOLA", "attributes": []}]}
+        self.assertTrue(is_gor_structural(structural))
+        self.assertEqual(detect("", structural=structural).name, "gor")
+
+    def test_gora_stem_wins_over_ksd_foreign_layer(self) -> None:
+        structural = {"inserts": [{"layer": "1-EQUIPMENT KSD", "name": "EQ", "attributes": []}]}
+        eco = detect("GORA68210", structural=structural)
+        self.assertEqual(eco.name, "gor")
+
+    def test_ksd_inventory_signal(self) -> None:
+        from dwg_reader.dwg_ecosystem import is_ksd_inventory
+
+        self.assertTrue(is_ksd_inventory({"lines": [{"source": "ksd_pipe_id"}]}))
+        self.assertTrue(is_ksd_inventory({
+            "process_equipment": [{"layer": "PS-EQUIP", "tag": "122E-001"}]
+        }))
+        self.assertFalse(is_ksd_inventory({"valves": [{"block_name": "TAG VALVOLA"}]}))
 
 
 class EcosystemStandardsTests(unittest.TestCase):

@@ -56,7 +56,7 @@
   },
   "valve_layers": ["P-VALVEPOS", "P-CVPOS"],
   "av_layer": "P-CVPOS",
-  "instrument_layers": ["P-INSTRPOS"],
+  "instrument_layers": ["P-INSTRPOS", "P-INSTRU", "P-SENSOR_POS"],
   "equipment_layers": ["P-LINEPOS"],
   "fimpec_valve_codes": {
     "_note": "Appendix II of PS-21. These codes appear as a hyphen-separated suffix on manual valve tags (e.g. 35-24-123-GLO). The pipeline classifies via CAD layer + vision of the P&ID symbol shape, not by reading the tag suffix. FIMPEC codes are recorded here for reference only.",

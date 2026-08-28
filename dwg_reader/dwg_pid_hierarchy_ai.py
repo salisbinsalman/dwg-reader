@@ -52,7 +52,16 @@ from dwg_reader.tags import normalize_tag
 logger = get_logger(__name__)
 
 DEFAULT_SUB_PROCESS = "BR1"
-TAG_TOKEN_RE = re.compile(r"\b\d{1,3}-\d{1,3}[A-Z0-9][A-Z0-9./-]*\b", re.IGNORECASE)
+TAG_TOKEN_RE = re.compile(
+    r"\b(?:\d{1,3}-\d{1,3}[A-Z0-9][A-Z0-9./-]*|\d{3}[A-Z]{1,4}-?\d+[A-Z0-9.-]*|\d{3}-ST\d+|\d{3}ST-\d+)\b",
+    re.IGNORECASE,
+)
+# Require a sequence number so split fragments (168TI, 168PI, 168HC) are dropped.
+_TISSUE_HIER_TAG_RE = re.compile(
+    r"^(?:\d{3}[A-Z]{1,4}-?\d+[A-Z0-9.-]*|\d{3}-ST\d+|\d{3}ST-\d+)$",
+    re.I,
+)
+_WU_FN_RE = re.compile(r"^WU\d+$", re.I)
 
 PRIMARY_CATEGORIES = {"tanks", "process_equipment", "pumps", "agitators"}
 PARENT_PRIORITY = {
@@ -258,6 +267,10 @@ def collect_candidate_tags(
     cx, cy = center
     want = normalize_tag(tag)
     found: Dict[str, float] = {}
+    if _WU_FN_RE.match(want):
+        radius = max(radius, 800.0)
+    elif _TISSUE_HIER_TAG_RE.match(want):
+        radius = max(radius, 350.0)
 
     def consider(raw: object, x: Optional[float] = None, y: Optional[float] = None, weight: float = 1.0) -> None:
         if raw is None:
@@ -925,10 +938,17 @@ def _mask_value(*parts: str, explicit: str = "") -> str:
 def plant_prefix(tag: str) -> str:
     t = normalize_tag(tag)
     m = re.match(r"^(\d{2}-\d{2})", t)
-    return m.group(1) if m else t[:5]
+    if m:
+        return m.group(1)
+    # GOR/KSD mill+area: 122E-001 / 168L-521 → "122" / "168"
+    m = re.match(r"^(\d{3})", t)
+    if m:
+        return m.group(1)
+    return t[:5]
 
 
 _FN_NUM_RE = re.compile(r"^\d{2}-\d{2}[A-Z]+(\d+)$")
+_LINE_FN_RE = re.compile(r"^\d{2}-\d{2}-\d+$")  # 35-24-008 — piping header as FUNCTION
 _MOTOR_NUM_DASH_RE = re.compile(r"^\d{2}-\d{2}-(\d+)\.\d+$")    # 35-24-004.1
 _MOTOR_NUM_PFX_RE = re.compile(r"^\d{2}-\d{2}[A-Z]+(\d+)\.\d+$")  # 35-24L004.1
 
@@ -953,7 +973,20 @@ def _motor_matches_fn(tag: str, fn_num: str) -> bool:
 def is_plausible_hierarchy_tag(tok: str, parent_tag: str) -> bool:
     """Reject dimension fragments / off-area noise; keep GT-like tag shapes."""
     t = normalize_tag(tok)
-    if not t or len(t) < 6:
+    if not t or len(t) < 5:
+        return False
+    if _WU_FN_RE.match(t):
+        return True
+    # GOR / KSD: 168P-410, 168V-521, 168TC1, 122E-001, 126LC-001, 168-ST521
+    if _TISSUE_HIER_TAG_RE.match(t) and not re.match(r"^\d{3,4}-\d{2,4}$", t):
+        if re.search(r"-M[2-9]$", t):
+            return False
+        parent_area = re.match(r"^(\d{3})", normalize_tag(parent_tag))
+        child_area = re.match(r"^(\d{3})", t)
+        if parent_area and child_area and parent_area.group(1) != child_area.group(1):
+            return False
+        return True
+    if len(t) < 6:
         return False
     # 001-100 / 003-50 style fragments from pipe class text
     if re.match(r"^\d{3,4}-\d{2,4}$", t):
@@ -963,6 +996,12 @@ def is_plausible_hierarchy_tag(tok: str, parent_tag: str) -> bool:
         return False
     # Local panel / MCS pushbuttons are not in the GT hierarchy sheet
     if re.search(r"(?:HS|ES|KI|KJ|HI|MCS)-\d+", t):
+        return False
+    # Gearbox housing 35-24P519.1 is vessel-only; pumps use 35-24-519.1
+    pm = re.match(r"^(\d{2}-\d{2})([A-Z]+)(\d+)$", normalize_tag(parent_tag))
+    if pm and not pm.group(2).startswith("L") and re.match(
+        rf"^{re.escape(normalize_tag(parent_tag))}\.\d+$", t
+    ):
         return False
     # 35-24L009 / 35-24-189 / 35-24LC-674 / 35-24LV1-674 / 35-24XS-681
     return bool(re.match(r"^\d{2}-\d{2}(?:[A-Z]|-\d)[A-Z0-9./-]*$", t))
@@ -1000,8 +1039,9 @@ def text_tag_locations(structural: Optional[Dict[str, Any]]) -> Dict[str, Tuple[
 def canonicalize_vision_tag(tok: str) -> str:
     """Normalize CAD/vision tag spellings toward GT conventions."""
     t = normalize_tag(tok)
-    # Vision often misreads XS as XV on interlock symbols
-    t = re.sub(r"XV-", "XS-", t)
+    # Vision often misreads XS as XV on Valmet interlock symbols — not GOR/KSD.
+    if re.match(r"^\d{2}-\d{2}", t):
+        t = re.sub(r"XV-", "XS-", t)
     return normalize_tag(t)
 
 
@@ -1026,7 +1066,10 @@ def nearby_line_seeds(
         tok = canonicalize_vision_tag(str(raw or ""))
         if not is_plausible_hierarchy_tag(tok, parent_tag):
             return
-        if not re.match(r"^\d{2}-\d{2}-\d{2,4}(?:\.\d+)?$", tok):
+        if not (
+            re.match(r"^\d{2}-\d{2}-\d{2,4}(?:\.\d+)?$", tok)
+            or re.match(r"^\d{3}L-\d+$", tok, re.I)
+        ):
             return
         score = d / max(weight, 1e-6)
         prev = seeds.get(tok)
@@ -1058,14 +1101,39 @@ def nearby_line_seeds(
                 add(ent.get("text"), pos[0], pos[1], weight=1.1)
 
     # Branch / local point conventions for this parent equipment.
-    # .1/.2 = gearbox unit / main motor; .3/.4 = oil-pump sub-motors under the gearbox.
+    # L### vessels: .1/.2 gearbox housings + .3/.4 oil-pump motors.
+    # P### / T###: only the main drive motor `.1` — never invent `.2/.3/.4`.
     want = normalize_tag(parent_tag)
     m = re.match(r"^(\d{2}-\d{2})([A-Z]+)(\d+)$", want)
     if m:
         area, letters, num = m.group(1), m.group(2), m.group(3)
-        for suffix in (".1", ".2", ".3", ".4"):
-            for cand in (f"{want}{suffix}", f"{area}-{num}{suffix}"):
-                seeds.setdefault(canonicalize_vision_tag(cand), 5.0)
+        if letters.startswith("L"):
+            # .1/.2 gearbox + main motors are the GT convention.
+            # .3/.4 oil-pump motors only if CAD already has that tag — seeding
+            # them on every vessel is a large extras source (L001.3, 001.4, …).
+            known = set(seeds)
+            if inventory:
+                for key, rows in inventory.items():
+                    if not isinstance(rows, list):
+                        continue
+                    for row in rows:
+                        if not isinstance(row, dict):
+                            continue
+                        for field in ("tag", "line_number", "resolved_tag", "function"):
+                            tok = canonicalize_vision_tag(str(row.get(field) or ""))
+                            if tok:
+                                known.add(tok)
+            for suffix in (".1", ".2"):
+                for cand in (f"{want}{suffix}", f"{area}-{num}{suffix}"):
+                    seeds.setdefault(canonicalize_vision_tag(cand), 5.0)
+            for suffix in (".3", ".4"):
+                for cand in (f"{want}{suffix}", f"{area}-{num}{suffix}"):
+                    tok = canonicalize_vision_tag(cand)
+                    if tok in known:
+                        seeds.setdefault(tok, 5.0)
+        else:
+            # Pumps/tanks: motor line form only (35-24-519.1), not P519.1 gearbox housing.
+            seeds.setdefault(canonicalize_vision_tag(f"{area}-{num}.1"), 5.0)
 
     return [t for t, _ in sorted(seeds.items(), key=lambda kv: kv[1])]
 
@@ -1100,6 +1168,12 @@ def refine_ai_hierarchy(
                 continue
             if tok in peers:
                 return
+            # Line FUNCTIONs are piping headers — never gearbox/motor `.N` children.
+            if _LINE_FN_RE.match(want) and re.search(r"\.\d+$", tok):
+                return
+            # KSD/GOR: only -M1 on driven equipment (cad whitelist must not revive -M2).
+            if re.search(r"-M[2-9]$", tok) and not re.match(r"^\d{2}-\d{2}", tok):
+                return
             if tok not in cad_confirmed and not is_plausible_hierarchy_tag(tok, want):
                 return
         key = (eq, sub)
@@ -1129,17 +1203,17 @@ def refine_ai_hierarchy(
             str(child.get("description") or ""),
         )
 
-    # Seed nearby process lines + parent.1/.2 conventions.
-    # Motor convention tags (.1/.2 suffix) seed unconditionally; plain line seeds
-    # require the AI to have mentioned the tag — guards against neighbouring-function
-    # spatial leakage where the crop shows another system's pipes.
-    for line_id in nearby_line_seeds(center, inventory, structural, want, radius=130.0):
+    # GOR ventil units are one FUNCTION for the whole sheet — inject nearby lines.
+    # KSD/Valmet keep the mention-guard so neighbouring machines do not leak in.
+    tissue_unit = bool(_WU_FN_RE.match(want))
+    seed_radius = 800.0 if tissue_unit else 130.0
+    for line_id in nearby_line_seeds(center, inventory, structural, want, radius=seed_radius):
         if line_id in peers:
             continue
         if any(r.get("equipment") == line_id or r.get("subequipment") == line_id for r in refined_rows):
             continue
         is_motor_convention = bool(re.search(r"\.\d+$", line_id))
-        if not is_motor_convention and line_id.upper() not in raw_compact:
+        if not is_motor_convention and not tissue_unit and line_id.upper() not in raw_compact:
             continue
         push(equipment=line_id)
 
@@ -1304,6 +1378,7 @@ def run_hierarchy_for_tag(
     reuse_shots: bool,
     no_clean_prev: bool,
     aws_profile: str = "",
+    crop_half: Optional[float] = None,
 ) -> int:
     """Library entry used by the orchestrator instead of subprocess."""
     if aws_profile:
@@ -1312,7 +1387,7 @@ def run_hierarchy_for_tag(
         input=str(input_path),
         output_dir=str(out_dir),
         tags=tag,
-        crop_half=165.0,
+        crop_half=float(crop_half) if crop_half is not None else 165.0,
         crop_half_min=105.0,
         dpi=260,
         model_id=model_id,
@@ -1418,8 +1493,10 @@ def run_hierarchy_from_args(args: argparse.Namespace) -> int:
     )
 
     if not enr_path.exists():
-        logger.error(f"[error] Missing {enr_path}. Run `make enrich` / `make all` first.")
-        return 2
+        logger.warning(f"[warn] No enrichment JSON at {enr_path}; dossier will use inventory only.")
+        enrichment = {}
+    else:
+        enrichment = load_json(enr_path)
 
     if not args.no_clean_prev:
         clear_previous_outputs(
@@ -1438,7 +1515,6 @@ def run_hierarchy_from_args(args: argparse.Namespace) -> int:
                 if legacy.is_file():
                     legacy.unlink()
 
-    enrichment = load_json(enr_path)
     tag_register = enrichment.get("tag_register") or []
     inventory = load_json(inv_path) if inv_path.exists() else None
     structural_path = find_json(out_dir, f"{base}.structural_dump.json")

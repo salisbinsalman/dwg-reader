@@ -1071,9 +1071,10 @@ def run_hierarchy_for_tag(
     reuse_shots: bool,
     no_clean_prev: bool,
     aws_profile: str,
+    crop_half: Optional[float] = None,
 ) -> int:
     logger.info(f"\n---------- hierarchy: {tag} ----------")
-    return _run_hierarchy_for_tag(
+    kwargs = dict(
         tag=tag,
         input_path=input_path,
         out_dir=out_dir,
@@ -1087,6 +1088,9 @@ def run_hierarchy_for_tag(
         no_clean_prev=no_clean_prev,
         aws_profile=aws_profile,
     )
+    if crop_half is not None:
+        kwargs["crop_half"] = crop_half
+    return _run_hierarchy_for_tag(**kwargs)
 
 
 def _apply_registry_and_write(
@@ -1172,7 +1176,11 @@ def main() -> int:
     )
     parser.add_argument("--model-id", default="eu.anthropic.claude-sonnet-4-6")
     parser.add_argument("--region", default="eu-west-2")
-    parser.add_argument("--prompt-file", default="pid_hierarchy_gt_v8.md")
+    parser.add_argument(
+        "--prompt-file",
+        default="",
+        help="Prompt template under prompts/. Empty = adapter core+addendum.",
+    )
     parser.add_argument(
         "--jobs",
         type=int,
@@ -1243,10 +1251,12 @@ def main() -> int:
     except (OSError, json.JSONDecodeError):
         inventory_preview = {}
     eco = detect_ecosystem(input_path.name, inventory=inventory_preview)
+    adapter = eco.adapter
     is_gor = eco.name == "gor"
-    if not gt_path.exists() and not is_gor:
-        logger.error(f"[error] Missing GT file: {gt_path}")
-        return 2
+    prompt_file = (args.prompt_file or "").strip() or adapter.hierarchy_prompt_file
+    args.prompt_file = prompt_file
+    if not gt_path.exists():
+        logger.warning(f"[warn] No GT file at {gt_path}; scoring will skip hit/miss.")
     gt_rows = load_gt_rows(gt_path) if gt_path.exists() else []
 
     if args.tags.strip():
@@ -1277,32 +1287,8 @@ def main() -> int:
 
     combined_csv = out_dir / f"{base}.hierarchy_orchestrator.csv"
 
-    # GOR bypass: build hierarchy deterministically without Bedrock, then run
-    # valve classify + SAP export the same as normal.
-    if is_gor:
-        logger.info(f"[gor] Detected GOR/Valmet drawing — building deterministic hierarchy for: {', '.join(tags)}")
-        inventory_data = json.loads(inv_path.read_text(encoding="utf-8"))
-        gor_rows = build_gor_hierarchy(inventory_data)
-        write_hierarchy_csv(combined_csv, gor_rows)
-        gor_rows = _apply_registry_and_write(
-            gor_rows, drawing=base, out_dir=out_dir, dest=combined_csv
-        )
-        logger.info(f"[gor] Written {len(gor_rows)} rows → {combined_csv.name}")
-        if combined_csv.exists() and combined_csv.stat().st_size > 0:
-            valve_types_path = json_path(out_dir, f"{base}.valve_types.json")
-            fn_id = tags[0] if tags else ""
-            logger.info("\n---------- gor tipo mapping (TIPO_VALVOLA → SAP) ----------")
-            _patch_gor_valve_types(inv_path, valve_types_path, fn_id)
-            _run_sap_and_tree_exports(
-                input_path=input_path,
-                out_dir=out_dir,
-                combined_csv=combined_csv,
-                gt_path=gt_path,
-                no_export_floc=args.no_export_floc,
-                no_export_equipment=args.no_export_equipment,
-                no_export_hierarchy_tree=args.no_export_hierarchy_tree,
-            )
-        return 0
+    # GOR still uses AI. Deterministic build_gor_hierarchy is a repair/fallback
+    # only — do not skip Bedrock.
     report_json = json_path(out_dir, f"{base}.hierarchy_orchestrator_report.json")
     log_path = log_dir / "hierarchy-orchestrator.log"
     parts_dir = out_dir / "jsons" / "_orchestrator_parts"
@@ -1354,7 +1340,7 @@ def main() -> int:
                 out_dir=out_dir,
                 model_id=args.model_id,
                 region=args.region,
-                prompt_file=args.prompt_file,
+                prompt_file=prompt_file,
                 inventory_json=inv_path,
                 per_tag_csv=tag_csv,
                 per_tag_json=tag_json,
@@ -1362,8 +1348,16 @@ def main() -> int:
                 # Parallel workers must never clear shared outputs.
                 no_clean_prev=True if jobs > 1 else (index > 0) or args.reuse_shots or bool(combined_rows),
                 aws_profile=args.aws_profile,
+                crop_half=adapter.hierarchy_crop_half,
             )
             rows = rows_for_function(read_hierarchy_csv(tag_csv), tag)
+            try:
+                inv_data = json.loads(inv_path.read_text(encoding="utf-8"))
+            except (OSError, json.JSONDecodeError):
+                inv_data = {}
+            rows = adapter.repair_hierarchy(rows, inv_data)
+            if rows:
+                write_hierarchy_csv(tag_csv, rows)
             return {"function": tag, "exit_code": rc, "rows": rows}
 
         if jobs == 1:
@@ -1419,13 +1413,19 @@ def main() -> int:
     # placed (incorrectly) under an earlier function.  Scoring on the pre-dedup
     # CSV gives the true measure of AI placement quality.
     inventory_tags: "set[str]" = set()
+    sml_like = eco.name in ("sml", "valmet")
+    process_all = (not args.tags.strip()) and args.limit == 0
     if combined_csv.exists() and combined_csv.stat().st_size > 0:
         structural_path = json_path(out_dir, f"{base}.structural_dump.json")
-        _append_orphan_valve_rows(combined_csv, structural_path, inv_path)
-        _append_agitator_equipment_rows(combined_csv, inv_path, structural_path)
-        _append_missing_machine_functions(combined_csv, inv_path)
-        inventory_tags = _load_inventory_tags(inv_path)
-        _inject_instrument_packages(combined_csv, inventory_tags)
+        # Orphan/agitator mop-up is Valmet-only and dumps the whole sheet onto
+        # whichever FUNCTIONs were selected — skip on GOR/KSD and on --tags/--limit subsets.
+        if sml_like and process_all:
+            _append_orphan_valve_rows(combined_csv, structural_path, inv_path)
+            _append_agitator_equipment_rows(combined_csv, inv_path, structural_path)
+            _append_missing_machine_functions(combined_csv, inv_path)
+        if sml_like:
+            inventory_tags = _load_inventory_tags(inv_path)
+            _inject_instrument_packages(combined_csv, inventory_tags)
 
     # Final scores reflect mop-up + instrument injection, but NOT dedup.
     # Strip orphan rows (MASK=ORPHAN) — placed by proximity heuristic, not AI.
@@ -1517,6 +1517,11 @@ def main() -> int:
                 skip_existing=bool(args.skip_existing),
                 aws_profile=args.aws_profile,
             )
+        if is_gor:
+            valve_types_path = json_path(out_dir, f"{base}.valve_types.json")
+            fn_id = tags[0] if tags else ""
+            logger.info("\n---------- gor tipo mapping (TIPO_VALVOLA → SAP) ----------")
+            _patch_gor_valve_types(inv_path, valve_types_path, fn_id)
 
         _run_sap_and_tree_exports(
             input_path=input_path,

@@ -278,6 +278,10 @@ class PlantPrefixTests(unittest.TestCase):
     def test_instrument_tag(self):
         self.assertEqual(plant_prefix("35-24LC-576"), "35-24")
 
+    def test_ksd_area_prefix(self):
+        self.assertEqual(plant_prefix("122E-001"), "122")
+        self.assertEqual(plant_prefix("168L-521"), "168")
+
 
 # ---------------------------------------------------------------------------
 # extract_json_object
@@ -348,10 +352,20 @@ class NearbyLineSeedsTests(unittest.TestCase):
         seeds = nearby_line_seeds((0.0, 0.0), None, None, "35-24L004")
         self.assertIn("35-24-004.1", seeds)
         self.assertIn("35-24-004.2", seeds)
+        self.assertNotIn("35-24-004.3", seeds)
+        self.assertNotIn("35-24L004.3", seeds)
 
     def test_motor_convention_seeds_for_pump(self):
         seeds = nearby_line_seeds((0.0, 0.0), None, None, "35-24P519")
         self.assertIn("35-24-519.1", seeds)
+        self.assertNotIn("35-24-519.2", seeds)
+        self.assertNotIn("35-24P519.1", seeds)
+        self.assertNotIn("35-24P519.2", seeds)
+
+    def test_gor_line_seeded_from_inventory(self):
+        lines = [{"line_number": "168L-521", "x": 10.0, "y": 0.0}]
+        seeds = nearby_line_seeds((0.0, 0.0), {"lines": lines}, None, "WU12", radius=130.0)
+        self.assertIn("168L-521", seeds)
 
     def test_instrument_line_not_seeded(self):
         # Seeds require the 35-24-NNN format (all digits after second dash)
@@ -409,6 +423,39 @@ class RefineAiHierarchyBasicTests(unittest.TestCase):
     def test_function_tag_normalised_in_output(self):
         result = _refine("35-24l009", [])
         self.assertEqual(result["function"], "35-24L009")
+
+    def test_gor_tissue_tags_kept_under_wu_function(self):
+        rows = [
+            {"equipment": "168L-521", "subequipment": "", "description": "168L-521 PIPE"},
+            {"equipment": "", "subequipment": "168V-521", "description": "168V-521 VLV"},
+            {"equipment": "168P-410", "subequipment": "", "description": "168P-410 PMP"},
+        ]
+        result = _refine("WU12", rows)
+        self.assertIn("168L-521", _equipment_tags(result))
+        self.assertIn("168P-410", _equipment_tags(result))
+        self.assertIn("168V-521", _sub_equipment_tags(result))
+
+    def test_ksd_tags_kept(self):
+        rows = [
+            {"equipment": "122E-001", "subequipment": "", "description": "SW HC CLEANER"},
+            {"equipment": "122L-015", "subequipment": "", "description": "PIPE"},
+            {"equipment": "", "subequipment": "122V-215", "description": "HV"},
+        ]
+        result = _refine("122E-001", rows)
+        self.assertIn("122E-001", _equipment_tags(result))
+        self.assertIn("122L-015", _equipment_tags(result))
+        self.assertIn("122V-215", _sub_equipment_tags(result))
+
+    def test_line_function_drops_invented_motors(self):
+        rows = [
+            {"equipment": "35-24-1089", "subequipment": "", "description": "BRANCH"},
+            {"equipment": "35-24-008.1", "subequipment": "", "description": "MTR"},
+            {"equipment": "35-24-008.3", "subequipment": "", "description": "MTR"},
+        ]
+        result = _refine("35-24-008", rows)
+        self.assertIn("35-24-1089", _equipment_tags(result))
+        self.assertNotIn("35-24-008.1", _equipment_tags(result))
+        self.assertNotIn("35-24-008.3", _equipment_tags(result))
 
     def test_description_truncated_to_40(self):
         rows = [{"equipment": "35-24-189", "subequipment": "", "description": "A" * 50}]

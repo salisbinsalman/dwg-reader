@@ -430,7 +430,7 @@ def main() -> int:
     else:
         from dwg_reader.dwg_pid_inventory import build_inventory
 
-        inventory = build_inventory(structural)
+        inventory = build_inventory(structural, dwg_stem=input_path.stem)
         logger.info("[2/4] Built inventory live")
 
     tag_register = build_tag_register(structural, inventory)

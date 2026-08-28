@@ -763,8 +763,8 @@ class KsdEcosystemTests(unittest.TestCase):
     def test_ksd_ecosystem_detected_from_stem_prefix(self):
         eco = detect("KSDM160104")
         self.assertEqual(eco.name, "ksd")
-        self.assertEqual(eco.standard_id, "tissue_ksdm160104",
-                         "KSD must share tissue_ksdm160104 standard with GOR")
+        self.assertEqual(eco.standard_id, "ksd_andritz",
+                         "KSD now uses the dedicated ksd_andritz standard")
 
     def test_ksd_motor_suffix_is_m1(self):
         """KSD pumps use -M1 motor suffix like GOR."""
@@ -772,11 +772,14 @@ class KsdEcosystemTests(unittest.TestCase):
         self.assertEqual(_motor_tag_for("124P-001", ecosystem=eco), "124P-001-M1")
 
     def test_ksd_and_gor_share_standard(self):
-        """KSD and GOR must both resolve to the same standard_id."""
+        """KSD and GOR are both tissue ecosystems (is_tissue=True) with
+        dedicated standard JSONs — they no longer share tissue_ksdm160104."""
         gor_eco = detect("GORA68210")
         ksd_eco = detect("KSDM160104")
-        self.assertEqual(gor_eco.standard_id, ksd_eco.standard_id,
-                         "KSD and GOR must share tissue_ksdm160104 standard")
+        self.assertTrue(gor_eco.is_tissue, "GOR must be a tissue ecosystem")
+        self.assertTrue(ksd_eco.is_tissue, "KSD must be a tissue ecosystem")
+        self.assertEqual(gor_eco.standard_id, "gor_fiorentini")
+        self.assertEqual(ksd_eco.standard_id, "ksd_andritz")
 
     def test_ksd_is_tissue_property(self):
         eco = detect("KSDM160104")

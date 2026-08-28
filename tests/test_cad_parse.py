@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import re
 import tempfile
 import unittest
 from pathlib import Path
@@ -140,9 +141,14 @@ class MakefileHierarchyTests(unittest.TestCase):
         self.assertNotIn("dwg_pid_hierarchy_vision.py --input", text.split("hierarchy-ai:")[0])
 
     def test_prompt_file_default_is_v8(self) -> None:
+        from dwg_reader.adapters.sml_adapter import SMLAdapter
+
         makefile = Path(__file__).resolve().parents[1] / "Makefile"
         text = makefile.read_text(encoding="utf-8")
-        self.assertIn("PROMPT_FILE ?= pid_hierarchy_gt_v8.md", text)
+        # Empty PROMPT_FILE lets GOR/KSD use their adapter prompts; Broke/SML
+        # still defaults to the GT-tuned v8 template via the SML adapter.
+        self.assertRegex(text, re.compile(r"^PROMPT_FILE \?=\s*$", re.M))
+        self.assertEqual(SMLAdapter().hierarchy_prompt_file, "pid_hierarchy_gt_v8.md")
 
 
 if __name__ == "__main__":

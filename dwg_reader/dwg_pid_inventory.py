@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """
-Comprehensive P&ID component inventory extractor (strict layer-first).
+P&ID component inventory extractor.
 
-Produces dedicated sheets for tanks, process equipment, agitators, pumps,
-motors, valves, control valves, instruments, symbols, fittings, terminals,
-lines, interconnections, connections, pipe connectivity, and masks.
+Classification is owned by the CAD-ecosystem adapter (Valmet P-* layers,
+GOR Italian layers/blocks, KSD ITEM/KRETS/PIPEID attributes). The generic
+ODA dump stays generic; adapters interpret layers, blocks, and attributes.
 """
 
 from __future__ import annotations
@@ -17,6 +17,8 @@ from collections import Counter, defaultdict
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Set, Tuple
 
+from dwg_reader.adapters.base import BaseAdapter
+from dwg_reader.dwg_ecosystem import detect as detect_ecosystem
 from dwg_reader.dwg_pure_dump import clear_previous_outputs, find_json, json_path, json_safe, safe_name, write_json
 from dwg_reader.dwg_semantic_extract import (
     block_family,
@@ -32,45 +34,8 @@ logger = get_logger(__name__)
 
 PROXIMITY_TOL = 12.0
 
-# Strict layer ownership for insert classification.
-LAYER_TO_CATEGORY = {
-    # SML standard layers
-    "P-TANK_POS": ("tanks", "tank_symbol"),
-    "P-PUMP_POS": ("pumps", "pump_symbol"),
-    "P-PUMPS": ("pumps", "pump_symbol"),
-    "P-MOTOR_POS": ("motors", "motor_symbol"),
-    "P-AGITATOR_POS": ("agitators", "agitator_symbol"),
-    "P-VALVEPOS": ("valves", "valve_symbol"),
-    "P-CVPOS": ("control_valves", "control_valve_symbol"),
-    "P-EQUIPMENT_POS": ("process_equipment", "equipment_symbol"),
-    "P-EQUIPMENTS": ("process_equipment", "equipment_symbol"),
-    "P-INSTRU": ("instruments", "instrument_symbol"),
-    "P-INSTRPOS": ("instruments", "instrument_position"),
-    "P-PTERMINAL_POS": ("terminals", "terminal_symbol"),
-    "P-FITTINGS": ("fittings", "fitting_symbol"),
-    "P-SYMB": ("symbols", "diagram_symbol"),
-    "P-VENTS": ("ventilation", "vent_symbol"),
-    "P-FAN_POS": ("ventilation", "fan_symbol"),
-    "P-REVISIONS": ("revisions", "revision_marker"),
-    "P-DELIVERY_LIMIT": ("delivery_limits", "delivery_limit"),
-    "P-A-SHEET": ("sheet_graphics", "sheet_block"),
-    "T-A-SHEET": ("sheet_graphics", "sheet_block"),
-    "P-OTHER": ("other_inserts", "other"),
-    "P-MARKBALL": ("other_inserts", "mark_ball"),
-    "P-LINEPOS": ("line_markers", "line_annotation_block"),
-    # Valmet/GOR standard layers (Italian engineering, "1-* GOR" naming convention)
-    "1-VALVE TEXT GOR": ("valves", "valve_symbol"),
-    "1-TAG AND INSTRUMENTS GOR": ("instruments", "instrument_symbol"),
-    "1-EQUIPMENT GOR": ("process_equipment", "equipment_symbol"),
-    "Revison 03": ("line_markers", "gor_pipe_id"),  # GOR Pipeno pipe-number blocks (typo is in the actual drawing)
-}
-
-# Layers that carry pipe/process line geometry in Valmet/GOR drawings.
-GOR_PIPE_LAYERS = {
-    "1-AIR GOR",
-    "1-WATER GOR",
-    "1-BACKPRESSURE GOR",
-}
+# PIPEID blocks appear as Pipeno (GOR), PIPENO / Pipeid (KSD).
+_PIPE_BLOCK_NAMES = frozenset({"PIPENO", "PIPEID"})
 
 # Instrument tag pattern for GOR drawings: starts with 3 digits + letters + optional digits.
 # Matches e.g. "168TC1", "168TT1", "168TA1", "168HC", "168P-410", "168P-410-M1".
@@ -177,48 +142,41 @@ def base_component(
     return row
 
 
-def classify_insert(ins: Dict[str, Any]) -> Optional[Tuple[str, str, str]]:
-    """Return (category, sub_type, confidence) using layer-first rules."""
-    layer = ins.get("layer") or ""
+def classify_insert(
+    ins: Dict[str, Any],
+    adapter: BaseAdapter,
+    attrs: Optional[Dict[str, str]] = None,
+) -> Optional[Tuple[str, str, str]]:
+    """Return (category, sub_type, confidence) using the CAD-ecosystem adapter."""
+    attrs = attrs if attrs is not None else group_attributes(ins.get("attributes", []))
+    cat, sub, confidence = adapter.classify_insert(ins, attrs)
     name = (ins.get("name") or "").upper()
-
-    if layer in LAYER_TO_CATEGORY:
-        cat, sub = LAYER_TO_CATEGORY[layer]
-        # Ventilation CVs stay under ventilation, not process control valves.
-        if layer == "P-VENTS" and name.startswith("CVM"):
-            return "ventilation", "vent_control_valve", "high"
-        if layer == "P-VENTS" and name.startswith(("PRM", "CTV", "P7A")):
-            return "ventilation", "vent_instrument_symbol", "high"
-        return cat, sub, "high"
-
-    # Fallback only for unknown layers with strong block cues.
-    if name.startswith("CVM"):
+    # Fallback only for unknown layers with strong block cues (Valmet CVM*).
+    if cat == "other_inserts" and name.startswith("CVM"):
         return "control_valves", block_family(name), "medium"
-    # Keep insert_coverage complete on drawings with extra Autodesk layers.
-    return "other_inserts", "unmapped_layer", "low"
+    return cat, sub, confidence
 
 
-def extract_from_inserts(structural: Dict[str, Any]) -> Dict[str, List[Dict[str, Any]]]:
+def extract_from_inserts(
+    structural: Dict[str, Any],
+    adapter: BaseAdapter,
+) -> Dict[str, List[Dict[str, Any]]]:
     buckets: Dict[str, List[Dict[str, Any]]] = defaultdict(list)
     for ins in structural.get("inserts", []):
-        classified = classify_insert(ins)
+        attrs = group_attributes(ins.get("attributes", []))
+        classified = classify_insert(ins, adapter, attrs)
         if not classified:
             continue
         comp_type, sub_type, confidence = classified
-        attrs = group_attributes(ins.get("attributes", []))
         block_name = ins.get("name") or ""
+        tag, tag_extra = adapter.tag_from_insert(block_name, attrs, layer=ins.get("layer") or "")
 
-        # GOR valve tag block stores the real tag and valve type in attributes.
         extra: Dict[str, Any] = {
             "xscale": ins.get("xscale"),
             "yscale": ins.get("yscale"),
             "attributes_json": json.dumps(json_safe(attrs), ensure_ascii=True),
         }
-        if block_name == "TAG VALVOLA" and attrs.get("TAG_VALVOLA"):
-            tag = attrs["TAG_VALVOLA"].strip()
-            extra["valve_type"] = attrs.get("TIPO_VALVOLA", "").strip() or None
-        else:
-            tag = block_name
+        extra.update(tag_extra)
 
         buckets[comp_type].append(
             base_component(
@@ -426,12 +384,13 @@ def bind_agitator_tags(
     return bound
 
 
-def extract_gor_instrument_texts(structural: Dict[str, Any]) -> List[Dict[str, Any]]:
-    """Extract GOR instrument tags from TEXT entities on the GOR instruments layer.
+def extract_gor_instrument_texts(
+    structural: Dict[str, Any],
+    adapter: BaseAdapter,
+) -> List[Dict[str, Any]]:
+    """Extract GOR instrument tags from TEXT on 1-TAG AND INSTRUMENTS GOR.
 
-    GOR drawings don't embed instrument tags in block attributes; instead, each
-    instrument is labelled by a nearby TEXT entity (e.g. "168TC1", "168P-410").
-    This supplements the LOOPDCS-block records with the actual tag strings.
+    Equipment tags on that layer (162E-010, 168P-410) are not instruments.
     """
     rows: List[Dict[str, Any]] = []
     seen: Set[str] = set()
@@ -441,10 +400,11 @@ def extract_gor_instrument_texts(structural: Dict[str, Any]) -> List[Dict[str, A
         text = (t.get("text") or "").strip()
         if not text:
             continue
-        # Skip pure loop numbers (3-4 digits with no letters) and short words.
         if re.match(r"^\d{3,4}$", text) or len(text) < 4:
             continue
-        if not GOR_INSTR_TAG_RE.match(text):
+        if adapter.is_equipment_tag(text) or adapter.is_valve_tag(text) or adapter.is_line_tag(text):
+            continue
+        if not (adapter.is_instrument_tag(text) or GOR_INSTR_TAG_RE.match(text)):
             continue
         key = text.upper()
         if key in seen:
@@ -465,7 +425,42 @@ def extract_gor_instrument_texts(structural: Dict[str, Any]) -> List[Dict[str, A
     return rows
 
 
-def extract_gor_valve_texts(structural: Dict[str, Any]) -> List[Dict[str, Any]]:
+def extract_gor_equipment_texts(
+    structural: Dict[str, Any],
+    adapter: BaseAdapter,
+) -> List[Dict[str, Any]]:
+    """Equipment tags drawn as TEXT on the GOR instruments layer (Code 03/13)."""
+    rows: List[Dict[str, Any]] = []
+    seen: Set[str] = set()
+    for t in structural.get("text_entities", []):
+        if t.get("layer") not in ("1-TAG AND INSTRUMENTS GOR", "1-EQUIPMENT GOR"):
+            continue
+        text = (t.get("text") or "").strip()
+        if not text or not adapter.is_equipment_tag(text):
+            continue
+        key = text.upper()
+        if key in seen:
+            continue
+        seen.add(key)
+        rows.append(
+            base_component(
+                "process_equipment",
+                tag=text,
+                sub_type="gor_equipment_tag",
+                handle=t.get("handle"),
+                layer=t.get("layer"),
+                insert=t.get("position"),
+                source="text_label",
+                confidence="high",
+            )
+        )
+    return rows
+
+
+def extract_gor_valve_texts(
+    structural: Dict[str, Any],
+    adapter: BaseAdapter,
+) -> List[Dict[str, Any]]:
     """Extract GOR Code 03/13 valve tags from TEXT entities on 1-VALVE TEXT GOR.
 
     In Code 03/13 drawings valves are labelled as plain TEXT entities (e.g. "162KV3-575",
@@ -481,7 +476,9 @@ def extract_gor_valve_texts(structural: Dict[str, Any]) -> List[Dict[str, Any]]:
             continue
         if re.match(r"^\d{3,4}$", text):
             continue
-        if not GOR_INSTR_TAG_RE.match(text):
+        if adapter.is_equipment_tag(text) or adapter.is_line_tag(text):
+            continue
+        if not (adapter.is_valve_tag(text) or GOR_INSTR_TAG_RE.match(text)):
             continue
         key = text.upper()
         if key in seen:
@@ -617,22 +614,12 @@ def entity_endpoints(entity: Dict[str, Any]) -> List[Tuple[float, float]]:
     return pts
 
 
-def extract_pipe_segments(structural: Dict[str, Any]) -> List[Dict[str, Any]]:
+def extract_pipe_segments(
+    structural: Dict[str, Any],
+    adapter: BaseAdapter,
+) -> List[Dict[str, Any]]:
     rows: List[Dict[str, Any]] = []
-    pipe_layers = {
-        # SML standard pipe layers
-        "P-FITTINGS",
-        "P-LINEPOS",
-        "P-EQUIPMENTS",
-        "P-WATER",
-        "P-SEALING_WATER",
-        "P-COOLING_WATER",
-        "P-FILTERED_WATER",
-        "P-WHITE_WATER",
-        "P-REJECT",
-        "P-AIR",
-        "P-MASS1",
-    } | GOR_PIPE_LAYERS
+    pipe_layers = set(adapter.pipe_layers)
     for e in structural.get("entities", []):
         if e.get("type") not in ("LINE", "LWPOLYLINE", "POLYLINE"):
             continue
@@ -861,12 +848,18 @@ def _detect_gor_unit_id(structural: Dict[str, Any]) -> Optional[str]:
     return None
 
 
-def extract_gor_pipe_ids(structural: Dict[str, Any]) -> List[Dict[str, Any]]:
-    """Extract pipe IDs from GOR Pipeno INSERT blocks (PIPEID + PIPEDATA attributes)."""
+def extract_pipe_ids(
+    structural: Dict[str, Any],
+    adapter: BaseAdapter,
+) -> List[Dict[str, Any]]:
+    """Extract pipe IDs from Pipeno / PIPENO / Pipeid INSERT blocks (PIPEID + PIPEDATA)."""
+    source = "ksd_pipe_id" if adapter.ecosystem_name == "ksd" else "gor_pipe_id"
+    line_type = "KSD_PIPE" if adapter.ecosystem_name == "ksd" else "GOR_PIPE"
     rows: List[Dict[str, Any]] = []
     seen: Set[str] = set()
     for ins in structural.get("inserts", []):
-        if ins.get("name") != "Pipeno":
+        name = (ins.get("name") or "").upper()
+        if name not in _PIPE_BLOCK_NAMES:
             continue
         attrs = group_attributes(ins.get("attributes", []))
         pipe_id = (attrs.get("PIPEID") or "").strip()
@@ -891,7 +884,7 @@ def extract_gor_pipe_ids(structural: Dict[str, Any]) -> List[Dict[str, Any]]:
             "line_number": pipe_id,
             "plant_area": None,
             "line_sequence": None,
-            "line_type": "GOR_PIPE",
+            "line_type": line_type,
             "nominal_size": size_str or None,
             "pipe_class": pipe_class or None,
             "parsed": True,
@@ -901,10 +894,16 @@ def extract_gor_pipe_ids(structural: Dict[str, Any]) -> List[Dict[str, Any]]:
             "y": y,
             "z": z,
             "position": fmt_point(ins.get("insert")),
-            "source": "gor_pipe_id",
+            "source": source,
             "confidence": "high",
         })
     return rows
+
+
+def extract_gor_pipe_ids(structural: Dict[str, Any]) -> List[Dict[str, Any]]:
+    """Backward-compatible wrapper — GOR Pipeno PIPEID extract."""
+    from dwg_reader.adapters.gor_adapter import GORAdapter
+    return extract_pipe_ids(structural, GORAdapter())
 
 
 def build_gor_functions(
@@ -945,21 +944,31 @@ def build_gor_functions(
     }]
 
 
-def build_inventory(structural: Dict[str, Any]) -> Dict[str, List[Dict[str, Any]]]:
-    inserts = extract_from_inserts(structural)
+def build_inventory(
+    structural: Dict[str, Any],
+    dwg_stem: str = "",
+    adapter: Optional[BaseAdapter] = None,
+) -> Dict[str, List[Dict[str, Any]]]:
+    if adapter is None:
+        adapter = detect_ecosystem(dwg_stem, structural=structural).adapter
+    inserts = extract_from_inserts(structural, adapter)
     labels = extract_text_labels(structural)
-    gor_instr = extract_gor_instrument_texts(structural)
-    gor_valves = extract_gor_valve_texts(structural)
     buckets = merge_buckets(inserts, labels)
-    if gor_instr:
-        buckets["instruments"] = buckets.get("instruments", []) + gor_instr
-    if gor_valves:
-        buckets["valves"] = buckets.get("valves", []) + gor_valves
+    if adapter.ecosystem_name == "gor":
+        gor_instr = extract_gor_instrument_texts(structural, adapter)
+        gor_valves = extract_gor_valve_texts(structural, adapter)
+        gor_equip = extract_gor_equipment_texts(structural, adapter)
+        if gor_instr:
+            buckets["instruments"] = buckets.get("instruments", []) + gor_instr
+        if gor_valves:
+            buckets["valves"] = buckets.get("valves", []) + gor_valves
+        if gor_equip:
+            buckets["process_equipment"] = buckets.get("process_equipment", []) + gor_equip
 
-    lines = extract_lines(structural) + extract_gor_pipe_ids(structural)
+    lines = extract_lines(structural) + extract_pipe_ids(structural, adapter)
     interconnections = extract_interconnections(structural)
     masks = extract_masks(structural)
-    pipe_segments = extract_pipe_segments(structural)
+    pipe_segments = extract_pipe_segments(structural, adapter)
 
     primary_components: List[Dict[str, Any]] = []
     for key in (
@@ -1008,46 +1017,76 @@ def build_inventory(structural: Dict[str, Any]) -> Dict[str, List[Dict[str, Any]
     bind_agitator_tags(inventory, structural)
     inventory["functions"] = build_functions(inventory, structural)
     if not inventory["functions"]:
-        inventory["functions"] = build_gor_functions(inventory, structural)
+        if adapter.ecosystem_name == "gor":
+            inventory["functions"] = build_gor_functions(inventory, structural)
+        elif adapter.ecosystem_name == "ksd":
+            inventory["functions"] = build_ksd_functions(inventory, adapter)
     return inventory
 
 
-def validate_inventory(structural: Dict[str, Any], inventory: Dict[str, List[Dict[str, Any]]]) -> Dict[str, Any]:
-    insert_by_layer = Counter(i.get("layer") for i in structural.get("inserts", []))
-    checks = {
-        "tanks": ["P-TANK_POS"],
-        "pumps": ["P-PUMP_POS", "P-PUMPS"],
-        "motors": ["P-MOTOR_POS"],
-        "agitators": ["P-AGITATOR_POS"],
-        "valves": ["P-VALVEPOS", "1-VALVE TEXT GOR"],
-        "control_valves": ["P-CVPOS"],
-        "process_equipment": ["P-EQUIPMENT_POS", "P-EQUIPMENTS", "1-EQUIPMENT GOR"],
-        "instruments": ["P-INSTRU", "P-INSTRPOS", "1-TAG AND INSTRUMENTS GOR"],
-        "fittings": ["P-FITTINGS"],
-        "terminals": ["P-PTERMINAL_POS"],
-        "symbols": ["P-SYMB"],
-        "ventilation": ["P-VENTS", "P-FAN_POS"],
-        "line_markers": ["P-LINEPOS", "Revison 03"],
-        "revisions": ["P-REVISIONS"],
-        "delivery_limits": ["P-DELIVERY_LIMIT"],
-        "sheet_graphics": ["P-A-SHEET", "T-A-SHEET"],
-        "other_inserts": ["P-OTHER", "P-MARKBALL"],
-    }
+def build_ksd_functions(
+    inventory: Dict[str, List[Dict[str, Any]]],
+    adapter: BaseAdapter,
+) -> List[Dict[str, Any]]:
+    """One FUNCTION per driven/process ITEM tag so the orchestrator has crop targets."""
+    rows: List[Dict[str, Any]] = []
+    seen: Set[str] = set()
+    for cat in ("process_equipment", "pumps", "agitators", "tanks"):
+        for item in inventory.get(cat) or []:
+            tag = str(item.get("tag") or "").strip().upper()
+            if not tag or tag in seen:
+                continue
+            if not adapter.is_equipment_tag(tag):
+                continue
+            seen.add(tag)
+            rows.append({
+                "function": tag,
+                "kind": "equipment",
+                "category": cat,
+                "block_name": item.get("block_name") or "",
+                "handle": item.get("handle") or "",
+                "layer": item.get("layer") or "",
+                "x": item.get("x"),
+                "y": item.get("y"),
+                "z": item.get("z") or 0.0,
+                "description": item.get("description") or tag,
+                "nearby_tags": tag,
+                "confidence": item.get("confidence") or "high",
+                "source": "cad",
+            })
+    return rows
+
+
+def validate_inventory(
+    structural: Dict[str, Any],
+    inventory: Dict[str, List[Dict[str, Any]]],
+    adapter: Optional[BaseAdapter] = None,
+    dwg_stem: str = "",
+) -> Dict[str, Any]:
+    if adapter is None:
+        adapter = detect_ecosystem(dwg_stem, structural=structural).adapter
+    checks: Dict[str, List[str]] = defaultdict(list)
+    for layer, (cat, _sub) in adapter.layer_map.items():
+        checks[cat].append(layer)
+    # Categories that always appear in the report even when the adapter has no layer.
+    for cat in (
+        "tanks", "pumps", "motors", "agitators", "valves", "control_valves",
+        "process_equipment", "instruments", "fittings", "terminals", "symbols",
+        "ventilation", "line_markers", "revisions", "delivery_limits",
+        "sheet_graphics", "other_inserts",
+    ):
+        checks.setdefault(cat, [])
+
+    gt_counts: Counter = Counter()
+    for ins in structural.get("inserts", []):
+        classified = classify_insert(ins, adapter)
+        if classified:
+            gt_counts[classified[0]] += 1
 
     report_rows = []
     all_pass = True
-    claimed_layers = {l for cat, layers in checks.items() if cat != "other_inserts" for l in layers}
-    for cat, layers in checks.items():
-        if cat == "other_inserts":
-            # Include explicit other layers plus any insert layer not claimed elsewhere
-            # (matches classify_insert fallback → other_inserts).
-            gt = sum(
-                n
-                for layer, n in insert_by_layer.items()
-                if layer in layers or layer not in claimed_layers
-            )
-        else:
-            gt = sum(insert_by_layer[l] for l in layers)
+    for cat in checks:
+        gt = gt_counts[cat]
         inv_insert = sum(1 for r in inventory.get(cat, []) if r.get("source") == "insert")
         inv_text = sum(1 for r in inventory.get(cat, []) if r.get("source") == "text_label")
         ok = inv_insert == gt
@@ -1068,9 +1107,9 @@ def validate_inventory(structural: Dict[str, Any], inventory: Dict[str, List[Dic
         for t in structural.get("text_entities", [])
         if t.get("layer") == "P-LINEPOS" and (t.get("text") or "").strip()
     }
-    # GOR: Pipeno INSERT blocks carry PIPEID attribute (not text entities)
+    # GOR/KSD: Pipeno / PIPENO / Pipeid INSERT blocks carry PIPEID attribute
     for _ins in structural.get("inserts", []):
-        if _ins.get("name") == "Pipeno":
+        if (_ins.get("name") or "").upper() in _PIPE_BLOCK_NAMES:
             _attrs = group_attributes(_ins.get("attributes", []))
             _pid = (_attrs.get("PIPEID") or "").strip().upper()
             if _pid:
@@ -1104,11 +1143,16 @@ def validate_inventory(structural: Dict[str, Any], inventory: Dict[str, List[Dic
         }
     )
 
-    # Instrument pollution check: instruments must only come from instru layers
+    # Instrument pollution: inserts mapped to a non-instrument layer must not
+    # land in the instruments sheet. Unmapped layers are allowed (KSD KRETS).
+    layer_to_cat = {layer: cat for layer, (cat, _sub) in adapter.layer_map.items()}
+    instrument_layers = {layer for layer, cat in layer_to_cat.items() if cat == "instruments"}
     bad_instr = [
         r for r in inventory.get("instruments", [])
         if r.get("source") == "insert"
-        and r.get("layer") not in ("P-INSTRU", "P-INSTRPOS", "1-TAG AND INSTRUMENTS GOR")
+        and r.get("layer") in layer_to_cat
+        and layer_to_cat[r.get("layer")] != "instruments"
+        and r.get("layer") not in instrument_layers
     ]
     valve_fp = [
         r for r in inventory.get("valves", [])
@@ -1220,7 +1264,7 @@ def main() -> int:
     structural, source = load_or_parse(input_path, out_dir, refresh=args.refresh)
     logger.info(f"[1/4] Loaded structural data ({source})")
 
-    inventory = build_inventory(structural)
+    inventory = build_inventory(structural, dwg_stem=input_path.stem)
     logger.info("[2/4] Inventory counts:")
     for k, v in inventory.items():
         logger.info(f"  - {k}: {len(v)}")
@@ -1235,7 +1279,7 @@ def main() -> int:
     if funcs:
         logger.info("    sample: " + ", ".join(r["function"] for r in funcs[:10]) + ("…" if len(funcs) > 10 else ""))
 
-    validation = validate_inventory(structural, inventory)
+    validation = validate_inventory(structural, inventory, dwg_stem=input_path.stem)
     logger.info(f"[3/4] Validation all_pass={validation['all_pass']}")
     for row in validation["checks"]:
         mark = "PASS" if row.get("pass") else "FAIL"

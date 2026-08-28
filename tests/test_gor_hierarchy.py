@@ -95,5 +95,21 @@ class GorHierarchyBuildTests(unittest.TestCase):
         self.assertNotEqual(by_tag["168TI2"]["EQART"], "9999")
 
 
+class GorRepairHierarchyTests(unittest.TestCase):
+    def test_nests_valve_under_matching_line(self):
+        from dwg_reader.adapters.gor_adapter import GORAdapter
+
+        rows = [
+            {"FUNCTION": "WU12", "EQUIPMENT": "", "SUB-EQUIPMENT": "", "MASK": "", "DESCRIPTION": "WU12"},
+            {"FUNCTION": "", "EQUIPMENT": "168L-522", "SUB-EQUIPMENT": "", "MASK": "", "DESCRIPTION": "PIPE"},
+            {"FUNCTION": "", "EQUIPMENT": "168V-522", "SUB-EQUIPMENT": "", "MASK": "", "DESCRIPTION": "VLV"},
+        ]
+        inv = {"lines": [{"line_number": "168L-522", "source": "gor_pipe_id"}]}
+        out = GORAdapter().repair_hierarchy(rows, inv)
+        valve = next(r for r in out if "522" in (r.get("EQUIPMENT") or r.get("SUB-EQUIPMENT") or "") and "V-" in (r.get("EQUIPMENT") or r.get("SUB-EQUIPMENT") or ""))
+        self.assertEqual(valve["EQUIPMENT"], "")
+        self.assertEqual(valve["SUB-EQUIPMENT"], "168V-522")
+
+
 if __name__ == "__main__":
     unittest.main()

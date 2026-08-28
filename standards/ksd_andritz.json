@@ -1,0 +1,88 @@
+{
+  "name": "KSD / Andritz — KSDM160104 Swedish Tissue Machine Standard",
+  "standard_id": "ksd_andritz",
+  "tag_pattern": "^(\\d)(\\d{2})([A-Z])-(\\d{3})$",
+  "line_tag_pattern": "^\\d{3}L-\\d{3}$",
+  "motor_suffix_patterns": ["-M\\d+$"],
+  "motor_from_equipment": {
+    "mode": "append_suffix",
+    "suffix": "-M1",
+    "example": "122E-001 → 122E-001-M1"
+  },
+  "driven_patterns": {
+    "pump":     "^\\d{3}P-\\d{3}$",
+    "agitator": "^\\d{3}A-\\d{3}$",
+    "equipment": "^\\d{3}[EX]-\\d{3}$"
+  },
+  "tag_prefix_rules": {
+    "P": "701",
+    "A": "2001",
+    "T": "601",
+    "E": "2000",
+    "V": "201"
+  },
+  "machine_codes": {
+    "1": "TM01",
+    "2": "TM02"
+  },
+  "area_codes": {
+    "10": { "name": "General",                      "process": "GEN", "sub_process": "GEN1" },
+    "20": { "name": "Bale handling",                 "process": "PL",  "sub_process": "PL0"  },
+    "21": { "name": "Pulp dissolving",               "process": "PL",  "sub_process": "PL0"  },
+    "22": { "name": "Softwood pulping",              "process": "PL",  "sub_process": "PL1"  },
+    "24": { "name": "Hardwood pulping",              "process": "PL",  "sub_process": "PL2"  },
+    "26": { "name": "Internal broke",                "process": "BR",  "sub_process": "BR1"  },
+    "28": { "name": "Converting broke",              "process": "BR",  "sub_process": "BR2"  },
+    "30": { "name": "Pulp mixing",                   "process": "AP",  "sub_process": "AP1"  },
+    "32": { "name": "White water",                   "process": "WW",  "sub_process": "WW1"  },
+    "34": { "name": "Shower water",                  "process": "WW",  "sub_process": "WW2"  },
+    "36": { "name": "Vacuum",                        "process": "VC",  "sub_process": "VC1"  },
+    "44": { "name": "Steam and condensate",          "process": "SC",  "sub_process": "SC1"  },
+    "50": { "name": "Winder",                        "process": "WN",  "sub_process": "WN1"  },
+    "54": { "name": "Roll handling",                 "process": "RH",  "sub_process": "RH1"  },
+    "60": { "name": "Mist removal",                  "process": "WU",  "sub_process": "WUC"  },
+    "62": { "name": "Advantage Aircap and air",      "process": "WU",  "sub_process": "WUC"  },
+    "64": { "name": "Advantage wet dust / run",      "process": "WU",  "sub_process": "WUH"  },
+    "66": { "name": "Dust control for rewinder",     "process": "WU",  "sub_process": "WUC"  },
+    "68": { "name": "Machine hall ventilation",      "process": "WU",  "sub_process": "WUC"  },
+    "70": { "name": "Paper machine main",            "process": "PM",  "sub_process": "PM1"  },
+    "75": { "name": "Control system",                "process": "CS",  "sub_process": "CS1"  },
+    "80": { "name": "Fresh water",                   "process": "FW",  "sub_process": "FW1"  },
+    "82": { "name": "Compressed air",                "process": "CA",  "sub_process": "CA1"  },
+    "84": { "name": "Internal ETP",                  "process": "ET",  "sub_process": "ET1"  },
+    "88": { "name": "TM chemicals",                  "process": "CH",  "sub_process": "CH1"  },
+    "90": { "name": "DIP pulping",                   "process": "DIP", "sub_process": "DIP1" },
+    "92": { "name": "DIP flotation",                 "process": "DIP", "sub_process": "DIP2" },
+    "94": { "name": "DIP thickening",                "process": "DIP", "sub_process": "DIP3" }
+  },
+  "function_letters": {
+    "E": "Process equipment (machines)",
+    "A": "Agitators",
+    "P": "Pumps",
+    "T": "Tanks",
+    "V": "Manual valves",
+    "L": "Pipelines",
+    "X": "Other equipment"
+  },
+  "instrument_format": "^\\d{3}([A-Z]{2,4})\\d*-\\d{3}$",
+  "flow_substance_codes": {},
+  "valve_layers": ["HAND-VALVE", "TXT-HAND-VALVE", "INSTR-VALVE", "TXT-INST-VALVE"],
+  "av_layer": "INSTR-VALVE",
+  "instrument_layers": ["INSTRUMENT", "PS-IN", "PS-IN-P"],
+  "layers": {
+    "process_equipment": "PS-EQUIP",
+    "valves":            "HAND-VALVE",
+    "control_valves":    "INSTR-VALVE",
+    "instruments":       "INSTRUMENT",
+    "pipe_markers":      "Pipe ID"
+  },
+  "attribute_tags": {
+    "ITEM":     "equipment tag (122E-001)",
+    "KRETS":    "instrument loop letters (126LC)",
+    "POSNR":    "instrument sequence, or a full tag on some sheets",
+    "PIPEID":   "line number (126L-002)",
+    "PIPEDATA": "size-media-spec (200-P96-VE10H2A)",
+    "BENÄMNING": "cross-sheet / description"
+  },
+  "notes": "Andritz tissue machine standard KSDM160104. Tag format: xyyz-aaa where x=machine digit (1=TM1), yy=two-digit area code, z=function letter (E/A/P/T/V/L/X), aaa=3-digit running number. Motor tag appends -M1 (main), -M2 (oil pump), -M3 (loading) on driven E/A/P/X only — not tanks, valves, or lines. CAD uses PS-EQUIP, HAND-VALVE, INSTR-VALVE, INSTRUMENT, Pipe ID — not Valmet P-* layers. POSNR is not always a 3-digit sequence; when it looks like a full tag, use POSNR as-is."
+}

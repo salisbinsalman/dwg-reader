@@ -5,7 +5,7 @@ OUT ?= outputs
 
 # Best hierarchy combo from GT sweep (~61.8% micro tag F1)
 MODEL_ID ?= eu.anthropic.claude-sonnet-4-6
-PROMPT_FILE ?= pid_hierarchy_gt_v8.md
+PROMPT_FILE ?=
 AWS_REGION ?= eu-west-2
 AWS_PROFILE ?= foundrydev
 TAGS ?= 35-24L009,35-24P519
@@ -85,14 +85,14 @@ hierarchy: hierarchy-ai
 
 hierarchy-ai:
 	@mkdir -p "$(OUT)/logs"
-	AWS_PROFILE="$(AWS_PROFILE)" $(PYTHON) dwg_pid_hierarchy_ai.py --input "$(INPUT)" --output-dir "$(OUT)" --tags "$(TAGS)" --model-id "$(MODEL_ID)" --region "$(AWS_REGION)" --prompt-file "$(PROMPT_FILE)" 2>&1 | tee "$(OUT)/logs/hierarchy-ai.log"
+	AWS_PROFILE="$(AWS_PROFILE)" $(PYTHON) dwg_pid_hierarchy_ai.py --input "$(INPUT)" --output-dir "$(OUT)" --tags "$(TAGS)" --model-id "$(MODEL_ID)" --region "$(AWS_REGION)" $(if $(PROMPT_FILE),--prompt-file "$(PROMPT_FILE)",) 2>&1 | tee "$(OUT)/logs/hierarchy-ai.log"
 
 hierarchy-orch-dry:
 	$(PYTHON) run_hierarchy_orchestrator.py --input "$(INPUT)" --output-dir "$(OUT)" --limit $(LIMIT) $(if $(KINDS),--kinds "$(KINDS)",) --dry-run
 
 hierarchy-orch:
 	@mkdir -p "$(OUT)/logs"
-	AWS_PROFILE="$(AWS_PROFILE)" PYTHONUNBUFFERED=1 $(PYTHON) run_hierarchy_orchestrator.py --input "$(INPUT)" --output-dir "$(OUT)" --limit $(LIMIT) --jobs $(JOBS) $(if $(KINDS),--kinds "$(KINDS)",) --model-id "$(MODEL_ID)" --region "$(AWS_REGION)" --prompt-file "$(PROMPT_FILE)" --aws-profile "$(AWS_PROFILE)" $(if $(SKIP_EXISTING),--skip-existing,) 2>&1 | tee "$(OUT)/logs/hierarchy-orchestrator.log"
+	AWS_PROFILE="$(AWS_PROFILE)" PYTHONUNBUFFERED=1 $(PYTHON) run_hierarchy_orchestrator.py --input "$(INPUT)" --output-dir "$(OUT)" --limit $(LIMIT) --jobs $(JOBS) $(if $(KINDS),--kinds "$(KINDS)",) --model-id "$(MODEL_ID)" --region "$(AWS_REGION)" $(if $(PROMPT_FILE),--prompt-file "$(PROMPT_FILE)",) --aws-profile "$(AWS_PROFILE)" $(if $(SKIP_EXISTING),--skip-existing,) 2>&1 | tee "$(OUT)/logs/hierarchy-orchestrator.log"
 
 floc:
 	$(PYTHON) export_sap_floc.py --input "$(INPUT)" --output-dir "$(OUT)" --limit $(LIMIT)

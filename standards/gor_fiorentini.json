@@ -1,0 +1,89 @@
+{
+  "name": "GOR Fiorentini — Italian CAD conventions on KSDM160104 numbering",
+  "standard_id": "gor_fiorentini",
+  "tag_unit_prefix_pattern": "^(\\d{3})([A-Z]{1,4})[-]?(\\d+)(.*)$",
+  "line_tag_pattern": "^\\d{3}L-\\d+$",
+  "motor_suffix_patterns": ["-M\\d+$"],
+  "motor_from_equipment": {
+    "mode": "append_suffix",
+    "suffix": "-M1",
+    "example": "168P-410 → 168P-410-M1"
+  },
+  "driven_patterns": {
+    "pump": "^\\d{3}P-\\d+$",
+    "agitator": "^\\d{3}A-\\d+$"
+  },
+  "tag_prefix_rules": {
+    "P": "701",
+    "A": "2001",
+    "T": "601",
+    "E": "2000",
+    "F": "2000"
+  },
+  "layers": {
+    "valves":            "1-VALVE TEXT GOR",
+    "instruments":       "1-TAG AND INSTRUMENTS GOR",
+    "process_equipment": "1-EQUIPMENT GOR",
+    "pipe_markers":      "Revison 03"
+  },
+  "blocks": {
+    "TAG VALVOLA": "valve",
+    "LOOPDCS":     "instrument",
+    "Pipeno":      "pipe_line",
+    "COIL":        "process_equipment"
+  },
+  "tipo_valvola_map": {
+    "BF_6prefix": "AV",
+    "BF_other":   "NC",
+    "LWE":        "NC",
+    "IT":         "NC",
+    "ST":         "SV",
+    "VX":         "AV",
+    "FL":         null
+  },
+  "tipo_valvola_descriptions": {
+    "BF":  "BUTTERFLY VLV",
+    "LWE": "SOLENOID NC VLV",
+    "IT":  "ISOLATION TAP VLV",
+    "VX":  "3-WAY SOL VLV",
+    "ST":  "SAFETY VLV",
+    "FL":  "BLIND FLANGE"
+  },
+  "instrument_letter_map": {
+    "TC":  "TEMP CTRL",
+    "TT":  "TEMP TRANS",
+    "TA":  "TEMP ALRM",
+    "TI":  "TEMP IND",
+    "TV":  "TEMP VLV",
+    "PT":  "PRES TRANS",
+    "PC":  "PRES CTRL",
+    "PI":  "PRES IND",
+    "FT":  "FLOW TRANS",
+    "FC":  "FLOW CTRL",
+    "FV":  "FLOW VLV",
+    "LC":  "LVL CTRL",
+    "LT":  "LVL TRANS",
+    "LI":  "LVL IND",
+    "HC":  "HUM CTRL",
+    "HS":  "HND SW",
+    "HI":  "HND IND",
+    "GSO": "GAS SO",
+    "GSC": "GAS SC",
+    "ST":  "SAFETY VLV",
+    "M":   "MTR",
+    "E":   "HEAT EXCH",
+    "P":   "PMP",
+    "F":   "FAN"
+  },
+  "function_id_pattern": "^WU\\d+$",
+  "pipe_data_format": "{size}-{class}-{spec}",
+  "code03_valve_type_rules": {
+    "KV_in_tag":              "AV",
+    "digit_V_hyphen_digit":   "NC",
+    "default":                "HV"
+  },
+  "valve_layers": ["1-VALVE TEXT GOR"],
+  "instrument_layers": ["1-TAG AND INSTRUMENTS GOR"],
+  "equipment_layers": ["1-EQUIPMENT GOR"],
+  "notes": "GOR S.r.l. Italian P&ID conventions. Code 14 drawings use TAG VALVOLA blocks with TIPO_VALVOLA attributes that encode the valve family and nominal size (e.g. 2K0-BF-65). Code 03/13 drawings use free text labels only — valve type must be inferred from tag pattern. Both use KSDM160104 numbering with a 3-digit unit prefix (168 = drawing area) instead of the standard xyy area code."
+}
