@@ -62,6 +62,8 @@ _TISSUE_HIER_TAG_RE = re.compile(
     re.I,
 )
 _WU_FN_RE = re.compile(r"^WU\d+$", re.I)
+# Matches plain line tags like 35-24-032 or 35-24-1089 (no letter prefix)
+_LINE_FN_RE = re.compile(r"^\d{2}-\d{2}-\d+$")
 
 PRIMARY_CATEGORIES = {"tanks", "process_equipment", "pumps", "agitators"}
 PARENT_PRIORITY = {
@@ -70,6 +72,179 @@ PARENT_PRIORITY = {
     "pumps": 2,
     "agitators": 3,
 }
+
+
+def _line_network_context(
+    tag: str,
+    inventory: Dict[str, Any],
+) -> Tuple[str, List[str]]:
+    """Build structured line-branch context for LINE-type FUNCTIONs.
+
+    Returns (context_text, extra_candidates).  context_text is empty and
+    extra_candidates is [] when tag is not a plain line tag (35-24-NNN).
+
+    Uses fluid-code (line_type) matching: branches of a distribution header
+    share its pipe specification.  Function-level headers (other 35-24-NNN
+    tags being scored by the orchestrator) are excluded so only leaf branches
+    appear as candidates.
+    """
+    want = normalize_tag(tag)
+    if not _LINE_FN_RE.match(want):
+        return "", []
+
+    area = want[:5]  # "35-24"
+    # Sequence as stored in the inventory (e.g. "032" for 35-24-032)
+    fn_seq = want.rsplit("-", 1)[-1]
+
+    # Look up this header's own line_type, nominal_size, and center position
+    fn_lt: str = ""
+    fn_size: str = ""
+    fn_x: Optional[float] = None
+    fn_y: Optional[float] = None
+    for line in inventory.get("lines") or []:
+        raw = str(line.get("line_number") or "").strip().upper()
+        m = re.match(r"^(\d{2}-\d{2}-(\d+))", raw)
+        if m and m.group(2) == fn_seq and raw.startswith(area):
+            fn_lt = str(line.get("line_type") or "").upper()
+            fn_size = str(line.get("nominal_size") or "")
+            try:
+                fn_x = float(line.get("x") or 0) or None
+                fn_y = float(line.get("y") or 0) or None
+            except (TypeError, ValueError):
+                pass
+            break
+
+    # Crop radius used by the orchestrator's viewer shot (approximate).
+    # Candidates within this radius are "NEARBY" — likely in the visible crop.
+    _CROP_RADIUS = 200.0
+
+    # Build the set of all FUNCTION-level headers (= other tags the orchestrator
+    # processes; do not list them as branch candidates of each other).
+    function_shorts: set = set()
+    for fn in inventory.get("functions") or []:
+        ft = str(fn.get("function") or "").strip().upper().replace(" ", "")
+        m = re.match(r"^(\d{2}-\d{2}-\d+)$", ft)
+        if m:
+            function_shorts.add(m.group(1))
+    # Also exclude the current tag itself
+    function_shorts.add(want)
+
+    # Collect same-fluid SIBLING function headers (other LINE FUNCTIONs sharing
+    # the same fluid code).  These must appear as PEERS, never as children.
+    sibling_fn_headers: List[str] = []
+    if fn_lt:
+        for line in inventory.get("lines") or []:
+            raw = str(line.get("line_number") or "").strip().upper()
+            m2 = re.match(r"^(\d{2}-\d{2}-(\d+))", raw)
+            if not m2:
+                continue
+            sib_short = m2.group(1)
+            if sib_short == want or not sib_short.startswith(area):
+                continue
+            if sib_short in function_shorts and str(line.get("line_type") or "").upper() == fn_lt:
+                sibling_fn_headers.append(sib_short)
+    sibling_fn_headers = sorted(set(sibling_fn_headers))
+
+    # Collect all non-header line labels in the same plant area, with distance
+    same_fluid: List[Tuple[str, str, str, bool]] = []  # (short, lt, size, nearby)
+    diff_fluid: List[Tuple[str, str, str, bool]] = []
+    seen: set = set()
+    for line in inventory.get("lines") or []:
+        raw = str(line.get("line_number") or "").strip().upper()
+        m = re.match(r"^(\d{2}-\d{2}-\d+)", raw)
+        if not m:
+            continue
+        short = m.group(1)
+        if short in seen or not short.startswith(area):
+            continue
+        lt = str(line.get("line_type") or "").upper()
+        is_same_fluid = lt and lt == fn_lt
+        # Same-fluid function headers are excluded: they are sibling distribution
+        # headers (listed in the SIBLING section) and must never be branch candidates.
+        # Diff-fluid function headers CAN be children — a connected branch of different
+        # fluid is a legitimate EQUIPMENT child even if it is itself a function header.
+        if is_same_fluid and short in function_shorts:
+            continue
+        seen.add(short)
+        size = str(line.get("nominal_size") or "")
+        # Determine if this candidate is within the crop window
+        nearby = False
+        if fn_x is not None:
+            try:
+                lx = float(line.get("x") or 0)
+                ly = float(line.get("y") or 0)
+                dist = ((lx - fn_x) ** 2 + (ly - fn_y) ** 2) ** 0.5
+                nearby = dist <= _CROP_RADIUS
+            except (TypeError, ValueError):
+                pass
+        if is_same_fluid:
+            same_fluid.append((short, lt, size, nearby))
+        else:
+            diff_fluid.append((short, lt, size, nearby))
+
+    same_fluid.sort()
+    diff_fluid.sort()
+
+    # If a lower-numbered sibling header shares this fluid code AND the pool has
+    # actual same-fluid non-header branches to allocate, that sibling is the
+    # "primary" header.  Downgrade TIGHT CIRCUIT to SHARED FLUID so this function
+    # only claims branches it can visually confirm (NEARBY), rather than
+    # auto-including branches that likely belong to the primary sibling.
+    # When the pool is empty (pool=0), framing doesn't affect same-fluid allocation,
+    # so we keep TIGHT CIRCUIT to avoid changing diff-fluid visual-confirm behavior.
+    has_lower_sibling = any(sib < want for sib in sibling_fn_headers)
+    downgrade_to_shared = has_lower_sibling and len(same_fluid) > 0
+
+    # Tight-circuit: pool ≤15 non-header candidates, and not downgraded by a
+    # lower-numbered same-fluid sibling with actual branch candidates to share.
+    tight_circuit = len(same_fluid) <= 15 and not downgrade_to_shared
+
+    # Nearby same-fluid count (within crop area)
+    nearby_same = sum(1 for _, _, _, nb in same_fluid if nb)
+
+    # Format the dossier section
+    if tight_circuit:
+        circuit_label = (
+            f"TIGHT CIRCUIT ({len(same_fluid)} same-fluid lines"
+            f" — include ALL as EQUIPMENT children)"
+        )
+    else:
+        circuit_label = (
+            f"SHARED FLUID ({len(same_fluid)} same-fluid candidates, {nearby_same} NEARBY in crop"
+            f" — multiple headers share [{fn_lt}]. Include NEARBY same-fluid lines as EQUIPMENT."
+            f" For lines NOT NEARBY, only include if visibly connected in image.)"
+        )
+    parts = [
+        f"LINE NETWORK CONTEXT for {want} ({fn_lt or '?'} / {fn_size or '?'} mm): {circuit_label}",
+    ]
+    # Show sibling function headers before the branch list so the AI knows to
+    # put them in peers and not claim them as EQUIPMENT children.
+    if sibling_fn_headers:
+        parts.append(
+            f"⚠ SIBLING [{fn_lt or '?'}] FUNCTION HEADERS — put in peers, NEVER as EQUIPMENT children:"
+        )
+        for sib in sibling_fn_headers[:25]:
+            parts.append(f"  {sib}  [{fn_lt}]  FUNCTION-HEADER  → peers only")
+    parts.append(f"Non-header lines with SAME fluid code [{fn_lt or '?'}] in this plant area:")
+    if same_fluid:
+        for short, lt, size, nb in same_fluid[:40]:
+            proximity = "NEARBY" if nb else "DISTANT"
+            parts.append(f"  {short}  [{lt}/{size}mm]  SAME-FLUID  {proximity}")
+    else:
+        parts.append("  (none with identical fluid code in this area)")
+    if diff_fluid:
+        parts.append("Non-header lines with DIFFERENT fluid code — include only if visibly connected:")
+        for short, lt, size, nb in diff_fluid[:20]:
+            proximity = "NEARBY" if nb else "DISTANT"
+            parts.append(f"  {short}  [{lt}/{size}mm]  DIFF-FLUID  {proximity}")
+
+    context_text = "\n".join(parts)
+    # Return same-fluid first (high-priority candidates), then diff-fluid
+    extra_candidates = (
+        [s for s, _, _, _ in same_fluid[:40]]
+        + [s for s, _, _, _ in diff_fluid[:20]]
+    )
+    return context_text, extra_candidates
 
 
 def build_equipment_dossier(
@@ -205,6 +380,12 @@ def build_equipment_dossier(
         "Nearby drawing text tokens:",
         *([f"- {x}" for x in uniq(texts, 40)] or ["- (none)"]),
     ]
+    # For LINE-type functions, append full network context (fluid-code branch list)
+    if inventory and _LINE_FN_RE.match(want):
+        lnet_text, _ = _line_network_context(want, inventory)
+        if lnet_text:
+            parts.append("")
+            parts.append(lnet_text)
     return "\n".join(parts)
 
 def title_context(
@@ -351,6 +532,17 @@ def collect_candidate_tags(
                         consider(item.get("text") or item.get("value") or item.get("tag"), x, y, weight=1.3)
 
     found.setdefault(want, 0.0)
+
+    # For LINE-type functions, add ALL same-fluid branch lines as candidates
+    # (radius filtering alone misses far-away branches of distribution headers).
+    if inventory and _LINE_FN_RE.match(want):
+        _, extra_cands = _line_network_context(want, inventory)
+        for tok in extra_cands:
+            tok_n = normalize_tag(tok)
+            if tok_n and tok_n not in found:
+                # Score 5000 = low priority vs nearby items (scored 0–radius)
+                found[tok_n] = 5000.0
+
     # Keep candidates in the same plant/area family as the parent when possible
     prefix = plant_prefix(want)
     ordered = [

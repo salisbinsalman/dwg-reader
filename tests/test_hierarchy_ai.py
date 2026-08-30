@@ -14,6 +14,8 @@ from typing import Any, Dict, List, Optional
 
 from dwg_reader.dwg_pid_hierarchy_ai import (
     _fn_numeric,
+    _LINE_FN_RE,
+    _line_network_context,
     _motor_matches_fn,
     canonicalize_vision_tag,
     extract_json_object,
@@ -999,6 +1001,104 @@ class EndToEndTests(unittest.TestCase):
         fn_row = csv_rows[2]
         self.assertEqual(fn_row["SUB-PROCESS"], "BR1")
         self.assertEqual(fn_row["FUNCTION"], "35-24P519")
+
+
+# ---------------------------------------------------------------------------
+# _line_network_context — fluid-code branch candidate builder
+# ---------------------------------------------------------------------------
+
+def _make_inventory(header_tag: str, header_lt: str, header_size: str,
+                    branches: list, header_x: float = 0.0, header_y: float = 0.0,
+                    other_headers: list = None) -> dict:
+    """Build a minimal inventory dict for _line_network_context tests."""
+    area = header_tag[:5]
+    header_seq = header_tag.rsplit("-", 1)[-1]
+    lines = [
+        {
+            "line_number": f"{area}-{header_seq}-{header_lt}-{header_size}-E",
+            "line_type": header_lt,
+            "nominal_size": header_size,
+            "x": header_x,
+            "y": header_y,
+        }
+    ]
+    for b_tag, b_lt, b_size, bx, by in branches:
+        bseq = b_tag.rsplit("-", 1)[-1]
+        lines.append({
+            "line_number": f"{area}-{bseq}-{b_lt}-{b_size}-E",
+            "line_type": b_lt,
+            "nominal_size": b_size,
+            "x": bx,
+            "y": by,
+        })
+    functions = [{"function": header_tag, "x": header_x, "y": header_y}]
+    for ht in (other_headers or []):
+        functions.append({"function": ht, "x": 9999.0, "y": 9999.0})
+    return {"lines": lines, "functions": functions}
+
+
+class LineNetworkContextTests(unittest.TestCase):
+
+    def test_non_line_tag_returns_empty(self):
+        """EQUIP-type functions (L/P/T prefix) get no line network context."""
+        text, cands = _line_network_context("35-24L004", {})
+        self.assertEqual(text, "")
+        self.assertEqual(cands, [])
+
+    def test_tight_circuit_small_pool(self):
+        """Pool ≤ 15 → TIGHT CIRCUIT label; all same-fluid lines included."""
+        branches = [
+            ("35-24-003", "WFC", "15", 200.0, 100.0),
+            ("35-24-005", "WFC", "15", 300.0, 100.0),
+            ("35-24-020", "WFC", "15", 400.0, 100.0),
+        ]
+        inv = _make_inventory("35-24-215", "WFC", "200", branches,
+                              header_x=50.0, header_y=50.0)
+        text, cands = _line_network_context("35-24-215", inv)
+        self.assertIn("TIGHT CIRCUIT", text)
+        self.assertIn("35-24-003", text)
+        self.assertIn("35-24-003", cands)
+        self.assertIn("35-24-020", cands)
+        # TIGHT CIRCUIT still shows proximity tags but instructs AI to include all
+
+    def test_shared_fluid_nearby_tagging(self):
+        """Pool > 15 → SHARED FLUID; branches within 200 units are NEARBY."""
+        branches = []
+        # 16 same-fluid branches; first 3 within 200 units of header
+        for i in range(16):
+            xpos = 50.0 + (i * 50.0) if i < 3 else 50.0 + (i * 500.0)
+            branches.append((f"35-24-{100+i:03d}", "WAF", "150", xpos, 50.0))
+        inv = _make_inventory("35-24-032", "WAF", "300", branches,
+                              header_x=50.0, header_y=50.0)
+        text, cands = _line_network_context("35-24-032", inv)
+        self.assertIn("SHARED FLUID", text)
+        nearby = [l for l in text.split("\n") if "NEARBY" in l and "SAME-FLUID" in l]
+        distant = [l for l in text.split("\n") if "DISTANT" in l and "SAME-FLUID" in l]
+        self.assertGreater(len(nearby), 0)
+        self.assertGreater(len(distant), 0)
+
+    def test_function_headers_excluded_from_pool(self):
+        """Other LINE FUNCTION headers must not appear in the candidate pool."""
+        branches = [("35-24-030", "WAF", "100", 100.0, 100.0)]
+        inv = _make_inventory("35-24-017", "WAF", "300", branches,
+                              header_x=0.0, header_y=0.0,
+                              other_headers=["35-24-032"])
+        # 35-24-032 is another FUNCTION header — it should NOT appear as a candidate
+        _, cands = _line_network_context("35-24-017", inv)
+        self.assertNotIn("35-24-032", cands)
+        self.assertIn("35-24-030", cands)
+
+    def test_diff_fluid_included_as_candidates(self):
+        """Different-fluid branches are listed as DIFF-FLUID candidates."""
+        branches = [
+            ("35-24-010", "WAF", "100", 100.0, 100.0),
+            ("35-24-011", "PP", "250", 200.0, 100.0),
+        ]
+        inv = _make_inventory("35-24-017", "WAF", "300", branches,
+                              header_x=0.0, header_y=0.0)
+        text, cands = _line_network_context("35-24-017", inv)
+        self.assertIn("DIFF-FLUID", text)
+        self.assertIn("35-24-011", cands)
 
 
 if __name__ == "__main__":

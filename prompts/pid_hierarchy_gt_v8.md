@@ -71,14 +71,18 @@ SUB-EQUIPMENT rows (nested under the line they physically sit on):
 When $tag is a line number (`35-24-NNN`), the FUNCTION is the header line itself.
 Children are connected branches / spools plus valves and instruments on that circuit.
 Do NOT attach neighbouring vessels or pumps as children.
+
 ```
 FUNCTION=35-24-008  description=35-24-008 PROC LINE
 EQUIPMENT:
-  35-24-1089           ← branch / spool off this header
-SUB-EQUIPMENT under that spool:
-  35-24PI-9252, 35-24FI-9253, 35-24FS-506
+  35-24-1089           ← branch / spool off this header (may be a different fluid type)
+SUB-EQUIPMENT under 35-24-1089:
+  35-24PI-9252, 35-24FI-9253, 35-24FS-506   ← instruments on that spool
 ```
-Typical line pattern: one EQUIPMENT branch, then PI / FI / FS (or HV/HS/HI triplets) nested under it.
+Typical line pattern: one EQUIPMENT branch (the specific spool visible in the crop), then PI / FI / FS (or TV/TC/HV triplets) nested **under that branch** as SUB-EQUIPMENT.
+Never list PI/FI/FS/TV/TC/FS instruments as flat EQUIPMENT siblings of the branch line.
+They are always SUB-EQUIPMENT nested *under* the EQUIPMENT line they physically sit on.
+
 If $tag is an instrument (LC/PI/FV/XS/…) and no labelled accessories sit on it, emit the FUNCTION header + description only — empty `rows` is correct.
 
 ---
@@ -122,7 +126,31 @@ If $tag is an instrument (LC/PI/FV/XS/…) and no labelled accessories sit on it
     - No sentences, no commas if avoidable, no quotes
 11. **Motor / branch numeric rule**: a motor or branch tag ending `.1` / `.2` must share the same numeric base as $tag. For FUNCTION `35-24L004` include `35-24-004.1` ✓ but NOT `35-24-003.1` ✗. If a motor/branch does not match — even if visible in the image — put it in `peers`.
 12. **Scope boundary**: the crop shows neighbouring systems too. Only include a line/instrument/valve as a child if it is clearly labelled as part of $tag's own circuit. If a tag's numeric base or label belongs to a different function, put it in `peers` or omit it entirely.
-13. **Line FUNCTION**: if $tag looks like `35-24-NNN` (no L/P/T letter), treat it as a piping header. Prefer branches + on-line instruments/valves. Never list a vessel/pump (L### / P### / T###) as a child of a line FUNCTION.
+13. **Line FUNCTION hierarchy via fluid-code affinity**:
+    When $tag looks like `35-24-NNN` (no L/P/T letter), it is a piping distribution header.
+    The CAD dossier includes a **LINE NETWORK CONTEXT** block with:
+
+    **⚠ SIBLING FUNCTION HEADERS** (if any): other `35-24-NNN` FUNCTION tags that share the
+    same fluid code. **Always put sibling headers in `peers`, never as EQUIPMENT children.**
+    Even if a sibling tag is visible in the crop or has the same fluid code, it is a
+    parallel/return header — not a spur off $tag. Example: `35-24-216 [WFC] → peers only`.
+
+    **Circuit label** (governs how to pick branch lines):
+    - **TIGHT CIRCUIT** (same-fluid pool ≤15 non-header lines): all SAME-FLUID lines in the
+      area belong exclusively to this header — **include ALL of them as EQUIPMENT children**,
+      even if not visible in the current crop. They are distribution spurs served by this header.
+    - **SHARED FLUID**: the fluid type is served by multiple headers in the area. Each
+      candidate is tagged **NEARBY** (within the visible crop window) or **DISTANT**:
+        - **NEARBY SAME-FLUID** lines: **include as EQUIPMENT children** — they are in the
+          crop area and belong to this header rather than a distant neighbour.
+        - **DISTANT SAME-FLUID** lines: only include if visibly connected to $tag's pipe run
+          in the image. Skip lines that appear to belong to a different header's region.
+      This lets the AI claim the correct local branches without mass-grabbing the full pool.
+    - Lines marked **DIFF-FLUID** should only be included if you can see them physically
+      connected to this header's circuit in the image.
+    - Never list a vessel/pump/agitator (L###/P###/T###) as a child of a line FUNCTION.
+    - After injecting EQUIPMENT lines, nest any bowtie-valve or measurement instrument
+      symbols visible on those branches as SUB-EQUIPMENT underneath them.
 14. **Valve child descriptions — type token**: a P&ID legend is provided as Image 2.
     For each valve child you emit (tag prefix HV/FV/XV/LV/CV/PV/BV, **or a plain `35-24-NNN` bowtie symbol**),
     look at its symbol body + all attachments in Image 1 and append token(s) to its `description`:

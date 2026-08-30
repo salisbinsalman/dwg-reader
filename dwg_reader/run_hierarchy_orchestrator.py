@@ -903,6 +903,10 @@ _MACHINE_FN_RE = re.compile(r"^\d{2}-\d{2}[LPT]\d+$", re.I)
 _HV_TAG_RE = re.compile(r"^(\d{2}-\d{2})HV-(\d+)$", re.I)
 _KV_TAG_RE = re.compile(r"^(\d{2}-\d{2})KV-(\d+)$", re.I)
 _FC_TAG_RE = re.compile(r"^(\d{2}-\d{2})FC-(\d+)$", re.I)
+# XV = solenoid isolating valve; its actuator pair is XS (solenoid switch)
+_XV_TAG_RE = re.compile(r"^(\d{2}-\d{2})XV-(\d+)$", re.I)
+# TV = temperature control valve; paired with XS
+_TV_TAG_RE = re.compile(r"^(\d{2}-\d{2})TV-(\d+)$", re.I)
 
 
 def _append_missing_machine_functions(
@@ -993,6 +997,10 @@ _INSTR_CHILDREN: List[tuple] = [
     (_HV_TAG_RE, [("HI", "HND IND"), ("HS", "HND SW")]),
     (_KV_TAG_RE, [("KS", "SOL SW")]),
     (_FC_TAG_RE, [("FV", "FLOW VLV")]),
+    # XV solenoid isolating valve → XS position switch
+    (_XV_TAG_RE, [("XS", "SOL SW")]),
+    # TV temperature/throttle valve → XS position switch
+    (_TV_TAG_RE, [("XS", "SOL SW")]),
 ]
 
 
