@@ -73,6 +73,7 @@ class CliWrapperTests(unittest.TestCase):
         "dwg_pid_enrich",
         "dwg_pid_hierarchy_ai",
         "dwg_valve_classify",
+        "dwg_agitator_bind",
         "run_hierarchy_orchestrator",
         "export_sap_floc",
         "export_sap_equipment",
@@ -98,10 +99,12 @@ class CliWrapperTests(unittest.TestCase):
         self.assertTrue(callable(run_hierarchy_from_args))
 
     def test_valve_and_export_library_entrypoints(self) -> None:
+        from dwg_reader.dwg_agitator_bind import run_agitator_bind
         from dwg_reader.dwg_valve_classify import run_valve_classify
         from dwg_reader.export_sap_equipment import run_equipment_export
         from dwg_reader.export_sap_floc import run_floc_export
 
+        self.assertTrue(callable(run_agitator_bind))
         self.assertTrue(callable(run_valve_classify))
         self.assertTrue(callable(run_equipment_export))
         self.assertTrue(callable(run_floc_export))

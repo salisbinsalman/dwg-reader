@@ -104,6 +104,10 @@ valve-classify:
 	@mkdir -p "$(OUT)/logs"
 	AWS_PROFILE="$(AWS_PROFILE)" PYTHONUNBUFFERED=1 $(PYTHON) dwg_valve_classify.py --input "$(INPUT)" --output-dir "$(OUT)" --model-id "$(MODEL_ID)" --region "$(AWS_REGION)" --jobs $(JOBS) $(if $(SKIP_EXISTING),--skip-existing,) 2>&1 | tee "$(OUT)/logs/valve-classify.log"
 
+agitator-bind:
+	@mkdir -p "$(OUT)/logs"
+	AWS_PROFILE="$(AWS_PROFILE)" PYTHONUNBUFFERED=1 $(PYTHON) dwg_agitator_bind.py --input "$(INPUT)" --output-dir "$(OUT)" --model-id "$(MODEL_ID)" --region "$(AWS_REGION)" $(if $(SKIP_EXISTING),--skip-existing,) 2>&1 | tee "$(OUT)/logs/agitator-bind.log"
+
 sap: floc equipment
 
 floc-test:

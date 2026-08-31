@@ -232,5 +232,183 @@ class MissingMachineFunctionTests(unittest.TestCase):
             self.assertEqual(_append_missing_machine_functions(hier, inv_path), 0)
 
 
+class AgitatorBindStepTests(unittest.TestCase):
+    """C-09: run_agitator_bind coverage + vision fallback (no Bedrock)."""
+
+    def _write(self, td: Path, rows, inv, structural=None):
+        from dwg_reader.run_hierarchy_orchestrator import write_hierarchy_csv
+        import json
+
+        hier = td / "Broke System.hierarchy_orchestrator.csv"
+        write_hierarchy_csv(hier, rows)
+        inv_path = td / "inv.json"
+        inv_path.write_text(json.dumps(inv), encoding="utf-8")
+        struct_path = None
+        if structural is not None:
+            struct_path = td / "struct.json"
+            struct_path.write_text(json.dumps(structural), encoding="utf-8")
+        return hier, inv_path, struct_path
+
+    def test_parse_propeller_reply(self) -> None:
+        from dwg_reader.dwg_agitator_bind import parse_propeller_reply
+
+        self.assertTrue(parse_propeller_reply('{"propeller": true}'))
+        self.assertFalse(parse_propeller_reply('{"propeller": false}'))
+        self.assertTrue(parse_propeller_reply('Sure.\n{"propeller": true}\n'))
+        self.assertFalse(parse_propeller_reply("nope"))
+
+    def test_vessel_coverage_flags_tank_without_agitator(self) -> None:
+        from dwg_reader.dwg_agitator_bind import run_agitator_bind
+
+        with tempfile.TemporaryDirectory() as td:
+            td_path = Path(td)
+            hier, inv_path, _ = self._write(
+                td_path,
+                [
+                    {
+                        "SUB-PROCESS": "",
+                        "FUNCTION": "35-24T606",
+                        "EQUIPMENT": "",
+                        "SUB-EQUIPMENT": "",
+                        "MASK": "",
+                        "DESCRIPTION": "BROKE REJECT TANK",
+                    },
+                ],
+                {"functions": [{"function": "35-24T606", "x": 100.0, "y": 100.0}], "agitators": []},
+            )
+            report = run_agitator_bind(
+                hierarchy_csv=hier,
+                inventory_json=inv_path,
+                out_dir=td_path,
+                input_path=Path("inputs/Broke System.dwg"),
+                vision=False,
+            )
+            self.assertEqual(report["tanks_without_agitator"], ["35-24T606"])
+            self.assertEqual(report["tanks_with_agitator"], [])
+            cache = td_path / "jsons" / "Broke System.agitator_bind.json"
+            self.assertTrue(cache.is_file())
+
+    def test_vision_yes_binds_nearby_l4xx(self) -> None:
+        from dwg_reader.dwg_agitator_bind import run_agitator_bind
+        from dwg_reader.run_hierarchy_orchestrator import read_hierarchy_csv
+
+        structural = {
+            "text_entities": [
+                {
+                    "text": "35-24L404",
+                    "layer": "P-AGITATOR_POS",
+                    "position": [102.0, 98.0, 0.0],
+                },
+                {
+                    "text": "BROKE REJECT",
+                    "layer": "P-TANK_POS",
+                    "position": [100.0, 90.0, 0.0],
+                },
+            ]
+        }
+        with tempfile.TemporaryDirectory() as td:
+            td_path = Path(td)
+            hier, inv_path, struct_path = self._write(
+                td_path,
+                [
+                    {
+                        "SUB-PROCESS": "",
+                        "FUNCTION": "35-24T606",
+                        "EQUIPMENT": "",
+                        "SUB-EQUIPMENT": "",
+                        "MASK": "",
+                        "DESCRIPTION": "BROKE REJECT TANK",
+                    },
+                ],
+                {"functions": [{"function": "35-24T606", "x": 100.0, "y": 100.0}], "agitators": []},
+                structural,
+            )
+            report = run_agitator_bind(
+                hierarchy_csv=hier,
+                inventory_json=inv_path,
+                structural_json=struct_path,
+                out_dir=td_path,
+                input_path=Path("inputs/Broke System.dwg"),
+                vision=True,
+                vision_detect=lambda _fn, _crop: True,
+            )
+            self.assertEqual(report["untagged_propellers"], [])
+            rows = read_hierarchy_csv(hier)
+            tags = [r.get("EQUIPMENT") for r in rows if r.get("EQUIPMENT")]
+            self.assertIn("35-24L404", tags)
+            self.assertIn("35-24T606", report["tanks_with_agitator"])
+
+    def test_vision_yes_without_tag_does_not_invent(self) -> None:
+        from dwg_reader.dwg_agitator_bind import run_agitator_bind
+        from dwg_reader.run_hierarchy_orchestrator import read_hierarchy_csv
+
+        with tempfile.TemporaryDirectory() as td:
+            td_path = Path(td)
+            hier, inv_path, struct_path = self._write(
+                td_path,
+                [
+                    {
+                        "SUB-PROCESS": "",
+                        "FUNCTION": "35-24T606",
+                        "EQUIPMENT": "",
+                        "SUB-EQUIPMENT": "",
+                        "MASK": "",
+                        "DESCRIPTION": "BROKE REJECT TANK",
+                    },
+                ],
+                {"functions": [{"function": "35-24T606", "x": 100.0, "y": 100.0}], "agitators": []},
+                {"text_entities": []},
+            )
+            report = run_agitator_bind(
+                hierarchy_csv=hier,
+                inventory_json=inv_path,
+                structural_json=struct_path,
+                out_dir=td_path,
+                input_path=Path("inputs/Broke System.dwg"),
+                vision=True,
+                vision_detect=lambda _fn, _crop: True,
+            )
+            self.assertEqual(report["untagged_propellers"], ["35-24T606"])
+            rows = read_hierarchy_csv(hier)
+            tags = [r.get("EQUIPMENT") for r in rows if r.get("EQUIPMENT")]
+            self.assertEqual(tags, [])
+            self.assertTrue(any(r.get("EQUIPMENT", "").startswith("35-24L") for r in rows) is False)
+
+    def test_vision_no_leaves_tank_alone(self) -> None:
+        from dwg_reader.dwg_agitator_bind import run_agitator_bind
+        from dwg_reader.run_hierarchy_orchestrator import read_hierarchy_csv
+
+        with tempfile.TemporaryDirectory() as td:
+            td_path = Path(td)
+            hier, inv_path, struct_path = self._write(
+                td_path,
+                [
+                    {
+                        "SUB-PROCESS": "",
+                        "FUNCTION": "35-24L001",
+                        "EQUIPMENT": "",
+                        "SUB-EQUIPMENT": "",
+                        "MASK": "",
+                        "DESCRIPTION": "PRESS PLPR",
+                    },
+                ],
+                {"functions": [{"function": "35-24L001", "x": 50.0, "y": 50.0}], "agitators": []},
+                {"text_entities": []},
+            )
+            report = run_agitator_bind(
+                hierarchy_csv=hier,
+                inventory_json=inv_path,
+                structural_json=struct_path,
+                out_dir=td_path,
+                input_path=Path("inputs/Broke System.dwg"),
+                vision=True,
+                vision_detect=lambda _fn, _crop: False,
+            )
+            self.assertEqual(report["tanks_without_agitator"], ["35-24L001"])
+            self.assertFalse(any(v.get("propeller") for v in report["vision"]))
+            rows = read_hierarchy_csv(hier)
+            self.assertEqual([r.get("EQUIPMENT") for r in rows if r.get("EQUIPMENT")], [])
+
+
 if __name__ == "__main__":
     unittest.main()
