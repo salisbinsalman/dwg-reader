@@ -382,7 +382,11 @@ class FlocLnPrefixVerificationTests(unittest.TestCase):
     def test_numeric_pipeline_translates_flow_code(self):
         r = self._fn_row_for("35-24-016", "35-24-016 WAF 250 DIST HDR")
         self.assertNotIn("WAF", r["PLTXT"])
-        self.assertIn("WHITE WTR", r["PLTXT"])
+        # Flow code translated to readable label; abbreviation then converts WHITE WTR→WW
+        self.assertTrue(
+            "WHITE WTR" in r["PLTXT"] or "WW" in r["PLTXT"],
+            f"Expected WHITE WTR or its abbreviation WW, got {r['PLTXT']!r}",
+        )
 
     def test_machine_tag_no_ln_prefix(self):
         """L-coded machine FUNCTION must not receive LN prefix."""
@@ -612,7 +616,8 @@ class ValmetStandardCompletenessTests(unittest.TestCase):
     @unittest.skipUnless(VALMET_STANDARD_JSON.exists(), "requires valmet_ps21.json")
     def test_required_top_level_keys(self):
         required = {"driven_patterns", "motor_from_equipment", "equipment_letter_codes",
-                    "flow_substance_codes", "fimpec_valve_codes"}
+                    "flow_substance_codes", "fimpec_valve_codes",
+                    "location_letter_codes", "location_code_format"}
         missing = required - set(self.data.keys())
         self.assertEqual(missing, set(), f"Missing top-level keys: {missing}")
 
@@ -683,6 +688,17 @@ class ValmetStandardCompletenessTests(unittest.TestCase):
         self.assertIn("SEAL WTR", _clean_line_description("WFL DN15"))
         self.assertIn("CLOUDY FILT", _clean_line_description("WAA LN DN300"))
         self.assertIn("CLG WTR", _clean_line_description("WFC CIRCUIT"))
+
+    @unittest.skipUnless(VALMET_STANDARD_JSON.exists(), "requires valmet_ps21.json")
+    def test_valmet_location_letter_codes_from_process_automation_pdf(self):
+        """H-06: PROCESS AND AUTOMATION.pdf location codes (CB, JBI, CR, …)."""
+        loc = self.data["location_letter_codes"]
+        self.assertEqual(loc["CB"], "Control box")
+        self.assertEqual(loc["JBI"], "Instrument junction box")
+        self.assertEqual(loc["CR"], "PLC / control cabinet / DCS I/O rack")
+        self.assertIn("CD", loc)
+        self.assertIn("JB", loc)
+        self.assertIn("MM-SSAAA-CCC.DD", self.data["location_code_format"])
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -1085,6 +1101,576 @@ class BrokeSystemEndToEndTests(unittest.TestCase):
                    if r["EQUNR"].upper() in ("AGITATOR", "ORPHAN", "FUNCTION", "")]
         self.assertEqual(invalid, [],
                          f"Invalid EQUNR placeholder values in output: {invalid}")
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# D-03 — X-position sort not corrupted by type-bucket
+# ─────────────────────────────────────────────────────────────────────────────
+
+class PositionSortNoBucketTests(unittest.TestCase):
+    """D-03: collect_functions must sort purely by X position, never grouping all
+    machines ahead of all pipelines regardless of position."""
+
+    def _mixed_rows(self, *tags: str) -> list[dict]:
+        """Build rows where each function also has a child so WFL lines survive filter."""
+        rows = []
+        for t in tags:
+            rows.append({"FUNCTION": t, "EQUIPMENT": "", "SUB-EQUIPMENT": "",
+                          "MASK": "", "DESCRIPTION": f"{t} DESC"})
+            rows.append({"FUNCTION": "", "EQUIPMENT": f"child-{t}", "SUB-EQUIPMENT": "",
+                          "MASK": "", "DESCRIPTION": "VLV"})
+        return rows
+
+    def test_pipeline_before_machine_when_position_says_so(self):
+        """Pipeline at lower X than machine must come first — not grouped by type."""
+        rows = self._mixed_rows("35-24L009", "35-24-026", "35-24P519")
+        positions = {"35-24L009": 500.0, "35-24-026": 100.0, "35-24P519": 300.0}
+        result = collect_functions(rows, filter_utility_lines=False, positions=positions)
+        tags = [t for t, _, _ in result]
+        self.assertEqual(tags, ["35-24-026", "35-24P519", "35-24L009"])
+
+    def test_machine_before_pipeline_when_position_says_so(self):
+        """Machine at lower X must precede pipeline at higher X."""
+        rows = self._mixed_rows("35-24-026", "35-24L009", "35-24P519")
+        positions = {"35-24-026": 400.0, "35-24L009": 100.0, "35-24P519": 250.0}
+        result = collect_functions(rows, filter_utility_lines=False, positions=positions)
+        tags = [t for t, _, _ in result]
+        self.assertEqual(tags, ["35-24L009", "35-24P519", "35-24-026"])
+
+    def test_numeric_sort_pipeline_interleaved_with_machines(self):
+        """Numeric sort: tag number determines order across machine and pipeline tags."""
+        rows = [
+            {"FUNCTION": "35-24L009", "EQUIPMENT": "", "SUB-EQUIPMENT": "", "MASK": "", "DESCRIPTION": "L009"},
+            {"FUNCTION": "35-24-026", "EQUIPMENT": "eq1", "SUB-EQUIPMENT": "", "MASK": "", "DESCRIPTION": "26"},
+            {"FUNCTION": "35-24P519", "EQUIPMENT": "", "SUB-EQUIPMENT": "", "MASK": "", "DESCRIPTION": "P519"},
+            {"FUNCTION": "35-24-008", "EQUIPMENT": "eq2", "SUB-EQUIPMENT": "", "MASK": "", "DESCRIPTION": "8"},
+        ]
+        result = collect_functions(rows, filter_utility_lines=False, sort_by_tag_number=True)
+        tags = [t for t, _, _ in result]
+        # 8 < 9 < 26 < 519
+        self.assertEqual(tags, ["35-24-008", "35-24L009", "35-24-026", "35-24P519"])
+
+    def test_wfl_with_children_not_filtered_position_sort(self):
+        """WFL pipeline with children must survive filter and sort by position."""
+        rows = [
+            {"FUNCTION": "35-24-026", "EQUIPMENT": "", "SUB-EQUIPMENT": "",
+             "MASK": "", "DESCRIPTION": "35-24-026 WFL PROC LN"},
+            {"FUNCTION": "", "EQUIPMENT": "35-24-159", "SUB-EQUIPMENT": "", "MASK": "", "DESCRIPTION": "VLV"},
+            {"FUNCTION": "35-24L009", "EQUIPMENT": "", "SUB-EQUIPMENT": "", "MASK": "", "DESCRIPTION": "PLPR"},
+        ]
+        positions = {"35-24-026": 200.0, "35-24L009": 100.0}
+        result = collect_functions(rows, positions=positions)
+        tags = [t for t, _, _ in result]
+        self.assertIn("35-24-026", tags, "WFL line with child must not be filtered")
+        self.assertIn("35-24L009", tags)
+        self.assertLess(tags.index("35-24L009"), tags.index("35-24-026"))
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# WFL filter — child_count gate (WFL lines with children are kept)
+# ─────────────────────────────────────────────────────────────────────────────
+
+class WflChildCountFilterTests(unittest.TestCase):
+    """WFL lines with children must not be filtered; childless stubs must be."""
+
+    def _wfl_row(self, tag: str, desc: str, has_child: bool) -> list[dict]:
+        rows = [{"FUNCTION": tag, "EQUIPMENT": "", "SUB-EQUIPMENT": "", "MASK": "", "DESCRIPTION": desc}]
+        if has_child:
+            rows.append({"FUNCTION": "", "EQUIPMENT": "35-24-999", "SUB-EQUIPMENT": "",
+                          "MASK": "", "DESCRIPTION": "VLV"})
+        return rows
+
+    def test_wfl_with_child_is_kept(self):
+        """WFL pipeline with at least one equipment child must survive the utility filter."""
+        rows = self._wfl_row("35-24-026", "35-24-026 WFL PROC LN", has_child=True)
+        result = collect_functions(rows)
+        tags = [t for t, _, _ in result]
+        self.assertIn("35-24-026", tags, "WFL line with a child must NOT be filtered")
+
+    def test_wfl_without_child_is_filtered(self):
+        """WFL pipeline with NO children must be filtered as a utility stub."""
+        rows = self._wfl_row("35-24-027", "35-24-027 WFL PROC LN", has_child=False)
+        result = collect_functions(rows)
+        tags = [t for t, _, _ in result]
+        self.assertNotIn("35-24-027", tags, "WFL line without children must be filtered")
+
+    def test_all_ten_broke_wfl_lines_kept(self):
+        """All 10 Broke System WFL sealing-water pipelines survive when they have children."""
+        wfl_tags = [
+            "35-24-026", "35-24-076", "35-24-219", "35-24-104",
+            "35-24-122", "35-24-068", "35-24-024", "35-24-121",
+            "35-24-045", "35-24-042",
+        ]
+        rows: list[dict] = []
+        for tag in wfl_tags:
+            rows.append({"FUNCTION": tag, "EQUIPMENT": "", "SUB-EQUIPMENT": "",
+                          "MASK": f"5001-PM03-BR-BR1-{tag}",
+                          "DESCRIPTION": f"{tag} WFL PROC LN"})
+            rows.append({"FUNCTION": "", "EQUIPMENT": f"child-{tag}", "SUB-EQUIPMENT": "",
+                          "MASK": "", "DESCRIPTION": "VLV"})
+        result = collect_functions(rows)
+        tags_out = [t for t, _, _ in result]
+        missing = [t for t in wfl_tags if t not in tags_out]
+        self.assertEqual(missing, [], f"WFL lines missing from output: {missing}")
+
+    def test_non_wfl_line_never_filtered(self):
+        """Non-WFL pipeline (FLSH WTR) must never be filtered by the WFL gate."""
+        rows = [
+            {"FUNCTION": "35-24-048", "EQUIPMENT": "", "SUB-EQUIPMENT": "",
+             "MASK": "", "DESCRIPTION": "35-24-048 FLSH WTR LN"},
+        ]
+        result = collect_functions(rows)
+        tags = [t for t, _, _ in result]
+        self.assertIn("35-24-048", tags)
+
+    @unittest.skipUnless(HIERARCHY_CSV.exists(), "requires hierarchy orchestrator CSV")
+    def test_real_csv_all_wfl_functions_kept(self):
+        """Integration: all WFL FUNCTIONs in the real Broke System CSV must survive."""
+        rows = list(csv.DictReader(HIERARCHY_CSV.open(encoding="utf-8")))
+        wfl_fns = {r["FUNCTION"].strip() for r in rows
+                   if r.get("FUNCTION", "").strip() and "WFL" in r.get("DESCRIPTION", "").upper()
+                   and not r.get("EQUIPMENT", "").strip()}
+        result = collect_functions(rows)
+        tags_out = {t for t, _, _ in result}
+        missing = wfl_fns - tags_out
+        self.assertEqual(missing, set(), f"Real WFL functions filtered out: {missing}")
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# B-01 (extra coverage) — mid-string LN tokens stripped from pipeline PLTXT
+# ─────────────────────────────────────────────────────────────────────────────
+
+class MidStringLnStripTests(unittest.TestCase):
+    """B-01 edge cases: standalone LN between words must not appear in final PLTXT."""
+
+    def _pltxt(self, tag: str, desc: str) -> str:
+        rows = build_floc_rows([(tag, f"5001-PM03-BR-BR1-{tag}", desc)])
+        fn = next(r for r in rows if r["TPLNR"].endswith(tag))
+        return fn["PLTXT"]
+
+    def test_ln_between_flow_code_and_destination(self):
+        """'35-24-045 WFL LN REEL PLPR RTR1' → no mid-string LN after flow-code translation."""
+        pltxt = self._pltxt("35-24-045", "35-24-045 WFL LN REEL PLPR RTR1")
+        self.assertTrue(pltxt.startswith("LN 35-24-045"), f"got {pltxt!r}")
+        body = pltxt[len("LN 35-24-045"):].strip()
+        self.assertNotRegex(body, r"\bLN\b", f"mid-string LN still present in {pltxt!r}")
+
+    def test_ln_before_size_spec_stripped(self):
+        """'35-24-122 WFL LN 15MM' → mid-string LN removed, prefix LN remains."""
+        pltxt = self._pltxt("35-24-122", "35-24-122 WFL LN 15MM")
+        self.assertTrue(pltxt.startswith("LN 35-24-122"), f"got {pltxt!r}")
+        body = pltxt[len("LN 35-24-122"):].strip()
+        self.assertNotRegex(body, r"\bLN\b", f"mid-string LN in {pltxt!r}")
+
+    def test_trailing_ln_marker_stripped(self):
+        """'35-24-024 WFL GB LBE LN' → trailing LN removed from description body."""
+        pltxt = self._pltxt("35-24-024", "35-24-024 WFL GB LBE LN")
+        self.assertTrue(pltxt.startswith("LN 35-24-024"), f"got {pltxt!r}")
+        body = pltxt[len("LN 35-24-024"):].strip()
+        self.assertNotRegex(body, r"\bLN\b", f"trailing LN survived in {pltxt!r}")
+
+    def test_pltxt_starts_with_ln_tag_always(self):
+        """All pipeline descriptions must produce PLTXT starting with 'LN {tag}'."""
+        cases = [
+            ("35-24-026", "35-24-026 WFL PROC LN"),
+            ("35-24-076", "35-24-076 WFL 15 GB LUB LN"),
+            ("35-24-008", "35-24-008 WFL FLSHG WTR LN 15MM"),
+            ("35-24-048", "35-24-048 FLSH WTR LN"),
+        ]
+        for tag, desc in cases:
+            pltxt = self._pltxt(tag, desc)
+            self.assertTrue(pltxt.startswith(f"LN {tag}"),
+                            f"{tag}: expected 'LN {tag}...' got {pltxt!r}")
+        self.assertNotIn("15MM", self._pltxt("35-24-008", "35-24-008 WFL FLSHG WTR LN 15MM"))
+
+    def test_pltxt_40_char_limit_still_respected(self):
+        """Long descriptions must still be clipped to 40 chars."""
+        pltxt = self._pltxt("35-24-045", "35-24-045 WFL LN REEL PLPR REEL ROLL UNIT RTR1 SIDE A")
+        self.assertLessEqual(len(pltxt), 40, f"PLTXT exceeds 40 chars: {pltxt!r}")
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# B-07 — Valve tag normalisation: all prefix variants, position-digit concat
+# ─────────────────────────────────────────────────────────────────────────────
+
+class ValveTagNormalisationTests(unittest.TestCase):
+    """B-07: strip_valve_prefix covers every valve letter variant correctly."""
+
+    def _strip(self, tag: str) -> str:
+        from dwg_reader.dwg_floc_context import strip_valve_prefix
+        return strip_valve_prefix(tag)
+
+    # ── Core coverage: all 10 declared valve-letter prefixes ──────────────────
+
+    def test_hv_stripped(self):
+        self.assertEqual(self._strip("35-24HV-548"), "35-24-548")
+
+    def test_fv_stripped(self):
+        self.assertEqual(self._strip("35-24FV-570"), "35-24-570")
+
+    def test_lv_no_digit_stripped(self):
+        self.assertEqual(self._strip("35-24LV-621"), "35-24-621")
+
+    def test_xv_stripped(self):
+        self.assertEqual(self._strip("35-24XV-100"), "35-24-100")
+
+    def test_cv_stripped(self):
+        self.assertEqual(self._strip("35-24CV-300"), "35-24-300")
+
+    def test_pv_stripped(self):
+        self.assertEqual(self._strip("35-24PV-200"), "35-24-200")
+
+    def test_bv_stripped(self):
+        self.assertEqual(self._strip("35-24BV-050"), "35-24-050")
+
+    def test_tv_stripped(self):
+        self.assertEqual(self._strip("35-24TV-9251"), "35-24-9251")
+
+    def test_kv_stripped(self):
+        self.assertEqual(self._strip("35-24KV-400"), "35-24-400")
+
+    def test_av_stripped(self):
+        self.assertEqual(self._strip("35-24AV-999"), "35-24-999")
+
+    # ── Position digit: concatenated into number, no extra hyphen ─────────────
+
+    def test_lv2_position_digit_concatenated(self):
+        """LV2-576 → 35-24-2576 (3-segment, not 4-segment 35-24-2-576)."""
+        result = self._strip("35-24LV2-576")
+        self.assertEqual(result, "35-24-2576")
+        self.assertNotIn("-2-576", result, "extra hyphen must not appear")
+
+    def test_lv1_position_digit_concatenated(self):
+        self.assertEqual(self._strip("35-24LV1-560"), "35-24-1560")
+
+    def test_lv1_lv2_same_number_distinct(self):
+        """LV1-513 and LV2-513 must produce different stripped tags."""
+        t1 = self._strip("35-24LV1-513")
+        t2 = self._strip("35-24LV2-513")
+        self.assertNotEqual(t1, t2, "LV1 and LV2 must not collapse to the same tag")
+        self.assertEqual(t1, "35-24-1513")
+        self.assertEqual(t2, "35-24-2513")
+
+    # ── Plain tags are not modified ───────────────────────────────────────────
+
+    def test_plain_pipeline_tag_unchanged(self):
+        self.assertEqual(self._strip("35-24-137"), "35-24-137")
+
+    def test_plain_pipeline_tag_three_digits_unchanged(self):
+        self.assertEqual(self._strip("35-24-026"), "35-24-026")
+
+    # ── format_valve_eqktx uses the stripped tag in the HV prefix slot ────────
+
+    def test_hv_eqktx_uses_stripped_tag(self):
+        result = format_valve_eqktx("35-24HV-548", "35-24L005", "", valve_type_override="AV")
+        self.assertTrue(result.startswith("HV 35-24-548"), result)
+
+    def test_tv_eqktx_uses_stripped_tag(self):
+        result = format_valve_eqktx("35-24TV-9251", "35-24-008", "", valve_type_override="AV")
+        self.assertTrue(result.startswith("HV 35-24-9251"), result)
+
+    def test_lv2_eqktx_uses_concatenated_stripped_tag(self):
+        result = format_valve_eqktx("35-24LV2-576", "35-24P503", "", valve_type_override="AV")
+        self.assertTrue(result.startswith("HV 35-24-2576"), result)
+        self.assertNotIn("-2-576", result, "4-segment tag must not appear in EQKTX")
+
+    def test_fv_eqktx_uses_stripped_tag(self):
+        result = format_valve_eqktx("35-24FV-570", "35-24-026", "", valve_type_override="AV")
+        self.assertTrue(result.startswith("HV 35-24-570"), result)
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# B-04 — Abbreviation table applied in hierarchy tree DESCRIPTION
+# ─────────────────────────────────────────────────────────────────────────────
+
+class HierarchyTreeAbbreviationTests(unittest.TestCase):
+    """B-04: export_hierarchy_tree.py applies normalize_pltxt to descriptions."""
+
+    def _tree_desc_for(self, eq_tag: str, raw_desc: str) -> str:
+        from dwg_reader.export_hierarchy_tree import build_tree_rows
+        rows = [
+            {"FUNCTION": "35-24L009", "EQUIPMENT": "", "SUB-EQUIPMENT": "",
+             "DESCRIPTION": "35-24L009 MACHINE", "MASK": ""},
+            {"FUNCTION": "", "EQUIPMENT": eq_tag, "SUB-EQUIPMENT": "",
+             "DESCRIPTION": raw_desc, "MASK": ""},
+        ]
+        ctx = {"ecosystem": "valmet", "plant": "5001", "line_code": "PM03",
+               "process_code": "BR", "sub_process": "BR1"}
+        tree = build_tree_rows(rows, ctx=ctx)
+        for row in tree:
+            if row.get("EQUIPMENT") == eq_tag:
+                return row.get("DESCRIPTION", "")
+        return ""
+
+    def test_conveyor_abbreviated_to_cvyr(self):
+        """CONVEYOR in raw AI description must appear as CVYR in tree DESCRIPTION."""
+        desc = self._tree_desc_for("35-24L010", "35-24L010 BROKE CONVEYOR BELT 1")
+        self.assertIn("CVYR", desc, f"Expected CVYR in {desc!r}")
+        self.assertNotIn("CONVEYOR", desc, f"CONVEYOR must be abbreviated in {desc!r}")
+
+    def test_agitator_abbreviated_to_agi(self):
+        desc = self._tree_desc_for("35-24L401", "35-24L401 BROKE TANK AGITATOR")
+        self.assertIn("AGI", desc, f"Expected AGI in {desc!r}")
+        self.assertNotIn("AGITATOR", desc, f"AGITATOR must be abbreviated in {desc!r}")
+
+    def test_screen_abbreviation_applied(self):
+        desc = self._tree_desc_for("35-24L015", "35-24L015 PRESSURE SCREEN PRIMARY")
+        self.assertTrue(
+            "SCRN" in desc or "SCR" in desc,
+            f"Expected SCRN/SCR abbreviation in {desc!r}",
+        )
+
+    def test_non_abbreviatable_words_preserved(self):
+        """Words not in the table pass through unchanged."""
+        desc = self._tree_desc_for("35-24L009", "35-24L009 BROKE ROLL PLPR HP-33G2")
+        self.assertIn("BROKE", desc)
+        self.assertIn("ROLL", desc)
+
+    def test_empty_description_safe(self):
+        """Empty description row does not raise."""
+        desc = self._tree_desc_for("35-24L020", "")
+        self.assertIsInstance(desc, str)
+
+    def test_function_header_row_also_abbreviated(self):
+        """FUNCTION-level description rows in the tree are also abbreviated."""
+        from dwg_reader.export_hierarchy_tree import build_tree_rows
+        rows = [
+            {"FUNCTION": "35-24L010", "EQUIPMENT": "", "SUB-EQUIPMENT": "",
+             "DESCRIPTION": "35-24L010 WIRE CONVEYOR ROLL 1", "MASK": ""},
+        ]
+        ctx = {"ecosystem": "valmet", "plant": "5001", "line_code": "PM03",
+               "process_code": "BR", "sub_process": "BR1"}
+        tree = build_tree_rows(rows, ctx=ctx)
+        fn_row = next((r for r in tree if r.get("FUNCTION") == "35-24L010"
+                       and not r.get("EQUIPMENT")), None)
+        self.assertIsNotNone(fn_row, "FUNCTION row not found in tree")
+        desc = fn_row.get("DESCRIPTION", "")
+        self.assertIn("CVYR", desc, f"Expected CVYR in function description {desc!r}")
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# B-02 — Hierarchy CSV DESCRIPTION patched with HV-prefixed EQKTX for valves
+# ─────────────────────────────────────────────────────────────────────────────
+
+class HierarchyCsvValvePatchTests(unittest.TestCase):
+    """B-02: _patch_hierarchy_csv_with_valve_eqktx syncs formatted EQKTX back."""
+
+    def setUp(self):
+        import tempfile
+        self._tmpdir = tempfile.TemporaryDirectory()
+        self.tmp = Path(self._tmpdir.name)
+
+    def tearDown(self):
+        self._tmpdir.cleanup()
+
+    def _write_hierarchy_csv(self, rows):
+        from dwg_reader.run_hierarchy_orchestrator import write_hierarchy_csv
+        p = self.tmp / "Broke System.hierarchy_orchestrator.csv"
+        write_hierarchy_csv(p, rows)
+        return p
+
+    def _write_reasoning_csv(self, rows):
+        import csv as csv_module
+        from dwg_reader.export_sap_equipment import REASONING_COLUMNS
+        p = self.tmp / "Broke System.valve_reasoning.csv"
+        with open(p, "w", newline="", encoding="utf-8") as f:
+            w = csv_module.DictWriter(f, fieldnames=REASONING_COLUMNS, extrasaction="ignore")
+            w.writeheader()
+            w.writerows(rows)
+        return p
+
+    def _patch(self, hier_csv):
+        from dwg_reader.run_hierarchy_orchestrator import _patch_hierarchy_csv_with_valve_eqktx
+        _patch_hierarchy_csv_with_valve_eqktx(hier_csv, self.tmp, "Broke System")
+
+    def _read(self, hier_csv):
+        from dwg_reader.run_hierarchy_orchestrator import read_hierarchy_csv
+        return read_hierarchy_csv(hier_csv)
+
+    def test_equipment_valve_description_patched(self):
+        """EQUIPMENT column valve row gets HV-prefixed EQKTX in DESCRIPTION."""
+        hier = self._write_hierarchy_csv([
+            {"FUNCTION": "35-24-076", "EQUIPMENT": "", "SUB-EQUIPMENT": "",
+             "DESCRIPTION": "35-24-076 WFL PROC LN", "MASK": ""},
+            {"FUNCTION": "", "EQUIPMENT": "35-24-112", "SUB-EQUIPMENT": "",
+             "DESCRIPTION": "35-24-112 VLV AV NC", "MASK": ""},
+        ])
+        self._write_reasoning_csv([
+            {"EQUNR": "35-24-112", "EQKTX": "HV 35-24-112 35-24-076 HV",
+             "TYPE": "HV", "SOURCE": "VISION", "AI_DESCRIPTION": "", "REASONING": ""},
+        ])
+        self._patch(hier)
+        rows = self._read(hier)
+        valve_row = next(r for r in rows if r.get("EQUIPMENT") == "35-24-112")
+        self.assertEqual(valve_row["DESCRIPTION"], "HV 35-24-112 35-24-076 HV")
+
+    def test_sub_equipment_valve_description_patched(self):
+        """SUB-EQUIPMENT column valve row is also patched."""
+        hier = self._write_hierarchy_csv([
+            {"FUNCTION": "35-24L005", "EQUIPMENT": "", "SUB-EQUIPMENT": "",
+             "DESCRIPTION": "35-24L005 MACHINE", "MASK": ""},
+            {"FUNCTION": "", "EQUIPMENT": "35-24-026", "SUB-EQUIPMENT": "",
+             "DESCRIPTION": "35-24-026 WFL LINE", "MASK": ""},
+            {"FUNCTION": "", "EQUIPMENT": "", "SUB-EQUIPMENT": "35-24-137",
+             "DESCRIPTION": "35-24-137 DRN VLV", "MASK": ""},
+        ])
+        self._write_reasoning_csv([
+            {"EQUNR": "35-24-137", "EQKTX": "HV 35-24-137 35-24L005 DRN NC",
+             "TYPE": "DRN NC", "SOURCE": "VISION", "AI_DESCRIPTION": "", "REASONING": ""},
+        ])
+        self._patch(hier)
+        rows = self._read(hier)
+        sub_row = next(r for r in rows if r.get("SUB-EQUIPMENT") == "35-24-137")
+        self.assertEqual(sub_row["DESCRIPTION"], "HV 35-24-137 35-24L005 DRN NC")
+
+    def test_non_valve_rows_unchanged(self):
+        """Machine FUNCTION rows stay put; pipeline FUNCTION rows get LN/spec cleanup."""
+        orig_desc = "35-24L005 PRESS PLPR"
+        hier = self._write_hierarchy_csv([
+            {"FUNCTION": "35-24L005", "EQUIPMENT": "", "SUB-EQUIPMENT": "",
+             "DESCRIPTION": orig_desc, "MASK": ""},
+            {"FUNCTION": "", "EQUIPMENT": "35-24-112", "SUB-EQUIPMENT": "",
+             "DESCRIPTION": "35-24-112 VLV AV NC", "MASK": ""},
+        ])
+        self._write_reasoning_csv([
+            {"EQUNR": "35-24-112", "EQKTX": "HV 35-24-112 35-24-076 HV",
+             "TYPE": "HV", "SOURCE": "VISION", "AI_DESCRIPTION": "", "REASONING": ""},
+        ])
+        self._patch(hier)
+        rows = self._read(hier)
+        fn_row = next(r for r in rows if r.get("FUNCTION") == "35-24L005"
+                      and not r.get("EQUIPMENT"))
+        self.assertEqual(fn_row["DESCRIPTION"], orig_desc,
+                         "Machine FUNCTION row description must not be modified")
+
+    def test_missing_reasoning_csv_is_noop(self):
+        """If valve_reasoning.csv doesn't exist, hierarchy CSV is left unchanged."""
+        hier = self._write_hierarchy_csv([
+            {"FUNCTION": "35-24-076", "EQUIPMENT": "", "SUB-EQUIPMENT": "",
+             "DESCRIPTION": "35-24-076 WFL LN PROC", "MASK": ""},
+            {"FUNCTION": "", "EQUIPMENT": "35-24-112", "SUB-EQUIPMENT": "",
+             "DESCRIPTION": "35-24-112 VLV AV NC", "MASK": ""},
+        ])
+        # Do NOT write reasoning CSV — patch should be a silent no-op
+        self._patch(hier)
+        rows = self._read(hier)
+        valve_row = next(r for r in rows if r.get("EQUIPMENT") == "35-24-112")
+        self.assertEqual(valve_row["DESCRIPTION"], "35-24-112 VLV AV NC",
+                         "Description must be unchanged when no reasoning CSV")
+
+    def test_multiple_valves_all_patched(self):
+        """All valves in the reasoning CSV are patched in a single pass."""
+        hier = self._write_hierarchy_csv([
+            {"FUNCTION": "35-24-076", "EQUIPMENT": "", "SUB-EQUIPMENT": "",
+             "DESCRIPTION": "35-24-076 WFL LN", "MASK": ""},
+            {"FUNCTION": "", "EQUIPMENT": "35-24-112", "SUB-EQUIPMENT": "",
+             "DESCRIPTION": "35-24-112 VLV AV", "MASK": ""},
+            {"FUNCTION": "", "EQUIPMENT": "35-24-073", "SUB-EQUIPMENT": "",
+             "DESCRIPTION": "35-24-073 VLV NC", "MASK": ""},
+            {"FUNCTION": "", "EQUIPMENT": "35-24-1127", "SUB-EQUIPMENT": "",
+             "DESCRIPTION": "35-24-1127 VLV", "MASK": ""},
+        ])
+        self._write_reasoning_csv([
+            {"EQUNR": "35-24-112", "EQKTX": "HV 35-24-112 35-24-076 HV",
+             "TYPE": "HV", "SOURCE": "VISION", "AI_DESCRIPTION": "", "REASONING": ""},
+            {"EQUNR": "35-24-073", "EQKTX": "HV 35-24-073 35-24-076 NC",
+             "TYPE": "NC", "SOURCE": "VISION", "AI_DESCRIPTION": "", "REASONING": ""},
+            {"EQUNR": "35-24-1127", "EQKTX": "HV 35-24-1127 35-24-076 AV",
+             "TYPE": "AV", "SOURCE": "VISION", "AI_DESCRIPTION": "", "REASONING": ""},
+        ])
+        self._patch(hier)
+        rows = self._read(hier)
+        by_eq = {r.get("EQUIPMENT"): r for r in rows if r.get("EQUIPMENT")}
+        self.assertEqual(by_eq["35-24-112"]["DESCRIPTION"], "HV 35-24-112 35-24-076 HV")
+        self.assertEqual(by_eq["35-24-073"]["DESCRIPTION"], "HV 35-24-073 35-24-076 NC")
+        self.assertEqual(by_eq["35-24-1127"]["DESCRIPTION"], "HV 35-24-1127 35-24-076 AV")
+
+    def test_e02_patch_uses_format_valve_eqktx_output(self):
+        """E-02: AI 'VLV AV NC' description is replaced by format_valve_eqktx() HV text."""
+        from dwg_reader.export_sap_equipment import patch_hierarchy_csv_with_valve_eqktx
+
+        rows = [
+            {"FUNCTION": "35-24-076", "EQUIPMENT": "", "SUB-EQUIPMENT": "",
+             "DESCRIPTION": "35-24-076 WFL PROC LN", "MASK": ""},
+            {"FUNCTION": "", "EQUIPMENT": "35-24-112", "SUB-EQUIPMENT": "",
+             "DESCRIPTION": "35-24-112 VLV AV NC", "MASK": ""},
+        ]
+        cache = {
+            "35-24-112": {
+                "is_valve": True, "type": "HV", "source": "vision", "fn": "35-24-076",
+            },
+        }
+        reasoning: list = []
+        out = build_equipment_rows(rows, valve_cache=cache, reasoning_out=reasoning)
+        by_tag = {r["EQUNR"]: r for r in out}
+        expected = format_valve_eqktx(
+            "35-24-112", "35-24-076", "35-24-112 VLV AV NC", valve_type_override="HV",
+        )
+        self.assertEqual(expected, "HV 35-24-112 35-24-076 HV")
+        self.assertEqual(by_tag["35-24-112"]["EQKTX"], expected)
+        self.assertEqual(reasoning[0]["EQKTX"], expected)
+        self.assertEqual(reasoning[0]["SOURCE"], "VISION")
+
+        hier = self._write_hierarchy_csv(rows)
+        patch_hierarchy_csv_with_valve_eqktx(hier, reasoning)
+        patched = self._read(hier)
+        valve_row = next(r for r in patched if r.get("EQUIPMENT") == "35-24-112")
+        self.assertEqual(valve_row["DESCRIPTION"], expected)
+
+    def test_line_ai_pp200_patched_from_equipment_rows(self) -> None:
+        """B-05: formatted line EQKTX (no PP-200) overwrites AI hierarchy DESCRIPTION."""
+        from dwg_reader.export_sap_equipment import patch_hierarchy_csv_with_valve_eqktx
+
+        rows = [
+            {"FUNCTION": "35-24P507", "EQUIPMENT": "", "SUB-EQUIPMENT": "",
+             "DESCRIPTION": "35-24P507 COUCH PIT PMP", "MASK": ""},
+            {"FUNCTION": "", "EQUIPMENT": "35-24-119", "SUB-EQUIPMENT": "",
+             "DESCRIPTION": "AI PP-200 35-24-119 SUCT LN 15MM", "MASK": ""},
+        ]
+        equipment = [
+            {"EQUNR": "35-24-119", "EQKTX": "LN 35-24-119 35-24P507 SUCT"},
+        ]
+        hier = self._write_hierarchy_csv(rows)
+        patch_hierarchy_csv_with_valve_eqktx(hier, equipment)
+        patched = self._read(hier)
+        line_row = next(r for r in patched if r.get("EQUIPMENT") == "35-24-119")
+        self.assertEqual(line_row["DESCRIPTION"], "LN 35-24-119 35-24P507 SUCT")
+        self.assertNotIn("PP-200", line_row["DESCRIPTION"])
+
+    def test_pipeline_function_row_patched(self) -> None:
+        """FUNCTION-only pipeline rows are rewritten when the tag was exported."""
+        from dwg_reader.export_sap_equipment import patch_hierarchy_csv_with_valve_eqktx
+
+        rows = [
+            {"FUNCTION": "35-24-076", "EQUIPMENT": "", "SUB-EQUIPMENT": "",
+             "DESCRIPTION": "35-24-076 WFL PROC LN PP-200", "MASK": ""},
+        ]
+        equipment = [
+            {"EQUNR": "35-24-076", "EQKTX": "LN 35-24-076 SEAL WTR PROC"},
+        ]
+        hier = self._write_hierarchy_csv(rows)
+        patch_hierarchy_csv_with_valve_eqktx(hier, equipment)
+        patched = self._read(hier)
+        fn_row = next(r for r in patched if r.get("FUNCTION") == "35-24-076")
+        self.assertEqual(fn_row["DESCRIPTION"], "LN 35-24-076 SEAL WTR PROC")
+        self.assertNotIn("PP-200", fn_row["DESCRIPTION"])
+
+    def test_pipeline_function_15mm_stripped_without_equipment_row(self) -> None:
+        """B-05: FUNCTION-only pipeline rows are not equipment; still drop 15MM."""
+        from dwg_reader.export_sap_equipment import patch_hierarchy_csv_with_valve_eqktx
+
+        rows = [
+            {"FUNCTION": "35-24-012", "EQUIPMENT": "", "SUB-EQUIPMENT": "",
+             "DESCRIPTION": "35-24-012 WFL PROC LN 15MM", "MASK": ""},
+        ]
+        hier = self._write_hierarchy_csv(rows)
+        n = patch_hierarchy_csv_with_valve_eqktx(hier, [])
+        self.assertGreater(n, 0)
+        patched = self._read(hier)
+        fn_row = next(r for r in patched if r.get("FUNCTION") == "35-24-012")
+        self.assertTrue(fn_row["DESCRIPTION"].startswith("LN 35-24-012"))
+        self.assertNotIn("15MM", fn_row["DESCRIPTION"].upper())
+        self.assertNotIn("PP-", fn_row["DESCRIPTION"].upper())
 
 
 if __name__ == "__main__":

@@ -199,25 +199,25 @@ class SITValveClassificationTests(unittest.TestCase):
     # -----------------------------------------------------------------------
 
     def test_av_lv2_prefix_strip_position_digit_p503(self) -> None:
-        """35-24LV2-576: LV prefix → AV; position digit 2 preserved in stripped tag."""
+        """35-24LV2-576: LV prefix → AV; position digit merged into number (no extra hyphen)."""
         rows = [
             _fn_row("35-24P503"),
             _eq_row("35-24-095", "35-24-095 SUCT LN PP-200"),
             _sub_row("35-24LV2-576", "35-24LV2-576 LVL CTRL VLV AV"),
         ]
         actual = self._eqktx_for(rows, "35-24LV2-576", fn="35-24P503")
-        self._assert_eqktx(actual, "HV 35-24-2-576 35-24P503 AV", "35-24LV2-576", "35-24P503")
+        self._assert_eqktx(actual, "HV 35-24-2576 35-24P503 AV", "35-24LV2-576", "35-24P503")
 
     def test_av_lv1_prefix_strip_position_digit_p509(self) -> None:
-        """35-24LV1-513/LV2-513: position digit 1/2 preserved to avoid tag collision."""
+        """35-24LV1-513/LV2-513: position digit merged into number; distinct, no collision."""
         rows = [
             _fn_row("35-24P509"),
             _eq_row("35-24-009", "35-24-009 SUCT LN PP600"),
             _sub_row("35-24LV1-513", "35-24LV1-513 LVL CTRL VLV AV"),
             _sub_row("35-24LV2-513", "35-24LV2-513 LVL CTRL VLV AV"),
         ]
-        for tag, expected in [("35-24LV1-513", "HV 35-24-1-513 35-24P509 AV"),
-                               ("35-24LV2-513", "HV 35-24-2-513 35-24P509 AV")]:
+        for tag, expected in [("35-24LV1-513", "HV 35-24-1513 35-24P509 AV"),
+                               ("35-24LV2-513", "HV 35-24-2513 35-24P509 AV")]:
             self._assert_eqktx(self._eqktx_for(rows, tag, fn="35-24P509"), expected, tag, "35-24P509")
 
     def test_av_lv_prefix_no_position_digit_t604(self) -> None:
@@ -238,8 +238,8 @@ class SITValveClassificationTests(unittest.TestCase):
             _sub_row("35-24LV1-518", "35-24LV1-518 LVL CNTRL VLV NC AV"),
             _sub_row("35-24LV2-518", "35-24LV2-518 LVL CNTRL VLV NC AV"),
         ]
-        for tag, expected in [("35-24LV1-518", "HV 35-24-1-518 35-24P508 AV"),
-                               ("35-24LV2-518", "HV 35-24-2-518 35-24P508 AV")]:
+        for tag, expected in [("35-24LV1-518", "HV 35-24-1518 35-24P508 AV"),
+                               ("35-24LV2-518", "HV 35-24-2518 35-24P508 AV")]:
             self._assert_eqktx(self._eqktx_for(rows, tag, fn="35-24P508"), expected, tag, "35-24P508")
 
     # -----------------------------------------------------------------------

@@ -245,9 +245,37 @@ class KsdFlocContextTests(unittest.TestCase):
             missing = required - set(entry)
             self.assertFalse(missing, f"{stem} missing fields: {missing}")
 
-    def test_total_context_entries_is_84(self) -> None:
+    def test_total_context_entries_covers_index(self) -> None:
         ctx = self._ctx()
-        self.assertEqual(len(ctx), 84)
+        # Broke System is a working-copy extra; index stems must all be mapped.
+        self.assertGreaterEqual(len(ctx), 84)
+        self.assertIn("Broke System", ctx)
+        self.assertIn("RAU6401403_03_FLOW_DIAGRAM_OCPRO", ctx)
+
+    def test_every_index_filename_stem_is_mapped(self) -> None:
+        """F-04: every stem in sml_dwg_index must have a floc_context_map entry."""
+        import csv
+
+        ctx = self._ctx()
+        index_path = ROOT / "resources" / "sml_dwg_index_260806 (1).csv"
+        self.assertTrue(index_path.is_file(), f"missing {index_path}")
+        stems: set[str] = set()
+        with index_path.open(encoding="utf-8", newline="") as f:
+            reader = csv.DictReader(f)
+            for row in reader:
+                name = (row.get("filename") or "").strip()
+                if not name:
+                    continue
+                stems.add(Path(name).stem)
+        missing = sorted(stems - set(ctx))
+        self.assertEqual(missing, [], f"index stems not in floc_context_map.json: {missing}")
+        extra_ok = {"Broke System"}
+        extra = set(ctx) - stems
+        unexpected = sorted(extra - extra_ok)
+        self.assertEqual(
+            unexpected, [],
+            f"map keys not in index (besides {sorted(extra_ok)}): {unexpected}",
+        )
 
 
 class AbbreviationsCompleteTests(unittest.TestCase):

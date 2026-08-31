@@ -870,14 +870,18 @@ def extract_pipe_ids(
         if key in seen:
             continue
         seen.add(key)
-        # PIPEDATA: "65-W38-VE10H2A" → size=65, pipe_class=W38-VE10H2A
+        # PIPEDATA: "65-W38-VE10H2A" → size=65, substance_code=W38, pipe_spec=VE10H2A
         size_str = ""
+        substance_code = ""
+        pipe_spec = ""
         pipe_class = pipe_data
         if pipe_data:
-            first, *rest = pipe_data.split("-", 1)
-            if first.isdigit():
-                size_str = first
-                pipe_class = rest[0] if rest else ""
+            parts = pipe_data.split("-", 2)
+            if parts[0].isdigit():
+                size_str = parts[0]
+                substance_code = parts[1] if len(parts) > 1 else ""
+                pipe_spec = parts[2] if len(parts) > 2 else ""
+                pipe_class = "-".join(parts[1:]) if len(parts) > 1 else ""
         x, y, z = xyz(ins.get("insert"))
         rows.append({
             "component_type": "lines",
@@ -886,6 +890,8 @@ def extract_pipe_ids(
             "line_sequence": None,
             "line_type": line_type,
             "nominal_size": size_str or None,
+            "substance_code": substance_code or None,
+            "pipe_spec": pipe_spec or None,
             "pipe_class": pipe_class or None,
             "parsed": True,
             "handle": ins.get("handle"),

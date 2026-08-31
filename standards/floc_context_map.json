@@ -239,6 +239,16 @@
     "line_name": "PAPER MACHINE 3",
     "process_name": "OPTISIZER SPRAY SUPPLY"
   },
+  "RAU6401403_03_FLOW_DIAGRAM_OCPRO": {
+    "ecosystem": "valmet",
+    "plant": "5001",
+    "line_code": "PM03",
+    "process_code": "UT",
+    "sub_process": "UT1",
+    "site_name": "SHOTTON MILL LTD",
+    "line_name": "PAPER MACHINE 3",
+    "process_name": "OCPRO FLOW DIAGRAM"
+  },
   "RAU6401404_01_FLOW_DIAGRAM_DOUBLEJET_TAIL_JET_P": {
     "ecosystem": "valmet",
     "plant": "5001",

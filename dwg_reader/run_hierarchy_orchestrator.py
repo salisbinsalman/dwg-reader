@@ -37,7 +37,10 @@ from dwg_reader.eval_hierarchy_gt import (
 )
 from dwg_reader.dwg_tag_registry import apply_registry_from_output_dir
 from dwg_reader.export_hierarchy_tree import run_hierarchy_tree_export
-from dwg_reader.export_sap_equipment import run_equipment_export
+from dwg_reader.export_sap_equipment import (
+    patch_hierarchy_csv_from_reasoning as _patch_hierarchy_csv_with_valve_eqktx,
+    run_equipment_export,
+)
 from dwg_reader.export_sap_floc import run_floc_export
 from dwg_reader.io import read_csv_rows, write_csv_rows
 from dwg_reader.logutil import configure_logging, get_logger
@@ -103,15 +106,17 @@ def _tipo_suffix(tipo: str) -> Optional[str]:
 
 
 def _gor_code03_valve_type(tag: str) -> Optional[str]:
-    """Infer SAP valve type for Code 03 GOR text tags (no TIPO_VALVOLA block)."""
+    """Infer SAP valve type for Code 03 GOR text tags (no TIPO_VALVOLA block).
+
+    Delegates to GORAdapter so KV→AV, ``\\dV-\\d``→NC, ST→SV, else HV stay
+    identical to ``resolve_valve_type`` (including hyphenated ST tags).
+    """
     t = re.sub(r"\s+", "", str(tag or "").strip()).upper()
     if not t:
         return None
-    if "KV" in t:
-        return "AV"
-    if re.match(r"^\d+V-\d", t):
-        return "NC"
-    return "HV"
+    from dwg_reader.adapters.gor_adapter import GORAdapter
+    vtype, _is_valve = GORAdapter()._code03_type(t)
+    return vtype
 
 
 def _tipo_to_sap_type(tipo: str) -> tuple[Optional[str], bool]:
@@ -1140,6 +1145,9 @@ def _run_sap_and_tree_exports(
             hierarchy_csv=combined_csv,
             limit=0,
         )
+        # Sync hierarchy CSV DESCRIPTION with formatted HV-prefixed EQKTX so the
+        # review file matches the SAP equipment.xlsx output.
+        _patch_hierarchy_csv_with_valve_eqktx(combined_csv, out_dir, safe_name(input_path))
     if not no_export_hierarchy_tree:
         logger.info("\n---------- export hierarchy tree ----------")
         run_hierarchy_tree_export(

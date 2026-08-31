@@ -40,8 +40,9 @@ from dwg_reader.export_sap_floc import (
     _extract_area_unit,
     _strip_trailing_spec,
 )
-from dwg_reader.io import cell as _norm, read_csv_rows
+from dwg_reader.io import cell as _norm, read_csv_rows, write_csv_rows
 from dwg_reader.logutil import configure_logging, get_logger
+from dwg_reader.models import HIERARCHY_COLUMNS
 from dwg_reader.paths import REPO_ROOT
 
 logger = get_logger(__name__)
@@ -344,6 +345,92 @@ def write_valve_reasoning_csv(path: Path, reasoning_rows: List[Dict[str, str]]) 
         writer.writerows(reasoning_rows)
 
 
+def _valve_eqktx_by_tag(reasoning_rows: Sequence[Dict[str, str]]) -> Dict[str, str]:
+    """Map EQUNR → format_valve_eqktx() text from equipment-export reasoning rows."""
+    out: Dict[str, str] = {}
+    for row in reasoning_rows:
+        equnr = str(row.get("EQUNR") or "").strip().upper().replace(" ", "")
+        eqktx = str(row.get("EQKTX") or "").strip()
+        if equnr and eqktx:
+            out[equnr] = eqktx
+    return out
+
+
+def patch_hierarchy_csv_with_valve_eqktx(
+    combined_csv: Path,
+    reasoning_rows: Sequence[Dict[str, str]],
+) -> int:
+    """Replace hierarchy DESCRIPTION with formatted EQKTX from equipment export.
+
+    Hierarchy CSV DESCRIPTION is AI enrichment text. Equipment EQKTX is produced by
+    format_valve_eqktx() / format_line_eqktx(). This writes that same formatted
+    string back onto EQUIPMENT / SUB-EQUIPMENT rows so the review hierarchy file
+    matches equipment.xlsx (HV prefix, LN prefix, parent-ref, spec-stripped).
+    """
+    valve_eqktx = _valve_eqktx_by_tag(reasoning_rows)
+    path = Path(combined_csv)
+    if not path.exists():
+        return 0
+    existing = read_hierarchy_csv(path)
+    patched = 0
+    for row in existing:
+        hit = False
+        for col in ("EQUIPMENT", "SUB-EQUIPMENT"):
+            tag = str(row.get(col) or "").strip().upper().replace(" ", "")
+            if tag and tag in valve_eqktx:
+                row["DESCRIPTION"] = valve_eqktx[tag]
+                patched += 1
+                hit = True
+        if hit:
+            continue
+        # Pipeline FUNCTION rows are not equipment records, so they never appear
+        # in equipment.xlsx. Still strip PP-/15MM and apply LN {tag} {role}.
+        eq = str(row.get("EQUIPMENT") or "").strip()
+        sub = str(row.get("SUB-EQUIPMENT") or "").strip()
+        fn = str(row.get("FUNCTION") or "").strip().upper().replace(" ", "")
+        if not fn or eq or sub:
+            continue
+        if fn in valve_eqktx:
+            row["DESCRIPTION"] = valve_eqktx[fn]
+            patched += 1
+            continue
+        if is_line_equipment_tag(fn):
+            desc = str(row.get("DESCRIPTION") or "")
+            pltxt = _clean_line_description(desc)
+            pltxt = format_line_eqktx(fn, pltxt)
+            pltxt = _strip_trailing_spec(pltxt)
+            pltxt = format_line_eqktx(fn, pltxt)
+            if pltxt and pltxt != desc:
+                row["DESCRIPTION"] = pltxt[:40]
+                patched += 1
+    if patched:
+        write_csv_rows(path, existing, HIERARCHY_COLUMNS)
+        logger.info(
+            "[valve-patch] updated %d valve DESCRIPTION(s) in %s",
+            patched, path.name,
+        )
+    return patched
+    if patched:
+        write_csv_rows(path, existing, HIERARCHY_COLUMNS)
+        logger.info(
+            "[valve-patch] updated %d valve DESCRIPTION(s) in %s",
+            patched, path.name,
+        )
+    return patched
+
+
+def patch_hierarchy_csv_from_reasoning(
+    combined_csv: Path, out_dir: Path, base: str
+) -> int:
+    """Load ``<base>.valve_reasoning.csv`` and sync hierarchy DESCRIPTION from it."""
+    reasoning_csv = Path(out_dir) / f"{base}.valve_reasoning.csv"
+    if not reasoning_csv.exists():
+        return 0
+    return patch_hierarchy_csv_with_valve_eqktx(
+        combined_csv, read_csv_rows(reasoning_csv, missing_ok=True)
+    )
+
+
 def build_equipment_rows(
     hierarchy_rows: Sequence[Dict[str, str]],
     *,
@@ -581,10 +668,11 @@ def build_equipment_rows(
                     "REASONING": vreason,
                 })
         else:
-            eqktx = format_line_eqktx(tag, eqktx, hequi=hequi)
+            eqktx = format_line_eqktx(tag, eqktx, hequi=hequi, parent_fn=effective_fn)
             if is_line_equipment_tag(tag):
                 eqktx = _clean_line_description(eqktx)
-                eqktx = format_line_eqktx(tag, eqktx, hequi=hequi)
+                eqktx = _strip_trailing_spec(eqktx)
+                eqktx = format_line_eqktx(tag, eqktx, hequi=hequi, parent_fn=effective_fn)
             if not is_line_equipment_tag(tag) and not hequi:
                 eqktx = _strip_trailing_spec(eqktx)
             if _MOTOR_SUFFIX_RE.search(tag) and not re.search(r"\bMTR\b", eqktx or "", re.I):
@@ -825,6 +913,9 @@ def run_equipment_export_from_args(args: argparse.Namespace) -> int:
 
     reasoning_csv = out_dir / f"{base}.valve_reasoning.csv"
     write_valve_reasoning_csv(reasoning_csv, reasoning_rows)
+    # Hierarchy DESCRIPTION is AI text; rewrite EQUIPMENT/SUB-EQUIPMENT with
+    # formatted EQKTX (HV valves via format_valve_eqktx, LN lines via format_line_eqktx).
+    patch_hierarchy_csv_with_valve_eqktx(hier_path, equipment_rows)
 
     tplnrs = sorted({r["TPLNR"] for r in equipment_rows})
     report: Dict[str, Any] = {

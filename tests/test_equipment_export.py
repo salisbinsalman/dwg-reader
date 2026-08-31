@@ -26,6 +26,7 @@ from dwg_reader.export_sap_equipment import (
     _motor_tag_for,
     _valve_hint,
     build_equipment_rows,
+    run_equipment_export,
     write_equipment_workbook,
 )
 
@@ -60,6 +61,12 @@ class ObjectTypeClassifierTests(unittest.TestCase):
     def test_switch_xs_tag(self):
         code, wc = self._cls("35-24XS-588", "35-24XS-588 MCS SIG")
         self.assertEqual(code, "1108")
+
+    def test_hand_indicator_hi_tag(self):
+        """A-06: 35-24HI-* must classify as INSTRUMENT OTHER (1210) with GEWRK=INST."""
+        code, wc = self._cls("35-24HI-597", "35-24HI-597 HND IND")
+        self.assertEqual(code, "1210")
+        self.assertEqual(wc, "INST")
 
     # --- description keyword rules ---
     def test_motor_keyword(self):
@@ -230,6 +237,25 @@ class FormatLineEqktxTests(unittest.TestCase):
             format_line_eqktx("35-24-100", "LN 35-24-100 35-24-"),
             "LN 35-24-100",
         )
+
+    def test_sop_parent_ref_as_third_token(self) -> None:
+        """H-05 / B-03: LN {tag} {parent-machine} {role} — SOP example shape."""
+        self.assertEqual(
+            format_line_eqktx("35-24-119", "35-24-119 SUCT LN", parent_fn="35-24P507"),
+            "LN 35-24-119 35-24P507 SUCT",
+        )
+
+    def test_parent_fn_skipped_when_parent_is_a_line(self) -> None:
+        out = format_line_eqktx("35-24-095", "35-24-095 PRESS PLPR", parent_fn="35-24-076")
+        self.assertEqual(out, "LN 35-24-095 PRESS PLPR")
+        self.assertNotIn("35-24-076", out)
+
+    def test_parent_fn_not_duplicated(self) -> None:
+        out = format_line_eqktx(
+            "35-24-119", "LN 35-24-119 35-24P507 SUCT", parent_fn="35-24P507"
+        )
+        self.assertEqual(out, "LN 35-24-119 35-24P507 SUCT")
+        self.assertEqual(out.count("35-24P507"), 1)
 
 
 class EquipmentExportTests(unittest.TestCase):
@@ -508,11 +534,36 @@ class EquipmentExportTests(unittest.TestCase):
         ]
         out = build_equipment_rows(rows)
         by_tag = {r["EQUNR"]: r for r in out}
-        self.assertEqual(by_tag["35-24-095"]["EQKTX"], "LN 35-24-095 PRESS PLPR")
-        self.assertEqual(by_tag["35-24-096"]["EQKTX"], "LN 35-24-096 PRESS PLPR")
+        self.assertEqual(by_tag["35-24-095"]["EQKTX"], "LN 35-24-095 35-24L001 PRESS PLPR")
+        self.assertEqual(by_tag["35-24-096"]["EQKTX"], "LN 35-24-096 35-24L001 PRESS PLPR")
         self.assertNotIn("DN", by_tag["35-24-095"]["EQKTX"])
         self.assertNotIn("PP-200", by_tag["35-24-095"]["EQKTX"])
         self.assertFalse(by_tag["35-24-207"]["EQKTX"].startswith("LN "))
+
+    def test_line_eqktx_strips_mm_size_spec(self) -> None:
+        """B-05: trailing 15MM pipe-size token must not appear in EQKTX."""
+        rows = [
+            {"FUNCTION": "35-24L001", "EQUIPMENT": "", "SUB-EQUIPMENT": "", "DESCRIPTION": ""},
+            {"FUNCTION": "", "EQUIPMENT": "35-24-005", "SUB-EQUIPMENT": "",
+             "DESCRIPTION": "35-24-005 CLG WTR DIST SPUR 15MM"},
+        ]
+        out = build_equipment_rows(rows)
+        eqktx = next(r["EQKTX"] for r in out if r["EQUNR"] == "35-24-005")
+        self.assertTrue(eqktx.startswith("LN 35-24-005"))
+        self.assertNotIn("15MM", eqktx.upper())
+        self.assertIn("35-24L001", eqktx)
+
+    def test_hi_indicator_gets_inst_gewrk(self) -> None:
+        """A-06: hand-indicator rows must not leave GEWRK/EQART empty."""
+        rows = [
+            {"FUNCTION": "35-24L001", "EQUIPMENT": "", "SUB-EQUIPMENT": "", "DESCRIPTION": ""},
+            {"FUNCTION": "", "EQUIPMENT": "35-24HI-597", "SUB-EQUIPMENT": "",
+             "DESCRIPTION": "35-24HI-597 HND IND"},
+        ]
+        out = build_equipment_rows(rows)
+        row = next(r for r in out if r["EQUNR"] == "35-24HI-597")
+        self.assertEqual(row["EQART"], "1210")
+        self.assertEqual(row["GEWRK"], "INST")
 
     def test_pipeline_eqktx_keeps_destination_not_peer_tag(self) -> None:
         rows = [
@@ -723,18 +774,20 @@ class ValveFormattingTests(unittest.TestCase):
         self.assertEqual(strip_valve_prefix("35-24FV-570"), "35-24-570")
 
     def test_strip_lv_with_digit(self) -> None:
-        # Position digit preserved so LV2-576 and a hypothetical LV1-576 stay distinct.
-        self.assertEqual(strip_valve_prefix("35-24LV2-576"), "35-24-2-576")
+        # Position digit merged into number (no extra hyphen) — 3-segment format.
+        self.assertEqual(strip_valve_prefix("35-24LV2-576"), "35-24-2576")
 
     def test_strip_lv1(self) -> None:
-        self.assertEqual(strip_valve_prefix("35-24LV1-560"), "35-24-1-560")
+        self.assertEqual(strip_valve_prefix("35-24LV1-560"), "35-24-1560")
 
     def test_strip_lv2_distinct_from_lv1(self) -> None:
-        # LV1-560 and LV2-560 must not both collapse to 35-24-560.
+        # LV1-560 → 35-24-1560 and LV2-560 → 35-24-2560: distinct, no collision.
         self.assertNotEqual(
             strip_valve_prefix("35-24LV1-560"),
             strip_valve_prefix("35-24LV2-560"),
         )
+        self.assertEqual(strip_valve_prefix("35-24LV1-560"), "35-24-1560")
+        self.assertEqual(strip_valve_prefix("35-24LV2-560"), "35-24-2560")
 
     def test_strip_plain_tag_unchanged(self) -> None:
         # Plain line tag — no embedded letters to strip
@@ -1252,6 +1305,96 @@ class GorObjectTypeTests(unittest.TestCase):
         for tag, code in cases.items():
             got, _ = classify_equipment(tag, f"{tag} INST")
             self.assertEqual(got, code, msg=f"{tag} → {got} expected {code}")
+
+
+class EquipmentExportPatchesHierarchyTests(unittest.TestCase):
+    """E-02: run_equipment_export writes HV EQKTX onto hierarchy DESCRIPTION."""
+
+    def setUp(self) -> None:
+        self._tmpdir = tempfile.TemporaryDirectory()
+        self.tmp = Path(self._tmpdir.name)
+
+    def tearDown(self) -> None:
+        self._tmpdir.cleanup()
+
+    def test_export_rewrites_ai_valve_description_with_formatted_eqktx(self) -> None:
+        import csv as csv_module
+        import json
+
+        from dwg_reader.io import write_csv_rows
+        from dwg_reader.models import HIERARCHY_COLUMNS
+
+        hier = self.tmp / "Broke System.hierarchy_orchestrator.csv"
+        write_csv_rows(
+            hier,
+            [
+                {"FUNCTION": "35-24-076", "EQUIPMENT": "", "SUB-EQUIPMENT": "",
+                 "MASK": "", "DESCRIPTION": "35-24-076 WFL PROC LN"},
+                {"FUNCTION": "", "EQUIPMENT": "35-24-112", "SUB-EQUIPMENT": "",
+                 "MASK": "", "DESCRIPTION": "35-24-112 VLV AV NC"},
+            ],
+            HIERARCHY_COLUMNS,
+        )
+        cache_dir = self.tmp / "jsons"
+        cache_dir.mkdir()
+        (cache_dir / "Broke System.valve_types.json").write_text(
+            json.dumps({
+                "tags": {
+                    "35-24-112": {
+                        "is_valve": True,
+                        "type": "HV",
+                        "source": "vision",
+                        "fn": "35-24-076",
+                    },
+                },
+            }),
+            encoding="utf-8",
+        )
+        rc = run_equipment_export(
+            input_path=Path("inputs/Broke System.dwg"),
+            out_dir=self.tmp,
+            hierarchy_csv=hier,
+            limit=0,
+        )
+        self.assertEqual(rc, 0)
+        with hier.open(encoding="utf-8") as f:
+            rows = list(csv_module.DictReader(f))
+        valve_row = next(r for r in rows if r.get("EQUIPMENT") == "35-24-112")
+        self.assertEqual(valve_row["DESCRIPTION"], "HV 35-24-112 35-24-076 HV")
+
+    def test_export_rewrites_line_ai_spec_with_formatted_eqktx(self) -> None:
+        """B-03 / B-05: line DESCRIPTION gets LN + parent-ref, no PP-200."""
+        import csv as csv_module
+
+        from dwg_reader.io import write_csv_rows
+        from dwg_reader.models import HIERARCHY_COLUMNS
+
+        hier = self.tmp / "Broke System.hierarchy_orchestrator.csv"
+        write_csv_rows(
+            hier,
+            [
+                {"FUNCTION": "35-24P507", "EQUIPMENT": "", "SUB-EQUIPMENT": "",
+                 "MASK": "", "DESCRIPTION": "35-24P507 COUCH PIT PMP"},
+                {"FUNCTION": "", "EQUIPMENT": "35-24-119", "SUB-EQUIPMENT": "",
+                 "MASK": "", "DESCRIPTION": "35-24-119 SUCT LN PP-200 15MM"},
+            ],
+            HIERARCHY_COLUMNS,
+        )
+        rc = run_equipment_export(
+            input_path=Path("inputs/Broke System.dwg"),
+            out_dir=self.tmp,
+            hierarchy_csv=hier,
+            limit=0,
+        )
+        self.assertEqual(rc, 0)
+        with hier.open(encoding="utf-8") as f:
+            rows = list(csv_module.DictReader(f))
+        line_row = next(r for r in rows if r.get("EQUIPMENT") == "35-24-119")
+        desc = line_row["DESCRIPTION"]
+        self.assertTrue(desc.startswith("LN 35-24-119"))
+        self.assertIn("35-24P507", desc)
+        self.assertNotIn("PP-200", desc)
+        self.assertNotIn("15MM", desc.upper())
 
 
 if __name__ == "__main__":

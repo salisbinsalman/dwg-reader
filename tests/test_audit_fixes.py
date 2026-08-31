@@ -74,14 +74,87 @@ class HierarchyCleanupTests(unittest.TestCase):
 
 
 class GorCode03Tests(unittest.TestCase):
+    """E-04: AirCap Code 03 tags (GORA68210) vs KV→AV / \\dV-\\d→NC / else HV."""
+
+    # Tags transcribed from GORA68210.05_Code 03 - P&ID AirCap (1-VALVE TEXT GOR).
+    AIRCAP_GOLDEN = {
+        "162KV1-575": "AV",
+        "162KV2-575": "AV",
+        "162KV3-575": "AV",
+        "162V-001": "NC",
+        "162V-002": "NC",
+        "162HV1-500": "HV",
+        "162HV1-600": "HV",
+        "162V1-570": "HV",  # digit between V and hyphen — not ^\\d+V-\\d
+    }
+
     def test_kv_is_av(self) -> None:
         self.assertEqual(_gor_code03_valve_type("162KV1-575"), "AV")
 
     def test_v_is_nc(self) -> None:
         self.assertEqual(_gor_code03_valve_type("162V-001"), "NC")
 
+    def test_st_is_sv(self) -> None:
+        self.assertEqual(_gor_code03_valve_type("162ST-065"), "SV")
+        self.assertEqual(_gor_code03_valve_type("168-ST521"), "SV")
+
     def test_default_hv(self) -> None:
         self.assertEqual(_gor_code03_valve_type("162X-001"), "HV")
+
+    def test_aircap_golden_tags(self) -> None:
+        from dwg_reader.adapters.gor_adapter import GORAdapter
+
+        adapter = GORAdapter()
+        for tag, expected in self.AIRCAP_GOLDEN.items():
+            self.assertEqual(_gor_code03_valve_type(tag), expected, tag)
+            vtype, is_valve = adapter.resolve_valve_type(tag)
+            self.assertEqual(vtype, expected, f"adapter {tag}")
+            self.assertTrue(is_valve, tag)
+
+    def test_orchestrator_matches_adapter(self) -> None:
+        from dwg_reader.adapters.gor_adapter import GORAdapter
+
+        adapter = GORAdapter()
+        for tag in (*self.AIRCAP_GOLDEN, "168ST-061", "168-ST-096", "168FOO-65"):
+            self.assertEqual(
+                _gor_code03_valve_type(tag),
+                adapter.resolve_valve_type(tag)[0],
+                tag,
+            )
+
+    def test_aircap_dwg_valve_texts_when_present(self) -> None:
+        """E-04: if AirCap DWG/structural JSON is on disk, classify extracted valves."""
+        from dwg_reader.adapters.gor_adapter import GORAdapter
+        from dwg_reader.dwg_pid_inventory import build_inventory
+
+        candidates = [
+            Path("outputs/jsons/GORA68210.05_Code 03 - P&ID AirCap_SWE Shotton_CE.structural.json"),
+            Path("outputs/jsons/GORA68210.05_Code 03 - P&ID AirCap_SWE Shotton_CE.pid_inventory.json"),
+        ]
+        structural_path = next((p for p in candidates if p.exists() and "structural" in p.name), None)
+        inv_path = next((p for p in candidates if p.exists() and "inventory" in p.name), None)
+        if structural_path is None and inv_path is None:
+            self.skipTest("AirCap structural/inventory JSON not present")
+
+        adapter = GORAdapter()
+        if structural_path is not None:
+            import json
+            structural = json.loads(structural_path.read_text(encoding="utf-8"))
+            inv = build_inventory(structural, dwg_stem="GORA68210")
+        else:
+            import json
+            inv = json.loads(inv_path.read_text(encoding="utf-8"))
+
+        tags = {r["tag"] for r in inv.get("valves") or []}
+        self.assertTrue(tags, "AirCap inventory has no valves")
+        for tag in tags:
+            orch = _gor_code03_valve_type(tag)
+            adapt, is_valve = adapter.resolve_valve_type(tag)
+            self.assertEqual(orch, adapt, tag)
+            self.assertTrue(is_valve, tag)
+        for tag, expected in self.AIRCAP_GOLDEN.items():
+            if tag in tags:
+                self.assertEqual(_gor_code03_valve_type(tag), expected, tag)
 
 
 class ExportFilterTests(unittest.TestCase):

@@ -124,6 +124,13 @@ class TestGORCode14InventoryBuild(unittest.TestCase):
         self.assertIn("168L-521", lines)
         self.assertEqual(self.inv["lines"][0]["source"], "gor_pipe_id")
 
+    def test_pipeid_pipe_data_parsed(self):
+        line = next(r for r in self.inv["lines"] if r["line_number"] == "168L-521")
+        self.assertEqual(line["nominal_size"], "65")
+        self.assertEqual(line["substance_code"], "W38")
+        self.assertEqual(line["pipe_spec"], "VE10H2A")
+        self.assertEqual(line["pipe_class"], "W38-VE10H2A")
+
     def test_foreign_layer_other_inserts(self):
         others = [r for r in self.inv["other_inserts"] if r["handle"] == "G3"]
         self.assertEqual(len(others), 1)
@@ -163,6 +170,19 @@ class TestGORCode03InventoryBuild(unittest.TestCase):
         valves = {r["tag"] for r in self.inv["valves"]}
         self.assertIn("162V-001", valves)
         self.assertIn("162KV3-575", valves)
+
+    def test_extracted_valves_classified_by_code03_heuristics(self):
+        """E-04: inventory extract from AirCap-shaped TEXT, then tag heuristics."""
+        from dwg_reader.adapters.gor_adapter import GORAdapter
+        from dwg_reader.run_hierarchy_orchestrator import _gor_code03_valve_type
+
+        adapter = GORAdapter()
+        want = {"162V-001": "NC", "162KV3-575": "AV"}
+        tags = {r["tag"] for r in self.inv["valves"]}
+        self.assertTrue(want.keys() <= tags)
+        for tag, expected in want.items():
+            self.assertEqual(adapter.resolve_valve_type(tag)[0], expected, tag)
+            self.assertEqual(_gor_code03_valve_type(tag), expected, tag)
 
 
 class TestSMLSensorLayer(unittest.TestCase):

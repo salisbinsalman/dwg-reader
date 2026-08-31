@@ -386,6 +386,12 @@ class CleanLineDescriptionTests(unittest.TestCase):
         self.assertNotIn("PP-200", result)
         self.assertIn("PLPR DIS LN", result)
 
+    def test_strips_bare_mm_size(self) -> None:
+        """B-05: leftover 15MM (no DN prefix) must be stripped."""
+        result = _clean_line_description("35-24-005 CLG WTR DIST SPUR 15MM")
+        self.assertNotIn("15MM", result)
+        self.assertIn("CLG WTR", result)
+
     def test_translates_wfc_to_clg_wtr(self) -> None:
         result = _clean_line_description("35-24-200 WFC LN DN80")
         self.assertIn("CLG WTR", result)

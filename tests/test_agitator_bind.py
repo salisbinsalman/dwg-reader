@@ -146,6 +146,18 @@ class AgitatorBindTests(unittest.TestCase):
         self.assertIn("MTR", eqktx.upper())
         self.assertIn("BROKE", eqktx.upper())
 
+    def test_motor_eqktx_pump_example_from_motors_docx(self) -> None:
+        """H-04: Example for motors.docx — 35-24P518 → 35-24-518.1."""
+        eqktx = _motor_eqktx(
+            "35-24-518.1",
+            "35-24P518",
+            "35-24P518 BROKE REJECT PMP",
+        )
+        self.assertTrue(eqktx.startswith("35-24-518.1"))
+        self.assertIn("MTR", eqktx.upper())
+        self.assertIn("BROKE", eqktx.upper())
+        self.assertNotIn("PMP", eqktx.upper())
+
 
 class MissingMachineFunctionTests(unittest.TestCase):
     def test_appends_p518_when_inventory_has_it(self) -> None:

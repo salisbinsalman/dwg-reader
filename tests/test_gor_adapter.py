@@ -228,6 +228,23 @@ class TestGORAdapterCode03Fallback(unittest.TestCase):
         self.assertEqual(vtype, "HV")
         self.assertTrue(is_valve)
 
+    def test_aircap_code03_golden_tags(self):
+        """E-04: tags from GORA68210.05 AirCap Code 03 (1-VALVE TEXT GOR)."""
+        expected = {
+            "162KV1-575": "AV",
+            "162KV2-575": "AV",
+            "162KV3-575": "AV",
+            "162V-001": "NC",
+            "162V-002": "NC",
+            "162HV1-500": "HV",
+            "162HV1-600": "HV",
+            "162V1-570": "HV",
+        }
+        for tag, want in expected.items():
+            vtype, is_valve = self.a.resolve_valve_type(tag)
+            self.assertEqual(vtype, want, tag)
+            self.assertTrue(is_valve, tag)
+
 
 class TestGORAdapterDescriptions(unittest.TestCase):
     def setUp(self):
@@ -240,7 +257,7 @@ class TestGORAdapterDescriptions(unittest.TestCase):
         self.assertEqual(self.a.tipo_description("4S4-LWE-15"), "SOLENOID NC VLV")
 
     def test_tipo_description_vx(self):
-        self.assertEqual(self.a.tipo_description("VX-25"), "3-WAY SOL VLV")
+        self.assertEqual(self.a.tipo_description("VX-25"), "AUTO DEAERATOR")
 
     def test_tipo_description_st(self):
         self.assertEqual(self.a.tipo_description("ST-65"), "SAFETY VLV")
@@ -361,6 +378,59 @@ class TestGORRepairHierarchy(unittest.TestCase):
         self.assertIn("168V-521", subs_under_521)
         self.assertIn("168-ST521", subs_under_521)
         self.assertIn("168L-532", {r.get("EQUIPMENT") for r in out})
+
+
+class TestGORMotorSubDesignation(unittest.TestCase):
+    """M4 suffix without hyphen: same-duty unit sub-designation (168F-315M4)."""
+
+    def setUp(self):
+        self.a = GORAdapter()
+
+    def test_motor_subdesig_is_motor_tag(self):
+        self.assertTrue(self.a.is_motor_tag("168F-315M4"))
+        self.assertTrue(self.a.is_motor_tag("168P-410M2"))
+
+    def test_motor_subdesig_not_equipment_tag(self):
+        self.assertFalse(self.a.is_equipment_tag("168F-315M4"))
+        self.assertFalse(self.a.is_equipment_tag("168P-410M2"))
+
+    def test_derive_motor_returns_none_for_subdesig(self):
+        self.assertIsNone(self.a.derive_motor_tag("168F-315M4"))
+        self.assertIsNone(self.a.derive_motor_tag("168P-410M2"))
+
+    def test_plain_equipment_still_derives_motor(self):
+        self.assertEqual(self.a.derive_motor_tag("168F-315"), "168F-315-M1")
+
+    def test_instrument_m_tag_not_affected(self):
+        # 168M1 is an instrument (M = type letter, not a motor sub-desig suffix)
+        self.assertFalse(self.a.is_motor_tag("168M1"))
+
+
+class TestGORInlineComponents(unittest.TestCase):
+    """VX = automatic deaerator: in-line piping component, not a strict valve."""
+
+    def setUp(self):
+        self.a = GORAdapter()
+
+    def test_vx_tag_is_inline_component(self):
+        self.assertTrue(self.a.is_inline_component_tag("168VX-521"))
+
+    def test_vx_still_classified_as_valve_tag(self):
+        # VX stays in valve letters so the hierarchy builder nests it under lines
+        self.assertTrue(self.a.is_valve_tag("168VX-521"))
+
+    def test_non_vx_is_not_inline_component(self):
+        self.assertFalse(self.a.is_inline_component_tag("168V-521"))
+        self.assertFalse(self.a.is_inline_component_tag("168-ST521"))
+        self.assertFalse(self.a.is_inline_component_tag("168P-410"))
+
+    def test_vx_description_is_auto_deaerator(self):
+        self.assertEqual(self.a.tipo_description("VX-25"), "AUTO DEAERATOR")
+
+    def test_vx_sap_type_is_av(self):
+        vtype, is_valve = self.a.resolve_valve_type("168VX-521", tipo="VX-25")
+        self.assertEqual(vtype, "AV")
+        self.assertTrue(is_valve)
 
 
 if __name__ == "__main__":

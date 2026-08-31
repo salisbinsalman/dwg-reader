@@ -282,9 +282,19 @@ def clip_pltxt(text: str, max_len: int = 40) -> str:
     return clipped.rstrip(" -")
 
 
-def format_line_eqktx(tag: str, eqktx: str, *, hequi: str = "", max_len: int = 40) -> str:
+def format_line_eqktx(
+    tag: str,
+    eqktx: str,
+    *,
+    hequi: str = "",
+    parent_fn: str = "",
+    max_len: int = 40,
+) -> str:
     """
-    SML Equipment Text rule: pipe line rows start with ``LN {tag} …``.
+    SML Equipment Text rule: ``LN {tag} {parent-fn} {role}``.
+
+    Masterdata SOP / Meeting 2-doc: ``LN 42-46627 42P5107 SUCT``. Parent-ref is
+    the parent machine FUNCTION (pump/tank/pulper), not a peer line number.
 
     Applied after normalize_pltxt. Strips trailing LINE/LN markers and rebuilds
     with the LN prefix. Skips valves/fittings on lines (usually sub-equipment).
@@ -323,10 +333,19 @@ def format_line_eqktx(tag: str, eqktx: str, *, hequi: str = "", max_len: int = 4
                 break
             rest = stripped
 
+    # Strip any standalone LN/LINE markers that survived mid-string (e.g. "SEAL WTR LN REEL PLPR")
+    rest = re.sub(r"\b(?:LINE|LN)\b", "", rest)
     # Prefer destination words over a second numeric tag that eats the 40-char budget.
     rest = re.sub(r"\b\d{2}-\d{2}-\d+\b", "", rest)
     rest = re.sub(r"\b\d{2}-\d{2}-", " ", rest)
     rest = re.sub(r" {2,}", " ", rest).strip(" -/")
+
+    # Parent-ref slot: machine FUNCTION only (skip another line number).
+    fn = re.sub(r"\s+", "", str(parent_fn or "").strip()).upper()
+    if fn and fn != tag_u and not is_line_equipment_tag(fn):
+        rest = re.sub(r"(?:^|\s)" + re.escape(fn) + r"(?:\s|$)", " ", rest)
+        rest = re.sub(r" {2,}", " ", rest).strip(" -/")
+        rest = f"{fn} {rest}".strip() if rest else fn
 
     formatted = f"{want} {rest}".strip() if rest else want
     return clip_pltxt(formatted, max_len)
@@ -472,18 +491,20 @@ def is_never_valve_tag(tag: str) -> bool:
 
 def strip_valve_prefix(tag: str) -> str:
     """
-    Remove embedded valve letters from tag, preserving any position digit.
+    Remove embedded valve letters from tag, merging any position digit into the number.
 
-    35-24HV-548  → 35-24-548    (no position digit)
-    35-24LV2-576 → 35-24-2-576  (position digit kept for disambiguation)
-    35-24LV1-560 → 35-24-1-560  (avoids collision with LV2-560)
+    35-24HV-548  → 35-24-548     (no position digit)
+    35-24LV2-576 → 35-24-2576   (position digit 2 merged into number; avoids 4-segment tag)
+    35-24LV1-560 → 35-24-1560   (distinct from LV2-560 → 35-24-2560, no collision)
+    35-24LV-621  → 35-24-621    (LV without position digit)
     Plain tags and non-valve tags are returned unchanged.
     """
     t = re.sub(r"\s+", "", str(tag or "").strip()).upper()
 
     def _rebuild(m: re.Match) -> str:  # type: ignore[type-arg]
         area, pos_digit, number = m.group(1), m.group(2), m.group(3)
-        return f"{area}-{pos_digit}-{number}" if pos_digit else f"{area}-{number}"
+        # Merge position digit directly into number (no extra hyphen) to keep 3-segment format.
+        return f"{area}-{pos_digit}{number}" if pos_digit else f"{area}-{number}"
 
     return re.sub(r"^(\d{2}-\d{2})-?[A-Z]+(\d*)-?(\d+.*)$", _rebuild, t, flags=re.I)
 

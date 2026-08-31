@@ -44,8 +44,9 @@ _SIMPLE_RE = re.compile(r"^(\d{3})([A-Z]{1,4})(\d*)(.*)$", re.I)
 _ST_RE = re.compile(r"^(\d{3})-?ST-?(\d+)(.*)$", re.I)
 # Line tag: 168L-521
 _LINE_RE = re.compile(r"^\d{3}L-\d+$", re.I)
-# Motor suffix
+# Motor suffix (hyphenated: 168P-410-M1) and sub-designation (no hyphen: 168F-315M4)
 _MOTOR_SUFFIX_RE = re.compile(r"-M\d+$", re.I)
+_MOTOR_SUBDESIG_RE = re.compile(r"^M\d+$", re.I)
 # Leading letters after unit prefix
 _LETTERS_RE = re.compile(r"^\d{3}([A-Z]{1,4})", re.I)
 
@@ -104,7 +105,7 @@ _TIPO_TO_SAP: Dict[str, Tuple[Optional[str], bool]] = {
     "LWE": ("NC", True),   # solenoid, normally closed
     "IT":  ("NC", True),   # isolation tap
     "ST":  ("SV", True),   # safety valve
-    "VX":  ("AV", True),   # 3-way solenoid
+    "VX":  ("AV", True),   # automatic deaerator (actuation valve class)
     "FL":  (None, False),  # blind flange — not a valve
     # BF (butterfly): depends on prefix (6* → AV, else → NC) — handled in code
 }
@@ -113,10 +114,13 @@ _TIPO_DESCRIPTIONS: Dict[str, str] = {
     "BF":  "BUTTERFLY VLV",
     "LWE": "SOLENOID NC VLV",
     "IT":  "ISOLATION TAP VLV",
-    "VX":  "3-WAY SOL VLV",
+    "VX":  "AUTO DEAERATOR",
     "ST":  "SAFETY VLV",
     "FL":  "BLIND FLANGE",
 }
+
+# In-line piping components (not strict valves): VX = automatic deaerator
+_INLINE_COMPONENT_LETTERS = frozenset({"VX"})
 
 _INSTR_LABELS: Dict[str, str] = {
     "TC":  "TEMP CTRL",
@@ -298,7 +302,17 @@ class GORAdapter(BaseAdapter):
         return len(letters) >= 2
 
     def is_motor_tag(self, tag: str) -> bool:
-        return bool(_MOTOR_SUFFIX_RE.search(self._norm(tag)))
+        t = self._norm(tag)
+        if _MOTOR_SUFFIX_RE.search(t):
+            return True
+        # Same-duty sub-designation: 168F-315M4 has suffix "M4" (no hyphen)
+        return bool(_MOTOR_SUBDESIG_RE.match(self.parse_tag(t).get("suffix", "")))
+
+    def is_inline_component_tag(self, tag: str) -> bool:
+        """Return True for in-line piping components (VX = automatic deaerator).
+        These are distinct from valves in the GOR drawing convention even though
+        they use TAG VALVOLA blocks and carry a TIPO_VALVOLA attribute."""
+        return self._letters(self._norm(tag)) in _INLINE_COMPONENT_LETTERS
 
     # ------------------------------------------------------------------
     # Motor derivation
@@ -308,6 +322,9 @@ class GORAdapter(BaseAdapter):
         """168P-410 → 168P-410-M1. Not applied to tanks, valves, lines, instruments."""
         t = self._norm(equipment_tag)
         if _MOTOR_SUFFIX_RE.search(t):
+            return None
+        # M4 sub-designation without hyphen — already a motor tag
+        if _MOTOR_SUBDESIG_RE.match(self.parse_tag(t).get("suffix", "")):
             return None
         if _LINE_RE.match(t) or self.is_valve_tag(t):
             return None

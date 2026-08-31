@@ -140,6 +140,7 @@ def _clean_line_description(text: str, *, flow_codes: Optional[Dict[str, str]] =
         result = text  # empty codes dict — nothing to translate
 
     result = re.sub(r"\bPP-\d+[A-Z0-9]*\b|\bDN\d+\b", "", result, flags=re.I)
+    result = re.sub(r"\b\d{1,4}\s*MM\b", "", result, flags=re.I)
     result = _BARE_DN_RE.sub("", result)
     return re.sub(r" {2,}", " ", result).strip()
 
@@ -172,7 +173,7 @@ def _is_utility_line_function(tag: str, desc: str, child_count: int) -> bool:
     if not is_line_equipment_tag(tag):
         return False
     desc_upper = desc.upper()
-    if re.search(r"\bWFL\b", desc_upper):
+    if re.search(r"\bWFL\b", desc_upper) and child_count == 0:
         return True
     return False
 
@@ -293,20 +294,24 @@ def collect_functions(
 
     if not filter_utility_lines:
         if positions:
-            # Fix #2: machines before pipelines, then by X position within each group
-            ordered.sort(key=lambda t: (1 if is_line_equipment_tag(t[0]) else 0, positions.get(t[0], float("inf"))))
+            ordered.sort(key=lambda t: positions.get(t[0], float("inf")))
         elif sort_by_tag_number:
-            ordered.sort(key=lambda t: (1 if is_line_equipment_tag(t[0]) else 0, _tag_numeric_sort_key(t[0])))
+            ordered.sort(key=lambda t: _tag_numeric_sort_key(t[0]))
         return ordered
 
     # Second pass — count equipment / sub-equipment children per function.
+    # In the orchestrator CSV, FUNCTION and EQUIPMENT/SUB-EQUIPMENT are on separate rows,
+    # so we track the current function across rows to credit children correctly.
     child_count: Dict[str, int] = {fn: 0 for fn, _, _ in ordered}
+    current_fn = ""
     for row in all_rows:
         fn = _norm(row.get("FUNCTION")).upper().replace(" ", "")
         eq = _norm(row.get("EQUIPMENT")).upper().replace(" ", "")
         sub = _norm(row.get("SUB-EQUIPMENT")).upper().replace(" ", "")
-        if fn in child_count and (eq or sub):
-            child_count[fn] += 1
+        if fn and fn in child_count:
+            current_fn = fn
+        if current_fn and not fn and (eq or sub):
+            child_count[current_fn] += 1
 
     # Determine the primary area-unit from non-numeric-pipeline function tags
     # (machines, pumps, tanks) so we can detect cross-unit pipelines.
@@ -328,11 +333,10 @@ def collect_functions(
             logger.debug("Filtered cross-unit pipeline: %s (primary=%s)", fn, primary_unit)
             continue
         out.append((fn, mask, desc))
-    # Fix #2: machines (L, P, T) come before pipeline (35-24-NNN) functions, then by position
     if positions:
-        out.sort(key=lambda t: (1 if is_line_equipment_tag(t[0]) else 0, positions.get(t[0], float("inf"))))
+        out.sort(key=lambda t: positions.get(t[0], float("inf")))
     elif sort_by_tag_number:
-        out.sort(key=lambda t: (1 if is_line_equipment_tag(t[0]) else 0, _tag_numeric_sort_key(t[0])))
+        out.sort(key=lambda t: _tag_numeric_sort_key(t[0]))
     return out
 
 
@@ -446,11 +450,13 @@ def build_floc_rows(
         # (same rule as Equipment EQKTX — Rob/SML feedback).
         pltxt = desc or tag
         if is_line_equipment_tag(tag):
-            # Don't prepend the tag before format_line_eqktx — that duplicates
-            # it and normalize_pltxt's 40-char cap then eats the destination.
+            # Translate flow codes (WAF→WHITE WTR, WFL→SEAL WTR) BEFORE abbreviation so that
+            # abbreviating "SEAL"→"SL" afterwards doesn't trigger false re-translation of "SL"
+            # as the LP steam flow code.  normalize_pltxt then abbreviates the readable labels
+            # (e.g. WHITE WTR→WW) cleanly.  A second format_line_eqktx pass cleans remnants.
+            pltxt = _clean_line_description(pltxt)
             pltxt = normalize_pltxt(pltxt, max_len=80)
             pltxt = format_line_eqktx(tag, pltxt)
-            pltxt = _clean_line_description(pltxt)
             pltxt = format_line_eqktx(tag, pltxt)
         else:
             if pltxt and not pltxt.startswith(tag):

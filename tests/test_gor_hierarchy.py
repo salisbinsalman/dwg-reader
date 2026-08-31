@@ -55,7 +55,7 @@ class GorHierarchyBuildTests(unittest.TestCase):
                  "process_code": "WU", "sub_process": "WUC"},
         )
         eqktx = next(r["EQKTX"] for r in out if r["EQUNR"] == "168L-522")
-        self.assertEqual(eqktx, "LN 168L-522 PIPE")
+        self.assertEqual(eqktx, "LN 168L-522 WU12 PIPE")
         self.assertNotIn("DN", eqktx)
 
     def test_fan_motors_nested_under_injected_parent(self) -> None:

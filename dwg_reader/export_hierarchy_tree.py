@@ -17,6 +17,7 @@ from dwg_reader.dwg_floc_context import (
     floc_paths_for_function,
     load_floc_context_for_input,
     merge_floc_context,
+    normalize_pltxt,
 )
 from dwg_reader.dwg_pure_dump import json_path, safe_name, write_json
 from dwg_reader.export_sap_equipment import resolve_hierarchy_csv
@@ -124,7 +125,7 @@ def build_tree_rows(
         fn = _norm(row.get("FUNCTION")).upper().replace(" ", "")
         eq = _norm(row.get("EQUIPMENT")).upper().replace(" ", "")
         subeq = _norm(row.get("SUB-EQUIPMENT")).upper().replace(" ", "")
-        desc = _norm(row.get("DESCRIPTION"))
+        desc = normalize_pltxt(_norm(row.get("DESCRIPTION")))
         mask = _norm(row.get("MASK"))
         if fn and not eq and not subeq:
             current_fn = fn
