@@ -1,12 +1,16 @@
 #!/usr/bin/env python3
-"""CAD bind + tank-coverage + optional vision for Valmet agitators (C-09).
+"""CAD bind + tank-coverage + vision for Valmet agitators (C-09).
 
 Pipeline:
   1. Bind L401–L499 labels on P-AGITATOR_POS to PPI inserts.
   2. Append bound agitators as EQUIPMENT under the nearest tank FUNCTION.
-  3. Report vessels (tanks / pulpers) that still have no agitator child.
-  4. Optional tight-crop at the vessel base: propeller yes/no. Nearby L4xx is
-     bound; untagged propellers are QA-flagged and never given a made-up tag.
+  3. Report tanks (Txxx) that still have no L4xx child.
+  4. Tight-crop those tanks: propeller yes/no. Nearby L4xx is bound;
+     untagged tank propellers are QA-flagged and never given a made-up tag.
+     Pass ``vision=False`` (or ``--no-vision``) to skip the crop step.
+
+Pulpers, conveyors, and screens (L001–L399) are not this job — their rotors are
+already tagged as ``35-24-00N.1`` sub-equipment, not missing tank agitators.
 """
 
 from __future__ import annotations
@@ -37,15 +41,19 @@ logger = get_logger(__name__)
 
 AGITATOR_EQ_RE = re.compile(r"^\d{2}-\d{2}L(4\d{2})$", re.I)
 TANK_FN_RE = re.compile(r"^\d{2}-\d{2}T\d+", re.I)
-# Tanks plus process vessels / pulpers (L001–L399). L401–L499 are agitators.
-VESSEL_FN_RE = re.compile(r"^\d{2}-\d{2}[TL]\d+$", re.I)
 
 VisionDetect = Callable[[str, Path], bool]
 
 _PROPELLER_PROMPT = """\
-This crop is the base of vessel {TAG} on a Valmet P&ID.
-Look for a propeller / agitator glyph (three blades, or a PPI agitator symbol)
-sitting in the tank or pulper — not a pump, not a valve bowtie, not a motor circle.
+This crop is tank {TAG} on a Valmet P&ID.
+Look ONLY inside this tank for a tank-agitator glyph: a PPI agitator symbol or
+a three-blade propeller sitting in the liquid.
+
+Reply false for everything else, including:
+- pulper / AT rotors and gearbox boxes tagged like 35-24-00N.1
+- pumps, valve bowties, motor circles, dip pipes, vents
+- equipment that belongs to a neighboring tag, not {TAG}
+
 Reply with ONLY JSON: {{"propeller": true}} or {{"propeller": false}}
 Do not invent equipment tags.
 """
@@ -56,10 +64,8 @@ def _norm(tag: str) -> str:
 
 
 def is_vessel_function(tag: str) -> bool:
-    t = _norm(tag)
-    if not VESSEL_FN_RE.match(t):
-        return False
-    return not _is_agitator_equipment_tag(t)
+    """True for tank FUNCTIONs that can own an L4xx agitator (Txxx)."""
+    return bool(TANK_FN_RE.match(_norm(tag)))
 
 
 def agitators_under_functions(rows: Sequence[Dict[str, str]]) -> Dict[str, List[str]]:
@@ -83,7 +89,7 @@ def vessel_coverage(
     hierarchy_rows: Sequence[Dict[str, str]],
     inventory: Dict[str, Any],
 ) -> List[Dict[str, Any]]:
-    """One record per tank/pulper FUNCTION in the hierarchy, with agitator children."""
+    """One record per tank FUNCTION in the hierarchy, with L4xx agitator children."""
     children = agitators_under_functions(hierarchy_rows)
     fn_xy: Dict[str, Tuple[float, float]] = {}
     for fn in inventory.get("functions") or []:
@@ -347,7 +353,7 @@ def run_agitator_bind(
     structural_json: Optional[Path] = None,
     input_path: Optional[Path] = None,
     out_dir: Optional[Path] = None,
-    vision: bool = False,
+    vision: bool = True,
     vision_detect: Optional[VisionDetect] = None,
     skip_existing: bool = False,
     model_id: str = DEFAULT_MODEL_ID,
@@ -355,7 +361,7 @@ def run_agitator_bind(
     crop_half: float = 70.0,
     extra_below: float = 90.0,
 ) -> Dict[str, Any]:
-    """CAD bind, append, coverage, optional propeller vision. Writes agitator_bind.json."""
+    """CAD bind, append, coverage, propeller vision. Writes agitator_bind.json."""
     hier_path = Path(hierarchy_csv)
     inv_path = Path(inventory_json)
     struct_path = Path(structural_json) if structural_json else None
@@ -385,7 +391,11 @@ def run_agitator_bind(
     }
 
     vision_rows: List[Dict[str, Any]] = []
-    uncovered = [c for c in coverage if not c["has_agitator"] and c["x"] is not None]
+    uncovered = [
+        c
+        for c in coverage
+        if not c["has_agitator"] and c["x"] is not None and is_vessel_function(c["function"])
+    ]
     if vision and uncovered:
         used = _used_agitator_tags(inventory, rows)
         detect = vision_detect

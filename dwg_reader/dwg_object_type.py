@@ -10,7 +10,7 @@ Lookup hierarchy:
     1. Tag prefix  e.g. "35-24LC-576" → prefix "LC" → 1200 (INSTRUMENT LEVEL)
     2. Motor suffix (.1 / -M1) → 1101, before description keywords
     3. Description keywords (ordered, first match wins)
-    4. Fallback → 9999 (NOT CATEGORIZED), work_centre ""
+    4. Fallback → blank EQART (Rob: leave unknown types empty for review)
 """
 
 from __future__ import annotations
@@ -143,6 +143,9 @@ def classify_equipment(
     # 2.6 Motor sub-equipment suffix BEFORE description keywords.
     # Otherwise a motor copied from a pulper/winder parent ("WINDER PLPR")
     # classifies as 2005 MECH instead of 1101 ELEC.
+    # Rotors (35-24L009.1) share the decimal suffix but are equipment, not motors.
+    if re.match(r"^\d{2}-\d{2}[A-Z]+\d+\.\d+$", tag, re.I):
+        return _resolve("2000")
     if _MOTOR_SUFFIX_RE.search(tag):
         return _resolve("1101")
 
@@ -161,5 +164,5 @@ def classify_equipment(
         if all(kw in desc_upper for kw in rule["match"]):
             return _resolve(rule["code"])
 
-    # 4. Fallback
-    return _resolve("9999")
+    # 4. Fallback — blank, not 9999. Unknown types must be reviewed, not invented.
+    return "", ""

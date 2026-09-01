@@ -385,14 +385,14 @@ class AgitatorBindStepTests(unittest.TestCase):
                 [
                     {
                         "SUB-PROCESS": "",
-                        "FUNCTION": "35-24L001",
+                        "FUNCTION": "35-24T604",
                         "EQUIPMENT": "",
                         "SUB-EQUIPMENT": "",
                         "MASK": "",
-                        "DESCRIPTION": "PRESS PLPR",
+                        "DESCRIPTION": "BROKE FILTRATE TANK",
                     },
                 ],
-                {"functions": [{"function": "35-24L001", "x": 50.0, "y": 50.0}], "agitators": []},
+                {"functions": [{"function": "35-24T604", "x": 50.0, "y": 50.0}], "agitators": []},
                 {"text_entities": []},
             )
             report = run_agitator_bind(
@@ -404,10 +404,93 @@ class AgitatorBindStepTests(unittest.TestCase):
                 vision=True,
                 vision_detect=lambda _fn, _crop: False,
             )
-            self.assertEqual(report["tanks_without_agitator"], ["35-24L001"])
+            self.assertEqual(report["tanks_without_agitator"], ["35-24T604"])
             self.assertFalse(any(v.get("propeller") for v in report["vision"]))
             rows = read_hierarchy_csv(hier)
             self.assertEqual([r.get("EQUIPMENT") for r in rows if r.get("EQUIPMENT")], [])
+
+    def test_vision_skips_pulpers_and_conveyors(self) -> None:
+        """C-09 binds L4xx tank agitators. Pulper rotors (.1/.2) are not this job."""
+        from dwg_reader.dwg_agitator_bind import run_agitator_bind
+        from dwg_reader.run_hierarchy_orchestrator import read_hierarchy_csv
+
+        asked: list = []
+
+        def detect(fn: str, _crop) -> bool:
+            asked.append(fn)
+            return True
+
+        with tempfile.TemporaryDirectory() as td:
+            td_path = Path(td)
+            hier, inv_path, struct_path = self._write(
+                td_path,
+                [
+                    {
+                        "SUB-PROCESS": "",
+                        "FUNCTION": "35-24L001",
+                        "EQUIPMENT": "",
+                        "SUB-EQUIPMENT": "",
+                        "MASK": "",
+                        "DESCRIPTION": "PRESS PLPR",
+                    },
+                    {
+                        "SUB-PROCESS": "",
+                        "FUNCTION": "35-24T601",
+                        "EQUIPMENT": "",
+                        "SUB-EQUIPMENT": "",
+                        "MASK": "",
+                        "DESCRIPTION": "COUCH PIT",
+                    },
+                    {
+                        "SUB-PROCESS": "",
+                        "FUNCTION": "",
+                        "EQUIPMENT": "35-24L401",
+                        "SUB-EQUIPMENT": "",
+                        "MASK": "AGITATOR",
+                        "DESCRIPTION": "35-24L401 COUCH PIT AGITATOR",
+                    },
+                    {
+                        "SUB-PROCESS": "",
+                        "FUNCTION": "35-24T604",
+                        "EQUIPMENT": "",
+                        "SUB-EQUIPMENT": "",
+                        "MASK": "",
+                        "DESCRIPTION": "BROKE FILTRATE TANK",
+                    },
+                ],
+                {
+                    "functions": [
+                        {"function": "35-24L001", "x": 50.0, "y": 50.0},
+                        {"function": "35-24T601", "x": 200.0, "y": 200.0},
+                        {"function": "35-24T604", "x": 400.0, "y": 400.0},
+                    ],
+                    "agitators": [],
+                },
+                {"text_entities": []},
+            )
+            report = run_agitator_bind(
+                hierarchy_csv=hier,
+                inventory_json=inv_path,
+                structural_json=struct_path,
+                out_dir=td_path,
+                input_path=Path("inputs/Broke System.dwg"),
+                vision=True,
+                vision_detect=detect,
+            )
+            self.assertEqual(report["tanks_with_agitator"], ["35-24T601"])
+            self.assertEqual(report["tanks_without_agitator"], ["35-24T604"])
+            self.assertNotIn("35-24L001", report["tanks_without_agitator"])
+            self.assertEqual(asked, ["35-24T604"])
+            self.assertEqual([v["function"] for v in report["vision"]], ["35-24T604"])
+            self.assertEqual(report["untagged_propellers"], ["35-24T604"])
+            rows = read_hierarchy_csv(hier)
+            invented = [
+                r.get("EQUIPMENT")
+                for r in rows
+                if (r.get("EQUIPMENT") or "").startswith("35-24L")
+                and r.get("EQUIPMENT") != "35-24L401"
+            ]
+            self.assertEqual(invented, [])
 
 
 if __name__ == "__main__":

@@ -174,7 +174,6 @@ class TestGORCode03InventoryBuild(unittest.TestCase):
     def test_extracted_valves_classified_by_code03_heuristics(self):
         """E-04: inventory extract from AirCap-shaped TEXT, then tag heuristics."""
         from dwg_reader.adapters.gor_adapter import GORAdapter
-        from dwg_reader.run_hierarchy_orchestrator import _gor_code03_valve_type
 
         adapter = GORAdapter()
         want = {"162V-001": "NC", "162KV3-575": "AV"}
@@ -182,7 +181,6 @@ class TestGORCode03InventoryBuild(unittest.TestCase):
         self.assertTrue(want.keys() <= tags)
         for tag, expected in want.items():
             self.assertEqual(adapter.resolve_valve_type(tag)[0], expected, tag)
-            self.assertEqual(_gor_code03_valve_type(tag), expected, tag)
 
 
 class TestSMLSensorLayer(unittest.TestCase):

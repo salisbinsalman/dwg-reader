@@ -96,175 +96,6 @@ _GOR_INSTR_TAG_RE = re.compile(r"^\d{3}([A-Z]{1,4})\d*$", re.I)
 _GOR_INSTR_COMPOUND_RE = re.compile(r"^\d{3}([A-Z]{1,4})-\d+$", re.I)
 
 
-def _tipo_suffix(tipo: str) -> Optional[str]:
-    """Extract TIPO family code (e.g. '2K0-BF-65' → 'BF', 'ST-65' → 'ST')."""
-    parts = (tipo or "").split("-")
-    if len(parts) >= 3:
-        return parts[1].upper()
-    if len(parts) == 2:
-        return parts[0].upper()
-    return None
-
-
-def _gor_code03_valve_type(tag: str) -> Optional[str]:
-    """Infer SAP valve type for Code 03 GOR text tags (no TIPO_VALVOLA block).
-
-    Delegates to GORAdapter so KV→AV, ``\\dV-\\d``→NC, ST→SV, else HV stay
-    identical to ``resolve_valve_type`` (including hyphenated ST tags).
-    """
-    t = re.sub(r"\s+", "", str(tag or "").strip()).upper()
-    if not t:
-        return None
-    from dwg_reader.adapters.gor_adapter import GORAdapter
-    vtype, _is_valve = GORAdapter()._code03_type(t)
-    return vtype
-
-
-def _tipo_to_sap_type(tipo: str) -> tuple[Optional[str], bool]:
-    """Map GOR TIPO_VALVOLA to SAP valve type. Returns (sap_type, is_valve)."""
-    t = (tipo or "").strip().upper()
-    if not t:
-        return None, True
-
-    suffix = _tipo_suffix(t) or ""
-    prefix = t.split("-")[0].upper() if "-" in t else ""
-
-    if suffix == "FL":
-        return None, False
-    if suffix == "ST":
-        return "SV", True
-    if suffix == "VX":
-        return "AV", True
-    if suffix == "LWE":
-        return "NC", True
-    if suffix == "IT":
-        return "NC", True
-    if suffix == "BF":
-        return ("AV", True) if prefix.startswith("6") else ("NC", True)
-
-    return None, True
-
-
-def _seed_gor_valve_types(inv_path: Path, valve_types_path: Path, fn_id: str) -> None:
-    """Create valve_types.json entries from GOR inventory (no Bedrock vision)."""
-    try:
-        inv_data = json.loads(inv_path.read_text(encoding="utf-8"))
-    except Exception as exc:
-        logger.warning("Could not read inventory JSON %s: %s", inv_path, exc)
-        return
-
-    raw: Dict[str, Any] = {}
-    if valve_types_path.exists():
-        try:
-            raw = json.loads(valve_types_path.read_text(encoding="utf-8"))
-        except Exception as exc:
-            logger.warning("Could not read valve types %s: %s", valve_types_path, exc)
-            raw = {}
-    tags_data = raw.get("tags", {})
-    if not isinstance(tags_data, dict):
-        tags_data = {}
-
-    seeded = 0
-    for v in inv_data.get("valves") or []:
-        tag = str(v.get("tag") or "").strip().upper()
-        if not tag or tag == "TAG VALVOLA":
-            continue
-        if tag not in tags_data:
-            tags_data[tag] = {
-                "fn": fn_id,
-                "layer": str(v.get("layer") or "1-VALVE TEXT GOR"),
-            }
-            seeded += 1
-
-    raw["tags"] = tags_data
-    valve_types_path.parent.mkdir(parents=True, exist_ok=True)
-    valve_types_path.write_text(
-        json.dumps(raw, indent=2, ensure_ascii=False), encoding="utf-8"
-    )
-    if seeded:
-        logger.info(f"[gor] valve_types seeded: {seeded} tags from inventory")
-
-
-def _patch_gor_valve_types(inv_path: Path, valve_types_path: Path, fn_id: str) -> None:
-    """Apply TIPO SAP types and mark instruments is_valve=False in valve_types.json."""
-    try:
-        inv_data = json.loads(inv_path.read_text(encoding="utf-8"))
-    except Exception as exc:
-        logger.warning("Could not read inventory JSON %s: %s", inv_path, exc)
-        return
-    _seed_gor_valve_types(inv_path, valve_types_path, fn_id)
-    if not valve_types_path.exists():
-        return
-    try:
-        raw = json.loads(valve_types_path.read_text(encoding="utf-8"))
-    except Exception as exc:
-        logger.warning("Could not read valve types %s: %s", valve_types_path, exc)
-        return
-    tags_data = raw.get("tags", {})
-    if not isinstance(tags_data, dict):
-        tags_data = {}
-
-    # Build TIPO → SAP type map from inventory valves
-    tipo_map: Dict[str, Optional[str]] = {}
-    tipo_full: Dict[str, str] = {}
-    valve_flags: Dict[str, bool] = {}
-    for v in inv_data.get("valves") or []:
-        tag = str(v.get("tag") or "").strip().upper()
-        tipo = str(v.get("valve_type") or "").strip()
-        if tag:
-            tipo_full[tag] = tipo
-            sap_type, is_valve = _tipo_to_sap_type(tipo)
-            tipo_map[tag] = sap_type
-            valve_flags[tag] = is_valve
-
-    # Instrument tags (skip LOOPDCS placeholders)
-    instr_tags: set = set()
-    seen_instr: set = set()
-    for instr in inv_data.get("instruments") or []:
-        tag = str(instr.get("tag") or "").strip().upper()
-        if tag and tag not in ("LOOPDCS",) and tag not in seen_instr:
-            seen_instr.add(tag)
-            instr_tags.add(tag)
-
-    tipo_applied = instr_marked = 0
-
-    for tag_upper in list(tags_data.keys()):
-        entry = tags_data[tag_upper]
-        if not isinstance(entry, dict):
-            continue
-
-        if tag_upper in instr_tags:
-            entry["is_valve"] = False
-            entry["type"] = "INSTR"
-            instr_marked += 1
-        elif tag_upper in tipo_map:
-            # TIPO code is authoritative for GOR drawings — Bedrock vision is
-            # trained on SML symbols and misclassifies Valmet/Italian CAD styles.
-            is_valve = valve_flags.get(tag_upper, True)
-            vtype = tipo_map[tag_upper] or _gor_code03_valve_type(tag_upper)
-            entry["tipo"] = tipo_full.get(tag_upper, "")
-            entry["source"] = "tipo_code" if tipo_map[tag_upper] else "gor_tag"
-            if not is_valve:
-                entry["is_valve"] = False
-                entry.pop("type", None)
-            elif vtype:
-                entry["type"] = vtype
-                tipo_applied += 1
-        else:
-            vtype = _gor_code03_valve_type(tag_upper)
-            if vtype:
-                entry["type"] = vtype
-                entry["source"] = "gor_tag"
-                entry["is_valve"] = True
-                tipo_applied += 1
-
-    raw["tags"] = tags_data
-    valve_types_path.write_text(
-        json.dumps(raw, indent=2, ensure_ascii=False), encoding="utf-8"
-    )
-    logger.info(f"[gor] valve_types patched: {tipo_applied} TIPO codes applied, {instr_marked} instruments marked")
-
-
 def _is_gor_inventory(inv_path: Path) -> bool:
     """True when the inventory is from a GOR drawing (Code 03, 13, or 14)."""
     try:
@@ -476,6 +307,8 @@ def build_gor_hierarchy(inventory: Dict[str, Any]) -> List[Dict[str, str]]:
 DEFAULT_HIERARCHY_FUNCTION_KINDS = ("equipment", "line")
 _INSTRUMENT_FN_RE = re.compile(r"^\d{2}-\d{2}(?:ES|HS|HI|WI|KI|KJ|MCS)-\d", re.I)
 _PHANTOM_EQUIP_RE = re.compile(r"\.\d+$")
+# Genuine pulper/agitator rotors: 35-24L009.1 — keep even if absent from inventory.
+_ROTOR_TAG_RE = re.compile(r"^\d{2}-\d{2}[A-Z]+\d+\.\d+$", re.I)
 
 
 def _is_instrument_function_tag(tag: str) -> bool:
@@ -515,9 +348,14 @@ def sanitize_hierarchy_rows(
     inventory_tags: if provided, decimal-suffix tags that exist in the inventory
     (e.g. genuine rotor sub-equipment 35-24L009.1) are preserved even though
     they match _PHANTOM_EQUIP_RE.
+
+    Duplicate tags: first-wins, except a later pump FUNCTION (P###) takes the
+    tag from an earlier non-pump owner (B01: P519 vs L009).
     """
-    out: List[Dict[str, str]] = []
-    seen_equipment: set[str] = set()
+    out: List[Optional[Dict[str, str]]] = []
+    seen_equipment: Dict[str, int] = {}
+    owner_fn: Dict[str, str] = {}
+    current_fn = ""
     current_fn_prefix = ""
 
     for row in rows:
@@ -526,6 +364,7 @@ def sanitize_hierarchy_rows(
         sub = str(row.get("SUB-EQUIPMENT") or "").strip().upper().replace(" ", "")
 
         if fn and not eq and not sub:
+            current_fn = fn
             current_fn_prefix = _plant_prefix(fn)
             out.append(row)
             continue
@@ -535,19 +374,32 @@ def sanitize_hierarchy_rows(
             continue
 
         tag = eq or sub
-        # Drop AI-hallucinated decimal sub-tags (35-24-508.2, .3, .4) unless
-        # the tag actually exists in the inventory (genuine rotors like 35-24L009.1).
-        if _PHANTOM_EQUIP_RE.search(tag) and tag not in inventory_tags:
+        # Drop AI-hallucinated decimal sub-tags (35-24-508.2) unless the tag is a
+        # genuine rotor (35-24L009.1) or exists in the inventory.
+        if (
+            _PHANTOM_EQUIP_RE.search(tag)
+            and tag not in inventory_tags
+            and not _ROTOR_TAG_RE.match(tag)
+        ):
             continue
         if is_phantom_motor_line_tag(tag, str(row.get("DESCRIPTION") or "")):
             continue
         if current_fn_prefix and _plant_prefix(tag) and _plant_prefix(tag) != current_fn_prefix:
             continue
         if tag in seen_equipment:
+            earlier_fn = owner_fn[tag]
+            later_pump = bool(_PUMP_FN_RE.match(current_fn))
+            earlier_pump = bool(_PUMP_FN_RE.match(earlier_fn))
+            if later_pump and not earlier_pump:
+                out[seen_equipment[tag]] = None
+                seen_equipment[tag] = len(out)
+                owner_fn[tag] = current_fn
+                out.append(row)
             continue
-        seen_equipment.add(tag)
+        seen_equipment[tag] = len(out)
+        owner_fn[tag] = current_fn
         out.append(row)
-    return out
+    return [r for r in out if r is not None]
 
 
 def load_inventory_functions(
@@ -776,6 +628,7 @@ def _append_agitator_equipment_rows(
 
 
 _MACHINE_FN_RE = re.compile(r"^\d{2}-\d{2}[LPT]\d+$", re.I)
+_PUMP_FN_RE = re.compile(r"^\d{2}-\d{2}P\d+", re.I)
 
 # Instrument valve tag patterns used for actuator package injection
 _HV_TAG_RE = re.compile(r"^(\d{2}-\d{2})HV-(\d+)$", re.I)
@@ -849,6 +702,132 @@ def _append_missing_machine_functions(
     return len(missing)
 
 
+def _seed_childless_functions(
+    combined_csv: Path,
+    inv_path: Path,
+    radius: float = 180.0,
+) -> int:
+    """If a FUNCTION header has zero children, attach nearby inventory tags (B03)."""
+    import math
+
+    if not inv_path.exists() or not combined_csv.exists():
+        return 0
+    existing = read_hierarchy_csv(combined_csv)
+    if not existing:
+        return 0
+
+    in_hierarchy: set = set()
+    children_by_fn: Dict[str, int] = {}
+    current = ""
+    for row in existing:
+        fn = (row.get("FUNCTION") or "").strip().upper().replace(" ", "")
+        eq = (row.get("EQUIPMENT") or "").strip().upper().replace(" ", "")
+        sub = (row.get("SUB-EQUIPMENT") or "").strip().upper().replace(" ", "")
+        if fn and not eq and not sub:
+            current = fn
+            children_by_fn.setdefault(current, 0)
+        elif current and (eq or sub):
+            children_by_fn[current] = children_by_fn.get(current, 0) + 1
+        for col in ("FUNCTION", "EQUIPMENT", "SUB-EQUIPMENT"):
+            v = (row.get(col) or "").strip().upper().replace(" ", "")
+            if v:
+                in_hierarchy.add(v)
+
+    childless = [fn for fn, n in children_by_fn.items() if n == 0 and _MACHINE_FN_RE.match(fn)]
+    if not childless:
+        return 0
+
+    try:
+        inventory = json.loads(inv_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return 0
+
+    fn_xy: Dict[str, Tuple[float, float]] = {}
+    for fn in inventory.get("functions") or []:
+        tag = str(fn.get("function") or "").strip().upper()
+        x, y = fn.get("x"), fn.get("y")
+        if tag and x is not None and y is not None:
+            fn_xy[tag] = (float(x), float(y))
+
+    candidates: List[Tuple[str, float, float, str]] = []
+    for section, key in (
+        ("valves", "tag"),
+        ("control_valves", "tag"),
+        ("instruments", "tag"),
+        ("lines", "line_number"),
+    ):
+        for item in inventory.get(section) or []:
+            raw = item.get(key) or item.get("tag") or ""
+            tag = re.sub(r"\s+", "", str(raw)).strip().upper()
+            x, y = item.get("x"), item.get("y")
+            if not tag or tag in in_hierarchy or _MACHINE_FN_RE.match(tag):
+                continue
+            if x is None or y is None:
+                continue
+            desc = str(item.get("description") or tag).strip()
+            candidates.append((tag, float(x), float(y), desc))
+
+    seeds_by_fn: Dict[str, List[Tuple[str, str]]] = {}
+    for fn in childless:
+        xy = fn_xy.get(fn)
+        if not xy:
+            continue
+        pfx = _plant_prefix(fn)
+        fx, fy = xy
+        nearby: List[Tuple[float, str, str]] = []
+        for tag, x, y, desc in candidates:
+            if pfx and _plant_prefix(tag) != pfx:
+                continue
+            d = math.hypot(x - fx, y - fy)
+            if d <= radius:
+                nearby.append((d, tag, desc))
+        nearby.sort()
+        for _d, tag, desc in nearby:
+            if tag in in_hierarchy:
+                continue
+            seeds_by_fn.setdefault(fn, []).append((tag, desc))
+            in_hierarchy.add(tag)
+
+    if not seeds_by_fn:
+        return 0
+
+    result: List[Dict[str, str]] = []
+    pending: List[Tuple[str, str]] = []
+    seeded = 0
+    for row in existing:
+        fn = (row.get("FUNCTION") or "").strip().upper()
+        eq = (row.get("EQUIPMENT") or "").strip()
+        sub = (row.get("SUB-EQUIPMENT") or "").strip()
+        is_header = bool(fn) and not eq and not sub
+        if is_header:
+            for tag, desc in pending:
+                result.append({
+                    "SUB-PROCESS": "",
+                    "FUNCTION": "",
+                    "EQUIPMENT": tag,
+                    "SUB-EQUIPMENT": "",
+                    "MASK": "SEED",
+                    "DESCRIPTION": desc,
+                })
+                seeded += 1
+            pending = seeds_by_fn.get(fn, [])
+        result.append(row)
+    for tag, desc in pending:
+        result.append({
+            "SUB-PROCESS": "",
+            "FUNCTION": "",
+            "EQUIPMENT": tag,
+            "SUB-EQUIPMENT": "",
+            "MASK": "SEED",
+            "DESCRIPTION": desc,
+        })
+        seeded += 1
+
+    write_hierarchy_csv(combined_csv, result)
+    logger.info(f"[childless-seed] appended {seeded} inventory tags under empty FUNCTIONs")
+    return seeded
+
+
 def _load_inventory_tags(inv_path: Path) -> "set[str]":
     """Return the uppercase set of every tag in the inventory JSON."""
     try:
@@ -861,11 +840,16 @@ def _load_inventory_tags(inv_path: Path) -> "set[str]":
         "valves": "tag",
         "instruments": "tag",
         "agitators": "tag",
+        "pumps": "tag",
+        "tanks": "tag",
+        "motors": "tag",
+        "process_equipment": "tag",
         "lines": "line_number",
     }
     for section, key in key_map.items():
         for item in data.get(section) or []:
-            t = re.sub(r"\s+", "", str(item.get(key) or "")).strip().upper()
+            raw = item.get(key) or item.get("tag") or item.get("function") or item.get("resolved_tag")
+            t = re.sub(r"\s+", "", str(raw or "")).strip().upper()
             if t:
                 tags.add(t)
     return tags
@@ -1090,7 +1074,8 @@ def main() -> int:
     parser.add_argument(
         "--skip-existing",
         action="store_true",
-        help="Skip FUNCTIONs already present as headers in hierarchy_orchestrator.csv",
+        help="Skip FUNCTIONs already present as headers in hierarchy_orchestrator.csv "
+        "(does not skip valve or agitator vision)",
     )
     parser.add_argument(
         "--score-only",
@@ -1115,7 +1100,7 @@ def main() -> int:
     parser.add_argument(
         "--no-valve-classify",
         action="store_true",
-        help="Skip per-tag tight-crop valve classification before SAP export",
+        help="Skip per-tag tight-crop + legend vision classification (all drawing standards)",
     )
     parser.add_argument(
         "--no-agitator-vision",
@@ -1146,7 +1131,6 @@ def main() -> int:
         inventory_preview = {}
     eco = detect_ecosystem(input_path.name, inventory=inventory_preview)
     adapter = eco.adapter
-    is_gor = eco.name == "gor"
     prompt_file = (args.prompt_file or "").strip() or adapter.hierarchy_prompt_file
     args.prompt_file = prompt_file
     if not gt_path.exists():
@@ -1300,22 +1284,26 @@ def main() -> int:
             per_function_scores.append(score)
             logger.info(format_function_report(score))
 
-    # Mop-up and instrument injection — runs BEFORE scoring so that injected
-    # instrument packages (HI/HS, KS, FV) are counted in the accuracy report.
-    # Dedup/sanitize runs AFTER scoring: the "first occurrence wins" dedup would
-    # hurt hits for tags that the AI correctly placed late in the file but also
-    # placed (incorrectly) under an earlier function.  Scoring on the pre-dedup
-    # CSV gives the true measure of AI placement quality.
+    # Mop-up, seed, and instrument injection run before both score passes.
     inventory_tags: "set[str]" = set()
     sml_like = eco.name in ("sml", "valmet")
     process_all = (not args.tags.strip()) and args.limit == 0
+    if args.limit != 0:
+        logger.warning(
+            "LIMIT=%s truncates hierarchy and SAP; use --limit 0 for the full drawing",
+            args.limit,
+        )
     if combined_csv.exists() and combined_csv.stat().st_size > 0:
         structural_path = json_path(out_dir, f"{base}.structural_dump.json")
-        # Orphan/agitator mop-up is Valmet-only and dumps the whole sheet onto
-        # whichever FUNCTIONs were selected — skip on GOR/KSD and on --tags/--limit subsets.
+        # Orphan mop-up dumps the whole sheet onto whichever FUNCTIONs were
+        # selected — skip on GOR/KSD and on --tags/--limit subsets.
         if sml_like and process_all:
             _append_orphan_valve_rows(combined_csv, structural_path, inv_path)
-            logger.info("\n---------- agitator bind (CAD + tank coverage) ----------")
+            _append_missing_machine_functions(combined_csv, inv_path)
+            _seed_childless_functions(combined_csv, inv_path)
+        # Agitator + valve vision always run (even with --limit / --skip-existing).
+        if sml_like:
+            logger.info("\n---------- agitator bind (CAD + tank coverage + vision) ----------")
             run_agitator_bind(
                 hierarchy_csv=combined_csv,
                 inventory_json=inv_path,
@@ -1323,19 +1311,30 @@ def main() -> int:
                 input_path=input_path,
                 out_dir=out_dir,
                 vision=not bool(getattr(args, "no_agitator_vision", False)),
-                skip_existing=bool(args.skip_existing),
+                skip_existing=False,
                 model_id=args.model_id,
                 region=args.region,
             )
-            _append_missing_machine_functions(combined_csv, inv_path)
-        if sml_like:
             inventory_tags = _load_inventory_tags(inv_path)
             _inject_instrument_packages(combined_csv, inventory_tags)
 
-    # Final scores reflect mop-up + instrument injection, but NOT dedup.
-    # Strip orphan rows (MASK=ORPHAN) — placed by proximity heuristic, not AI.
+    def _scoreable(rows: List[Dict[str, str]]) -> List[Dict[str, str]]:
+        return [r for r in rows if (r.get("MASK") or "").strip().upper() not in {"ORPHAN"}]
+
     combined_rows = read_hierarchy_csv(combined_csv) if combined_csv.exists() else combined_rows
-    scoreable_rows = [r for r in combined_rows if (r.get("MASK") or "").strip().upper() != "ORPHAN"]
+    pre_sanitize_scores = [score_function(tag, _scoreable(combined_rows), gt_rows) for tag in all_tags]
+
+    if combined_csv.exists() and combined_csv.stat().st_size > 0:
+        cleaned = sanitize_hierarchy_rows(read_hierarchy_csv(combined_csv), inventory_tags)
+        cleaned = _apply_registry_and_write(
+            cleaned, drawing=base, out_dir=out_dir, dest=combined_csv
+        )
+        logger.info(f"[sanitize] hierarchy cleaned → {len(cleaned)} rows")
+        combined_rows = cleaned
+
+    # Headline scores match the CSV SAP export reads (post-sanitize). Pre-dedup
+    # remains in the report as a debug split (B05).
+    scoreable_rows = _scoreable(combined_rows)
     per_function_scores = [score_function(tag, scoreable_rows, gt_rows) for tag in all_tags]
     for score in per_function_scores:
         logger.info(format_function_report(score))
@@ -1364,12 +1363,14 @@ def main() -> int:
     summary = {
         "tags": all_tags,
         "limit": args.limit,
+        "limit_truncated": bool(args.limit),
         "model_id": args.model_id,
         "prompt_file": args.prompt_file,
         "gt": str(gt_path),
         "inventory": str(inv_path),
         "pred_csv": str(combined_csv),
-        "accuracy_definition": "per_function hit/gt, then mean (extras ignored)",
+        "accuracy_definition": "post_sanitize per_function hit/gt, then mean (extras ignored)",
+        "accuracy_scope": "post_sanitize",
         "equipment": {
             "gt_count": eq_gt,
             "hit": eq_hit,
@@ -1385,11 +1386,12 @@ def main() -> int:
             "accuracy": sub_acc,
         },
         "per_function": per_function_scores,
+        "per_function_pre_sanitize": pre_sanitize_scores,
     }
     write_json(report_json, summary)
 
     logger.info("\n========== ORCHESTRATOR SUMMARY ==========")
-    logger.info(f"functions scored: {len(all_tags)}")
+    logger.info(f"functions scored: {len(all_tags)} (post-sanitize; limit={args.limit})")
     logger.info(f"EQUIPMENT:     hit={eq_hit}/{eq_gt}  miss={eq_miss}  extra={eq_extra}  "
         f"acc={eq_acc*100:.1f}% (mean of per-function hit/gt)")
     logger.info(f"SUB-EQUIPMENT: hit={sub_hit}/{sub_gt}  miss={sub_miss}  extra={sub_extra}  "
@@ -1398,20 +1400,9 @@ def main() -> int:
     logger.info(f"combined CSV: {combined_csv}")
     log_path.write_text(json.dumps(summary, indent=2), encoding="utf-8")
 
-    # Dedup/sanitize runs AFTER scoring, for export quality only.
-    # It drops phantom decimal tags and cross-function duplicates but does NOT
-    # affect the accuracy numbers above.
     if combined_csv.exists() and combined_csv.stat().st_size > 0:
-        cleaned = sanitize_hierarchy_rows(read_hierarchy_csv(combined_csv), inventory_tags)
-        cleaned = _apply_registry_and_write(
-            cleaned, drawing=base, out_dir=out_dir, dest=combined_csv
-        )
-        logger.info(f"[sanitize] hierarchy cleaned → {len(cleaned)} rows")
-
-    if combined_csv.exists() and combined_csv.stat().st_size > 0:
-        limit_s = str(args.limit if args.limit > 0 else 0)
         if not args.no_valve_classify:
-            logger.info("\n---------- valve classify (tight crop + legend) ----------")
+            logger.info("\n---------- valve classify (tight crop + legend, all standards) ----------")
             run_valve_classify(
                 input_path=input_path,
                 out_dir=out_dir,
@@ -1419,14 +1410,9 @@ def main() -> int:
                 model_id=args.model_id,
                 region=args.region,
                 jobs=max(1, int(getattr(args, "jobs", 1) or 1)),
-                skip_existing=bool(args.skip_existing),
+                skip_existing=False,
                 aws_profile=args.aws_profile,
             )
-        if is_gor:
-            valve_types_path = json_path(out_dir, f"{base}.valve_types.json")
-            fn_id = tags[0] if tags else ""
-            logger.info("\n---------- gor tipo mapping (TIPO_VALVOLA → SAP) ----------")
-            _patch_gor_valve_types(inv_path, valve_types_path, fn_id)
 
         _run_sap_and_tree_exports(
             input_path=input_path,

@@ -165,7 +165,7 @@ class DrainParentTests(unittest.TestCase):
         )
         self.assertEqual(parent, "35-24L005")
 
-    def test_non_drain_keeps_hierarchy_parent(self) -> None:
+    def test_non_drain_on_conveyor_moves_to_vessel(self) -> None:
         parent = pick_parent_fn(
             x=self.xy[0],
             y=self.xy[1],
@@ -173,7 +173,19 @@ class DrainParentTests(unittest.TestCase):
             functions=self.functions,
             valve_type="HV",
         )
-        self.assertEqual(parent, "35-24L006")
+        self.assertEqual(parent, "35-24L005")
+
+    def test_lin_neighbor_vessel_wins(self) -> None:
+        parent = pick_parent_fn(
+            x=self.xy[0],
+            y=self.xy[1],
+            hierarchy_fn="35-24L006",
+            functions=self.functions,
+            valve_type="AV",
+            valve_tag="35-24HV-548",
+            lin_edges=[{"from": "35-24HV-548", "to": "35-24L005"}],
+        )
+        self.assertEqual(parent, "35-24L005")
 
     def test_drain_keeps_pulper_hierarchy_parent(self) -> None:
         parent = pick_parent_fn(

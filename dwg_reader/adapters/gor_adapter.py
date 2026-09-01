@@ -15,7 +15,7 @@ Safety valves are irregular: 168-ST521, 168ST-061, 168-ST-096.
 Equipment letters: E/A/P/T/X/F. Valve letters: V/ST/VX/KV/HV/FV. L = line.
 Two or more ISO letters = instrument. A hyphen does not mean equipment.
 
-Valve type source:
+Valve type source (inventory / descriptions only — SAP types come from legend vision):
   Code 14: TIPO_VALVOLA block attribute  (2K0-BF-65, 4S4-LWE-15, ST-65, VX-25 …)
            Known family typos like 4S4-LWE25 (missing hyphen) are normalised.
   Code 03/13: tag-pattern fallback       (KV in tag → AV, ^\\d+V-\\d → NC, else HV)

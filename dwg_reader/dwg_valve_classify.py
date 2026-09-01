@@ -2,6 +2,10 @@
 """
 Per-tag valve classification: tight CAD crop + legend → cached type + parent fn.
 
+Runs for every drawing standard (SML/Valmet, GOR, KSD, …). No CAD type
+heuristics and no TIPO overlay — the model reads the crop against
+``standards/legend.png``.
+
 Fixes the four remaining valve gaps:
   1. Tight crop around the valve insert (not the whole FUNCTION screenshot)
   2. Full legend vocabulary including AV-M
@@ -401,20 +405,43 @@ def pick_parent_fn(
     functions: List[Dict[str, Any]],
     valve_type: str = "",
     radius: float = 250.0,
+    valve_tag: str = "",
+    lin_edges: Optional[List[Dict[str, str]]] = None,
 ) -> str:
     """
-    Keep hierarchy ownership unless this is a drain on a conveyor/pump.
+    Keep hierarchy ownership unless the parent is a conveyor or this is a drain.
 
-    Drain valves on this drawing hang off pulpers/tanks; Euclidean nearest
-    often picks the neighbouring conveyor (L006 vs L005 for 35-24-137).
+    Drain valves and any valve sitting on a conveyor (L006 vs L005 for HV-548 /
+    35-24-137) reassign to the nearest pulper/tank. LIN_FROM/LIN_TO neighbors
+    that are vessels win when the graph is present (R27/B04).
     """
     hier = _norm_tag(hierarchy_fn)
     vtype = str(valve_type or "").upper()
-    if "DRN" not in vtype.split():
-        return hier
+
+    if valve_tag and lin_edges:
+        from dwg_reader.dwg_lin_graph import neighbors as lin_neighbors
+
+        nbs = lin_neighbors(lin_edges, valve_tag)
+        vessel_hits = [
+            fn for fn in functions
+            if fn.get("tag") in nbs and is_vessel_function(fn)
+        ]
+        if vessel_hits:
+            vessel_hits.sort(key=lambda fn: (fn["x"] - x) ** 2 + (fn["y"] - y) ** 2)
+            return vessel_hits[0]["tag"]
 
     hier_row = next((f for f in functions if f["tag"] == hier), None)
     if hier_row and is_vessel_function(hier_row):
+        return hier
+
+    is_conveyor_parent = bool(
+        hier_row
+        and (
+            _CONVEYOR_RE.search(str(hier_row.get("description") or ""))
+            or _CONVEYOR_RE.search(str(hier_row.get("tag") or ""))
+        )
+    )
+    if not is_conveyor_parent and "DRN" not in vtype.split():
         return hier
 
     vessels = []
@@ -2116,6 +2143,8 @@ def run_valve_classify_from_args(args: argparse.Namespace) -> int:
             hierarchy_fn=str(loc.get("fn_hierarchy") or ""),
             functions=functions,
             valve_type=vtype,
+            valve_tag=tag,
+            lin_edges=inventory.get("lin_from_to") or [],
         )
         cache[tag] = {
             "type": vtype,

@@ -26,7 +26,10 @@ from functools import lru_cache
 from pathlib import Path
 from typing import Any, Dict, Optional
 
+from dwg_reader.logutil import get_logger
 from dwg_reader.paths import STANDARDS_DIR
+
+logger = get_logger(__name__)
 
 _STANDARDS_DIR = STANDARDS_DIR
 
@@ -213,4 +216,10 @@ def detect(
     if is_gor_structural(structural) or is_gor_inventory(inventory):
         return _eco("gor")
 
+    if dwg_stem:
+        logger.warning(
+            "ecosystem detect: no stem prefix or GOR/KSD fingerprint for %r; "
+            "defaulting to valmet",
+            dwg_stem,
+        )
     return _eco("valmet")

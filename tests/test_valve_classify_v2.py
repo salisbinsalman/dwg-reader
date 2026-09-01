@@ -39,6 +39,9 @@ class V2PromptTests(unittest.TestCase):
             "THREE", "SAFETY", "STRAINER", "PLUG", "AIR VENT",
         ):
             self.assertIn(phrase, text.upper())
+        self.assertIn("ALL drawing standards", text)
+        for standard in ("SML", "GOR", "Valmet"):
+            self.assertIn(standard, text)
 
 
 class V2ParserTests(unittest.TestCase):

@@ -107,8 +107,13 @@ class ObjectTypeClassifierTests(unittest.TestCase):
 
     def test_fallback(self):
         code, wc = classify_equipment("35-24-999", "35-24-999 UNKNOWN THING")
-        self.assertEqual(code, "9999")
+        self.assertEqual(code, "")
         self.assertEqual(wc, "")
+
+    def test_rotor_letter_decimal_is_process_equipment_not_motor(self):
+        code, wc = classify_equipment("35-24L009.1", "35-24L009.1 RTR 1")
+        self.assertEqual(code, "2000")
+        self.assertEqual(wc, "MECH")
 
     def test_pump_single_letter_tag(self):
         # "35-24P519" — single-letter no-dash format → P → 701 without needing PMP in description
@@ -257,6 +262,11 @@ class FormatLineEqktxTests(unittest.TestCase):
         self.assertEqual(out, "LN 35-24-119 35-24P507 SUCT")
         self.assertEqual(out.count("35-24P507"), 1)
 
+    def test_strips_dangling_arrow(self) -> None:
+        out = format_line_eqktx("35-24-095", "LN 35-24-095 PRESS PLPR >")
+        self.assertEqual(out, "LN 35-24-095 PRESS PLPR")
+        self.assertNotIn(">", out)
+
 
 class EquipmentExportTests(unittest.TestCase):
     def test_build_rows_hequi_and_posnr(self) -> None:
@@ -267,9 +277,8 @@ class EquipmentExportTests(unittest.TestCase):
             {"FUNCTION": "", "EQUIPMENT": "35-24P519", "SUB-EQUIPMENT": "", "DESCRIPTION": "35-24P519 PMP"},
         ]
         out = build_equipment_rows(rows)
-        # 35-24L009(fn-equip), 35-24-189, 35-24-194, 35-24P519, motor(pump), motor(pulper)
-        # Pulpers (PLPR in description) match the winder_pulper driven_pattern → get motors
-        self.assertEqual(len(out), 6)
+        # Function, line, valve-sub, pump, pump motor, two pulper rotors, two rotor motors.
+        self.assertEqual(len(out), 9)
         by_tag = {r["EQUNR"]: r for r in out}
 
         # Function-level equipment for 35-24L009
@@ -308,6 +317,11 @@ class EquipmentExportTests(unittest.TestCase):
         self.assertEqual(by_tag["35-24-519.1"]["EQART"], "1101")
         self.assertEqual(by_tag["35-24-519.1"]["GEWRK"], "ELEC")
         self.assertEqual(by_tag["35-24-519.1"]["TPLNR"], by_tag["35-24P519"]["TPLNR"])
+
+        self.assertEqual(by_tag["35-24L009.1"]["HEQUI"], "35-24L009")
+        self.assertEqual(by_tag["35-24L009.2"]["HEQUI"], "35-24L009")
+        self.assertEqual(by_tag["35-24-009.1"]["HEQUI"], "35-24L009.1")
+        self.assertEqual(by_tag["35-24-009.2"]["HEQUI"], "35-24L009.2")
 
     def test_motor_tag_for_pump(self) -> None:
         self.assertEqual(_motor_tag_for("35-24P518"), "35-24-518.1")
@@ -454,6 +468,45 @@ class EquipmentExportTests(unittest.TestCase):
         motor = by_tag["35-24-404.1"]
         self.assertEqual(motor["HEQUI"], "35-24L404")
         self.assertEqual(motor["EQART"], "1101")
+        self.assertEqual(by_tag["35-24L404"]["HEQUI"], "",
+                         "agitator HEQUI stays blank when the parent FUNCTION is not a tank")
+
+    def test_agitator_hequi_is_tank_when_parent_is_tank(self) -> None:
+        rows = [
+            {"FUNCTION": "35-24T601", "EQUIPMENT": "", "SUB-EQUIPMENT": "", "DESCRIPTION": "COUCH PIT TNK"},
+            {"FUNCTION": "", "EQUIPMENT": "35-24L401", "SUB-EQUIPMENT": "", "DESCRIPTION": "AGITATOR"},
+        ]
+        out = build_equipment_rows(rows)
+        by_tag = {r["EQUNR"]: r for r in out}
+        self.assertEqual(by_tag["35-24L401"]["HEQUI"], "35-24T601")
+        self.assertEqual(by_tag["35-24-401.1"]["HEQUI"], "35-24L401")
+
+    def test_pulper_injects_rotors_conveyor_does_not(self) -> None:
+        rows = [
+            {"FUNCTION": "35-24L009", "EQUIPMENT": "", "SUB-EQUIPMENT": "",
+             "DESCRIPTION": "35-24L009 BROKE ROLL PLPR"},
+            {"FUNCTION": "35-24L004", "EQUIPMENT": "", "SUB-EQUIPMENT": "",
+             "DESCRIPTION": "35-24L004 BROKE CVYR 2"},
+        ]
+        out = build_equipment_rows(rows)
+        tags = {r["EQUNR"] for r in out}
+        self.assertIn("35-24L009.1", tags)
+        self.assertIn("35-24L009.2", tags)
+        self.assertNotIn("35-24L004.1", tags)
+        self.assertNotIn("35-24L004.2", tags)
+        by_tag = {r["EQUNR"]: r for r in out}
+        self.assertEqual(by_tag["35-24-009.1"]["HEQUI"], "35-24L009.1")
+        self.assertEqual(by_tag["35-24-004.1"]["HEQUI"], "35-24L004")
+
+    def test_pump_eqktx_strips_conveyor_tokens(self) -> None:
+        rows = [
+            {"FUNCTION": "35-24P507", "EQUIPMENT": "", "SUB-EQUIPMENT": "",
+             "DESCRIPTION": "35-24P507 BROKE CVYR 3 PMP"},
+        ]
+        out = build_equipment_rows(rows)
+        pump = next(r for r in out if r["EQUNR"] == "35-24P507")
+        self.assertNotIn("CVYR", pump["EQKTX"])
+        self.assertIn("PMP", pump["EQKTX"])
 
     def test_motor_eqktx_strips_parent_type_tokens(self) -> None:
         eqktx = _motor_eqktx(
@@ -711,19 +764,20 @@ class RealHierarchyLineEqktxTests(unittest.TestCase):
         self.assertEqual(missing_ln, [], msg=f"missing LN prefix: {missing_ln[:10]}")
         self.assertEqual(has_line_word, [], msg=f"trailing LINE/LN: {has_line_word[:10]}")
 
-    @unittest.skipUnless(HIERARCHY_CSV.exists(), "requires hierarchy orchestrator CSV")
     def test_l001_review_line_examples(self) -> None:
-        from dwg_reader.export_sap_equipment import read_hierarchy_csv
-
-        out = build_equipment_rows(
-            read_hierarchy_csv(HIERARCHY_CSV),
-            limit_functions=1,
-        )
-        by_tag = {r["EQUNR"]: r for r in out}
-        # Pipeline tags under 35-24L001 (first function in current CSV)
+        rows = [
+            {"FUNCTION": "35-24L001", "EQUIPMENT": "", "SUB-EQUIPMENT": "",
+             "DESCRIPTION": "35-24L001 PRESS PLPR"},
+            {"FUNCTION": "", "EQUIPMENT": "35-24-095", "SUB-EQUIPMENT": "",
+             "DESCRIPTION": "35-24-095 PRESS PLPR PP-200 LINE"},
+            {"FUNCTION": "", "EQUIPMENT": "35-24-096", "SUB-EQUIPMENT": "",
+             "DESCRIPTION": "35-24-096 PRESS PLPR LINE"},
+            {"FUNCTION": "", "EQUIPMENT": "35-24LC-576", "SUB-EQUIPMENT": "",
+             "DESCRIPTION": "35-24LC-576 LVL CONTROLLER"},
+        ]
+        by_tag = {r["EQUNR"]: r for r in build_equipment_rows(rows)}
         self.assertTrue(by_tag["35-24-095"]["EQKTX"].startswith("LN 35-24-095"))
         self.assertTrue(by_tag["35-24-096"]["EQKTX"].startswith("LN 35-24-096"))
-        # Level controller tag must NOT get LN prefix (not a pipeline)
         self.assertFalse(by_tag["35-24LC-576"]["EQKTX"].startswith("LN "))
 
 
@@ -1215,6 +1269,74 @@ class PipelineVsVisionTests(unittest.TestCase):
         out = build_equipment_rows(rows, valve_cache=cache)
         eqktx = next(r["EQKTX"] for r in out if r["EQUNR"] == "35-24-137")
         self.assertEqual(eqktx, "HV 35-24-137 35-24L005 DRN NC")
+
+    def test_137_ln_proc_collision_stays_valve(self) -> None:
+        """R09/B02: leftover LN PROC text must not demote a valve/line collision."""
+        rows = [
+            {"FUNCTION": "35-24L005", "EQUIPMENT": "", "SUB-EQUIPMENT": "", "DESCRIPTION": ""},
+            {"FUNCTION": "", "EQUIPMENT": "35-24-137", "SUB-EQUIPMENT": "",
+             "DESCRIPTION": "LN 35-24-137 35-24L005 PROC"},
+        ]
+        cache = {
+            "35-24-137": {
+                "is_valve": True, "type": "DRN NC", "source": "vision", "fn": "35-24L005",
+            }
+        }
+        out = build_equipment_rows(
+            rows, valve_cache=cache, collision_tags={"35-24-137"},
+        )
+        row = next(r for r in out if r["EQUNR"] == "35-24-137")
+        self.assertTrue(row["EQKTX"].startswith("HV 35-24-137"))
+        self.assertNotEqual(row["EQART"], "2100")
+        self.assertIn("DRN", row["EQKTX"])
+
+    def test_089_valve_is_not_hequi_parent(self) -> None:
+        """R23/B08: line-shaped valve 089 must not parent later SUB-EQUIPMENT."""
+        rows = [
+            {"FUNCTION": "35-24L004", "EQUIPMENT": "", "SUB-EQUIPMENT": "",
+             "DESCRIPTION": "35-24L004 BROKE CVYR 2"},
+            {"FUNCTION": "", "EQUIPMENT": "35-24-089", "SUB-EQUIPMENT": "",
+             "DESCRIPTION": "LN 35-24-089 SHW WHITE WTR"},
+            {"FUNCTION": "", "EQUIPMENT": "", "SUB-EQUIPMENT": "35-24HV-651",
+             "DESCRIPTION": "35-24HV-651 AV"},
+            {"FUNCTION": "", "EQUIPMENT": "", "SUB-EQUIPMENT": "35-24HV-575",
+             "DESCRIPTION": "35-24HV-575 AV"},
+        ]
+        cache = {
+            "35-24-089": {"is_valve": True, "type": "DRN", "source": "cad_layer"},
+        }
+        out = build_equipment_rows(
+            rows, valve_cache=cache, collision_tags={"35-24-089"},
+        )
+        by_tag = {r["EQUNR"]: r for r in out}
+        self.assertTrue(by_tag["35-24-089"]["EQKTX"].startswith("HV"))
+        self.assertNotEqual(by_tag["35-24HV-651"]["HEQUI"], "35-24-089")
+        self.assertNotEqual(by_tag["35-24HV-575"]["HEQUI"], "35-24-089")
+
+    def test_tipo_code_source_not_written_to_reasoning(self) -> None:
+        """B09: stale TIPO overlay in cache is not SAP authority."""
+        rows = [
+            {"FUNCTION": "WU12", "EQUIPMENT": "", "SUB-EQUIPMENT": "", "DESCRIPTION": ""},
+            {"FUNCTION": "", "EQUIPMENT": "168V-521", "SUB-EQUIPMENT": "",
+             "DESCRIPTION": "168V-521 NC"},
+        ]
+        cache = {
+            "168V-521": {
+                "is_valve": True, "type": "NC", "source": "tipo_code", "tipo": "LWE",
+            }
+        }
+        reasoning: list[dict] = []
+        build_equipment_rows(rows, valve_cache=cache, reasoning_out=reasoning)
+        self.assertTrue(reasoning)
+        self.assertNotEqual(reasoning[0]["SOURCE"], "TIPO_CODE")
+        self.assertIn(reasoning[0]["TYPE_CONFLICT"], ("yes", "no"))
+
+    def test_type_conflict_flags_av_vs_hv(self) -> None:
+        """B12: TYPE vs AI_DESCRIPTION AV/HV disagreement is flagged."""
+        from dwg_reader.export_sap_equipment import _type_conflict
+
+        self.assertEqual(_type_conflict("HV", "VLV AV NC"), "yes")
+        self.assertEqual(_type_conflict("AV NC", "VLV AV NC"), "no")
 
 
 class MotorAndFunctionEquipmentTests(unittest.TestCase):

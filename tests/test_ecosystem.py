@@ -49,6 +49,12 @@ class EcosystemDetectionTests(unittest.TestCase):
         eco = detect("Broke System")
         self.assertEqual(eco.name, "valmet")
 
+    def test_detect_unknown_stem_defaults_valmet_with_warning(self) -> None:
+        with self.assertLogs("dwg_reader.dwg_ecosystem", level="WARNING") as cm:
+            eco = detect("RandomStem")
+        self.assertEqual(eco.name, "valmet")
+        self.assertTrue(any("defaulting to valmet" in m for m in cm.output))
+
     def test_detect_empty_stem_defaults_valmet(self) -> None:
         eco = detect("")
         self.assertEqual(eco.name, "valmet")

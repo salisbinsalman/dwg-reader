@@ -271,6 +271,8 @@ class AgitatorPlacementExportTests(unittest.TestCase):
             by_tag["35-24L403"]["TPLNR"], t601_tplnr,
             "L403 must be installed at T601 FLOC",
         )
+        self.assertEqual(by_tag["35-24L401"]["HEQUI"], "35-24T601")
+        self.assertEqual(by_tag["35-24L403"]["HEQUI"], "35-24T601")
 
     def test_agitator_object_type_is_2001(self):
         """L401-L499 tags must classify as object type 2001 (Agitator)."""

@@ -15,7 +15,7 @@ SKIP_EXISTING ?=
 # Empty = all inventory FUNCTION kinds (equipment + instrument + line).
 KINDS ?=
 
-.PHONY: help check-odafc run run-json run-json-splits semantic semantic-run inventory inventory-run enrich hierarchy hierarchy-cad hierarchy-ai hierarchy-orch hierarchy-orch-dry floc equipment sap floc-test equipment-test valve-classify valve-test hierarchy-experiments hierarchy-vendors hierarchy-eval all all-prep full forensic structural structural-aspose clean-prev clean-outputs abbreviations-json
+.PHONY: help check-odafc run run-json run-json-splits semantic semantic-run inventory inventory-run enrich hierarchy hierarchy-cad hierarchy-ai hierarchy-orch hierarchy-orch-dry floc equipment sap floc-test equipment-test valve-classify valve-test hierarchy-experiments hierarchy-vendors hierarchy-eval all all-prep full forensic structural structural-aspose clean-prev clean-outputs abbreviations-json warn-limit
 
 help:
 	@echo "Targets:"
@@ -40,7 +40,7 @@ help:
 	@echo "  make hierarchy-vendors      # Kimi/Mistral/Gemma/Nova/Qwen/OpenAI-OSS sweep"
 	@echo "  make hierarchy-eval         # score outputs/*hierarchy_orchestrator.csv vs GT"
 	@echo "  make hierarchy-vision       # LEGACY CAD-graph + Bedrock confirm/reject"
-	@echo "  make all                    # FULL: dump→inventory→enrich→hierarchy-orch→FLOC+Equipment (LIMIT=$(LIMIT))"
+	@echo "  make all                    # FULL: dump→inventory→enrich→hierarchy-orch (valve+agitator vision always) (LIMIT=$(LIMIT))"
 	@echo "  make all-prep               # dump→inventory→enrich only (no Bedrock)"
 	@echo "  make clean-prev             # remove prior outputs for INPUT stem only"
 	@echo "  make clean-outputs          # remove generated outputs"
@@ -90,7 +90,7 @@ hierarchy-ai:
 hierarchy-orch-dry:
 	$(PYTHON) run_hierarchy_orchestrator.py --input "$(INPUT)" --output-dir "$(OUT)" --limit $(LIMIT) $(if $(KINDS),--kinds "$(KINDS)",) --dry-run
 
-hierarchy-orch:
+hierarchy-orch: warn-limit
 	@mkdir -p "$(OUT)/logs"
 	AWS_PROFILE="$(AWS_PROFILE)" PYTHONUNBUFFERED=1 $(PYTHON) run_hierarchy_orchestrator.py --input "$(INPUT)" --output-dir "$(OUT)" --limit $(LIMIT) --jobs $(JOBS) $(if $(KINDS),--kinds "$(KINDS)",) --model-id "$(MODEL_ID)" --region "$(AWS_REGION)" $(if $(PROMPT_FILE),--prompt-file "$(PROMPT_FILE)",) --aws-profile "$(AWS_PROFILE)" $(if $(SKIP_EXISTING),--skip-existing,) 2>&1 | tee "$(OUT)/logs/hierarchy-orchestrator.log"
 
@@ -144,8 +144,12 @@ hierarchy-cad: hierarchy
 # CAD-only prep (no Bedrock / FLOC).
 all-prep: run-json inventory enrich
 
-# End-to-end: dump → inventory → enrich → hierarchy (LIMIT) → FLOC + Equipment.
-all: all-prep hierarchy-orch
+# End-to-end: dump → inventory → enrich → hierarchy (LIMIT) → valve+agitator vision → FLOC + Equipment.
+# Valve and agitator vision always run; --skip-existing only skips hierarchy FUNCTION headers.
+warn-limit:
+	@if [ "$(LIMIT)" != "0" ]; then printf '%s\n' "WARNING: LIMIT=$(LIMIT) truncates hierarchy and SAP. Use LIMIT=0 for the full drawing."; fi
+
+all: warn-limit all-prep hierarchy-orch
 
 full: all
 

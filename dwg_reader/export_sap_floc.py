@@ -18,10 +18,12 @@ from dwg_reader.dwg_floc_context import (
     build_tplnr,
     floc_paths_for_function,
     format_line_eqktx,
+    inherit_pump_duty,
     is_line_equipment_tag,
     load_floc_context_for_input,
     merge_floc_context,
     normalize_pltxt,
+    scrub_pump_description,
 )
 from dwg_reader.dwg_floc_standards import lookup_line, lookup_process, lookup_sub_process
 from dwg_reader.dwg_object_type import classify_equipment
@@ -142,6 +144,8 @@ def _clean_line_description(text: str, *, flow_codes: Optional[Dict[str, str]] =
     result = re.sub(r"\bPP-\d+[A-Z0-9]*\b|\bDN\d+\b", "", result, flags=re.I)
     result = re.sub(r"\b\d{1,4}\s*MM\b", "", result, flags=re.I)
     result = _BARE_DN_RE.sub("", result)
+    # Dangling delimiters left after size/spec stripping (not mid-string destination arrows).
+    result = re.sub(r"[\s>/\-|]+$", "", result)
     return re.sub(r" {2,}", " ", result).strip()
 
 
@@ -441,6 +445,9 @@ def build_floc_rows(
         )
     )
 
+    last_vessel = ""
+    _vessel_fn = re.compile(r"^\d{2}-\d{2}[LT]\d+", re.I)
+    _cvyr = re.compile(r"\b(?:CVYR|CONVEYOR)\b", re.I)
     for i, (tag, mask, desc) in enumerate(functions):
         paths = floc_paths_for_function(tag, c)
         tplnr = mask if mask.startswith(subprocess) else paths["function"]
@@ -464,10 +471,14 @@ def build_floc_rows(
             else:
                 pltxt = normalize_pltxt(pltxt)
             pltxt = _strip_trailing_spec(pltxt)
+            pltxt = scrub_pump_description(tag, pltxt)
+            pltxt = inherit_pump_duty(tag, pltxt, last_vessel)
+        if _vessel_fn.match(tag) and not _cvyr.search(str(desc or "")):
+            last_vessel = desc or pltxt
         _eqart, gewrk = classify_equipment(tag, pltxt)
         if is_line_equipment_tag(tag) and not gewrk:
             gewrk = "MECH"
-        if is_line_equipment_tag(tag) and _eqart == "9999":
+        if is_line_equipment_tag(tag) and (not _eqart or _eqart == "9999"):
             _eqart = "2100"
         rows.append(
             blank_row(
@@ -475,7 +486,7 @@ def build_floc_rows(
                 TPLMA=subprocess,
                 POSNR=f"{(i + 1) * 10:04d}",
                 PLTXT=pltxt[:40],
-                EQART=_eqart if _eqart != "9999" else "",
+                EQART=_eqart if _eqart and _eqart != "9999" else "",
                 GEWRK=gewrk,
                 IWERK=c.get("planning_plant") or plant,
                 INGRP=c.get("planning_group", "P01"),

@@ -243,6 +243,43 @@ def is_line_equipment_tag(tag: str) -> bool:
     return bool(_LINE_EQUIPMENT_TAG_RE.match(tag_u))
 
 
+# Pump FLOC/EQKTX must not inherit conveyor or gearbox-oil labels from nearby text.
+_PUMP_DUTY_NOISE_RE = re.compile(
+    r"\b(?:CVYR|CONVEYOR)(?:\s+\d+)?\b|\b(?:GRBX|GEARBOX|GB)\s+OL\b",
+    re.I,
+)
+
+
+def scrub_pump_description(tag: str, text: str) -> str:
+    """Strip conveyor/gearbox-oil tokens from pump descriptions (R22)."""
+    if not is_pump_tag(tag):
+        return text
+    cleaned = _PUMP_DUTY_NOISE_RE.sub(" ", str(text or ""))
+    cleaned = re.sub(r"\s+", " ", cleaned).strip(" -")
+    return cleaned or str(text or "")
+
+
+def inherit_pump_duty(tag: str, text: str, parent_desc: str) -> str:
+    """If a pump description has no duty left after scrub, copy the parent machine duty (B06)."""
+    if not is_pump_tag(tag) or not parent_desc:
+        return text
+    body = re.sub(r"\s+", " ", str(text or "")).strip()
+    rest = re.sub(rf"^{re.escape(tag)}\s*", "", body, flags=re.I)
+    rest = re.sub(r"\b(?:PMP|PUMP|BROKE|\d+)\b", " ", rest, flags=re.I)
+    rest = re.sub(r"\s+", " ", rest).strip(" -")
+    if rest:
+        return text
+    parent = re.sub(r"\s+", " ", str(parent_desc)).strip()
+    parent = re.sub(r"^[\dA-Z./-]+\s+", "", parent, flags=re.I)
+    parent = re.sub(r"\b(?:CVYR|CONVEYOR)(?:\s+\d+)?\b", " ", parent, flags=re.I)
+    parent = re.sub(r"\s+", " ", parent).strip(" -")
+    if not parent:
+        return text
+    if not re.search(r"\bPMP\b", parent, re.I):
+        parent = f"{parent} PMP"
+    return clip_pltxt(f"{tag} {parent}", 40)
+
+
 # Nameplate misreads: AI copies a kW/rpm figure (e.g. "1300/50") as a line tag
 # and labels it PMP MTR. Real motors use the .1 suffix (35-24-501.1).
 _MOTOR_ONLY_BODY_RE = re.compile(
@@ -348,6 +385,7 @@ def format_line_eqktx(
         rest = f"{fn} {rest}".strip() if rest else fn
 
     formatted = f"{want} {rest}".strip() if rest else want
+    formatted = re.sub(r"[\s>/\-|]+$", "", formatted).strip()
     return clip_pltxt(formatted, max_len)
 
 

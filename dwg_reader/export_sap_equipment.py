@@ -18,23 +18,24 @@ from typing import Any, Dict, List, Optional, Sequence, Set
 
 from dwg_reader.dwg_ecosystem import Ecosystem, detect as _detect_ecosystem
 from dwg_reader.dwg_floc_context import (
+    clip_pltxt,
     combine_valve_type,
     explain_valve_type,
     floc_paths_for_function,
-    clip_pltxt,
     format_line_eqktx,
     format_valve_eqktx,
     is_line_equipment_tag,
     is_never_valve_tag,
     is_phantom_motor_line_tag,
-    is_pump_equipment,
     is_valve_equipment,
     load_floc_context_for_input,
     merge_floc_context,
     normalize_pltxt,
+    inherit_pump_duty,
+    scrub_pump_description,
 )
 from dwg_reader.dwg_object_type import classify_equipment
-from dwg_reader.dwg_pure_dump import json_path, safe_name, write_json
+from dwg_reader.dwg_pure_dump import find_json, json_path, safe_name, write_json
 from dwg_reader.export_sap_floc import (
     _clean_line_description,
     _extract_area_unit,
@@ -63,6 +64,10 @@ _PIPELINE_VALVE_DESC_RE = re.compile(r"\b(VLV|VALVE|DRN|DRAIN|CHK|CHECK|FLS|HV)\
 # Driven equipment patterns: pumps (35-24P518) and agitators by L401–L499 range
 _PUMP_TAG_NODASH_RE = re.compile(r"^(\d{2}-\d{2})P(\d+)$", re.I)
 _AGITATOR_L_NODASH_RE = re.compile(r"^(\d{2}-\d{2})L(4\d{2})$", re.I)
+_TANK_FN_RE = re.compile(r"^\d{2}-\d{2}T\d+$", re.I)
+# Pulper L001–L399 (not agitators L401+). Rotors are {tag}.1 / {tag}.2.
+_PULPER_L_RE = re.compile(r"^(\d{2}-\d{2})L([0-3]\d{2})$", re.I)
+_PULPER_DESC_RE = re.compile(r"\bPLPR\b", re.I)
 # Rotor sub-equipment tags: 35-24L009.1, 35-24L009.2 — always driven, need a motor
 _ROTOR_TAG_RE = re.compile(r"^(\d{2}-\d{2})[A-Z]+\d+\.\d+$", re.I)
 
@@ -300,6 +305,18 @@ def _load_valve_cache(path: Path) -> dict[str, dict]:
         }
 
 
+def _load_collision_tags(inv_path: Path) -> Set[str]:
+    """Valve/line numeric IDs that collide (R09/R23), from pid_inventory.json."""
+    p = Path(inv_path)
+    if not p.exists():
+        return set()
+    try:
+        data = json.loads(p.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return set()
+    return {str(t).strip().upper() for t in (data.get("valve_line_collisions") or []) if t}
+
+
 def _valve_hint(tag: str, *, cache: dict[str, dict]) -> dict:
     """Return CAD/vision classification cache entry for a tag."""
     ca = cache.get(tag) or {}
@@ -333,6 +350,7 @@ REASONING_COLUMNS = [
     "SOURCE",
     "AI_DESCRIPTION",
     "REASONING",
+    "TYPE_CONFLICT",
 ]
 
 
@@ -431,6 +449,46 @@ def patch_hierarchy_csv_from_reasoning(
     )
 
 
+def _cad_or_desc_valve(
+    tag: str,
+    raw_desc: str,
+    cache: dict[str, dict],
+    collisions: Set[str],
+) -> bool:
+    """True when this numeric/letter tag should export as a valve, not a line.
+
+    Collision tags (P-LINEPOS + P-VALVEPOS, e.g. 35-24-137) always win.
+    Vision false-positives on real pipelines (096, 189) stay lines when the
+    hierarchy text is LN/LINE/OVFL and the tag is not a collision.
+    """
+    if is_never_valve_tag(tag):
+        return False
+    hint = _valve_hint(tag.upper(), cache=cache)
+    if tag.upper() in collisions:
+        return True
+    if is_valve_equipment(tag, raw_desc):
+        return True
+    cad = bool(hint.get("is_valve"))
+    if cad and _pipeline_description_blocks_valve(raw_desc):
+        return False
+    return cad
+
+
+def _type_conflict(final_type: str, ai_desc: str) -> str:
+    from dwg_reader.dwg_valve_classify import parse_type_tokens
+
+    inferred = parse_type_tokens(ai_desc)
+    ft = set(str(final_type or "").upper().split())
+    inf = set(str(inferred or "").upper().split())
+    if not ft or not inf:
+        return "no"
+    if ("AV" in inf and "HV" in ft) or ("HV" in inf and "AV" in ft):
+        return "yes"
+    if inf != ft and not inf <= ft and not ft <= inf:
+        return "yes"
+    return "no"
+
+
 def build_equipment_rows(
     hierarchy_rows: Sequence[Dict[str, str]],
     *,
@@ -440,6 +498,7 @@ def build_equipment_rows(
     reasoning_out: Optional[List[Dict[str, str]]] = None,
     ecosystem: Optional[Ecosystem] = None,
     include_function_equipment: bool = True,
+    collision_tags: Optional[Set[str]] = None,
 ) -> List[Dict[str, str]]:
     """
     Walk hierarchy stream and emit one Equipment row per EQUIPMENT / SUB-EQUIPMENT.
@@ -478,11 +537,13 @@ def build_equipment_rows(
         row.update(kwargs)
         return row
 
+    collisions: Set[str] = {str(t).upper() for t in (collision_tags or set())}
     out: List[Dict[str, str]] = []
     current_fn = ""
     current_tplnr = ""
     current_equipment = ""
     current_line = ""  # last line-equipment tag in this FUNCTION; valves after it become sub-equipment
+    last_vessel_desc = ""
     top_pos_by_tplnr: Dict[str, int] = {}
     sub_pos_by_parent: Dict[str, int] = {}
     emitted: Set[str] = set()
@@ -519,6 +580,12 @@ def build_equipment_rows(
             current_tplnr = floc_paths_for_function(fn, c)["function"]
             current_equipment = ""
             current_line = ""
+            header_desc = _norm(row.get("DESCRIPTION"))
+            if (
+                re.match(r"^\d{2}-\d{2}[LT]\d+", fn, re.I)
+                and not re.search(r"\b(?:CVYR|CONVEYOR)\b", header_desc, re.I)
+            ):
+                last_vessel_desc = header_desc
             # Emit the machine function itself as Equipment (for spare parts tracking).
             # Only for non-pipeline machine tags (L, P, T — not 35-24-NNN line tags).
             if include_function_equipment and not is_line_equipment_tag(fn):
@@ -530,7 +597,11 @@ def build_equipment_rows(
                 if fn_eqktx and not fn_eqktx.upper().startswith(fn.upper()):
                     fn_eqktx = normalize_pltxt(f"{fn} {fn_eqktx}")
                 fn_eqktx = _strip_trailing_spec(fn_eqktx)[:40]
+                fn_eqktx = scrub_pump_description(fn, fn_eqktx)
+                fn_eqktx = inherit_pump_duty(fn, fn_eqktx, last_vessel_desc)
                 fn_eqart, fn_gewrk = classify_equipment(fn, fn_eqktx)
+                if not fn_eqart or fn_eqart == "9999":
+                    fn_eqart = ""
                 top_pos_by_tplnr[current_tplnr] = 0
                 out.append(
                     blank_row(
@@ -552,17 +623,28 @@ def build_equipment_rows(
 
         if eq:
             tag = eq
-            if is_line_equipment_tag(tag):
+            raw_preview = _norm(row.get("DESCRIPTION"))
+            as_valve = _cad_or_desc_valve(tag, raw_preview, cache, collisions)
+            if as_valve:
+                # Collision / CAD / desc valve: standalone Equipment. Do not become
+                # current_line or HEQUI parent of later SUB-EQUIPMENT (R09/R23).
+                hequi = ""
+            elif is_line_equipment_tag(tag):
                 # This is a pipe/line tag — it becomes the parent for subsequent valves.
                 hequi = ""
                 current_line = tag
                 current_equipment = tag
-            elif current_line and is_valve_equipment(tag, _norm(row.get("DESCRIPTION"))):
+            elif current_line and is_valve_equipment(tag, raw_preview):
                 # SAP PM standard: valves are standalone Equipment records installed at
                 # the pipeline FLOC (TPLNR = current_tplnr), NOT sub-equipment of the
                 # pipeline Equipment record.  HEQUI is reserved for physical components
                 # inside a machine (impeller inside a pump, bearing inside a motor).
                 hequi = ""
+                current_equipment = tag
+            elif _AGITATOR_L_NODASH_RE.match(tag) and _TANK_FN_RE.match(current_fn):
+                # R12: tank agitators are sub-equipment of the tank (spares on the vessel).
+                hequi = current_fn
+                current_line = ""
                 current_equipment = tag
             else:
                 # Non-line, non-valve equipment (motor, instrument, etc.) — direct FUNCTION child.
@@ -608,6 +690,8 @@ def build_equipment_rows(
             eqktx = desc if desc else normalize_pltxt(tag)
             if eqktx and not eqktx.startswith(tag):
                 eqktx = normalize_pltxt(f"{tag} {eqktx}")
+            eqktx = scrub_pump_description(tag, eqktx)
+            eqktx = inherit_pump_duty(tag, eqktx, last_vessel_desc)
         eqart, gewrk = classify_equipment(tag, eqktx)
         tag_upper = tag.upper()
         hint = _valve_hint(tag_upper, cache=cache)
@@ -620,28 +704,17 @@ def build_equipment_rows(
         effective_tplnr = (
             floc_paths_for_function(cache_fn, c)["function"] if cache_fn else current_tplnr
         )
-        # Tags with embedded non-valve prefix (e.g. 35-24L401 agitator) are never valves,
-        # even when the vision cache reports is_valve=True (vision saw a drain tap on the tank).
-        _hint_valve = bool(hint.get("is_valve")) and not is_never_valve_tag(tag)
-        if is_line_equipment_tag(tag) and _pipeline_description_blocks_valve(raw_desc):
-            _hint_valve = False
-        is_valve = is_valve_equipment(tag, eqktx) or _hint_valve
-        if is_line_equipment_tag(tag) and _pipeline_description_blocks_valve(raw_desc):
-            is_valve = False
+        is_valve = _cad_or_desc_valve(tag, raw_desc, cache, collisions) or is_valve_equipment(
+            tag, eqktx
+        )
         if is_valve:
             eqktx = format_valve_eqktx(tag, effective_fn, eqktx, valve_type_override=cache_type)
             if reasoning_out is not None:
                 source = hint.get("source")
-                if source == "tipo_code" and cache_type:
-                    vtype = cache_type
-                    vsource = "TIPO_CODE"
-                    tipo = str(cache.get(tag_upper, {}).get("tipo") or "").strip()
-                    vreason = (
-                        f"GOR TIPO_VALVOLA '{tipo}' → {vtype}"
-                        if tipo
-                        else f"GOR TIPO code → {vtype}"
-                    )
-                elif source == "gor_tag" and cache_type:
+                if source == "tipo_code":
+                    # B09: TIPO overlay is not SAP authority — treat as vision/legend.
+                    source = "vision" if cache_type else "cad_layer"
+                if source == "gor_tag" and cache_type:
                     vtype = cache_type
                     vsource = "GOR_TAG"
                     vreason = f"GOR tag pattern → {vtype}"
@@ -666,6 +739,7 @@ def build_equipment_rows(
                     "SOURCE": vsource,
                     "AI_DESCRIPTION": raw_desc,
                     "REASONING": vreason,
+                    "TYPE_CONFLICT": _type_conflict(vtype, raw_desc),
                 })
         else:
             eqktx = format_line_eqktx(tag, eqktx, hequi=hequi, parent_fn=effective_fn)
@@ -678,17 +752,21 @@ def build_equipment_rows(
             if _MOTOR_SUFFIX_RE.search(tag) and not re.search(r"\bMTR\b", eqktx or "", re.I):
                 eqktx = normalize_pltxt(f"{eqktx} MTR")[:40]
                 eqart, gewrk = classify_equipment(tag, eqktx)
-        # Fix #4: re-classify when initial classification failed — the formatted EQKTX
-        # now has HV/LN prefix which the keyword rules can match.
-        if eqart == "9999":
-            if is_valve:
+        # Re-classify after HV/LN formatting. Line-shaped valve tags (137) first
+        # match EQART 2100; once they are valves, use the valve object type.
+        if is_valve:
+            eqart, gewrk = classify_equipment(tag, eqktx)
+            if not eqart or eqart in {"9999", "2100"}:
                 eqart = "201"
-                if not gewrk:
-                    gewrk = "MECH"
-            elif is_line_equipment_tag(tag):
+            if not gewrk:
+                gewrk = "MECH"
+        elif not eqart or eqart == "9999":
+            if is_line_equipment_tag(tag):
                 eqart = "2100"
                 if not gewrk:
                     gewrk = "MECH"
+            else:
+                eqart = ""
         out.append(
             blank_row(
                 TPLNR=effective_tplnr[:30],
@@ -699,7 +777,37 @@ def build_equipment_rows(
                 EQART=eqart,
                 GEWRK=gewrk,
             )
-        )
+            )
+
+    # R11: pulper rotors Lxxx.1 / Lxxx.2 are implicit on PLPR functions (meeting 4).
+    # Inject before motors so each rotor claims 35-24-00N.1 before the pulper body does.
+    _pulper_rows = [
+        r for r in list(out)
+        if _PULPER_L_RE.match(r["EQUNR"] or "") and _PULPER_DESC_RE.search(r.get("EQKTX") or "")
+    ]
+    for pulper in _pulper_rows:
+        ptag = pulper["EQUNR"]
+        parent_tplnr = pulper["TPLNR"]
+        for n in (1, 2):
+            rotor = f"{ptag}.{n}"
+            if rotor in emitted:
+                continue
+            emitted.add(rotor)
+            parent_key = f"{parent_tplnr}|{ptag}"
+            sub_pos_by_parent[parent_key] = sub_pos_by_parent.get(parent_key, 0) + 10
+            rotor_eqktx = normalize_pltxt(f"{rotor} RTR {n}")[:40]
+            r_eqart, r_gewrk = classify_equipment(rotor, rotor_eqktx)
+            out.append(
+                blank_row(
+                    TPLNR=parent_tplnr,
+                    EQUNR=rotor[:18],
+                    HEQUI=ptag[:18],
+                    POSNR=f"{sub_pos_by_parent[parent_key]:04d}",
+                    EQKTX=rotor_eqktx,
+                    EQART=r_eqart,
+                    GEWRK=r_gewrk,
+                )
+            )
 
     # Second pass: inject implicit motor rows for driven equipment with no motor emitted.
     # Includes sub-equipment items (non-empty HEQUI) such as agitator rotors (35-24L009.1)
@@ -788,7 +896,10 @@ def build_equipment_rows(
             if fn_eqktx and not fn_eqktx.upper().startswith(fn.upper()):
                 fn_eqktx = normalize_pltxt(f"{fn} {fn_eqktx}")[:40]
             fn_eqktx = _strip_trailing_spec(fn_eqktx)[:40]
+            fn_eqktx = scrub_pump_description(fn, fn_eqktx)
             fn_eqart, fn_gewrk = classify_equipment(fn, fn_eqktx)
+            if not fn_eqart or fn_eqart == "9999":
+                fn_eqart = ""
             top_pos_by_tplnr[tplnr] = 0 if tplnr not in top_pos_by_tplnr else top_pos_by_tplnr[tplnr]
             out.append(
                 blank_row(
@@ -901,12 +1012,15 @@ def run_equipment_export_from_args(args: argparse.Namespace) -> int:
     reasoning_rows: List[Dict[str, str]] = []
     cache_path = json_path(out_dir, f"{base}.valve_types.json")
     valve_cache = _load_valve_cache(cache_path)
+    inv_path = find_json(out_dir, f"{base}.pid_inventory.json")
+    collision_tags = _load_collision_tags(inv_path)
     equipment_rows = build_equipment_rows(
         hierarchy_rows,
         limit_functions=args.limit,
         ctx=ctx,
         reasoning_out=reasoning_rows,
         valve_cache=valve_cache,
+        collision_tags=collision_tags,
     )
     out_xlsx = out_dir / f"{base}.equipment.xlsx"
     write_equipment_workbook(template, out_xlsx, equipment_rows)

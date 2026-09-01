@@ -10,6 +10,7 @@ from unittest.mock import patch
 
 from dwg_reader.run_hierarchy_orchestrator import (
     _is_gor_inventory,
+    main,
     read_hierarchy_csv,
     run_hierarchy_for_tag,
     write_hierarchy_csv,
@@ -105,6 +106,28 @@ class OrchestratorLibraryCallTests(unittest.TestCase):
                 encoding="utf-8",
             )
             self.assertFalse(_is_gor_inventory(path))
+
+    def test_valve_classify_runs_for_all_standards_without_tipo_patch(self) -> None:
+        src = inspect.getsource(main)
+        self.assertIn("run_valve_classify", src)
+        self.assertIn("all standards", src)
+        self.assertNotIn("_patch_gor_valve_types", src)
+        self.assertNotIn("gor tipo mapping", src.lower())
+        self.assertNotIn("is_gor", src)
+        self.assertNotIn("is_valmet", src)
+
+    def test_orchestrator_scores_after_sanitize(self) -> None:
+        src = inspect.getsource(main)
+        self.assertIn("per_function_pre_sanitize", src)
+        self.assertIn("post_sanitize", src)
+        self.assertIn("_seed_childless_functions", src)
+
+    def test_valve_and_agitator_vision_always_run(self) -> None:
+        src = inspect.getsource(main)
+        self.assertIn("run_valve_classify", src)
+        self.assertIn("run_agitator_bind", src)
+        self.assertIn("skip_existing=False", src)
+        self.assertNotIn("skip_existing=bool(args.skip_existing)", src)
 
 
 if __name__ == "__main__":

@@ -386,6 +386,13 @@ class CleanLineDescriptionTests(unittest.TestCase):
         self.assertNotIn("PP-200", result)
         self.assertIn("PLPR DIS LN", result)
 
+    def test_strips_dangling_arrow_and_sizes(self) -> None:
+        result = _clean_line_description("35-24-095 PRESS PLPR > PP-200 DN150")
+        self.assertNotIn(">", result)
+        self.assertNotIn("PP-200", result)
+        self.assertNotIn("DN", result)
+        self.assertIn("PRESS", result)
+
     def test_strips_bare_mm_size(self) -> None:
         """B-05: leftover 15MM (no DN prefix) must be stripped."""
         result = _clean_line_description("35-24-005 CLG WTR DIST SPUR 15MM")
@@ -827,6 +834,39 @@ class FunctionPositionOrderingTests(unittest.TestCase):
         result = collect_functions(rows, filter_utility_lines=False, ecosystem=eco)
         descs = [desc for _, _, desc in result]
         self.assertTrue(any("CUSTOM WTR" in d for d in descs), f"Expected CUSTOM WTR in {descs}")
+
+
+    def test_unknown_non_line_eqart_blank(self) -> None:
+        functions = [
+            ("35-24Z999", "5001-PM03-BR-BR1-35-24Z999", "35-24Z999 MYSTERY WIDGET"),
+        ]
+        row = next(r for r in build_floc_rows(functions) if r["TPLNR"].endswith("35-24Z999"))
+        self.assertEqual(row["EQART"], "")
+
+    def test_line_function_unknown_type_still_2100(self) -> None:
+        functions = [
+            ("35-24-095", "5001-PM03-BR-BR1-35-24-095", "35-24-095 UNKNOWN THING"),
+        ]
+        row = next(r for r in build_floc_rows(functions) if r["TPLNR"].endswith("35-24-095"))
+        self.assertEqual(row["EQART"], "2100")
+
+    def test_pump_pltxt_strips_conveyor_tokens(self) -> None:
+        functions = [
+            ("35-24P507", "5001-PM03-BR-BR1-35-24P507", "35-24P507 BROKE CVYR 3 PMP"),
+        ]
+        row = next(r for r in build_floc_rows(functions) if r["TPLNR"].endswith("35-24P507"))
+        self.assertNotIn("CVYR", row["PLTXT"])
+        self.assertIn("PMP", row["PLTXT"])
+
+    def test_pump_pltxt_inherits_parent_vessel_duty(self) -> None:
+        functions = [
+            ("35-24L005", "5001-PM03-BR-BR1-35-24L005", "35-24L005 REEL PLPR"),
+            ("35-24P507", "5001-PM03-BR-BR1-35-24P507", "35-24P507 BROKE CVYR 3 PMP"),
+        ]
+        row = next(r for r in build_floc_rows(functions) if r["TPLNR"].endswith("35-24P507"))
+        self.assertNotIn("CVYR", row["PLTXT"])
+        self.assertIn("REEL", row["PLTXT"])
+        self.assertIn("PMP", row["PLTXT"])
 
 
 if __name__ == "__main__":

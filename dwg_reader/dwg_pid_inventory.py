@@ -27,7 +27,7 @@ from dwg_reader.dwg_semantic_extract import (
     load_or_parse,
 )
 from dwg_reader.logutil import configure_logging, get_logger
-from dwg_reader.tags import DN_RE, LINE_NUMBER_RE, parse_line_number
+from dwg_reader.tags import DN_RE, LINE_NUMBER_RE, normalize_tag, parse_line_number
 
 logger = get_logger(__name__)
 
@@ -992,6 +992,18 @@ def build_inventory(
         primary_components.extend(primary_rows(buckets.get(key, [])))
 
     connections, pipe_connectivity = build_connectivity(primary_components, pipe_segments)
+    from dwg_reader.dwg_lin_graph import parse_lin_from_to, valve_line_collision_tags
+
+    lin_edges = parse_lin_from_to(structural)
+    collisions = sorted(valve_line_collision_tags(structural=structural, inventory={
+        "valves": buckets.get("valves", []),
+        "control_valves": buckets.get("control_valves", []),
+        "lines": lines,
+    }))
+    for line in lines:
+        short = str(line.get("line_number") or "")
+        if normalize_tag(short) in collisions:
+            line["collides_with_valve"] = True
 
     inventory: Dict[str, List[Dict[str, Any]]] = {
         "tanks": buckets.get("tanks", []),
@@ -1018,6 +1030,8 @@ def build_inventory(
         "pipe_connectivity": pipe_connectivity,
         "pipe_segments": pipe_segments,
         "primary_components": primary_components,
+        "lin_from_to": lin_edges,
+        "valve_line_collisions": collisions,
     }
     # Bind L401–L499 labels to PPI agitator inserts before FUNCTION extraction.
     bind_agitator_tags(inventory, structural)
